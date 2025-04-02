@@ -1,0 +1,355 @@
+/* src/style.css */
+@import url('https://fonts.googleapis.com/css2?family=MedievalSharp&family=Lato:wght@400;700&family=Cinzel:wght@400;700&display=swap');
+
+:root {
+  /* Fonts */
+  --font-main: 'Lato', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --font-display: 'Cinzel', serif; /* Elegant fantasy font for headings */
+  --font-accent: 'MedievalSharp', cursive; /* More medieval font for accents */
+
+  /* Color Palette (Dark Fantasy Theme) */
+  --color-background: #121418; /* Very dark blue-gray */
+  --color-surface: #1e222a;  /* Dark slate for cards/containers */
+  --color-primary: #c9a959; /* Rich gold */
+  --color-secondary: #8a0303; /* Deep blood red */
+  --color-accent: #2a6077; /* Deep teal blue */
+  --color-text: #e8e8e8; /* Off-white */
+  --color-text-muted: #a0a0a0; /* Grey for less important text */
+  --color-link: #d4b784;
+  --color-link-hover: #e8d1a1;
+  --border-color: #3b3f47;
+  --border-accent: #58473e;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.5);
+
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, var(--color-surface) 0%, #262c36 100%);
+  
+  font-family: var(--font-main);
+  line-height: 1.6;
+  font-weight: 400;
+
+  color-scheme: dark;
+  color: var(--color-text);
+  background-color: var(--color-background);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Animated background with subtle texture */
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: var(--color-background);
+  background-image: 
+    url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23232323' fill-opacity='0.3' fill-rule='evenodd'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E");
+  position: relative;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(18, 20, 24, 0.7) 0%, var(--color-background) 70%);
+  z-index: -1;
+}
+
+#app {
+  width: 100%;
+  margin: 0 auto;
+  font-size: 16px;
+}
+
+/* --- Typography --- */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  color: var(--color-primary);
+  letter-spacing: 1px;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  font-weight: 700;
+}
+
+h1 { 
+  font-size: 2.8em; 
+  line-height: 1.1; 
+  position: relative;
+  display: inline-block;
+}
+
+h1::after {
+  content: "";
+  position: absolute;
+  height: 3px;
+  width: 60%;
+  background: var(--color-primary);
+  bottom: -10px;
+  left: 0;
+}
+
+h2 { 
+  font-size: 2em; 
+  color: var(--color-primary);
+}
+
+h3 { 
+  font-size: 1.5em; 
+}
+
+p {
+  margin-bottom: 1em;
+  line-height: 1.7;
+}
+
+/* --- Links --- */
+a {
+  font-weight: 500;
+  color: var(--color-link);
+  text-decoration: none;
+  transition: color 0.2s ease-in-out, border-bottom-color 0.2s;
+  border-bottom: 1px solid transparent;
+}
+
+a:hover {
+  color: var(--color-link-hover);
+  border-bottom-color: var(--color-link-hover);
+}
+
+/* --- Page Sections --- */
+.content-section {
+  background-color: var(--color-surface);
+  padding: 2em;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color);
+  position: relative;
+  overflow: hidden;
+}
+
+.content-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+}
+
+/* --- Cards --- */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem !important;           /* Increase gap between cards */
+  grid-auto-rows: min-content;    /* Let rows size to content */
+  align-items: start !important;  /* Align items to top of container */
+  margin-bottom: 2rem;            /* Add space below the grid */
+}
+
+.card {
+  background: var(--gradient-primary);
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s, box-shadow 0.2s;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md);
+}
+
+.card-title {
+  margin-top: 0;
+  font-family: var(--font-display);
+  color: var(--color-primary);
+  border-bottom: 1px solid var(--border-accent);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.card-content {
+  flex-grow: 1;
+}
+
+/* --- Buttons and Interactive Elements --- */
+.button-link {
+  display: inline-block;
+  border-radius: 6px;
+  border: 1px solid var(--color-primary);
+  padding: 0.7em 1.4em;
+  font-size: 0.95em;
+  font-weight: 500;
+  font-family: var(--font-main);
+  background-color: transparent;
+  color: var(--color-primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.button-link:hover {
+  background-color: var(--color-primary);
+  color: var(--color-background);
+  border-color: var(--color-primary);
+  text-decoration: none;
+  border-bottom-color: var(--color-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+button {
+  border-radius: 6px;
+  border: 1px solid var(--color-primary);
+  padding: 0.7em 1.4em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: var(--font-main);
+  background-color: transparent;
+  color: var(--color-primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  background-color: var(--color-primary);
+  color: var(--color-background);
+}
+
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+/* --- Images --- */
+.avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--color-primary);
+  box-shadow: var(--shadow-sm);
+  background-color: var(--color-surface);
+}
+
+.banner-image {
+  max-width: 100%;
+  border-radius: 8px;
+  margin: 1rem 0;
+  box-shadow: var(--shadow-md);
+}
+
+/* --- Utility Classes --- */
+.text-center {
+  text-align: center;
+}
+
+.muted {
+  color: var(--color-text-muted);
+  font-size: 0.9em;
+}
+
+.fancy-title {
+  font-family: var(--font-accent);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 1.2em;
+}
+
+/* --- Navigation --- */
+nav {
+  padding: 1rem 2rem;
+  margin-bottom: 2rem;
+  background-color: var(--color-surface);
+  border-radius: 8px;
+  box-shadow: var(--shadow-md);
+  position: relative;
+}
+
+nav::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+}
+
+nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+nav ul li a {
+  font-family: var(--font-display);
+  font-size: 1.1em;
+  letter-spacing: 1px;
+  padding: 0.5em 0;
+  border-bottom: 2px solid transparent;
+  transition: border-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+nav ul li a:hover,
+nav ul li a.router-link-exact-active {
+  color: var(--color-link-hover);
+  border-bottom-color: var(--color-primary);
+}
+
+/* --- Fix for vertical tile overlap in NPC and Characters views --- */
+.character-tile,
+.npc-tile,
+.character-card,
+.npc-card {
+  height: auto !important;        /* Override any fixed height settings */
+  min-height: 100px;              /* Set minimum height */
+  display: flex !important;       /* Ensure flex display */
+  flex-direction: column !important; /* Stack content vertically */
+  overflow: visible !important;   /* Prevent content cutoff */
+  margin-bottom: 0 !important;    /* Remove bottom margin that might cause issues */
+  position: relative;             /* Enable proper positioning */
+}
+
+/* If using a grid or flex layout for tiles */
+.tile-container {
+  gap: 1rem;            /* Add space between grid/flex items */
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 768px) {
+  h1 { font-size: 2.4em; }
+  h2 { font-size: 1.8em; }
+  .content-section { padding: 1.5em; }
+  nav ul { gap: 1rem; }
+}
+
+@media (max-width: 480px) {
+  h1 { font-size: 2.1em; }
+  h2 { font-size: 1.6em; }
+  .content-section { padding: 1.2em; }
+  nav ul { 
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+  }
+}
