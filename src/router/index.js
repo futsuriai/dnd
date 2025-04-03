@@ -1,9 +1,11 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
-import HomeView from '../views/HomeView.vue'; // We'll create this next
+import HomeView from '../views/HomeView.vue';
 import CharactersView from '../views/CharactersView.vue';
 import NpcView from '../views/NpcView.vue';
 import HistoryView from '../views/HistoryView.vue';
 import ItemsView from '../views/ItemsView.vue';
+import SessionsView from '../views/SessionsView.vue';
+import LocationsView from '../views/LocationsView.vue';
 
 const routes = [
   {
@@ -30,6 +32,16 @@ const routes = [
     path: '/items',
     name: 'Items',
     component: ItemsView,
+  },
+  {
+    path: '/sessions',
+    name: 'Sessions',
+    component: SessionsView,
+  },
+  {
+    path: '/locations',
+    name: 'Locations',
+    component: LocationsView,
   },
   // Add other routes here (e.g., Locations, Sessions)
 ];

@@ -134,6 +134,9 @@ a:hover {
   border: 1px solid var(--border-color);
   position: relative;
   overflow: hidden;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .content-section::before {
@@ -352,4 +355,10 @@ nav ul li a.router-link-exact-active {
     align-items: center;
     gap: 0.8rem;
   }
+}
+
+/* Add these rules to prevent horizontal scrolling on mobile */
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
 }
