@@ -156,8 +156,6 @@ export default {
     getSubtitle() {
       if (this.entityType === 'character') {
         return `${this.entity.race} ${this.entity.class}`;
-      } else if (this.entityType === 'location' && this.entity.type) {
-        return this.entity.type.charAt(0).toUpperCase() + this.entity.type.slice(1);
       }
       return null;
     },
