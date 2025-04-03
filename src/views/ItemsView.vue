@@ -52,7 +52,7 @@
             type: 'Ancient Weapon (Ethereal Edge)',
             rarity: 'Rare',
             attunement: 'Required (Bloodline Affinity)',
-            description: 'A longsword that appears to be made of translucent blue ice. Analysis suggests it's actually a fragment of the Ethereal Lattice, crystallized during the Sundering. It deals an additional 1d6 cold damage and slows targets by manipulating local temporal flow.',
+            description: 'A longsword that appears to be made of translucent blue ice. Analysis suggests it\'s actually a fragment of the Ethereal Lattice, crystallized during the Sundering. It deals an additional 1d6 cold damage and slows targets by manipulating local temporal flow.',
             found: 'Recovered from an Active Node in the former Frozen Wastes, now the Crimson Desert',
             owner: 'Thorne Ironheart'
           },
