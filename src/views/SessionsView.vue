@@ -4,7 +4,7 @@
     <p class="section-intro">Chronicles of our adventures and key events from each session.</p>
 
     <div class="sessions-container">
-      <div v-for="(session, index) in sessions" :key="index" class="session-card">
+      <div v-for="session in sessions" :key="session.id" class="session-card" :id="session.id">
         <div class="session-header" :class="{ 'upcoming': session.upcoming }">
           <div class="header-top-line">
             <h3 class="session-title">{{ session.title }}:</h3>
@@ -36,28 +36,13 @@
 </template>
 
 <script>
+import { sessions } from '../store/worldData';
+
 export default {
   name: 'SessionsView',
   data() {
     return {
-      sessions: [
-        {
-          title: 'Session 0',
-          subtitle: 'Character Creation',
-          date: 'April 6, 2025',
-          upcoming: true,
-          description: 'Character creation and world introduction. Come prepared with character concepts and backstory ideas!'
-        },
-        {
-          title: 'Session -1',
-          subtitle: 'Setting up the website',
-          date: 'April 2, 2025',
-          description: 'Playing around with Vue and Github Pages to set this up.',
-          highlights: [
-            'Set up the page and made it publishable on github'
-          ]
-        }
-      ]
+      sessions
     };
   }
 };
