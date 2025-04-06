@@ -1,25 +1,29 @@
 <template>
   <div id="app-container">
     <header>
-      <nav>
-        <div class="mobile-nav-toggle" @click="toggleMobileMenu" v-show="isMobileView">
-          <div class="hamburger-icon">
-            <span></span>
-            <span></span>
-            <span></span>
+      <div class="header-container">
+        <nav>
+          <div class="mobile-nav-toggle" @click="toggleMobileMenu" v-show="isMobileView">
+            <div class="hamburger-icon">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+            <span class="current-page">{{ currentRouteName }}</span>
           </div>
-          <span class="current-page">{{ currentRouteName }}</span>
-        </div>
-        <ul :class="{ 'mobile-open': mobileMenuOpen }">
-          <li><router-link to="/">Home</router-link></li>
-          <li><router-link to="/sessions">Sessions</router-link></li>
-          <li><router-link to="/characters">Characters</router-link></li>
-          <li><router-link to="/npcs">NPCs</router-link></li>
-          <li><router-link to="/locations">Locations</router-link></li>
-          <li><router-link to="/history">History</router-link></li>
-          <li><router-link to="/items">Items</router-link></li>
-        </ul>
-      </nav>
+          <ul :class="{ 'mobile-open': mobileMenuOpen }">
+            <li><router-link to="/">Home</router-link></li>
+            <li><router-link to="/sessions">Sessions</router-link></li>
+            <li><router-link to="/characters">Characters</router-link></li>
+            <li><router-link to="/npcs">NPCs</router-link></li>
+            <li><router-link to="/locations">Locations</router-link></li>
+            <li><router-link to="/history">History</router-link></li>
+            <li><router-link to="/items">Items</router-link></li>
+            <li v-if="isEditor"><router-link to="/admin" class="admin-link">Admin</router-link></li>
+          </ul>
+        </nav>
+        <AuthComponent />
+      </div>
     </header>
 
     <main>
@@ -33,12 +37,19 @@
 </template>
 
 <script>
+import AuthComponent from './components/AuthComponent.vue';
+import authService from './services/AuthService';
+
 export default {
   name: 'App',
+  components: {
+    AuthComponent
+  },
   data() {
     return {
       mobileMenuOpen: false,
-      isMobileView: false
+      isMobileView: false,
+      isEditor: false
     }
   },
   computed: {
@@ -46,6 +57,18 @@ export default {
       const route = this.$route.path;
       if (route === '/') return 'Home';
       return route.charAt(1).toUpperCase() + route.slice(2).replace('/', '');
+    }
+  },
+  created() {
+    // Subscribe to auth state changes
+    this.unsubscribe = authService.addAuthListener((user, isEditor) => {
+      this.isEditor = isEditor;
+    });
+  },
+  beforeUnmount() {
+    // Clean up listener on component unmount
+    if (this.unsubscribe) {
+      this.unsubscribe();
     }
   },
   methods: {
@@ -101,6 +124,12 @@ header {
   box-sizing: border-box;
 }
 
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 footer {
   padding: 1.5rem;
   margin-top: 2rem;
@@ -124,8 +153,8 @@ footer::before {
 }
 
 nav {
-  width: 100%;
   position: relative;
+  flex: 1;
 }
 
 nav ul {
@@ -173,6 +202,14 @@ nav ul {
 }
 
 @media (max-width: 600px) {
+  .header-container {
+    flex-direction: column;
+  }
+  
+  nav {
+    width: 100%;
+  }
+  
   nav ul {
     flex-direction: column;
     align-items: center;
@@ -222,5 +259,10 @@ nav ul {
     padding-right: 1rem;
     box-sizing: border-box;
   }
+}
+
+.admin-link {
+  color: var(--color-primary);
+  font-weight: bold;
 }
 </style>

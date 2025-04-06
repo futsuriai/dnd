@@ -6,6 +6,8 @@ import HistoryView from '../views/HistoryView.vue';
 import ItemsView from '../views/ItemsView.vue';
 import SessionsView from '../views/SessionsView.vue';
 import LocationsView from '../views/LocationsView.vue';
+import AdminView from '../views/AdminView.vue';
+import authService from '../services/AuthService';
 
 const routes = [
   {
@@ -43,7 +45,14 @@ const routes = [
     name: 'Locations',
     component: LocationsView,
   },
-  // Add other routes here (e.g., Locations, Sessions)
+  {
+    path: '/admin',
+    name: 'Admin',
+    component: AdminView,
+    meta: {
+      requiresAuth: true
+    }
+  }
 ];
 
 // Use the same base path logic as in vite.config.js
@@ -54,6 +63,23 @@ const router = createRouter({
   routes,
   linkActiveClass: 'router-link-active',
   linkExactActiveClass: 'router-link-exact-active'
-})
+});
+
+// Navigation guard for routes that require authentication
+router.beforeEach(async (to, from, next) => {
+  const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+  
+  if (requiresAuth) {
+    // Check if user is authorized editor
+    const isAuthorized = authService.isAuthorizedEditor();
+    
+    if (!isAuthorized) {
+      // User will still navigate to the page, but will see the auth UI
+      console.log('User not authorized to access admin page');
+    }
+  }
+  
+  next();
+});
 
 export default router;

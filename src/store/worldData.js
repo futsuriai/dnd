@@ -8,112 +8,264 @@ import historyStore, {
   getAllSessionRelatedEvents
 } from './history.js';
 
+// Import characters and npcs data
+import { characters } from './characters.js';
+import { npcs } from './npcs.js';
+import { locations } from './locations.js';
+import { items } from './items.js';
+import { sessions } from './sessions.js';
+
+// Import Firestore service
+import firestoreService from '../services/FirestoreService.js';
+
+// Export characters and npcs for direct use
+export { characters, npcs, locations, items, sessions };
+
+// State tracking for data source
+let useFirestore = false;
+let isInitialized = false;
+let dataSource = 'local';
+
 // HELPER FUNCTIONS
 
-// Getter functions - now pulling from history events
-export function getLocations(type = null) {
-  const locations = getAllEntities('location');
-  if (type) {
-    return locations.filter(loc => loc.type === type);
+// Initialize function to determine whether to use Firestore or local data
+export async function initWorldData(options = {}) {
+  if (isInitialized && !options.forceInit) return dataSource;
+  
+  try {
+    // If seed option is provided, seed the database first
+    if (options.seedDatabase) {
+      console.log('Seeding Firestore database...');
+      const { seedFirestore } = await import('../scripts/seedFirestore.js');
+      await seedFirestore();
+      console.log('Database seeding complete!');
+    }
+    
+    // Try to get data from Firestore
+    const sessions = await firestoreService.getAllSessions();
+    if (sessions && sessions.length > 0) {
+      console.log('Using Firestore as data source');
+      useFirestore = true;
+      dataSource = 'firestore';
+    } else {
+      console.log('Using local data files as data source');
+      useFirestore = false;
+      dataSource = 'local';
+    }
+  } catch (error) {
+    console.error('Error checking Firestore, falling back to local data:', error);
+    useFirestore = false;
+    dataSource = 'local';
   }
-  return locations;
+  
+  isInitialized = true;
+  return dataSource;
 }
 
-export function getLocation(id) {
-  return buildEntityFromHistory('location', id);
+// Getter functions - now with support for both data sources
+export async function getLocations(type = null) {
+  if (!isInitialized) await initWorldData();
+  
+  if (useFirestore) {
+    const locations = await firestoreService.getAllLocations();
+    if (type) {
+      return locations.filter(loc => loc.type === type);
+    }
+    return locations;
+  } else {
+    const locations = getAllEntities('location');
+    if (type) {
+      return locations.filter(loc => loc.type === type);
+    }
+    return locations;
+  }
 }
 
-export function getCharacter(id) {
-  return buildEntityFromHistory('character', id);
+export async function getLocation(id) {
+  if (!isInitialized) await initWorldData();
+  
+  if (useFirestore) {
+    return await firestoreService.get('locations', id);
+  } else {
+    return buildEntityFromHistory('location', id);
+  }
 }
 
-export function getNpc(id) {
-  return buildEntityFromHistory('npc', id);
+export async function getCharacter(id) {
+  if (!isInitialized) await initWorldData();
+  
+  if (useFirestore) {
+    return await firestoreService.get('characters', id);
+  } else {
+    return buildEntityFromHistory('character', id);
+  }
 }
 
-export function getItem(id) {
-  return buildEntityFromHistory('item', id);
+export async function getNpc(id) {
+  if (!isInitialized) await initWorldData();
+  
+  if (useFirestore) {
+    return await firestoreService.get('npcs', id);
+  } else {
+    return buildEntityFromHistory('npc', id);
+  }
 }
 
-export function getSession(id) {
-  return buildEntityFromHistory('session', id);
+export async function getItem(id) {
+  if (!isInitialized) await initWorldData();
+  
+  if (useFirestore) {
+    return await firestoreService.get('items', id);
+  } else {
+    return buildEntityFromHistory('item', id);
+  }
+}
+
+export async function getSession(id) {
+  if (!isInitialized) await initWorldData();
+  
+  if (useFirestore) {
+    return await firestoreService.get('sessions', id);
+  } else {
+    return buildEntityFromHistory('session', id);
+  }
 }
 
 // Get all sessions
-export function getAllSessions() {
-  return getAllEntities('session').sort((a, b) => {
-    // Get session number from ID
-    const aNum = parseInt(a.id.split('-')[1]) || -1;
-    const bNum = parseInt(b.id.split('-')[1]) || -1;
-    return bNum - aNum; // Sort in descending order (newest first)
-  });
+export async function getAllSessions() {
+  if (!isInitialized) await initWorldData();
+  
+  if (useFirestore) {
+    return await firestoreService.getAllSessions();
+  } else {
+    return getAllEntities('session').sort((a, b) => {
+      // Get session number from ID
+      const aNum = parseInt(a.id.split('-')[1]) || -1;
+      const bNum = parseInt(b.id.split('-')[1]) || -1;
+      return bNum - aNum; // Sort in descending order (newest first)
+    });
+  }
 }
 
 // Get all characters
-export function getAllCharacters() {
-  return getAllEntities('character');
+export async function getAllCharacters() {
+  if (!isInitialized) await initWorldData();
+  
+  if (useFirestore) {
+    return await firestoreService.getAllCharacters();
+  } else {
+    return getAllEntities('character');
+  }
 }
 
 // Get all npcs
-export function getAllNpcs() {
-  return getAllEntities('npc');
+export async function getAllNpcs() {
+  if (!isInitialized) await initWorldData();
+  
+  if (useFirestore) {
+    return await firestoreService.getAllNpcs();
+  } else {
+    return getAllEntities('npc');
+  }
 }
 
 // Get all items 
-export function getAllItems() {
-  return getAllEntities('item');
+export async function getAllItems() {
+  if (!isInitialized) await initWorldData();
+  
+  if (useFirestore) {
+    return await firestoreService.getAllItems();
+  } else {
+    return getAllEntities('item');
+  }
 }
 
 // Entity retrieval functions
-export function getEntity(type, id) {
-  if (type === 'character') return getCharacter(id);
-  if (type === 'npc') return getNpc(id);
-  if (type === 'location') return getLocation(id);
-  if (type === 'item') return getItem(id);
-  if (type === 'session') return getSession(id);
+export async function getEntity(type, id) {
+  if (type === 'character') return await getCharacter(id);
+  if (type === 'npc') return await getNpc(id);
+  if (type === 'location') return await getLocation(id);
+  if (type === 'item') return await getItem(id);
+  if (type === 'session') return await getSession(id);
   return null;
 }
 
 // Get entity history - events where this entity was created, updated, or connected
-export function getEntityHistory(type, id) {
-  return getEntityEvents(type, id);
+export async function getEntityHistory(type, id) {
+  if (!isInitialized) await initWorldData();
+  
+  if (useFirestore) {
+    return await firestoreService.getEntityEvents(type, id);
+  } else {
+    return getEntityEvents(type, id);
+  }
 }
 
 // Get all entities that changed in a specific session
-export function getSessionEntities(sessionId) {
-  const events = getAllSessionRelatedEvents(sessionId);
+export async function getSessionEntities(sessionId) {
+  if (!isInitialized) await initWorldData();
   
-  // Create a set of all affected entities
-  const affectedEntities = new Set();
-  
-  events.forEach(event => {
-    if (event.entityType !== 'session') { // Skip the session creation itself
-      affectedEntities.add(`${event.entityType}:${event.entityId}`);
-    }
-    if (event.type === 'connect' && event.targetEntityType) {
-      affectedEntities.add(`${event.targetEntityType}:${event.targetEntityId}`);
-    }
-  });
-  
-  // Convert the set back to an array of entity objects
-  return Array.from(affectedEntities).map(entityKey => {
-    const [type, id] = entityKey.split(':');
-    return {
-      type,
-      id,
-      entity: getEntity(type, id)
-    };
-  });
+  if (useFirestore) {
+    const events = await firestoreService.getSessionEvents(sessionId);
+    
+    // Create a set of all affected entities
+    const affectedEntities = new Set();
+    
+    events.forEach(event => {
+      if (event.entityType !== 'session') { // Skip the session creation itself
+        affectedEntities.add(`${event.entityType}:${event.entityId}`);
+      }
+      if (event.type === 'connect' && event.targetEntityType) {
+        affectedEntities.add(`${event.targetEntityType}:${event.targetEntityId}`);
+      }
+    });
+    
+    // Convert the set back to an array of entity objects
+    const entityPromises = Array.from(affectedEntities).map(async entityKey => {
+      const [type, id] = entityKey.split(':');
+      return {
+        type,
+        id,
+        entity: await getEntity(type, id)
+      };
+    });
+    
+    return Promise.all(entityPromises);
+  } else {
+    const events = getAllSessionRelatedEvents(sessionId);
+    
+    // Create a set of all affected entities
+    const affectedEntities = new Set();
+    
+    events.forEach(event => {
+      if (event.entityType !== 'session') { // Skip the session creation itself
+        affectedEntities.add(`${event.entityType}:${event.entityId}`);
+      }
+      if (event.type === 'connect' && event.targetEntityType) {
+        affectedEntities.add(`${event.targetEntityType}:${event.targetEntityId}`);
+      }
+    });
+    
+    // Convert the set back to an array of entity objects
+    return Array.from(affectedEntities).map(entityKey => {
+      const [type, id] = entityKey.split(':');
+      return {
+        type,
+        id,
+        entity: getEntity(type, id)
+      };
+    });
+  }
 }
 
 // Connection functions
-export function getEntityConnections(type, id) {
-  const entity = getEntity(type, id);
+export async function getEntityConnections(type, id) {
+  const entity = await getEntity(type, id);
 
   if (!entity || !entity.connections) return [];
 
-  return entity.connections.map(conn => {
-    const connectedEntity = getEntity(conn.type, conn.id);
+  const connectionPromises = entity.connections.map(async conn => {
+    const connectedEntity = await getEntity(conn.type, conn.id);
 
     if (connectedEntity) {
       return {
@@ -125,15 +277,16 @@ export function getEntityConnections(type, id) {
       };
     }
     return null;
-  }).filter(Boolean);
+  });
+
+  const connections = await Promise.all(connectionPromises);
+  return connections.filter(Boolean);
 }
 
-// Export the history-based collections for use in other files
-export const characters = getAllCharacters();
-export const npcs = getAllNpcs();
-export const locations = getLocations();
-export const items = getAllItems();
-export const sessions = getAllSessions();
+// Get current data source
+export function getDataSource() {
+  return { source: dataSource, initialized: isInitialized };
+}
 
 // Re-export worldHistory unchanged as it's a different structure
 import { worldHistory } from './worldHistory.js';
@@ -141,12 +294,8 @@ export { worldHistory };
 
 // Export default worldData object for easy importing
 export default {
-  characters,
-  npcs,
-  locations,
-  items,
-  sessions,
-  worldHistory,
+  initWorldData,
+  getDataSource,
   getLocations,
   getLocation,
   getCharacter,
@@ -160,5 +309,6 @@ export default {
   getEntity,
   getEntityConnections,
   getEntityHistory,
-  getSessionEntities
+  getSessionEntities,
+  worldHistory
 };

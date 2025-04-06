@@ -48,6 +48,7 @@
 
 <script>
 import { getLocations } from '../store/worldData';
+import { locations } from '../store/worldData'; // Import local data as fallback
 import EntityCard from '../components/EntityCard.vue';
 
 export default {
