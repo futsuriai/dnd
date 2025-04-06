@@ -1,7 +1,6 @@
 <template>
   <div class="content-section">
     <h1>Player Characters</h1>
-    <p class="section-intro">The brave adventurers navigating the perils of the Modern Age as Active Nodes reawaken across the land.</p>
 
     <div class="entity-grid">
       <EntityCard 

@@ -3,13 +3,11 @@
       <h1>{{ campaignName }}</h1>
       <p class="intro-text">
         Welcome to the central hub for our adventures in the realm of {{ worldName }}. 
-        Here you'll find information about the brave heroes, important NPCs, the world's 
-        rich history, magical items discovered, and chronicles of our journey.
       </p>
       
-      <!-- Placeholder for campaign banner -->
-      <div class="banner-placeholder">
-        <div class="placeholder-text">Campaign Banner</div>
+      <!-- Campaign banner image -->
+      <div class="banner-container">
+        <img src="../assets/gaslamp.png" alt="Campaign Banner" class="campaign-banner">
       </div>
       
       <div class="campaign-quick-info">
@@ -36,11 +34,11 @@
     name: 'HomeView',
     data() {
       return {
-        campaignName: '<Campaign 2>',
-        worldName: '<Unknown>',
+        campaignName: '<Untitled Gaslamp Adventures>',
+        worldName: 'New Aetherwick (TBD)',
         currentLocation: 'Session 0',
         currentQuest: 'Session 0',
-        nextSession: 'Sunday, April 6th at 2:00 PM'
+        nextSession: 'Sunday, May 4th at 1:00 PM'
       };
     }
   }
@@ -61,21 +59,22 @@
   }
   
   .banner-placeholder {
-    width: 100%;
-    height: 250px;
-    margin: 2em 0;
-    background: linear-gradient(135deg, var(--color-background) 0%, var(--color-surface) 100%);
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px dashed var(--border-color);
+    display: none; /* Hide the placeholder */
   }
   
-  .placeholder-text {
-    font-family: var(--font-accent);
-    color: var(--color-text-muted);
-    font-size: 1.2em;
+  .banner-container {
+    width: 100%;
+    margin: 2em 0;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .campaign-banner {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
   }
   
   .campaign-quick-info {
