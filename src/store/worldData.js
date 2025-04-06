@@ -353,9 +353,6 @@ export function getAllSessions() {
   
   // Transform sessions to match expected properties in the Vue component
   return sortedSessions.map(session => {
-    // Generate highlights based on the session
-    const highlights = generateSessionHighlights(session.id);
-    
     // Convert the data to the format expected by the UI
     return {
       id: session.id,
@@ -364,61 +361,9 @@ export function getAllSessions() {
       subtitle: session.subtitle || '',
       description: session.summary, // Map summary to description
       upcoming: false, // Default to false, set true for future sessions
-      highlights: highlights // Add the highlights
+      highlights: session.highlights // Add the highlights
     };
   });
-}
-
-// Generate session highlights based on significant events
-function generateSessionHighlights(sessionId) {
-  const sessionNum = parseInt(sessionId.split('-')[1]) || 0;
-  
-  // Return preset highlights based on session ID
-  switch(sessionId) {
-    case 'session-0':
-      return [
-        'Established the main party and key NPCs',
-        'Documented important locations and their connections',
-        'Inventoried significant items and their origins'
-      ];
-    case 'session-1':
-      return [
-        'Investigated the Silent Mire Ruins',
-        'Encountered and disabled an Ancient Guardian construct',
-        'Recovered a flickering Data Shard',
-        'Repelled forces loyal to Kragnor'
-      ];
-    case 'session-2':
-      return [
-        'Delivered the Data Shard to Lord Silverhand',
-        'Received cryptic prophecy from the Oracle of Nexus',
-        'Encountered Morana Shadowweaver who warned about the Oracle',
-        'Learned about the "Prophecy of Convergence"'
-      ];
-    default:
-      // For any other session, generate generic highlights based on important events
-      const events = getAllSessionRelatedEvents(sessionId);
-      const highlights = [];
-      
-      // Look for significant event types
-      const creationEvents = events.filter(e => e.changeType === 'creation');
-      const connectionEvents = events.filter(e => e.changeType.includes('connection'));
-      
-      // Add creation highlights
-      if (creationEvents.length > 0) {
-        const entityTypes = new Set(creationEvents.filter(e => e.data.entityType).map(e => e.data.entityType));
-        if (entityTypes.size > 0) {
-          highlights.push(`Discovered ${Array.from(entityTypes).join(', ')}s`);
-        }
-      }
-      
-      // Add connection highlights
-      if (connectionEvents.length > 0) {
-        highlights.push(`Established new relationships between characters and the world`);
-      }
-      
-      return highlights;
-  }
 }
 
 // Get a specific session

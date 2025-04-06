@@ -15,10 +15,10 @@
             <li><router-link to="/">Home</router-link></li>
             <li><router-link to="/sessions">Sessions</router-link></li>
             <li><router-link to="/characters">Characters</router-link></li>
-            <li><router-link to="/npcs">NPCs</router-link></li>
+            <!-- <li><router-link to="/npcs">NPCs</router-link></li>
             <li><router-link to="/locations">Locations</router-link></li>
+            <li><router-link to="/items">Items</router-link></li> -->
             <li><router-link to="/history">History</router-link></li>
-            <li><router-link to="/items">Items</router-link></li>
             <li v-if="isEditor"><router-link to="/admin" class="admin-link">Admin</router-link></li>
           </ul>
         </nav>
