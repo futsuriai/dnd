@@ -7,7 +7,7 @@
     
     <!-- Campaign banner image -->
     <div class="banner-container">
-      <img src="../assets/gaslamp.png" alt="Campaign Banner" class="campaign-banner">
+      <img src="../assets/gaslamp.jpg" alt="Campaign Banner" class="campaign-banner">
     </div>
     
     <div class="campaign-quick-info">
