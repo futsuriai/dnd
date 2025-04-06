@@ -284,14 +284,14 @@ export default {
       this.showHistory = !this.showHistory;
     },
     getSessionName(sessionId) {
-      // Session -1 is special, treat as website setup
-      if (sessionId === 'session-minus-1') {
+      // Session 0 is special (was previously session-minus-1)
+      if (sessionId === 'session-0') {
         return 'Initial Setup';
       }
       
       const session = getSession(sessionId);
       if (session) {
-        return `${session.title}: ${session.subtitle}`;
+        return `${session.title} (${session.date})`;
       }
       return sessionId;
     }

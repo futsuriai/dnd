@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { npcs } from '../store/worldData';
+import { getAllNpcs } from '../store/worldData';
 import EntityCard from '../components/EntityCard.vue';
 
 export default {
@@ -25,8 +25,12 @@ export default {
   },
   data() {
     return {
-      npcs
+      npcs: []
     };
+  },
+  async created() {
+    // Load NPCs from worldData
+    this.npcs = await getAllNpcs();
   }
 }
 </script>

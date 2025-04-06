@@ -24,13 +24,18 @@
         <p class="connection-reason" v-if="connection.reason">
           {{ connection.reason }}
         </p>
+        <div class="connection-session" v-if="expanded && connection.sessionId">
+          <span class="session-link" @click="navigateToSession(connection.sessionId)">
+            Added in: {{ getSessionName(connection.sessionId) }}
+          </span>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { getEntityConnections } from '../store/worldData';
+import { getEntityConnections, getSession } from '../store/worldData';
 
 export default {
   name: 'EntityConnections',
@@ -47,13 +52,11 @@ export default {
   },
   data() {
     return {
-      expanded: false
+      expanded: false,
+      connections: []
     };
   },
   computed: {
-    connections() {
-      return getEntityConnections(this.entityType, this.entityId);
-    },
     connectionNamesPreview() {
       if (this.connections.length === 0) return '';
       
@@ -115,6 +118,31 @@ export default {
           element.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       }, 100);
+    },
+    getSessionName(sessionId) {
+      if (sessionId === 'session-0') {
+        return 'Initial Setup';
+      }
+      
+      const session = getSession(sessionId);
+      if (session) {
+        return session.title;
+      }
+      return `Session ${sessionId.split('-')[1]}`;
+    },
+    navigateToSession(sessionId) {
+      this.$router.push({ name: 'Sessions', params: { id: sessionId } });
+    },
+    async loadConnections() {
+      this.connections = await getEntityConnections(this.entityType, this.entityId);
+    }
+  },
+  created() {
+    this.loadConnections();
+  },
+  watch: {
+    entityId() {
+      this.loadConnections();
     }
   }
 }
@@ -332,5 +360,21 @@ export default {
   .preview-text {
     max-width: 100px;
   }
+}
+
+.connection-session {
+  font-size: 0.75rem;
+  margin-top: 0.4rem;
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+.session-link {
+  cursor: pointer;
+  text-decoration: underline dotted;
+}
+
+.session-link:hover {
+  color: var(--color-text);
 }
 </style>

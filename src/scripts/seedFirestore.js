@@ -1,70 +1,75 @@
-// Database seeder - imports data from store files and seeds Firestore
+// Script to seed the Firestore database with consolidated data
 
-import firestoreService from '../services/FirestoreService';
-import { historyEntries } from '../store/history';
-import { sessions } from '../store/sessions';
-import { worldHistoryEvents } from '../store/worldHistoryEvents';
-import { characterEvents } from '../store/characterEvents';
-import { itemEvents } from '../store/itemEvents';
-import { locationEvents } from '../store/locationEvents';
-import { npcEvents } from '../store/npcEvents';
+import { historyBasedDataExpanded } from '../store/consolidatedData.js';
+import { worldHistory } from '../store/worldHistory.js';
+import firestoreService from '../services/FirestoreService.js';
+import { serverTimestamp } from 'firebase/firestore';
 
-// Function to seed the Firestore database with all history events
+// Function to seed Firestore with history-based data
 export async function seedFirestore() {
-  console.log('Starting database seeding process...');
+  console.log('Starting database seed process...');
   
   try {
-    // 1. Clear existing data first (optional - might want to comment this out in production)
-    console.log('Clearing existing data...');
-    await firestoreService.clearDatabase();
-    
-    // 2. Seed session data
-    console.log('Seeding sessions...');
-    for (const session of sessions) {
-      await firestoreService.create('sessions', session);
+    // Upload sessions first
+    console.log(`Uploading ${historyBasedDataExpanded.sessions.length} sessions...`);
+    for (const session of historyBasedDataExpanded.sessions) {
+      // Add serverTimestamp for createdAt, updatedAt
+      await firestoreService.create('sessions', {
+        ...session,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      });
     }
     
-    // 3. Seed all history events
-    console.log('Seeding history events...');
-    // Use a batch approach to avoid overwhelming Firestore
-    const allEvents = [
-      ...historyEntries,
-      ...worldHistoryEvents,
-    ];
-    
-    // Process in smaller batches
-    const batchSize = 20;
-    for (let i = 0; i < allEvents.length; i += batchSize) {
-      const batch = allEvents.slice(i, i + batchSize);
-      await Promise.all(batch.map(event => 
-        firestoreService.createHistoryEvent(event)
-      ));
-      console.log(`Processed ${i + batch.length} of ${allEvents.length} events`);
+    // Upload history entries
+    console.log(`Uploading ${historyBasedDataExpanded.historyEntries.length} history entries...`);
+    for (const entry of historyBasedDataExpanded.historyEntries) {
+      // Generate an ID based on the entry's properties for deduplication
+      const entryId = `${entry.entityType}-${entry.entityId}-${entry.sessionId}-${entry.changeType}`;
+      
+      await firestoreService.create('historyEntries', {
+        ...entry,
+        id: entryId, // Use deterministic ID
+        timestamp: new Date().toISOString(), // Add a timestamp
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      });
     }
     
-    console.log('Database seeding complete!');
-    return true;
+    // Upload world history eras
+    console.log(`Uploading ${worldHistory.eras.length} world history eras...`);
+    for (const era of worldHistory.eras) {
+      await firestoreService.create('worldHistory', {
+        ...era,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      });
+    }
+    
+    console.log('Database seed completed successfully!');
+    
+    // Return counts of uploaded data
+    return {
+      sessions: historyBasedDataExpanded.sessions.length,
+      historyEntries: historyBasedDataExpanded.historyEntries.length,
+      worldHistoryEras: worldHistory.eras.length
+    };
   } catch (error) {
-    console.error('Error seeding database:', error);
+    console.error('Error during database seed:', error);
     throw error;
   }
 }
 
-// Export other utility functions
+// Function to get counts of all events in the data
 export function getEventCounts() {
   return {
-    historyEntries: historyEntries.length,
-    sessions: sessions.length,
-    worldHistoryEvents: worldHistoryEvents.length,
-    characterEvents: characterEvents.length,
-    itemEvents: itemEvents.length,
-    locationEvents: locationEvents.length,
-    npcEvents: npcEvents.length,
-    total: historyEntries.length + worldHistoryEvents.length
+    sessions: historyBasedDataExpanded.sessions.length,
+    historyEntries: historyBasedDataExpanded.historyEntries.length,
+    worldHistoryEvents: worldHistory.eras.reduce((total, era) => total + era.events.length, 0),
+    total: historyBasedDataExpanded.sessions.length + 
+           historyBasedDataExpanded.historyEntries.length +
+           worldHistory.eras.reduce((total, era) => total + era.events.length, 0)
   };
 }
 
-export default {
-  seedFirestore,
-  getEventCounts
-};
+export default { seedFirestore, getEventCounts };

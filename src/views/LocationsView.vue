@@ -47,8 +47,7 @@
 </template>
 
 <script>
-import { getLocations } from '../store/worldData';
-import { locations } from '../store/worldData'; // Import local data as fallback
+import { getLocations, getAllEntities } from '../store/worldData';
 import EntityCard from '../components/EntityCard.vue';
 
 export default {
@@ -56,15 +55,35 @@ export default {
   components: {
     EntityCard
   },
+  data() {
+    return {
+      allLocations: []
+    };
+  },
+  async created() {
+    // Load all locations once
+    this.allLocations = await getAllEntities('location');
+  },
   methods: {
     getCitiesLocations() {
-      return getLocations('city');
+      return this.allLocations.filter(loc => 
+        loc.type === 'City' || loc.type === 'City District'
+      );
     },
     getDungeonsLocations() {
-      return getLocations('dungeon');
+      return this.allLocations.filter(loc => 
+        loc.type === 'Ancient Ruin Site' || 
+        loc.type === 'Fortress' || 
+        loc.type === 'Dungeon'
+      );
     },
     getPointsOfInterestLocations() {
-      return getLocations('poi');
+      return this.allLocations.filter(loc => 
+        loc.type === 'Place of Power' || 
+        loc.type === 'Landmark' || 
+        loc.type === 'Region' ||
+        (loc.type && !this.getCitiesLocations().includes(loc) && !this.getDungeonsLocations().includes(loc))
+      );
     }
   }
 };

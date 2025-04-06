@@ -36,8 +36,8 @@
 import EntityCard from '../components/EntityCard.vue';
 import firestoreService from '../services/FirestoreService';
 import authService from '../services/AuthService';
-// Import local data as fallback
-import { characters as localCharacters } from '../store/worldData';
+// Import worldData functions
+import { getAllCharacters } from '../store/worldData';
 
 export default {
   name: 'CharactersView',
@@ -79,20 +79,20 @@ export default {
           // Fetch characters from Firestore
           this.characters = await firestoreService.getAllCharacters();
           
-          // If no characters are in Firestore yet, fall back to local data
+          // If no characters are in Firestore yet, fall back to worldData
           if (this.characters.length === 0) {
-            console.log('No characters found in Firestore, using local data');
-            this.characters = localCharacters;
+            console.log('No characters found in Firestore, using worldData');
+            this.characters = await getAllCharacters();
           }
         } else {
-          // Use local data directly
-          this.characters = localCharacters;
+          // Use worldData directly
+          this.characters = await getAllCharacters();
         }
       } catch (error) {
         console.error('Error loading characters:', error);
         this.error = 'Failed to load characters. Please try again.';
-        // Fall back to local data on error
-        this.characters = localCharacters;
+        // Fall back to worldData on error
+        this.characters = await getAllCharacters();
       } finally {
         this.loading = false;
       }
