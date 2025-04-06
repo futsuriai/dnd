@@ -1,18 +1,18 @@
-// Central data store for world information with bidirectional relationships
-// Imports all data collections from separate files and provides shared logic
+// Central data store for world information using history-based event sourcing
+// This file now acts as an adapter between the history-based data model and the rest of the application
 
-// Import data collections from separate files
-import { characters } from './characters.js';
-import { npcs } from './npcs.js';
-import { locations } from './locations.js';
-import { items } from './items.js';
-import { sessions } from './sessions.js';
-import { worldHistory } from './worldHistory.js';
+import historyStore, {
+  buildEntityFromHistory,
+  getAllEntities,
+  getEntityEvents,
+  getAllSessionRelatedEvents
+} from './history.js';
 
 // HELPER FUNCTIONS
 
-// Getter functions
+// Getter functions - now pulling from history events
 export function getLocations(type = null) {
+  const locations = getAllEntities('location');
   if (type) {
     return locations.filter(loc => loc.type === type);
   }
@@ -20,23 +20,48 @@ export function getLocations(type = null) {
 }
 
 export function getLocation(id) {
-  return locations.find(loc => loc.id === id);
+  return buildEntityFromHistory('location', id);
 }
 
 export function getCharacter(id) {
-  return characters.find(char => char.id === id);
+  return buildEntityFromHistory('character', id);
 }
 
 export function getNpc(id) {
-  return npcs.find(npc => npc.id === id);
+  return buildEntityFromHistory('npc', id);
 }
 
 export function getItem(id) {
-  return items.find(item => item.id === id);
+  return buildEntityFromHistory('item', id);
 }
 
 export function getSession(id) {
-  return sessions.find(session => session.id === id);
+  return buildEntityFromHistory('session', id);
+}
+
+// Get all sessions
+export function getAllSessions() {
+  return getAllEntities('session').sort((a, b) => {
+    // Get session number from ID
+    const aNum = parseInt(a.id.split('-')[1]) || -1;
+    const bNum = parseInt(b.id.split('-')[1]) || -1;
+    return bNum - aNum; // Sort in descending order (newest first)
+  });
+}
+
+// Get all characters
+export function getAllCharacters() {
+  return getAllEntities('character');
+}
+
+// Get all npcs
+export function getAllNpcs() {
+  return getAllEntities('npc');
+}
+
+// Get all items 
+export function getAllItems() {
+  return getAllEntities('item');
 }
 
 // Entity retrieval functions
@@ -49,83 +74,36 @@ export function getEntity(type, id) {
   return null;
 }
 
-// Entity adding functions
-export function addCharacter(character) {
-  // Ensure the character has all required fields
-  if (!character.id || !character.name) {
-    console.error('Character must have id and name');
-    return false;
-  }
-
-  // Check for duplicates
-  if (getCharacter(character.id)) {
-    console.error(`Character with id ${character.id} already exists`);
-    return false;
-  }
-
-  // Add to collection
-  characters.push(character);
-  return true;
+// Get entity history - events where this entity was created, updated, or connected
+export function getEntityHistory(type, id) {
+  return getEntityEvents(type, id);
 }
 
-export function addNpc(npc) {
-  if (!npc.id || !npc.name) {
-    console.error('NPC must have id and name');
-    return false;
-  }
-
-  if (getNpc(npc.id)) {
-    console.error(`NPC with id ${npc.id} already exists`);
-    return false;
-  }
-
-  npcs.push(npc);
-  return true;
-}
-
-export function addLocation(location) {
-  if (!location.id || !location.name || !location.type) {
-    console.error('Location must have id, name, and type');
-    return false;
-  }
-
-  if (getLocation(location.id)) {
-    console.error(`Location with id ${location.id} already exists`);
-    return false;
-  }
-
-  locations.push(location);
-  return true;
-}
-
-export function addItem(item) {
-  if (!item.id || !item.name) {
-    console.error('Item must have id and name');
-    return false;
-  }
-
-  if (getItem(item.id)) {
-    console.error(`Item with id ${item.id} already exists`);
-    return false;
-  }
-
-  items.push(item);
-  return true;
-}
-
-export function addSession(session) {
-  if (!session.id || !session.title) {
-    console.error('Session must have id and title');
-    return false;
-  }
-
-  if (getSession(session.id)) {
-    console.error(`Session with id ${session.id} already exists`);
-    return false;
-  }
-
-  sessions.push(session);
-  return true;
+// Get all entities that changed in a specific session
+export function getSessionEntities(sessionId) {
+  const events = getAllSessionRelatedEvents(sessionId);
+  
+  // Create a set of all affected entities
+  const affectedEntities = new Set();
+  
+  events.forEach(event => {
+    if (event.entityType !== 'session') { // Skip the session creation itself
+      affectedEntities.add(`${event.entityType}:${event.entityId}`);
+    }
+    if (event.type === 'connect' && event.targetEntityType) {
+      affectedEntities.add(`${event.targetEntityType}:${event.targetEntityId}`);
+    }
+  });
+  
+  // Convert the set back to an array of entity objects
+  return Array.from(affectedEntities).map(entityKey => {
+    const [type, id] = entityKey.split(':');
+    return {
+      type,
+      id,
+      entity: getEntity(type, id)
+    };
+  });
 }
 
 // Connection functions
@@ -142,58 +120,24 @@ export function getEntityConnections(type, id) {
         name: connectedEntity.name,
         id: connectedEntity.id,
         reason: conn.reason,
-        entityType: conn.type
+        entityType: conn.type,
+        sessionId: conn.sessionId // Include when the connection was established
       };
     }
     return null;
   }).filter(Boolean);
 }
 
-export function addConnection(sourceType, sourceId, targetType, targetId, reason) {
-  const sourceEntity = getEntity(sourceType, sourceId);
-  const targetEntity = getEntity(targetType, targetId);
+// Export the history-based collections for use in other files
+export const characters = getAllCharacters();
+export const npcs = getAllNpcs();
+export const locations = getLocations();
+export const items = getAllItems();
+export const sessions = getAllSessions();
 
-  if (!sourceEntity || !targetEntity) {
-    console.error('Source or target entity not found');
-    return false;
-  }
-
-  // Initialize connections array if it doesn't exist
-  if (!sourceEntity.connections) {
-    sourceEntity.connections = [];
-  }
-
-  // Check if connection already exists
-  const existingConnection = sourceEntity.connections.find(conn =>
-    conn.type === targetType && conn.id === targetId
-  );
-
-  if (existingConnection) {
-    // Update reason if provided
-    if (reason) {
-      existingConnection.reason = reason;
-    }
-  } else {
-    // Add new connection
-    sourceEntity.connections.push({
-      type: targetType,
-      id: targetId,
-      reason: reason || `Connected to ${targetEntity.name}`
-    });
-  }
-
-  return true;
-}
-
-// Export the data collections for use in other files
-export {
-  characters,
-  npcs,
-  locations,
-  items,
-  sessions,
-  worldHistory
-};
+// Re-export worldHistory unchanged as it's a different structure
+import { worldHistory } from './worldHistory.js';
+export { worldHistory };
 
 // Export default worldData object for easy importing
 export default {
@@ -206,15 +150,15 @@ export default {
   getLocations,
   getLocation,
   getCharacter,
+  getAllCharacters,
   getNpc,
+  getAllNpcs,
   getItem,
+  getAllItems,
   getSession,
+  getAllSessions,
   getEntity,
   getEntityConnections,
-  addCharacter,
-  addNpc,
-  addLocation,
-  addItem,
-  addSession,
-  addConnection
+  getEntityHistory,
+  getSessionEntities
 };

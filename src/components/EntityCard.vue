@@ -57,6 +57,11 @@
             <span class="detail-label">Background:</span>
             <span class="detail-value">{{ entity.background }}</span>
           </div>
+          
+          <!-- Optional quote section for characters -->
+          <div v-if="entity.quote" class="character-quote">
+            <blockquote>{{ entity.quote }}</blockquote>
+          </div>
         </template>
         
         <!-- NPC entities -->
@@ -69,6 +74,11 @@
           <div class="detail-row">
             <span class="detail-icon">👑</span>
             <span>{{ entity.role }}</span>
+          </div>
+          
+          <!-- Optional quote section for NPCs -->
+          <div v-if="entity.quote" class="npc-quote">
+            <blockquote>{{ entity.quote }}</blockquote>
           </div>
         </template>
         
@@ -101,6 +111,30 @@
         <p>{{ entity.description || entity.bio }}</p>
       </div>
       
+      <!-- Character-specific traits -->
+      <div v-if="entityType === 'character' && entity.specialAbility" class="character-traits">
+        <div class="ability">
+          <span class="ability-label">Special Ability:</span>
+          <span>{{ entity.specialAbility }}</span>
+        </div>
+      </div>
+      
+      <!-- NPC-specific traits -->
+      <div v-if="entityType === 'npc' && entity.inventory" class="npc-traits">
+        <div class="inventory">
+          <span class="inventory-label">Inventory:</span>
+          <span>{{ entity.inventory }}</span>
+        </div>
+      </div>
+      
+      <!-- Character inventory if available -->
+      <div v-if="entityType === 'character' && entity.inventory" class="character-inventory">
+        <div class="inventory">
+          <span class="inventory-label">Inventory:</span>
+          <span>{{ entity.inventory }}</span>
+        </div>
+      </div>
+      
       <!-- Action Buttons Section -->
       <div v-if="hasActions" class="entity-actions">
         <a v-if="entityType === 'character' && entity.dndBeyondLink" 
@@ -115,11 +149,40 @@
     
     <!-- EntityConnections Component -->
     <EntityConnections :entityType="entityType" :entityId="entity.id" v-if="entity.id" />
+    
+    <!-- Entity History Section -->
+    <div class="entity-history" v-if="entity.history && entity.history.length">
+      <div class="history-header" @click="toggleHistory">
+        <h4>History</h4>
+        <span class="toggle-icon">{{ showHistory ? '▼' : '▶' }}</span>
+      </div>
+      
+      <div v-if="showHistory" class="history-content">
+        <div v-for="(sessionHistory, index) in entity.history" 
+             :key="'history-' + index"
+             class="history-session-group">
+          
+          <div class="history-session-header">
+            <span class="session-indicator"></span>
+            <span class="session-name">{{ getSessionName(sessionHistory.sessionId) }}</span>
+          </div>
+          
+          <ul class="history-events">
+            <li v-for="(event, eventIndex) in sessionHistory.events" 
+                :key="'event-' + eventIndex"
+                :class="['history-event', event.type]">
+              {{ event.description }}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import EntityConnections from './EntityConnections.vue';
+import { getSession } from '../store/worldData';
 
 export default {
   name: 'EntityCard',
@@ -140,6 +203,11 @@ export default {
       type: Boolean,
       default: false
     }
+  },
+  data() {
+    return {
+      showHistory: false
+    };
   },
   computed: {
     hasMetadata() {
@@ -197,6 +265,7 @@ export default {
           magic: '✨',
           shrine: '🔮',
           monument: '🗿',
+          tavern: '🍺',
           default: '⭐'
         };
         
@@ -210,6 +279,21 @@ export default {
       }
       
       return '';
+    },
+    toggleHistory() {
+      this.showHistory = !this.showHistory;
+    },
+    getSessionName(sessionId) {
+      // Session -1 is special, treat as website setup
+      if (sessionId === 'session-minus-1') {
+        return 'Initial Setup';
+      }
+      
+      const session = getSession(sessionId);
+      if (session) {
+        return `${session.title}: ${session.subtitle}`;
+      }
+      return sessionId;
     }
   }
 }
@@ -331,6 +415,32 @@ export default {
 .entity-description p {
   margin: 0;
   line-height: 1.6;
+}
+
+/* Quote styling */
+.character-quote blockquote,
+.npc-quote blockquote {
+  font-style: italic;
+  border-left: 3px solid var(--color-primary);
+  padding-left: 10px;
+  margin: 12px 0;
+  font-size: 0.95rem;
+}
+
+/* Character traits */
+.character-traits, 
+.npc-traits,
+.character-inventory {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dotted var(--border-color);
+}
+
+.ability-label, 
+.inventory-label {
+  font-weight: bold;
+  color: var(--color-primary);
+  margin-right: 0.5rem;
 }
 
 /* Actions section */
@@ -467,6 +577,97 @@ export default {
 /* Specific entity type customizations */
 .location-card {
   background: rgba(0, 0, 0, 0.2);
+}
+
+/* Entity History Section */
+.entity-history {
+  border-top: 1px solid var(--border-color);
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+}
+
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  margin-bottom: 0.5rem;
+}
+
+.history-header h4 {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--color-primary);
+}
+
+.toggle-icon {
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  transition: transform 0.3s ease;
+}
+
+.history-content {
+  padding-top: 0.5rem;
+}
+
+.history-session-group {
+  margin-bottom: 1rem;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  padding: 0.8rem;
+}
+
+.history-session-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+.session-indicator {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background-color: var(--color-primary);
+  border-radius: 50%;
+  margin-right: 0.5rem;
+}
+
+.history-events {
+  list-style: none;
+  padding-left: 1rem;
+  margin: 0.5rem 0 0;
+}
+
+.history-event {
+  position: relative;
+  font-size: 0.85rem;
+  margin-bottom: 0.5rem;
+  padding-left: 1.2rem;
+}
+
+.history-event:before {
+  content: "";
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #666;
+  left: 0;
+  top: 7px;
+}
+
+.history-event.create:before {
+  background-color: #4caf50; /* green */
+}
+
+.history-event.update:before {
+  background-color: #2196f3; /* blue */
+}
+
+.history-event.connect:before {
+  background-color: #ff9800; /* orange */
 }
 
 /* Responsive adjustments */

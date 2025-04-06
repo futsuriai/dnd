@@ -28,6 +28,103 @@
                 </li>
               </ul>
             </div>
+            
+            <!-- Session affected entities section -->
+            <div v-if="!session.upcoming && getSessionEntitiesData(session.id).length > 0" class="session-affected-entities">
+              <div class="affected-entities-header" @click="toggleEntityChanges(session.id)">
+                <h4>Entities Affected</h4>
+                <span class="toggle-icon">{{ isEntityChangesOpen(session.id) ? '▼' : '▶' }}</span>
+              </div>
+              
+              <div v-show="isEntityChangesOpen(session.id)" class="affected-entities-content">
+                <div class="entity-changes-categories">
+                  <!-- Characters -->
+                  <div v-if="getSessionEntitiesByType(session.id, 'character').length > 0" class="entity-type-group">
+                    <h5>Characters</h5>
+                    <div class="session-entity-grid">
+                      <div v-for="entity in getSessionEntitiesByType(session.id, 'character')" 
+                           :key="entity.id"
+                           class="session-entity-card">
+                        <div class="entity-name">{{ entity.entity.name }}</div>
+                        <div class="entity-changes">
+                          <router-link :to="{ name: 'Characters', hash: '#' + entity.id }">
+                            View changes
+                          </router-link>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- NPCs -->
+                  <div v-if="getSessionEntitiesByType(session.id, 'npc').length > 0" class="entity-type-group">
+                    <h5>NPCs</h5>
+                    <div class="session-entity-grid">
+                      <div v-for="entity in getSessionEntitiesByType(session.id, 'npc')" 
+                           :key="entity.id"
+                           class="session-entity-card">
+                        <div class="entity-name">{{ entity.entity.name }}</div>
+                        <div class="entity-changes">
+                          <router-link :to="{ name: 'NPCs', hash: '#' + entity.id }">
+                            View changes
+                          </router-link>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- Locations -->
+                  <div v-if="getSessionEntitiesByType(session.id, 'location').length > 0" class="entity-type-group">
+                    <h5>Locations</h5>
+                    <div class="session-entity-grid">
+                      <div v-for="entity in getSessionEntitiesByType(session.id, 'location')" 
+                           :key="entity.id"
+                           class="session-entity-card">
+                        <div class="entity-name">{{ entity.entity.name }}</div>
+                        <div class="entity-changes">
+                          <router-link :to="{ name: 'Locations', hash: '#' + entity.id }">
+                            View changes
+                          </router-link>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- Items -->
+                  <div v-if="getSessionEntitiesByType(session.id, 'item').length > 0" class="entity-type-group">
+                    <h5>Items</h5>
+                    <div class="session-entity-grid">
+                      <div v-for="entity in getSessionEntitiesByType(session.id, 'item')" 
+                           :key="entity.id"
+                           class="session-entity-card">
+                        <div class="entity-name">{{ entity.entity.name }}</div>
+                        <div class="entity-changes">
+                          <router-link :to="{ name: 'Items', hash: '#' + entity.id }">
+                            View changes
+                          </router-link>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- History -->
+                  <div v-if="getSessionEntitiesByType(session.id, 'history').length > 0" class="entity-type-group">
+                    <h5>History</h5>
+                    <div class="session-entity-grid">
+                      <div v-for="entity in getSessionEntitiesByType(session.id, 'history')" 
+                           :key="entity.id"
+                           class="session-entity-card">
+                        <div class="entity-name">{{ getHistoryEraName(entity.id) }}</div>
+                        <div class="entity-changes">
+                          <router-link :to="{ name: 'History' }">
+                            View changes
+                          </router-link>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -36,14 +133,40 @@
 </template>
 
 <script>
-import { sessions } from '../store/worldData';
+import { getSessionEntities, worldHistory } from '../store/worldData';
 
 export default {
   name: 'SessionsView',
   data() {
     return {
-      sessions
+      sessions: [],
+      openEntityChanges: {}
     };
+  },
+  methods: {
+    toggleEntityChanges(sessionId) {
+      this.openEntityChanges[sessionId] = !this.isEntityChangesOpen(sessionId);
+    },
+    isEntityChangesOpen(sessionId) {
+      return !!this.openEntityChanges[sessionId];
+    },
+    getSessionEntitiesData(sessionId) {
+      return getSessionEntities(sessionId);
+    },
+    getSessionEntitiesByType(sessionId, type) {
+      return this.getSessionEntitiesData(sessionId).filter(entity => entity.type === type);
+    },
+    getHistoryEraName(eraId) {
+      const era = worldHistory.eras.find(e => e.id === eraId);
+      return era ? era.name : eraId;
+    }
+  },
+  created() {
+    // Import dynamically to ensure the component gets the latest data
+    import('../store/worldData')
+      .then(module => {
+        this.sessions = module.sessions;
+      });
   }
 };
 </script>
@@ -138,6 +261,84 @@ export default {
   margin-bottom: 0.5rem;
 }
 
+/* Session affected entities styling */
+.session-affected-entities {
+  margin-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 1rem;
+}
+
+.affected-entities-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  margin-bottom: 1rem;
+}
+
+.affected-entities-header h4 {
+  margin: 0;
+  color: var(--color-primary);
+  font-size: 1.1rem;
+}
+
+.toggle-icon {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  transition: transform 0.3s ease;
+}
+
+.affected-entities-content {
+  padding: 0.5rem 0;
+}
+
+.entity-type-group {
+  margin-bottom: 1.5rem;
+}
+
+.entity-type-group h5 {
+  margin: 0 0 0.75rem 0;
+  font-size: 1rem;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+  padding-bottom: 0.3rem;
+}
+
+.session-entity-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 0.75rem;
+}
+
+.session-entity-card {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  padding: 0.5rem 0.75rem;
+  transition: all 0.2s ease;
+}
+
+.session-entity-card:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.entity-name {
+  font-weight: bold;
+  margin-bottom: 0.3rem;
+  font-size: 0.9rem;
+}
+
+.entity-changes {
+  font-size: 0.8rem;
+}
+
+.entity-changes a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.entity-changes a:hover {
+  text-decoration: underline;
+}
+
 @media (max-width: 600px) {
   .header-top-line {
     flex-wrap: wrap;
@@ -150,6 +351,10 @@ export default {
   
   .session-subtitle {
     margin-top: 0.5rem;
+  }
+  
+  .session-entity-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   }
 }
 </style>
