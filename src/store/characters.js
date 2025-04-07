@@ -35,7 +35,7 @@ export const characters = [
     id: 'alex',
     name: 'Alex',
     player: 'Alex',
-    race: 'Fey',
+    race: 'Eladrin Elf or Aasimar (Eldritch/Nyarlathotep)',
     class: 'Gloomstalker Ranger',
     level: 3,
     background: 'Eldritch/Ancient',
