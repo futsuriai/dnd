@@ -44,61 +44,7 @@
             </div>
           </div>
         </div>
-        
-        <!-- NPCs Section -->
-        <div v-if="activeSection === 'npcs'" class="entity-editor">
-          <h3>Manage NPCs</h3>
-          <button class="new-entity-button" @click="createNewEntity('npc')">
-            Add New NPC
-          </button>
-          
-          <div class="entity-list">
-            <div v-for="entity in npcs" :key="entity.id" class="entity-item">
-              <div class="entity-name">{{ entity.name }}</div>
-              <div class="entity-actions">
-                <button @click="editEntity('npc', entity)">Edit</button>
-                <button class="delete-button" @click="confirmDelete('npc', entity)">Delete</button>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <!-- Locations Section -->
-        <div v-if="activeSection === 'locations'" class="entity-editor">
-          <h3>Manage Locations</h3>
-          <button class="new-entity-button" @click="createNewEntity('location')">
-            Add New Location
-          </button>
-          
-          <div class="entity-list">
-            <div v-for="entity in locations" :key="entity.id" class="entity-item">
-              <div class="entity-name">{{ entity.name }}</div>
-              <div class="entity-actions">
-                <button @click="editEntity('location', entity)">Edit</button>
-                <button class="delete-button" @click="confirmDelete('location', entity)">Delete</button>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <!-- Items Section -->
-        <div v-if="activeSection === 'items'" class="entity-editor">
-          <h3>Manage Items</h3>
-          <button class="new-entity-button" @click="createNewEntity('item')">
-            Add New Item
-          </button>
-          
-          <div class="entity-list">
-            <div v-for="entity in items" :key="entity.id" class="entity-item">
-              <div class="entity-name">{{ entity.name }}</div>
-              <div class="entity-actions">
-                <button @click="editEntity('item', entity)">Edit</button>
-                <button class="delete-button" @click="confirmDelete('item', entity)">Delete</button>
-              </div>
-            </div>
-          </div>
-        </div>
-        
+
         <!-- Sessions Section -->
         <div v-if="activeSection === 'sessions'" class="entity-editor">
           <h3>Manage Sessions</h3>
@@ -244,9 +190,9 @@ export default defineComponent({
     const activeSection = ref<string>('characters');
     const sections = ref<Section[]>([
       { id: 'characters', name: 'Characters' },
-      { id: 'npcs', name: 'NPCs' },
-      { id: 'locations', name: 'Locations' },
-      { id: 'items', name: 'Items' },
+      // { id: 'npcs', name: 'NPCs' },
+      // { id: 'locations', name: 'Locations' },
+      // { id: 'items', name: 'Items' },
       { id: 'sessions', name: 'Sessions' },
       { id: 'database', name: 'Database' }
     ]);

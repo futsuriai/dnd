@@ -194,6 +194,15 @@ export default defineComponent({
         // Get all sessions using worldData adapter
         sessions.value = await worldData.getAllSessions();
         
+        // Sort sessions by date, newest first
+        sessions.value.sort((a, b) => {
+          // Convert dates to timestamp for comparison
+          const dateA = new Date(a.date).getTime();
+          const dateB = new Date(b.date).getTime();
+          // Sort in descending order (newest first)
+          return dateB - dateA;
+        });
+        
         // Pre-load affected entities for each session
         for (const session of sessions.value) {
           await loadSessionEntities(session.id);
