@@ -21,8 +21,8 @@
             <li><router-link to="/history">History</router-link></li>
             <li v-if="isEditor"><router-link to="/admin" class="admin-link">Admin</router-link></li>
           </ul>
+          <AuthComponent class="auth-component" />
         </nav>
-        <AuthComponent />
       </div>
     </header>
 
@@ -155,14 +155,19 @@ footer::before {
 nav {
   position: relative;
   flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 nav ul {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   padding: 0;
   list-style: none;
   margin: 0;
+  flex: 1;
+  gap: 1.5rem;
 }
 
 .mobile-nav-toggle {
@@ -201,6 +206,10 @@ nav ul {
   vertical-align: middle;
 }
 
+.auth-component {
+  margin-left: 1rem;
+}
+
 @media (max-width: 600px) {
   .header-container {
     flex-direction: column;
@@ -208,6 +217,9 @@ nav ul {
   
   nav {
     width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
   
   nav ul {
@@ -245,7 +257,12 @@ nav ul {
   
   .mobile-nav-toggle {
     display: flex;
+    flex: 1;
     align-items: center;
+  }
+  
+  .auth-component {
+    margin-left: auto;
   }
   
   main, header, footer {
