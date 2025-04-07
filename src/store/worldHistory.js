@@ -1,88 +1,86 @@
-// World history data
+// Revised World History Data: Balanced Edition
 
 export const worldHistory = {
   eras: [
     {
-      id: 'age-of-arcana',
-      name: 'The Age of Arcana',
-      period: 'Ancient Times',
+      id: 'era-of-wild-magic',
+      name: 'Era of Wild Magic',
+      period: 'Before the Long Eclipse',
       description: [
-        'Legends tell of an age when magic flowed freely through the world. The Arcane Masters crafted wonders beyond modern comprehension, their spells and rituals allowing them to communicate across vast distances, alter the very elements, and even touch the stars.',
-        'The Arcane Conclave, a council of the most powerful mages, maintained balance and harmony. Their great libraries contained knowledge of spells that could reshape mountains, cure any ailment, or create life from mere thought.',
-        'This golden age saw the rise of magnificent floating cities and living architecture that responded to its inhabitants\' needs. Magic was the foundation of daily life, and all beings lived in harmony with the natural world.'
+        'Before historical records became clouded, the world thrived with varied cultures steeped in powerful and unpredictable magic. Communities ranged from shamanic tribes and arcane conclaves to city-states aligned with elemental beings or Fey courts.',
+        'Spirits and mythical beings interacted freely with mortals, forging pacts and influencing civilizations. Power dynamics shifted rapidly, with kingdoms rising and falling based on their mastery or favor of arcane energies.',
+        'While danger was constant—magical beasts roamed untamed and rituals could spiral disastrously out of control—many ancient sites still bear testament to the era\'s creativity and diversity.'
       ],
       events: [
-        { year: 'Unknown', description: 'The formation of the Arcane Conclave unites the magical traditions.' },
-        { year: 'Unknown', description: 'Creation of the World Gates, allowing instant travel between distant lands.' },
-        { year: 'Unknown', description: 'The Communion of Spirits establishes peaceful contact with the fey realms.' }
+        { year: 'Unknown', description: 'Formation of alliances between Fey Courts and mortal kingdoms.' },
+        { year: 'Unknown', description: 'Construction of mystical sites, such as the famed Spirit Stones.' },
+        { year: 'Unknown', description: 'Localized cults flourish around minor deities and natural forces.' }
       ]
     },
     {
-      id: 'the-cataclysm',
-      name: 'The Cataclysm',
-      period: 'The Shattering of Magic',
+      id: 'the-long-eclipse',
+      name: 'The Long Eclipse',
+      period: 'The Shrouded Age (Centuries preceding 1 AE)',
       description: [
-        'The downfall came when the Arcane Conclave attempted to harness powers beyond mortal understanding. In their pursuit of immortality, they tore open the veil between planes, unleashing chaotic energies that fractured the world\'s magical foundations.',
-        'The resulting Cataclysm destroyed the great cities and twisted the land. Wild magic corrupted plants, animals, and even people. The World Gates collapsed, severing connections between distant regions.',
-        'In the aftermath, survivors huddled in small enclaves, their memories of the golden age fading to myth. The flow of magic became erratic and dangerous, with strange new creatures emerging from the fractured places of the world.'
+        'A mysterious event plunged the world into prolonged darkness, disrupting natural and magical orders alike. Fey beings retreated or turned hostile; divine presences vanished or grew silent. Societies collapsed, isolated in fear as knowledge faded.',
+        'With darkness came corruption, monsters emerged from shadows, and survivors struggled for generations amid dwindling hope and resources. Stories vary about the cause—cosmic event, magical cataclysm, or divine punishment—but all agree it reshaped civilization.',
+        'Small, fortified communities endured by banding together under warlords or wise leaders, fostering new traditions and alliances.'
       ],
       events: [
-        { year: 'The Final Incantation', description: 'The Immortality Ritual fails, beginning the Cataclysm.' },
-        { year: 'Unknown', description: 'The fall of the floating cities as wild magic sweeps the world.' },
-        { year: 'Unknown', description: 'The Great Silence begins, a period where magic becomes unpredictable and feared.' }
+        { year: 'Unknown', description: 'Fey Courts withdraw support, leading to societal collapse.' },
+        { year: 'Unknown', description: 'Emergence of shadow creatures and corrupted wildlife.' },
+        { year: 'Unknown', description: 'Disruption of magical ley lines causes widespread instability.' }
       ]
     },
     {
-      id: 'age-of-faith',
-      name: 'The Age of Faith',
-      period: '1-600 PC (Post-Cataclysm)',
+      id: 'the-dawn-of-light',
+      name: 'The Dawn of Light',
+      period: 'Approx. 1 AE - 200 AE',
       description: [
-        'From the ashes of the old world, the Divine Ecclesia emerged as a guiding light. Founded by those who claimed to hear the voices of new gods born from the Cataclysm, the church provided structure and hope to a shattered society.',
-        'The Ecclesia taught that the Cataclysm was divine punishment for mortal hubris. They established strict doctrine around the use of magic, declaring it a divine gift to be channeled only through proper rituals and prayers approved by the church.',
-        'The first settlements coalesced around ancient ruins, where the Ecclesia built grand cathedrals and monasteries to harness the lingering magical energies. The church\'s influence grew as they provided education, protection, and a framework for understanding the new world.'
+        'In a world fractured by despair, new forces rose promising unity and renewal. Most famously, the faith of Eulogia began spreading, sparked by a mysterious Guiding Being who sacrificed and was reborn, drawing followers seeking hope amidst darkness.',
+        'Yet faith was not the only unifying force: elsewhere, powerful leaders established alliances and foundations for what would become the Empire, driven equally by pragmatic necessity as spiritual belief. The province known today as the Hieroterra Province, paradoxically, remained largely independent, resistant to centralized authority and fiercely protective of its older traditions and knowledge.',
+        'This period saw communities across the lands rediscovering hope, knowledge, and order, whether driven by religious fervor or practical governance.'
       ],
       events: [
-        { year: '1 PC', description: 'The Divine Revelation of Saint Lumina establishes the Ecclesia\'s founding principles.' },
-        { year: '112 PC', description: 'Completion of the Grand Cathedral in Old Aetherwick, establishing the first permanent settlement.' },
-        { year: '387 PC', description: 'The Codex Divinia is compiled, standardizing church doctrine across all settlements.' },
-        { year: '542 PC', description: 'The Council of Thirteen Bishops divides the known world into church provinces.' }
+        { year: '~1 AE', description: 'The Guiding Being leads followers from the Hieroterra Province on the Great Pilgrimage.' },
+        { year: '~50 AE', description: 'Formation of the early Imperial Concordat, gradually consolidating scattered communities into a broader political entity.' },
+        { year: '~120 AE', description: 'Eulogia solidifies doctrines, coexisting uneasily with older faiths and traditions.' },
+        { year: '~180 AE', description: 'Establishment of the new Imperial Capital far from the Hieroterra Province, solidifying political authority distinct from religious centers.' }
       ]
     },
     {
-      id: 'age-of-nobles',
-      name: 'The Age of Nobility',
-      period: '600-1500 PC',
+      id: 'the-imperial-age',
+      name: 'The Imperial Age',
+      period: 'Approx. 200 AE - 500 AE',
       description: [
-        'As populations grew, a new social order emerged. Families who demonstrated particular skill in channeling magic through church-approved methods became the first noble houses. The Ecclesia granted them divine right to rule, creating a stratified society with clear boundaries between classes.',
-        'The House of Aether, claiming descent from Saint Lumina herself, rose to prominence and established the Kingdom of Luminaria with Old Aetherwick as its capital. Other noble houses controlled different territories, all maintaining close ties to the Ecclesia.',
-        'This period saw the codification of magical education, with noble children receiving formal training while commoners were limited to practical crafts and trades. The aristocracy justified their rule through their "divine connection" to magic, while the church maintained its role as the arbiter of magical knowledge.'
+        'This era marked the height of Imperial power, blending governance, religion, commerce, and emerging technologies. The Empire grew into a structured bureaucracy, integrating distant provinces while fostering trade and infrastructure improvements.',
+        'Though the Eulogia church played a significant role in education and social norms, its influence varied considerably. Local regions often retained older traditions, folk magics, and independent governance, leading to intermittent conflicts and negotiations rather than absolute domination.',
+        'Technological advances such as early mechanics and steam experimentation began reshaping societies, sparking both excitement and controversy. Guilds, academies, and individual inventors rose alongside clergy and nobility as influential voices.'
       ],
       events: [
-        { year: '614 PC', description: 'Coronation of King Thaddeus Aether I, establishing the Kingdom of Luminaria.' },
-        { year: '802 PC', description: 'The Treaty of Five Houses brings stability after the War of Succession.' },
-        { year: '1056 PC', description: 'The Ecclesia establishes the Royal Academy of Divine Arts for noble children.' },
-        { year: '1347 PC', description: 'Discovery of ancient ruins beneath Old Aetherwick leads to new magical insights.' },
-        { year: '1489 PC', description: 'The Great Plague tests church authority as magical healing proves insufficient.' }
+        { year: '~250 AE', description: 'Imperial Law codified, incorporating both secular governance and limited religious principles.' },
+        { year: '~310 AE', description: 'The Schism of the Whispering Woods; major conflicts erupt with Fey-aligned territories resisting Imperial assimilation.' },
+        { year: '~380 AE', description: 'Establishment of Imperial Academies for technological and scientific advancement.' },
+        { year: '~450 AE', description: 'Sanctioned use of mechanical "Orderly Machines" gains official recognition.' }
       ]
     },
     {
-      id: 'the-mechanical-revolution',
-      name: 'The Mechanical Revolution',
-      period: '1500 PC - Present (2103 PC)',
+      id: 'age-of-steel-and-light',
+      name: 'Age of Steel and Light',
+      period: 'Approx. 500 AE - Present (~603 AE)',
       description: [
-        'Everything changed when Elias Thornwick, a common-born inventor, created the first aetheric engine - a device that harnessed magical energies without church rituals. Initially condemned as heresy, the undeniable utility of these machines eventually forced acceptance, beginning the Mechanical Revolution.',
-        'New Aetherwick was founded in 1632 PC when the old capital was destroyed in the Great Conflagration. Built with modern principles, it became a center of innovation where aetheric technology flourished alongside traditional magic. Steam-powered omnibuses share streets with enchanted carriages, while factories and workshops now challenge the economic power of noble estates.',
-        'Modern society exists in a state of tension. The Ecclesia struggles to maintain relevance, with progressive and traditional factions forming within the church. Noble houses invest in new industries while defending their privileges. Commoners find new paths to influence through technological innovation, forming guilds and merchant houses.'
+        'Rapid technological advancements now define this age, profoundly affecting society, trade, and international relationships. Steam-powered vehicles, elaborate automata, and aether-based innovations have begun reshaping the Imperial core and its periphery.',
+        'The Empire, balancing traditional governance with rising guilds and technological societies, faces internal tensions. While the Eulogia religion cautiously endorses technology as symbolic of rational enlightenment, debates flourish over what constitutes appropriate innovation.',
+        'Not all provinces embrace these changes equally. Regions such as the Hieroterra Province remain culturally distinct, retaining stronger links to ancient practices, Fey influences, and localized governance. Imperial pressure grows alongside grassroots resistance movements advocating local autonomy and traditional magics.',
+        'Strange celestial and Fey-related phenomena have increased in recent decades, causing unease across scholarly and religious institutions alike.'
       ],
       events: [
-        { year: '1587 PC', description: 'Elias Thornwick unveils the first aetheric engine, beginning the Mechanical Revolution.' },
-        { year: '1632 PC', description: 'Founding of New Aetherwick after the Great Conflagration destroys the old capital.' },
-        { year: '1798 PC', description: 'The Reform Proclamation officially recognizes mechanical guilds alongside magical institutions.' },
-        { year: '1924 PC', description: 'The first airship line connects New Aetherwick to distant settlements.' },
-        { year: '2067 PC', description: 'The Mother Forest east of New Aetherwick is declared a protected sanctuary after negotiations with sentient plant life.' },
-        { year: '2089 PC', description: 'Reports of fey entities emerging from the Whispering Woods coincide with strange celestial phenomena.' },
-        { year: '2095 PC', description: 'The Monastery of Eternal Light reports a divine visitation, leading to renewed spiritual fervor in the region.' },
-        { year: '2103 PC', description: 'Present day. New Aetherwick thrives as the center of both magical tradition and technological innovation, though social tensions run high beneath its gleaming surface.' }
+        { year: '~530 AE', description: 'Expansion of the Imperial Steam Carriage network accelerates commerce and migration.' },
+        { year: '~565 AE', description: 'Deployment of technological infrastructures like communication towers and automated street lighting across Imperial territories.' },
+        { year: '~580 AE', description: 'Increased reports of unusual Fey activity and unexplained celestial phenomena prompt scholarly investigations.' },
+        { year: '~590 AE', description: 'Rise of Technologist Guilds challenges old power structures, advocating innovation and commercial liberalization.' },
+        { year: '~598 AE', description: 'A wave of unexplained supernatural occurrences reignites religious fervor and academic curiosity, increasing tension between traditionalists and progressives.' },
+        { year: '~603 AE', description: 'Present day: Intensified Imperial presence in Hieroterra Province sparks resistance movements, coinciding with rumors of resurgent magical phenomena and ancient Fey awakenings.' }
       ]
     }
   ]
