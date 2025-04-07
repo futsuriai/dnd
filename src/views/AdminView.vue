@@ -434,6 +434,26 @@ export default defineComponent({
         // Use the exportDataInHistoryFormat method to get data
         const exportData = await firestoreService.exportDataInHistoryFormat();
         
+        // Sort history entries by timestamp, newest first
+        if (exportData.historyEntries && Array.isArray(exportData.historyEntries)) {
+          exportData.historyEntries.sort((a, b) => {
+            return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime();
+          });
+        }
+        
+        // Ensure sessions are also sorted by newest first (by date or ID if date is missing)
+        if (exportData.sessions && Array.isArray(exportData.sessions)) {
+          exportData.sessions.sort((a, b) => {
+            if (a.date && b.date) {
+              return new Date(b.date).getTime() - new Date(a.date).getTime();
+            }
+            // Fallback to ID sorting if dates aren't available
+            const aId = parseInt(a.id.split('-')[1]) || 0;
+            const bId = parseInt(b.id.split('-')[1]) || 0;
+            return bId - aId;
+          });
+        }
+        
         // Convert to JSON string
         const jsonString = JSON.stringify(exportData, null, 2);
         

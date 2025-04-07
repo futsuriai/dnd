@@ -1,9 +1,19 @@
 {
   "sessions": [
     {
+      "summary": "Character creation and world introduction. Come prepared with character concepts and backstory ideas based on Session -1!",
+      "id": "session-0",
+      "upcoming": true,
+      "subtitle": "Character Creation",
+      "date": "2025-05-04",
+      "title": "Session 0"
+    },
+    {
+      "summary": "Hopes, dreams and expectations setting. Discussed the world's themes, character concepts, and narrative boundaries.",
+      "id": "session-minus-1",
+      "subtitle": "Initial world building and general framework discussions",
       "title": "Session -1",
       "date": "2025-04-06",
-      "summary": "Hopes, dreams and expectations setting. Discussed the world's themes, character concepts, and narrative boundaries.",
       "highlights": [
         "Established our world as a Steampunk/Gaslamp Fantasy setting where magic and emerging technology exist in societal tension.",
         "Explored the possibility of an overarching church structure reminiscent of Catholicism, influencing the world's spiritual and political landscape.",
@@ -11,109 +21,99 @@
         "Shared initial character concepts and considered how each might fit into different societal niches.",
         "Had conversations about narrative boundaries and player comfort zones.",
         "Contemplated whether characters will have pre-existing connections when our adventure begins."
-      ],
-      "subtitle": "Initial world building and general framework discussions",
-      "id": "session-minus-1"
-    },
-    {
-      "id": "session-0",
-      "subtitle": "Character Creation",
-      "upcoming": true,
-      "title": "Session 0",
-      "date": "2025-05-04",
-      "summary": "Character creation and world introduction. Come prepared with character concepts and backstory ideas based on Session -1!"
+      ]
     }
   ],
   "historyEntries": [
     {
-      "entityId": "steff",
-      "sessionId": "session-minus-1",
+      "timestamp": "2025-04-06T10:04:00Z",
       "changeType": "creation",
-      "timestamp": "2025-04-06T10:00:00Z",
-      "editedBy": "12345",
       "data": {
-        "entityType": "character",
-        "id": "steff",
-        "name": "Steff",
-        "player": "Steff",
-        "race": "Sentient Plant",
-        "class": "Ranger/Beastmaster",
+        "background": "Backwoods Hero",
+        "player": "Marc",
+        "bio": "A 'himbo' paladin from the backwoods, traveling to the city due to outside forces. Has taken an oath to a local god/spirit. Simple but good-hearted.",
+        "name": "Marc",
+        "class": "Paladin",
+        "race": "Unknown",
         "level": 3,
-        "background": "Forest Offspring",
-        "bio": "An offspring of a mother tree where the whole forest is one sentient plant. Sent out into the world on a mission, carrying a magical item that is a by-product of the mother tree. Travels with a companion animal."
-      }
-    },
-    {
+        "id": "marc",
+        "entityType": "character"
+      },
       "entityId": "marc",
       "sessionId": "session-minus-1",
-      "changeType": "creation",
-      "timestamp": "2025-04-06T10:04:00Z",
-      "editedBy": "12345",
-      "data": {
-        "entityType": "character",
-        "id": "marc",
-        "name": "Marc",
-        "player": "Marc",
-        "race": "Unknown",
-        "class": "Paladin",
-        "level": 3,
-        "background": "Backwoods Hero",
-        "bio": "A 'himbo' paladin from the backwoods, traveling to the city due to outside forces. Has taken an oath to a local god/spirit. Simple but good-hearted."
-      }
+      "editedBy": "12345"
     },
     {
-      "entityId": "andres",
-      "sessionId": "session-minus-1",
-      "changeType": "creation",
       "timestamp": "2025-04-06T10:03:00Z",
-      "editedBy": "12345",
+      "changeType": "creation",
       "data": {
+        "player": "Andres",
         "entityType": "character",
         "id": "andres",
-        "name": "Andres",
-        "player": "Andres",
-        "race": "Kalashtar",
-        "class": "Druid (Cleric presenting)",
-        "level": 3,
         "background": "Cloister Scholar",
-        "bio": "Hosts a spirit that manifests as an existing god, which embedded itself after death. Lives a cloistered life in a monastery/church and received the spirit as a revelation. Mechanically a druid but spiritually a cleric. Unfamiliar with the ordinary world due to cloistered upbringing."
-      }
-    },
-    {
-      "entityId": "avi",
-      "sessionId": "session-minus-1",
-      "changeType": "creation",
-      "timestamp": "2025-04-06T10:01:00Z",
-      "editedBy": "12345",
-      "data": {
-        "entityType": "character",
-        "id": "avi",
-        "name": "Avi",
-        "player": "Avi",
-        "race": "Unknown",
-        "class": "Bard/Warlock",
+        "class": "Druid (Cleric presenting)",
+        "name": "Andres",
+        "bio": "Hosts a spirit that manifests as an existing god, which embedded itself after death. Lives a cloistered life in a monastery/church and received the spirit as a revelation. Mechanically a druid but spiritually a cleric. Unfamiliar with the ordinary world due to cloistered upbringing.",
         "level": 3,
-        "background": "Outsider",
-        "bio": "Lives on the edge of society and prefers to talk his way out of situations. Skilled in illusion magic and has an outsider perspective on societal norms."
-      }
+        "race": "Kalashtar"
+      },
+      "entityId": "andres",
+      "editedBy": "12345",
+      "sessionId": "session-minus-1"
     },
     {
       "entityId": "alex",
-      "sessionId": "session-minus-1",
-      "changeType": "creation",
-      "timestamp": "2025-04-06T10:02:00Z",
-      "editedBy": "12345",
       "data": {
-        "entityType": "character",
-        "id": "alex",
-        "name": "Alex",
         "player": "Alex",
-        "race": "Fey",
+        "name": "Alex",
+        "bio": "Connected to death, decay, and the darker aspects of nature. Lost their prey and purpose and is now adapting to a strange new world. Has an ancient, eldritch background with fey connections.",
+        "background": "Eldritch/Ancient",
         "class": "Gloomstalker Ranger",
         "level": 3,
-        "background": "Eldritch/Ancient",
-        "bio": "Connected to death, decay, and the darker aspects of nature. Lost their prey and purpose and is now adapting to a strange new world. Has an ancient, eldritch background with fey connections."
-      }
+        "entityType": "character",
+        "race": "Fey",
+        "id": "alex"
+      },
+      "changeType": "creation",
+      "sessionId": "session-minus-1",
+      "timestamp": "2025-04-06T10:02:00Z",
+      "editedBy": "12345"
+    },
+    {
+      "changeType": "creation",
+      "timestamp": "2025-04-06T10:01:00Z",
+      "data": {
+        "class": "Bard/Warlock",
+        "player": "Avi",
+        "level": 3,
+        "race": "Unknown",
+        "background": "Outsider",
+        "entityType": "character",
+        "id": "avi",
+        "bio": "Lives on the edge of society and prefers to talk his way out of situations. Skilled in illusion magic and has an outsider perspective on societal norms.",
+        "name": "Avi"
+      },
+      "sessionId": "session-minus-1",
+      "editedBy": "12345",
+      "entityId": "avi"
+    },
+    {
+      "editedBy": "12345",
+      "sessionId": "session-minus-1",
+      "entityId": "steff",
+      "data": {
+        "id": "steff",
+        "level": 3,
+        "race": "Sentient Plant",
+        "entityType": "character",
+        "player": "Steff",
+        "name": "Steff",
+        "class": "Ranger/Beastmaster",
+        "bio": "An offspring of a mother tree where the whole forest is one sentient plant. Sent out into the world on a mission, carrying a magical item that is a by-product of the mother tree. Travels with a companion animal.",
+        "background": "Forest Offspring"
+      },
+      "timestamp": "2025-04-06T10:00:00Z",
+      "changeType": "creation"
     }
   ]
 }
