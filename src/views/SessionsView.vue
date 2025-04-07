@@ -1,148 +1,136 @@
 <template>
   <div class="content-section">
-    <h1>Campaign Sessions</h1>
-    <p class="section-intro">Chronicles of our adventures and key events from each session.</p>
-
     <div class="sessions-container">
-      <div v-for="session in sessions" :key="session.id" class="session-card" :id="session.id">
-        <div class="session-header" :class="{ 'upcoming': session.upcoming }">
-          <div class="header-top-line">
-            <h3 class="session-title">{{ session.title }}:</h3>
-            <span class="session-date">{{ session.date }}</span>
+      <div v-if="loading" class="loading-indicator">
+        <div class="spinner"></div>
+        <p>Loading sessions...</p>
+      </div>
+      
+      <div v-else-if="error" class="error-message">
+        <p>{{ error }}</p>
+      </div>
+      
+      <div v-else>
+        <div v-for="session in sessions" :key="session.id" class="session-card" :id="session.id">
+          <div class="session-header">
+            <h3 class="session-title">{{ session.title }}</h3>
+            <div class="session-date">{{ session.date }}</div>
+            <div v-if="session.subtitle" class="session-subtitle">{{ session.subtitle }}</div>
           </div>
-          <p class="session-subtitle">{{ session.subtitle }}</p>
-        </div>
-        
-        <div class="session-content">
-          <div v-if="session.upcoming" class="upcoming-message">
-            <p>{{ session.description }}</p>
-          </div>
-          <div v-else class="session-summary">
-            <p>{{ session.description }}</p>
-            
-            <div v-if="session.highlights && session.highlights.length > 0" class="highlights">
-              <h4>Key Moments:</h4>
-              <ul>
-                <li v-for="(highlight, i) in session.highlights" :key="i">
-                  {{ highlight }}
-                </li>
-              </ul>
+          
+          <div class="session-content">
+            <div v-if="session.upcoming" class="session-upcoming">
+              <div class="upcoming-badge">Upcoming</div>
+              <div class="session-description">{{ session.description || session.summary }}</div>
             </div>
             
-            <!-- Session history timeline section -->
-            <div v-if="!session.upcoming" class="session-history">
-              <div class="history-header" @click="toggleHistory(session.id)">
-                <h4>Session History</h4>
-                <span class="toggle-icon">{{ isHistoryOpen(session.id) ? '▼' : '▶' }}</span>
+            <div v-else class="session-summary">
+              <div class="session-description">{{ session.description || session.summary }}</div>
+              
+              <div v-if="session.highlights && session.highlights.length > 0" class="session-highlights">
+                <h4>Highlights</h4>
+                <ul>
+                  <li v-for="(highlight, index) in session.highlights" :key="index">{{ highlight }}</li>
+                </ul>
               </div>
               
-              <div v-show="isHistoryOpen(session.id)" class="history-content">
-                <div v-if="getSessionHistoryEvents(session.id).length === 0" class="no-history">
-                  <p>No detailed history available for this session.</p>
+              <div v-if="!session.upcoming" class="session-history">
+                <div class="history-header" @click="toggleHistory(session.id)">
+                  <h4>Session History</h4>
+                  <span class="toggle-icon">{{ isHistoryOpen(session.id) ? '▼' : '▶' }}</span>
                 </div>
-                <div v-else class="history-timeline">
-                  <div v-for="(event, index) in getSessionHistoryEvents(session.id)" 
-                       :key="index" 
-                       class="history-item" 
-                       :class="event.type">
-                    <div class="history-timestamp">{{ formatTimestamp(event.timestamp) }}</div>
-                    <div class="history-content">
-                      <span v-html="formatHistoryEvent(event)"></span>
+                
+                <div v-show="isHistoryOpen(session.id)" class="history-content">
+                  <div v-if="getSessionHistoryEvents(session.id).length === 0" class="no-history">
+                    No history events recorded for this session.
+                  </div>
+                  
+                  <div v-else class="history-timeline">
+                    <div v-for="(event, index) in getSessionHistoryEvents(session.id)" 
+                         :key="index"
+                         :class="event.type">
+                      <div class="history-timestamp">{{ formatTimestamp(event.timestamp) }}</div>
+                      <div class="history-content">
+                        <span v-html="formatHistoryEvent(event)"></span>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
-            
-            <!-- Session affected entities section -->
-            <div v-if="!session.upcoming && getSessionEntitiesData(session.id).length > 0" class="session-affected-entities">
-              <div class="affected-entities-header" @click="toggleEntityChanges(session.id)">
-                <h4>Entities Affected</h4>
-                <span class="toggle-icon">{{ isEntityChangesOpen(session.id) ? '▼' : '▶' }}</span>
               </div>
               
-              <div v-show="isEntityChangesOpen(session.id)" class="affected-entities-content">
-                <div class="entity-changes-categories">
-                  <!-- Characters -->
-                  <div v-if="getSessionEntitiesByType(session.id, 'character').length > 0" class="entity-type-group">
-                    <h5>Characters</h5>
-                    <div class="session-entity-grid">
-                      <div v-for="entity in getSessionEntitiesByType(session.id, 'character')" 
-                           :key="entity.id"
-                           class="session-entity-card">
-                        <div class="entity-name">{{ entity.entity.name }}</div>
-                        <div class="entity-changes">
-                          <router-link :to="{ name: 'Characters', hash: '#' + entity.id }">
-                            View changes
-                          </router-link>
+              <!-- Session affected entities section -->
+              <div v-if="!session.upcoming && getSessionEntitiesData(session.id).length > 0" class="session-affected-entities">
+                <div class="affected-entities-header" @click="toggleEntityChanges(session.id)">
+                  <h4>Entities Affected</h4>
+                  <span class="toggle-icon">{{ isEntityChangesOpen(session.id) ? '▼' : '▶' }}</span>
+                </div>
+                
+                <div v-show="isEntityChangesOpen(session.id)" class="affected-entities-content">
+                  <div class="entity-changes-categories">
+                    <!-- Characters -->
+                    <div v-if="getSessionEntitiesByType(session.id, 'character').length > 0" class="entity-type-group">
+                      <h5>Characters</h5>
+                      <div class="session-entity-grid">
+                        <div v-for="entity in getSessionEntitiesByType(session.id, 'character')" 
+                             :key="entity.id"
+                             class="session-entity-card">
+                          <div class="entity-name">{{ entity.entity.name }}</div>
+                          <div class="entity-changes">
+                            <router-link :to="{ name: 'Characters', hash: '#' + entity.id }">
+                              View changes
+                            </router-link>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  
-                  <!-- NPCs -->
-                  <div v-if="getSessionEntitiesByType(session.id, 'npc').length > 0" class="entity-type-group">
-                    <h5>NPCs</h5>
-                    <div class="session-entity-grid">
-                      <div v-for="entity in getSessionEntitiesByType(session.id, 'npc')" 
-                           :key="entity.id"
-                           class="session-entity-card">
-                        <div class="entity-name">{{ entity.entity.name }}</div>
-                        <div class="entity-changes">
-                          <router-link :to="{ name: 'NPCs', hash: '#' + entity.id }">
-                            View changes
-                          </router-link>
+                    
+                    <!-- NPCs -->
+                    <div v-if="getSessionEntitiesByType(session.id, 'npc').length > 0" class="entity-type-group">
+                      <h5>NPCs</h5>
+                      <div class="session-entity-grid">
+                        <div v-for="entity in getSessionEntitiesByType(session.id, 'npc')" 
+                             :key="entity.id"
+                             class="session-entity-card">
+                          <div class="entity-name">{{ entity.entity.name }}</div>
+                          <div class="entity-changes">
+                            <router-link :to="{ name: 'NPCs', hash: '#' + entity.id }">
+                              View changes
+                            </router-link>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  
-                  <!-- Locations -->
-                  <div v-if="getSessionEntitiesByType(session.id, 'location').length > 0" class="entity-type-group">
-                    <h5>Locations</h5>
-                    <div class="session-entity-grid">
-                      <div v-for="entity in getSessionEntitiesByType(session.id, 'location')" 
-                           :key="entity.id"
-                           class="session-entity-card">
-                        <div class="entity-name">{{ entity.entity.name }}</div>
-                        <div class="entity-changes">
-                          <router-link :to="{ name: 'Locations', hash: '#' + entity.id }">
-                            View changes
-                          </router-link>
+                    
+                    <!-- Locations -->
+                    <div v-if="getSessionEntitiesByType(session.id, 'location').length > 0" class="entity-type-group">
+                      <h5>Locations</h5>
+                      <div class="session-entity-grid">
+                        <div v-for="entity in getSessionEntitiesByType(session.id, 'location')" 
+                             :key="entity.id"
+                             class="session-entity-card">
+                          <div class="entity-name">{{ entity.entity.name }}</div>
+                          <div class="entity-changes">
+                            <router-link :to="{ name: 'Locations', hash: '#' + entity.id }">
+                              View changes
+                            </router-link>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  
-                  <!-- Items -->
-                  <div v-if="getSessionEntitiesByType(session.id, 'item').length > 0" class="entity-type-group">
-                    <h5>Items</h5>
-                    <div class="session-entity-grid">
-                      <div v-for="entity in getSessionEntitiesByType(session.id, 'item')" 
-                           :key="entity.id"
-                           class="session-entity-card">
-                        <div class="entity-name">{{ entity.entity.name }}</div>
-                        <div class="entity-changes">
-                          <router-link :to="{ name: 'Items', hash: '#' + entity.id }">
-                            View changes
-                          </router-link>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <!-- History -->
-                  <div v-if="getSessionEntitiesByType(session.id, 'history').length > 0" class="entity-type-group">
-                    <h5>History</h5>
-                    <div class="session-entity-grid">
-                      <div v-for="entity in getSessionEntitiesByType(session.id, 'history')" 
-                           :key="entity.id"
-                           class="session-entity-card">
-                        <div class="entity-name">{{ getHistoryEraName(entity.id) }}</div>
-                        <div class="entity-changes">
-                          <router-link :to="{ name: 'History' }">
-                            View changes
-                          </router-link>
+                    
+                    <!-- Items -->
+                    <div v-if="getSessionEntitiesByType(session.id, 'item').length > 0" class="entity-type-group">
+                      <h5>Items</h5>
+                      <div class="session-entity-grid">
+                        <div v-for="entity in getSessionEntitiesByType(session.id, 'item')" 
+                             :key="entity.id"
+                             class="session-entity-card">
+                          <div class="entity-name">{{ entity.entity.name }}</div>
+                          <div class="entity-changes">
+                            <router-link :to="{ name: 'Items', hash: '#' + entity.id }">
+                              View changes
+                            </router-link>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -158,424 +146,392 @@
 </template>
 
 <script>
-import { getSessionEntities, getAllSessions, worldHistory, getAllSessionRelatedEvents, getEntityTypeFromId } from '../store/worldData';
+import { ref, onMounted, computed } from 'vue';
+import worldData from '../store/worldData';
+import firestoreService from '../services/FirestoreService';
 
 export default {
   name: 'SessionsView',
-  data() {
-    return {
-      sessions: [],
-      sessionEntitiesCache: {}, // Cache for session entities to avoid repeated calls
-      sessionHistoryCache: {}, // Cache for session history events
-      openEntityChanges: {},
-      openHistorySections: {} // Track which history sections are open
-    };
-  },
-  methods: {
-    toggleEntityChanges(sessionId) {
-      this.openEntityChanges[sessionId] = !this.isEntityChangesOpen(sessionId);
-    },
-    isEntityChangesOpen(sessionId) {
-      return !!this.openEntityChanges[sessionId];
-    },
-    toggleHistory(sessionId) {
-      this.openHistorySections[sessionId] = !this.isHistoryOpen(sessionId);
-    },
-    isHistoryOpen(sessionId) {
-      return !!this.openHistorySections[sessionId];
-    },
-    async getSessionEntitiesData(sessionId) {
-      // Use cache if available to improve performance
-      if (!this.sessionEntitiesCache[sessionId]) {
-        this.sessionEntitiesCache[sessionId] = await getSessionEntities(sessionId);
+  
+  setup() {
+    const sessions = ref([]);
+    const loading = ref(true);
+    const error = ref(null);
+    const openSections = ref({
+      history: {},
+      entityChanges: {}
+    });
+    const sessionEntities = ref({});
+    
+    // Get sessions when component is mounted
+    onMounted(async () => {
+      await loadSessions();
+    });
+    
+    // Load sessions with Firestore first, fallback to local data
+    async function loadSessions() {
+      loading.value = true;
+      error.value = null;
+      
+      try {
+        // Initialize worldData to determine data source
+        const dataSource = await worldData.initWorldData();
+        console.log(`Using data source: ${dataSource}`);
+        
+        // Get all sessions using worldData adapter
+        sessions.value = await worldData.getAllSessions();
+        
+        // Pre-load affected entities for each session
+        for (const session of sessions.value) {
+          await loadSessionEntities(session.id);
+        }
+      } catch (err) {
+        console.error('Error loading sessions:', err);
+        error.value = `Error loading sessions: ${err.message}`;
+      } finally {
+        loading.value = false;
       }
-      return this.sessionEntitiesCache[sessionId] || [];
-    },
-    getSessionEntitiesByType(sessionId, type) {
-      const entities = this.sessionEntitiesCache[sessionId] || [];
-      return entities.filter(entity => entity.type === type);
-    },
-    getHistoryEraName(eraId) {
-      const era = worldHistory.eras.find(e => e.id === eraId);
-      return era ? era.name : eraId;
-    },
-    // Helper method to preload session entities data
-    async preloadSessionEntities() {
-      for (const session of this.sessions) {
-        if (!session.upcoming) {
-          await this.getSessionEntitiesData(session.id);
-          this.getSessionHistoryEvents(session.id); // Also preload history
+    }
+    
+    // Load entities affected by a session
+    async function loadSessionEntities(sessionId) {
+      if (!sessionEntities.value[sessionId]) {
+        try {
+          const entities = await worldData.getSessionEntities(sessionId);
+          sessionEntities.value[sessionId] = entities;
+        } catch (err) {
+          console.error(`Error loading entities for session ${sessionId}:`, err);
+          sessionEntities.value[sessionId] = [];
         }
       }
-    },
-    // Get and format session history events
-    getSessionHistoryEvents(sessionId) {
-      if (!this.sessionHistoryCache[sessionId]) {
-        const events = getAllSessionRelatedEvents(sessionId);
-        
-        // Transform events to a more UI-friendly format
-        this.sessionHistoryCache[sessionId] = events.map(event => {
-          let description = '';
-          let type = event.changeType || 'generic';
-          
-          // Format based on event type
-          if (event.changeType === 'creation') {
-            const entityName = event.data.name || event.entityId;
-            const entityType = event.data.entityType || 'entity';
-            description = `Created new ${entityType}: <strong>${entityName}</strong>`;
-          } 
-          else if (event.changeType === 'update') {
-            const entityType = event.data.entityType || this.getEntityTypeById(event.entityId);
-            const entityName = event.data.name || this.getEntityNameById(event.entityId, entityType);
-            
-            if (event.data.last_action) {
-              description = event.data.last_action;
-            } else if (event.data.status) {
-              description = `${entityName} status changed to: ${event.data.status}`;
-            } else {
-              description = `Updated ${entityType}: ${entityName}`;
-            }
-          }
-          else if (event.changeType === 'connection_added') {
-            const sourceType = this.getEntityTypeById(event.entityId);
-            const sourceName = this.getEntityNameById(event.entityId, sourceType);
-            const targetType = event.data.connectedEntityType;
-            const targetName = this.getEntityNameById(event.data.connectedEntityId, targetType);
-            
-            description = `Connected <strong>${sourceName}</strong> to <strong>${targetName}</strong>: ${event.data.reason}`;
-          }
-          else if (event.changeType.includes('connection')) {
-            const sourceType = this.getEntityTypeById(event.entityId);
-            const sourceName = this.getEntityNameById(event.entityId, sourceType);
-            const targetType = event.data.connectedEntityType;
-            const targetName = this.getEntityNameById(event.data.connectedEntityId, targetType);
-            
-            if (event.changeType === 'connection_removed') {
-              description = `Removed connection between <strong>${sourceName}</strong> and <strong>${targetName}</strong>`;
-            } else {
-              description = `Updated connection between <strong>${sourceName}</strong> and <strong>${targetName}</strong>: ${event.data.reason}`;
-            }
-          }
-          
-          return {
-            type: type.split('_')[0], // Simplify type for CSS
-            description: description, 
-            timestamp: event.timestamp,
-            sourceEvent: event
-          };
-        }).sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp)); // Sort chronologically
-      }
-      
-      return this.sessionHistoryCache[sessionId] || [];
-    },
-    // Format the timestamp for display
-    formatTimestamp(timestamp) {
+    }
+    
+    // Get entities affected by a session
+    function getSessionEntitiesData(sessionId) {
+      return sessionEntities.value[sessionId] || [];
+    }
+    
+    // Get entities of a specific type for a session
+    function getSessionEntitiesByType(sessionId, entityType) {
+      const entities = getSessionEntitiesData(sessionId);
+      return entities.filter(entity => entity.type === entityType);
+    }
+    
+    // Get history events for a session
+    function getSessionHistoryEvents(sessionId) {
+      const session = sessions.value.find(s => s.id === sessionId);
+      return session && session.events ? session.events : [];
+    }
+    
+    // Toggle history visibility
+    function toggleHistory(sessionId) {
+      openSections.value.history[sessionId] = !openSections.value.history[sessionId];
+    }
+    
+    // Check if history is open
+    function isHistoryOpen(sessionId) {
+      return !!openSections.value.history[sessionId];
+    }
+    
+    // Toggle entity changes visibility
+    function toggleEntityChanges(sessionId) {
+      openSections.value.entityChanges[sessionId] = !openSections.value.entityChanges[sessionId];
+    }
+    
+    // Check if entity changes are open
+    function isEntityChangesOpen(sessionId) {
+      return !!openSections.value.entityChanges[sessionId];
+    }
+    
+    // Format timestamp for display
+    function formatTimestamp(timestamp) {
       if (!timestamp) return '';
+      
       const date = new Date(timestamp);
       return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    },
-    // Format history event with links
-    formatHistoryEvent(event) {
-      // Already has HTML, just return the description
-      return event.description;
-    },
-    // Helper to get entity type by ID
-    getEntityTypeById(entityId) {
-      // This is a simplified version - ideally we'd use the existing function
-      const entityInfo = Object.values(this.sessionEntitiesCache)
-        .flat()
-        .find(e => e.id === entityId);
-      
-      return entityInfo ? entityInfo.type : 'entity';
-    },
-    // Helper to get entity name by ID and type
-    getEntityNameById(entityId, entityType) {
-      const entityInfo = Object.values(this.sessionEntitiesCache)
-        .flat()
-        .find(e => e.id === entityId && e.type === entityType);
-      
-      return entityInfo && entityInfo.entity ? entityInfo.entity.name : entityId;
     }
-  },
-  created() {
-    // Load sessions synchronously since getAllSessions doesn't return a Promise
-    this.sessions = getAllSessions();
     
-    // After sessions are loaded, preload session entities data
-    this.$nextTick(async () => {
-      await this.preloadSessionEntities();
-      // Force a re-render after data is loaded
-      this.$forceUpdate();
-    });
+    // Format history event for display with HTML
+    function formatHistoryEvent(event) {
+      if (!event) return '';
+      
+      // If event has a pre-formatted description, use it
+      if (event.description) {
+        return `<strong>${event.type.toUpperCase()}:</strong> ${event.description}`;
+      }
+      
+      // Otherwise, create a generic description based on type
+      let html = `<strong>${event.type.toUpperCase()}:</strong> `;
+      
+      switch (event.type) {
+        case 'creation':
+          html += `Created new ${event.entityType || 'entity'}`;
+          break;
+        case 'update':
+          html += `Updated ${event.entityType || 'entity'} properties`;
+          break;
+        case 'connection':
+          html += `Connected to another entity`;
+          break;
+        default:
+          html += `Event recorded`;
+      }
+      
+      return html;
+    }
+    
+    return {
+      sessions,
+      loading,
+      error,
+      toggleHistory,
+      isHistoryOpen,
+      toggleEntityChanges,
+      isEntityChangesOpen,
+      getSessionHistoryEvents,
+      getSessionEntitiesData,
+      getSessionEntitiesByType,
+      formatTimestamp,
+      formatHistoryEvent
+    };
   }
-};
+}
 </script>
 
 <style scoped>
-.section-intro {
-  text-align: center;
-  max-width: 800px;
-  margin: 0 auto 2em;
+.content-section {
+  padding: 20px;
 }
 
 .sessions-container {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 25px;
 }
 
 .session-card {
-  background: var(--gradient-primary);
+  background-color: rgba(0, 0, 0, 0.1);
   border-radius: 8px;
-  border: 1px solid var(--border-color);
-  overflow: hidden;
-  box-shadow: var(--shadow-sm);
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.session-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
 }
 
 .session-header {
-  padding: 1rem 1.5rem;
-  border-bottom: 1px solid var(--border-accent);
-}
-
-.header-top-line {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .session-title {
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: 1.4rem;
-  line-height: 1.2;
-  display: inline-block;
+  margin: 0 0 5px 0;
+  font-size: 1.8rem;
 }
 
 .session-subtitle {
-  margin: 0.25rem 0 0;
-  font-size: 0.95rem;
-  color: var(--text-muted, #aaa);
   font-style: italic;
-  width: 100%;
+  margin-top: 5px;
+  opacity: 0.8;
 }
 
 .session-date {
-  font-family: var(--font-accent);
-  font-size: 0.9em;
-  font-weight: bold;
-  padding: 0.3em 0.6em;
+  opacity: 0.7;
+  font-size: 0.9rem;
+}
+
+.session-description {
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+.upcoming-badge {
+  display: inline-block;
+  background-color: #4CAF50;
+  color: white;
+  padding: 5px 10px;
   border-radius: 4px;
-  background-color: rgba(100, 100, 100, 0.2);
-  white-space: nowrap;
+  font-size: 0.8rem;
+  margin-bottom: 10px;
 }
 
-.session-content {
-  padding: 1.5rem;
+.session-highlights {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
 }
 
-.upcoming-message {
-  font-style: italic;
-  border-left: 3px solid var(--color-primary);
-  padding-left: 1rem;
+.session-highlights h4 {
+  margin-top: 0;
+  margin-bottom: 10px;
 }
 
-.upcoming .session-header {
-  background-color: rgba(65, 105, 225, 0.1);
+.session-highlights ul {
+  margin: 0;
+  padding-left: 20px;
 }
 
-.highlights {
-  margin-top: 1.5rem;
+.session-highlights li {
+  margin-bottom: 5px;
+  line-height: 1.5;
 }
 
-.highlights h4 {
-  margin-bottom: 0.5rem;
-  color: var(--color-primary);
-}
-
-.highlights ul {
-  padding-left: 1.5rem;
-}
-
-.highlights li {
-  margin-bottom: 0.5rem;
-}
-
-/* Session affected entities styling */
-.session-affected-entities {
-  margin-top: 2rem;
+/* Session history section */
+.session-history {
+  margin-top: 20px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  padding-top: 1rem;
+  padding-top: 15px;
 }
 
-.affected-entities-header {
+.history-header, .affected-entities-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
-  margin-bottom: 1rem;
+  padding: 5px 0;
 }
 
-.affected-entities-header h4 {
+.history-header h4, .affected-entities-header h4 {
   margin: 0;
-  color: var(--color-primary);
-  font-size: 1.1rem;
 }
 
 .toggle-icon {
   font-size: 0.8rem;
-  color: var(--color-text-muted);
-  transition: transform 0.3s ease;
+}
+
+.history-content {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+}
+
+.history-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.history-timestamp {
+  font-size: 0.8rem;
+  opacity: 0.7;
+  margin-bottom: 2px;
+}
+
+/* Entity types (for styling different event types) */
+.creation {
+  background-color: rgba(76, 175, 80, 0.1);
+  padding: 10px;
+  border-radius: 4px;
+  border-left: 3px solid #4CAF50;
+}
+
+.update {
+  background-color: rgba(33, 150, 243, 0.1);
+  padding: 10px;
+  border-radius: 4px;
+  border-left: 3px solid #2196F3;
+}
+
+.connection {
+  background-color: rgba(156, 39, 176, 0.1);
+  padding: 10px;
+  border-radius: 4px;
+  border-left: 3px solid #9C27B0;
+}
+
+/* Session entities section */
+.session-affected-entities {
+  margin-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 15px;
 }
 
 .affected-entities-content {
-  padding: 0.5rem 0;
+  margin-top: 10px;
 }
 
 .entity-type-group {
-  margin-bottom: 1.5rem;
+  margin-bottom: 20px;
 }
 
 .entity-type-group h5 {
-  margin: 0 0 0.75rem 0;
-  font-size: 1rem;
-  border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
-  padding-bottom: 0.3rem;
+  margin: 0 0 10px 0;
+  font-weight: 600;
 }
 
 .session-entity-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
 }
 
 .session-entity-card {
-  background: rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.1);
+  padding: 10px;
   border-radius: 4px;
-  padding: 0.5rem 0.75rem;
-  transition: all 0.2s ease;
-}
-
-.session-entity-card:hover {
-  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
 .entity-name {
-  font-weight: bold;
-  margin-bottom: 0.3rem;
-  font-size: 0.9rem;
-}
-
-.entity-changes {
-  font-size: 0.8rem;
+  font-weight: 500;
 }
 
 .entity-changes a {
-  color: var(--color-primary);
+  color: #2196F3;
   text-decoration: none;
+  font-size: 0.8rem;
 }
 
 .entity-changes a:hover {
   text-decoration: underline;
 }
 
-@media (max-width: 600px) {
-  .header-top-line {
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
-  
-  .session-date {
-    align-self: flex-start;
-  }
-  
-  .session-subtitle {
-    margin-top: 0.5rem;
-  }
-  
-  .session-entity-grid {
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  }
-}
-
-/* New Session History Timeline Styling */
-.session-history {
-  margin-top: 2rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  padding-top: 1rem;
-}
-
-.history-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  cursor: pointer;
-  margin-bottom: 1rem;
-}
-
-.history-header h4 {
-  margin: 0;
-  color: var(--color-primary);
-  font-size: 1.1rem;
-}
-
-.history-content {
-  padding: 0.5rem 0;
-}
-
-.history-timeline {
-  position: relative;
-  margin-left: 1rem;
-  padding-left: 2rem;
-  border-left: 2px solid rgba(255, 255, 255, 0.1);
-}
-
-.history-item {
-  position: relative;
-  margin-bottom: 1.5rem;
-  padding-bottom: 0.5rem;
-}
-
-.history-item::before {
-  content: '';
-  position: absolute;
-  left: -2.25rem;
-  top: 0.25rem;
-  width: 0.75rem;
-  height: 0.75rem;
-  border-radius: 50%;
-  background-color: var(--color-secondary, #666);
-}
-
-.history-item.creation::before {
-  background-color: #4CAF50;
-}
-
-.history-item.update::before {
-  background-color: #2196F3;
-}
-
-.history-item.connection::before {
-  background-color: #FF9800;
-}
-
-.history-timestamp {
-  font-size: 0.8rem;
-  color: var(--text-muted, #aaa);
-  margin-bottom: 0.25rem;
-}
-
-.history-content {
-  font-size: 0.95rem;
-  line-height: 1.4;
-}
-
-.history-content strong {
-  color: var(--color-accent, #f0f0f0);
-}
-
 .no-history {
+  padding: 10px;
+  text-align: center;
+  opacity: 0.7;
   font-style: italic;
-  color: var(--text-muted, #aaa);
+}
+
+/* Loading and error states */
+.loading-indicator, .error-message {
+  text-align: center;
+  padding: 40px;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  border-top-color: #2196F3;
+  margin: 0 auto 15px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.error-message {
+  color: #F44336;
+  background-color: rgba(244, 67, 54, 0.1);
+  border-radius: 4px;
+  padding: 20px;
+}
+
+@media (max-width: 768px) {
+  .session-entity-grid {
+    grid-template-columns: 1fr;
+  }
 }
 </style>

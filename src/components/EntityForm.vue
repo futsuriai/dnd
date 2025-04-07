@@ -3,6 +3,17 @@
     <form @submit.prevent="saveEntity">
       <!-- Common fields for all entity types -->
       <div class="form-group">
+        <label for="id">Entity ID</label>
+        <input 
+          type="text" 
+          id="id" 
+          v-model="formData.id" 
+          :disabled="readOnly || !isNewEntity"
+          placeholder="Leave empty for auto-generated ID"
+        />
+      </div>
+      
+      <div class="form-group">
         <label for="name">Name*</label>
         <input 
           type="text" 
@@ -23,14 +34,30 @@
         ></textarea>
       </div>
       
+      <!-- Session selector for history tracking (shown for all entity types) -->
+      <div class="form-group" v-if="!readOnly">
+        <label for="sessionId">Associate with Session</label>
+        <select 
+          id="sessionId" 
+          v-model="formData.sessionId"
+          class="session-selector"
+        >
+          <option value="session-admin">Admin (No specific session)</option>
+          <option v-for="session in sessions" :key="session.id" :value="session.id">
+            {{ session.title }} ({{ formatDate(session.date) }})
+          </option>
+        </select>
+        <div class="helper-text">Select which game session this change is associated with for history tracking</div>
+      </div>
+      
       <!-- Character specific fields -->
       <template v-if="entityType === 'character'">
         <div class="form-group">
-          <label for="playerName">Player Name</label>
+          <label for="player">Player Name</label>
           <input 
             type="text" 
-            id="playerName" 
-            v-model="formData.playerName" 
+            id="player" 
+            v-model="formData.player" 
             :disabled="readOnly"
           />
         </div>
@@ -55,41 +82,60 @@
               :disabled="readOnly"
             />
           </div>
+          
+          <div class="form-group">
+            <label for="level">Level</label>
+            <input 
+              type="number" 
+              id="level" 
+              v-model.number="formData.level" 
+              :disabled="readOnly"
+              min="1"
+            />
+          </div>
         </div>
         
         <div class="form-group">
-          <label for="backstory">Backstory</label>
+          <label for="background">Background</label>
+          <input 
+            type="text" 
+            id="background" 
+            v-model="formData.background" 
+            :disabled="readOnly"
+          />
+        </div>
+        
+        <div class="form-group">
+          <label for="bio">Biography/Backstory</label>
           <textarea 
-            id="backstory" 
-            v-model="formData.backstory" 
+            id="bio" 
+            v-model="formData.bio" 
             rows="6"
             :disabled="readOnly"
           ></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="quote">Character Quote</label>
+          <input 
+            type="text" 
+            id="quote" 
+            v-model="formData.quote" 
+            :disabled="readOnly"
+          />
         </div>
       </template>
       
       <!-- NPC specific fields -->
       <template v-if="entityType === 'npc'">
-        <div class="form-row">
-          <div class="form-group">
-            <label for="race">Race</label>
-            <input 
-              type="text" 
-              id="race" 
-              v-model="formData.race" 
-              :disabled="readOnly"
-            />
-          </div>
-          
-          <div class="form-group">
-            <label for="occupation">Occupation</label>
-            <input 
-              type="text" 
-              id="occupation" 
-              v-model="formData.occupation" 
-              :disabled="readOnly"
-            />
-          </div>
+        <div class="form-group">
+          <label for="role">Role</label>
+          <input 
+            type="text" 
+            id="role" 
+            v-model="formData.role" 
+            :disabled="readOnly"
+          />
         </div>
         
         <div class="form-group">
@@ -102,19 +148,59 @@
           />
         </div>
         
+        <div class="form-row">
+          <div class="form-group">
+            <label for="status">Status</label>
+            <select 
+              id="status" 
+              v-model="formData.status"
+              :disabled="readOnly"
+            >
+              <option value="Ally">Ally</option>
+              <option value="Neutral">Neutral</option>
+              <option value="Enemy">Enemy</option>
+              <option value="Unknown">Unknown</option>
+            </select>
+          </div>
+        </div>
+        
         <div class="form-group">
-          <label for="relationships">Relationships</label>
-          <textarea 
-            id="relationships" 
-            v-model="formData.relationships" 
-            rows="4"
+          <label for="quote">NPC Quote</label>
+          <input 
+            type="text" 
+            id="quote" 
+            v-model="formData.quote" 
             :disabled="readOnly"
-          ></textarea>
+          />
         </div>
       </template>
       
       <!-- Location specific fields -->
       <template v-if="entityType === 'location'">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="type">Type</label>
+            <input 
+              type="text" 
+              id="type" 
+              v-model="formData.type" 
+              placeholder="City, Dungeon, Landmark, etc."
+              :disabled="readOnly"
+            />
+          </div>
+          
+          <div class="form-group">
+            <label for="subtype">Subtype</label>
+            <input 
+              type="text" 
+              id="subtype" 
+              v-model="formData.subtype" 
+              placeholder="Magical, Settlement, Ruin, etc."
+              :disabled="readOnly"
+            />
+          </div>
+        </div>
+        
         <div class="form-group">
           <label for="region">Region</label>
           <input 
@@ -126,34 +212,14 @@
         </div>
         
         <div class="form-group">
-          <label for="type">Type</label>
+          <label for="status">Status</label>
           <input 
             type="text" 
-            id="type" 
-            v-model="formData.type" 
-            placeholder="City, Dungeon, Forest, etc."
+            id="status" 
+            v-model="formData.status" 
+            placeholder="Accessible, Ruins, Active Node, etc."
             :disabled="readOnly"
           />
-        </div>
-        
-        <div class="form-group">
-          <label for="notableFeatures">Notable Features</label>
-          <textarea 
-            id="notableFeatures" 
-            v-model="formData.notableFeatures" 
-            rows="4"
-            :disabled="readOnly"
-          ></textarea>
-        </div>
-        
-        <div class="form-group">
-          <label for="inhabitants">Inhabitants</label>
-          <textarea 
-            id="inhabitants" 
-            v-model="formData.inhabitants" 
-            rows="4"
-            :disabled="readOnly"
-          ></textarea>
         </div>
       </template>
       
@@ -166,7 +232,7 @@
               type="text" 
               id="type" 
               v-model="formData.type" 
-              placeholder="Weapon, Armor, Magical, etc."
+              placeholder="Weapon, Armor, Magical item, etc."
               :disabled="readOnly"
             />
           </div>
@@ -189,58 +255,76 @@
         </div>
         
         <div class="form-group">
-          <label for="properties">Properties</label>
-          <textarea 
-            id="properties" 
-            v-model="formData.properties" 
-            rows="4"
+          <label for="attunement">Attunement</label>
+          <input 
+            type="text" 
+            id="attunement" 
+            v-model="formData.attunement" 
+            placeholder="Required (Class), Not Required, etc."
             :disabled="readOnly"
-          ></textarea>
+          />
         </div>
         
         <div class="form-group">
-          <label for="history">History</label>
-          <textarea 
-            id="history" 
-            v-model="formData.history" 
-            rows="4"
+          <label for="found">Where Found</label>
+          <input 
+            type="text" 
+            id="found" 
+            v-model="formData.found" 
             :disabled="readOnly"
-          ></textarea>
+          />
+        </div>
+        
+        <div class="form-group">
+          <label for="owner">Current Owner</label>
+          <input 
+            type="text" 
+            id="owner" 
+            v-model="formData.owner" 
+            :disabled="readOnly"
+          />
         </div>
       </template>
       
       <!-- Session specific fields -->
       <template v-if="entityType === 'session'">
-        <div class="form-row">
-          <div class="form-group">
-            <label for="sessionNumber">Session Number*</label>
-            <input 
-              type="number" 
-              id="sessionNumber" 
-              v-model.number="formData.sessionNumber" 
-              required
-              :disabled="readOnly"
-            />
-          </div>
-          
-          <div class="form-group">
-            <label for="date">Date</label>
-            <input 
-              type="date" 
-              id="date" 
-              v-model="formData.date"
-              :disabled="readOnly"
-            />
-          </div>
-        </div>
-        
         <div class="form-group">
-          <label for="title">Title*</label>
+          <label for="title">Session Title*</label>
           <input 
             type="text" 
             id="title" 
             v-model="formData.title" 
             required
+            :disabled="readOnly"
+          />
+        </div>
+        
+        <div class="form-group">
+          <label for="subtitle">Subtitle</label>
+          <input 
+            type="text" 
+            id="subtitle" 
+            v-model="formData.subtitle"
+            :disabled="readOnly"
+          />
+        </div>
+        
+        <div class="form-group">
+          <label for="date">Date</label>
+          <input 
+            type="date" 
+            id="date" 
+            v-model="formData.date"
+            :disabled="readOnly"
+          />
+        </div>
+        
+        <div class="form-group">
+          <label for="upcoming">Upcoming Session</label>
+          <input 
+            type="checkbox" 
+            id="upcoming" 
+            v-model="formData.upcoming"
             :disabled="readOnly"
           />
         </div>
@@ -256,25 +340,23 @@
         </div>
         
         <div class="form-group">
-          <label for="locations">Locations Visited</label>
-          <textarea 
-            id="locations" 
-            v-model="formData.locations" 
-            rows="3"
-            placeholder="Comma-separated list of locations"
-            :disabled="readOnly"
-          ></textarea>
-        </div>
-        
-        <div class="form-group">
-          <label for="characters">Characters Present</label>
-          <textarea 
-            id="characters" 
-            v-model="formData.characters" 
-            rows="3"
-            placeholder="Comma-separated list of characters"
-            :disabled="readOnly"
-          ></textarea>
+          <label for="highlights">Highlights</label>
+          <div v-if="!readOnly" class="repeatable-fields">
+            <div v-for="(highlight, index) in formData.highlights" :key="index" class="repeatable-field">
+              <input 
+                type="text" 
+                v-model="formData.highlights[index]"
+                placeholder="Session highlight"
+              />
+              <button type="button" @click="removeHighlight(index)" class="remove-button">×</button>
+            </div>
+            <button type="button" @click="addHighlight" class="add-button">Add Highlight</button>
+          </div>
+          <div v-else>
+            <div v-for="(highlight, index) in formData.highlights" :key="index" class="highlight-item">
+              {{ highlight }}
+            </div>
+          </div>
         </div>
       </template>
       
@@ -287,6 +369,9 @@
 </template>
 
 <script>
+import { ref, computed, watch, onMounted } from 'vue';
+import worldData from '../store/worldData';
+
 export default {
   name: 'EntityForm',
   props: {
@@ -304,119 +389,187 @@ export default {
       default: false
     }
   },
-  data() {
-    return {
-      formData: {}
-    };
-  },
-  watch: {
-    entity: {
-      immediate: true,
-      handler(newValue) {
-        // Deep clone the entity to avoid modifying the original
-        this.formData = JSON.parse(JSON.stringify(newValue || {}));
-        
-        // Set default values for new entities
-        if (Object.keys(this.formData).length === 0) {
-          this.setDefaultValues();
-        }
+  setup(props, { emit }) {
+    const formData = ref({});
+    const isNewEntity = computed(() => !props.entity.id);
+    const sessions = ref([]);
+    
+    // Load sessions for the dropdown
+    onMounted(async () => {
+      try {
+        // Initialize worldData to determine data source
+        await worldData.initWorldData();
+        // Get all sessions
+        sessions.value = await worldData.getAllSessions();
+      } catch (error) {
+        console.error('Error loading sessions for form:', error);
       }
-    }
-  },
-  methods: {
-    setDefaultValues() {
-      // Set default values based on entity type
+    });
+    
+    // Format date for display
+    const formatDate = (dateString) => {
+      if (!dateString) return '';
+      return new Date(dateString).toLocaleDateString();
+    };
+    
+    // Initialize form data from entity prop
+    const initFormData = () => {
+      // Deep clone the entity to avoid modifying the original
+      formData.value = JSON.parse(JSON.stringify(props.entity || {}));
+      
+      // Set default values for new entities
+      if (Object.keys(formData.value).length === 0) {
+        setDefaultValues();
+      }
+      
+      // Ensure highlights is an array for sessions
+      if (props.entityType === 'session' && !Array.isArray(formData.value.highlights)) {
+        formData.value.highlights = formData.value.highlights 
+          ? formData.value.highlights.split('\n').filter(h => h.trim())
+          : [];
+      }
+      
+      // Set default session ID if not provided (try to use most recent non-upcoming session)
+      if (!formData.value.sessionId) {
+        const recentSession = sessions.value.find(s => !s.upcoming);
+        formData.value.sessionId = recentSession ? recentSession.id : 'session-admin';
+      }
+    };
+    
+    // Set default values based on entity type
+    const setDefaultValues = () => {
       const defaults = {
         // Common defaults
+        id: '',
         name: '',
         description: '',
         
         // Entity-specific defaults
         character: {
-          playerName: '',
+          player: '',
           race: '',
           class: '',
-          backstory: ''
+          level: 1,
+          background: '',
+          bio: '',
+          quote: ''
         },
         npc: {
-          race: '',
-          occupation: '',
+          role: '',
           location: '',
-          relationships: ''
+          status: 'Neutral',
+          quote: ''
         },
         location: {
-          region: '',
           type: '',
-          notableFeatures: '',
-          inhabitants: ''
+          subtype: '',
+          region: '',
+          status: ''
         },
         item: {
           type: '',
           rarity: 'Common',
-          properties: '',
-          history: ''
+          attunement: 'Not required',
+          found: '',
+          owner: ''
         },
         session: {
-          sessionNumber: this.getNextSessionNumber(),
-          date: new Date().toISOString().split('T')[0],
           title: '',
+          subtitle: '',
+          date: new Date().toISOString().split('T')[0],
+          upcoming: false,
           summary: '',
-          locations: '',
-          characters: ''
+          highlights: []
         }
       };
       
       // Apply common defaults
-      this.formData = {
-        ...this.formData,
+      formData.value = {
+        ...formData.value,
+        id: '',
         name: '',
-        description: ''
+        description: '',
+        sessionId: 'session-admin' // Default to admin session
       };
       
       // Apply entity-specific defaults
-      if (defaults[this.entityType]) {
-        this.formData = {
-          ...this.formData,
-          ...defaults[this.entityType]
+      if (defaults[props.entityType]) {
+        formData.value = {
+          ...formData.value,
+          ...defaults[props.entityType]
         };
       }
-    },
+    };
     
-    getNextSessionNumber() {
-      // This would ideally check existing sessions to determine the next number
-      // For now, we'll just return a placeholder
-      return 1;
-    },
+    // Initialize form data on component creation
+    initFormData();
     
-    saveEntity() {
-      // Process data before emitting
-      let processedData = { ...this.formData };
+    // Watch for changes to the entity prop
+    watch(() => props.entity, () => {
+      initFormData();
+    }, { deep: true });
+    
+    // Methods for session highlights
+    const addHighlight = () => {
+      if (!formData.value.highlights) {
+        formData.value.highlights = [];
+      }
+      formData.value.highlights.push('');
+    };
+    
+    const removeHighlight = (index) => {
+      formData.value.highlights.splice(index, 1);
+    };
+    
+    // Handle form submission
+    const saveEntity = () => {
+      // Clone the data to avoid reactive issues
+      const dataToSave = JSON.parse(JSON.stringify(formData.value));
       
-      // Special processing for sessions
-      if (this.entityType === 'session') {
-        // Generate an ID for new sessions if not present
-        if (!processedData.id) {
-          processedData.id = `session-${processedData.sessionNumber}`;
+      // Clean up any empty fields
+      Object.keys(dataToSave).forEach(key => {
+        if (dataToSave[key] === '' || dataToSave[key] === null) {
+          delete dataToSave[key];
+        }
+      });
+      
+      // For sessions, handle specific conversions
+      if (props.entityType === 'session') {
+        // Filter out empty highlights
+        if (Array.isArray(dataToSave.highlights)) {
+          dataToSave.highlights = dataToSave.highlights.filter(h => h.trim());
         }
         
-        // Process locations and characters into arrays if they're strings
-        if (typeof processedData.locations === 'string') {
-          processedData.locations = processedData.locations
-            .split(',')
-            .map(item => item.trim())
-            .filter(item => item);
-        }
-        
-        if (typeof processedData.characters === 'string') {
-          processedData.characters = processedData.characters
-            .split(',')
-            .map(item => item.trim())
-            .filter(item => item);
+        // If no ID provided for session, create ID from title
+        if (!dataToSave.id && dataToSave.title) {
+          const sessionNum = extractSessionNumber(dataToSave.title);
+          if (sessionNum !== null) {
+            dataToSave.id = `session-${sessionNum}`;
+          }
         }
       }
       
-      this.$emit('save', processedData);
-    }
+      emit('save', dataToSave);
+    };
+    
+    // Extract session number from title, e.g., "Session 1" -> 1
+    const extractSessionNumber = (title) => {
+      const match = title.match(/session\s+(-?\d+)/i);
+      if (match && match[1]) {
+        return match[1];
+      }
+      return null;
+    };
+    
+    return {
+      formData,
+      isNewEntity,
+      sessions,
+      formatDate,
+      addHighlight,
+      removeHighlight,
+      saveEntity
+    };
   }
 };
 </script>
@@ -451,17 +604,22 @@ label {
 input, textarea, select {
   width: 100%;
   padding: 0.5rem;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--border-color, #555);
   background-color: rgba(0, 0, 0, 0.2);
-  color: var(--color-text);
+  color: var(--color-text, #ddd);
   border-radius: 4px;
   font-family: inherit;
 }
 
+input[type="checkbox"] {
+  width: auto;
+  margin-right: 0.5rem;
+}
+
 input:focus, textarea:focus, select:focus {
   outline: none;
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 2px rgba(var(--color-primary-rgb), 0.2);
+  border-color: var(--color-primary, #4CAF50);
+  box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
 }
 
 .form-actions {
@@ -480,14 +638,59 @@ input:focus, textarea:focus, select:focus {
 }
 
 .btn-primary {
-  background-color: var(--color-primary);
-  color: var(--color-background);
+  background-color: var(--color-primary, #4CAF50);
+  color: var(--color-background, #fff);
 }
 
 .btn-cancel {
   background-color: rgba(0, 0, 0, 0.2);
-  border: 1px solid var(--border-color);
-  color: var(--color-text);
+  border: 1px solid var(--border-color, #555);
+  color: var(--color-text, #ddd);
+}
+
+/* Repeatable fields for highlights */
+.repeatable-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.repeatable-field {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.remove-button {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+
+.add-button {
+  margin-top: 0.5rem;
+  padding: 0.3rem 0.8rem;
+  background-color: #2196F3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  align-self: flex-start;
+}
+
+.highlight-item {
+  padding: 0.5rem;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
 }
 
 @media (max-width: 768px) {
@@ -499,5 +702,22 @@ input:focus, textarea:focus, select:focus {
   .form-row .form-group {
     margin-bottom: 0;
   }
+}
+
+/* Session selector styling */
+.session-selector {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid var(--border-color, #555);
+  background-color: rgba(0, 0, 0, 0.2);
+  color: var(--color-text, #ddd);
+  border-radius: 4px;
+  font-family: inherit;
+}
+
+.helper-text {
+  font-size: 0.8rem;
+  color: var(--color-text-muted, #999);
+  margin-top: 0.3rem;
 }
 </style>

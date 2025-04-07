@@ -9,18 +9,55 @@ let useFirestore = false;
 let isInitialized = false;
 let dataSource = 'local';
 
+// Cache for Firestore history entries
+let firestoreHistoryCache = null;
+let firestoreSessionsCache = null;
+
 // HISTORY DATA PROCESSING FUNCTIONS
 
+// Get all history entries (either from local data or Firestore)
+async function getAllHistoryEntries() {
+  if (useFirestore) {
+    if (!firestoreHistoryCache) {
+      firestoreHistoryCache = await firestoreService.getAllHistoryEvents();
+    }
+    return firestoreHistoryCache;
+  } else {
+    return historyBasedDataExpanded.historyEntries;
+  }
+}
+
+// Get all sessions (either from local data or Firestore)
+async function getAllSessionsData() {
+  if (useFirestore) {
+    if (!firestoreSessionsCache) {
+      firestoreSessionsCache = await firestoreService.getAllSessions();
+    }
+    return firestoreSessionsCache;
+  } else {
+    return historyBasedDataExpanded.sessions;
+  }
+}
+
+// Clear cache to ensure fresh data on next load
+function clearCache() {
+  firestoreHistoryCache = null;
+  firestoreSessionsCache = null;
+}
+
 // Build an entity from history entries
-export function buildEntityFromHistory(entityType, entityId) {
+export async function buildEntityFromHistory(entityType, entityId) {
+  // Get all history entries
+  const allHistoryEntries = await getAllHistoryEntries();
+  
   // Get all history entries for this entity
-  const entries = historyBasedDataExpanded.historyEntries.filter(
+  const entries = allHistoryEntries.filter(
     entry => entry.entityId === entityId && 
            (entry.changeType === 'creation' && entry.data.entityType === entityType)
   );
   
   // Also include update entries that target this entity
-  const updateEntries = historyBasedDataExpanded.historyEntries.filter(
+  const updateEntries = allHistoryEntries.filter(
     entry => entry.entityId === entityId && 
             entry.changeType !== 'creation'
   );
@@ -54,6 +91,10 @@ export function buildEntityFromHistory(entityType, entityId) {
     else if (entry.changeType === 'update') {
       // Apply updates
       Object.assign(entity, entry.data);
+    }
+    else if (entry.changeType === 'deletion') {
+      // Mark entity as deleted
+      entity.deleted = true;
     }
     else if (entry.changeType === 'connection_added') {
       // Initialize connections array if it doesn't exist
@@ -89,17 +130,20 @@ export function buildEntityFromHistory(entityType, entityId) {
     }
   });
   
+  // Don't return deleted entities
+  if (entity.deleted) return null;
+  
   // Add history to the entity
-  entity.history = organizeHistoryBySession(sortedEntries);
+  entity.history = await organizeHistoryBySession(sortedEntries);
   
   return entity;
 }
 
 // Organize history entries by session for UI display
-function organizeHistoryBySession(entries) {
+async function organizeHistoryBySession(entries) {
   const sessionMap = new Map();
   
-  entries.forEach(entry => {
+  for (const entry of entries) {
     if (!sessionMap.has(entry.sessionId)) {
       sessionMap.set(entry.sessionId, {
         sessionId: entry.sessionId,
@@ -113,7 +157,7 @@ function organizeHistoryBySession(entries) {
     if (entry.changeType === 'creation') {
       description = `${capitalizeFirst(entry.data.entityType)} was created`;
     } else if (entry.changeType === 'update') {
-      const entityType = entry.data.entityType || getEntityTypeFromId(entry.entityId);
+      const entityType = entry.data.entityType || await getEntityTypeFromId(entry.entityId);
       description = `${capitalizeFirst(entityType)} was updated`;
       
       // Add details about what was updated if available
@@ -122,17 +166,19 @@ function organizeHistoryBySession(entries) {
       } else if (entry.data && entry.data.status) {
         description = `Status changed to: ${entry.data.status}`;
       }
+    } else if (entry.changeType === 'deletion') {
+      description = 'Entity was deleted';
     } else if (entry.changeType === 'connection_added') {
       const targetType = capitalizeFirst(entry.data.connectedEntityType);
-      const targetName = getEntityNameFromId(entry.data.connectedEntityType, entry.data.connectedEntityId);
+      const targetName = await getEntityNameFromId(entry.data.connectedEntityType, entry.data.connectedEntityId);
       description = `Connected to ${targetType} "${targetName}": ${entry.data.reason}`;
     } else if (entry.changeType === 'connection_removed') {
       const targetType = capitalizeFirst(entry.data.connectedEntityType);
-      const targetName = getEntityNameFromId(entry.data.connectedEntityType, entry.data.connectedEntityId);
+      const targetName = await getEntityNameFromId(entry.data.connectedEntityType, entry.data.connectedEntityId);
       description = `Connection to ${targetType} "${targetName}" was removed`;
     } else if (entry.changeType === 'connection_updated') {
       const targetType = capitalizeFirst(entry.data.connectedEntityType);
-      const targetName = getEntityNameFromId(entry.data.connectedEntityType, entry.data.connectedEntityId);
+      const targetName = await getEntityNameFromId(entry.data.connectedEntityType, entry.data.connectedEntityId);
       description = `Updated connection to ${targetType} "${targetName}": ${entry.data.reason}`;
     }
     
@@ -142,7 +188,7 @@ function organizeHistoryBySession(entries) {
       timestamp: entry.timestamp || new Date().toISOString(),
       changes: entry.data
     });
-  });
+  }
   
   // Convert to array and sort by session ID
   return Array.from(sessionMap.values()).sort((a, b) => {
@@ -153,9 +199,12 @@ function organizeHistoryBySession(entries) {
 }
 
 // Get entity name from ID (for better history descriptions)
-function getEntityNameFromId(entityType, entityId) {
+async function getEntityNameFromId(entityType, entityId) {
+  // Get all history entries
+  const allHistoryEntries = await getAllHistoryEntries();
+  
   // Look for creation entries to get entity names
-  const creationEntry = historyBasedDataExpanded.historyEntries.find(
+  const creationEntry = allHistoryEntries.find(
     entry => entry.entityId === entityId && 
             entry.changeType === 'creation' && 
             entry.data.entityType === entityType
@@ -170,8 +219,11 @@ function getEntityNameFromId(entityType, entityId) {
 }
 
 // Get entity type from ID when not provided
-export function getEntityTypeFromId(entityId) {
-  const creationEntry = historyBasedDataExpanded.historyEntries.find(
+export async function getEntityTypeFromId(entityId) {
+  // Get all history entries
+  const allHistoryEntries = await getAllHistoryEntries();
+  
+  const creationEntry = allHistoryEntries.find(
     entry => entry.entityId === entityId && entry.changeType === 'creation'
   );
   
@@ -188,24 +240,35 @@ function capitalizeFirst(str) {
 }
 
 // Get all entities of a specific type
-export function getAllEntities(entityType) {
+export async function getAllEntities(entityType) {
+  // Get all history entries
+  const allHistoryEntries = await getAllHistoryEntries();
+  
   // Get unique entity IDs of this type by checking creation entries
   const entityIds = [...new Set(
-    historyBasedDataExpanded.historyEntries
+    allHistoryEntries
       .filter(entry => entry.changeType === 'creation' && entry.data.entityType === entityType)
       .map(entry => entry.entityId)
   )];
   
-  // Build each entity from history
-  return entityIds.map(id => buildEntityFromHistory(entityType, id))
-    .filter(Boolean) // Remove null entities
-    .sort((a, b) => (a.name || '').localeCompare(b.name || '')); // Sort by name
+  // Build each entity from history in parallel
+  const entities = await Promise.all(
+    entityIds.map(id => buildEntityFromHistory(entityType, id))
+  );
+  
+  // Remove null entities (e.g., deleted ones) and sort by name
+  return entities
+    .filter(Boolean)
+    .sort((a, b) => (a.name || '').localeCompare(b.name || '')); 
 }
 
 // Get all events related to a specific entity
-export function getEntityEvents(entityType, entityId) {
+export async function getEntityEvents(entityType, entityId) {
+  // Get all history entries
+  const allHistoryEntries = await getAllHistoryEntries();
+  
   // First find if the entity exists with the correct type
-  const creationEntry = historyBasedDataExpanded.historyEntries.find(
+  const creationEntry = allHistoryEntries.find(
     entry => entry.entityId === entityId && 
             entry.changeType === 'creation' && 
             entry.data.entityType === entityType
@@ -214,25 +277,31 @@ export function getEntityEvents(entityType, entityId) {
   if (!creationEntry) return [];
   
   // If entity exists, get all its events
-  return historyBasedDataExpanded.historyEntries.filter(
+  return allHistoryEntries.filter(
     entry => entry.entityId === entityId
   );
 }
 
 // Get all events related to a specific session
-export function getAllSessionRelatedEvents(sessionId) {
-  return historyBasedDataExpanded.historyEntries.filter(
+export async function getAllSessionRelatedEvents(sessionId) {
+  // Get all history entries
+  const allHistoryEntries = await getAllHistoryEntries();
+  
+  return allHistoryEntries.filter(
     entry => entry.sessionId === sessionId
   );
 }
 
 // Get entity as it appeared at a specific session
-export function getEntityAtSession(entityType, entityId, sessionId) {
+export async function getEntityAtSession(entityType, entityId, sessionId) {
+  // Get all history entries
+  const allHistoryEntries = await getAllHistoryEntries();
+  
   // Get the session number for comparison
   const targetSessionNum = parseInt(sessionId.split('-')[1]) || 0;
   
   // First check if entity exists with correct type
-  const creationEntry = historyBasedDataExpanded.historyEntries.find(
+  const creationEntry = allHistoryEntries.find(
     entry => entry.entityId === entityId && 
             entry.changeType === 'creation' && 
             entry.data.entityType === entityType
@@ -241,7 +310,7 @@ export function getEntityAtSession(entityType, entityId, sessionId) {
   if (!creationEntry) return null;
   
   // Get all history entries for this entity up to the specified session
-  const entries = historyBasedDataExpanded.historyEntries.filter(
+  const entries = allHistoryEntries.filter(
     entry => {
       const entrySessionNum = parseInt(entry.sessionId.split('-')[1]) || 0;
       return entry.entityId === entityId && entrySessionNum <= targetSessionNum;
@@ -272,6 +341,9 @@ export function getEntityAtSession(entityType, entityId, sessionId) {
     else if (entry.changeType === 'update') {
       Object.assign(entity, entry.data);
     }
+    else if (entry.changeType === 'deletion') {
+      entity.deleted = true;
+    }
     else if (entry.changeType === 'connection_added') {
       if (!entity.connections) entity.connections = [];
       entity.connections.push({
@@ -301,8 +373,11 @@ export function getEntityAtSession(entityType, entityId, sessionId) {
     }
   });
   
+  // Don't return deleted entities
+  if (entity.deleted) return null;
+  
   // Add filtered history to the entity
-  entity.history = organizeHistoryBySession(sortedEntries);
+  entity.history = await organizeHistoryBySession(sortedEntries);
   
   return entity;
 }
@@ -312,13 +387,8 @@ export async function initWorldData(options = {}) {
   if (isInitialized && !options.forceInit) return dataSource;
   
   try {
-    // If seed option is provided, seed the database first
-    if (options.seedDatabase) {
-      console.log('Seeding Firestore database...');
-      const { seedFirestore } = await import('../scripts/seedFirestore.js');
-      await seedFirestore();
-      console.log('Database seeding complete!');
-    }
+    // Clear cache
+    clearCache();
     
     // Try to get data from Firestore
     const sessions = await firestoreService.getAllSessions();
@@ -341,10 +411,27 @@ export async function initWorldData(options = {}) {
   return dataSource;
 }
 
+// Create a new history entry (in Firestore or local cache temporarily)
+export async function createHistoryEntry(entryData) {
+  if (useFirestore) {
+    // Add to Firestore
+    await firestoreService.createHistoryEntry(entryData);
+    
+    // Clear cache to ensure fresh data on next load
+    clearCache();
+  } else {
+    // Add to local cache (warning: this is temporary and will be lost on refresh)
+    historyBasedDataExpanded.historyEntries.push(entryData);
+  }
+}
+
 // Get all sessions
-export function getAllSessions() {
-  // Get and sort sessions
-  const sortedSessions = historyBasedDataExpanded.sessions.sort((a, b) => {
+export async function getAllSessions() {
+  // Get all sessions data
+  const allSessions = await getAllSessionsData();
+  
+  // Sort sessions
+  const sortedSessions = allSessions.sort((a, b) => {
     // Get session number from ID
     const aNum = parseInt(a.id.split('-')[1]) || -1;
     const bNum = parseInt(b.id.split('-')[1]) || -1;
@@ -359,21 +446,22 @@ export function getAllSessions() {
       title: session.title,
       date: session.date,
       subtitle: session.subtitle || '',
-      description: session.summary, // Map summary to description
-      upcoming: false, // Default to false, set true for future sessions
-      highlights: session.highlights // Add the highlights
+      description: session.summary || session.description, // Map summary to description
+      upcoming: !!session.upcoming, // Ensure boolean
+      highlights: session.highlights || [] // Ensure array
     };
   });
 }
 
 // Get a specific session
-export function getSession(id) {
-  return historyBasedDataExpanded.sessions.find(session => session.id === id);
+export async function getSession(id) {
+  const allSessions = await getAllSessionsData();
+  return allSessions.find(session => session.id === id);
 }
 
 // Getter functions - now unified across data sources
 export async function getLocations(type = null) {
-  const locations = getAllEntities('location');
+  const locations = await getAllEntities('location');
   if (type) {
     return locations.filter(loc => loc.type === type);
   }
@@ -448,7 +536,7 @@ export async function getEntityConnections(type, id) {
 
 // Get all entities that changed in a specific session
 export async function getSessionEntities(sessionId) {
-  const events = getAllSessionRelatedEvents(sessionId);
+  const events = await getAllSessionRelatedEvents(sessionId);
   
   // Create a set of all affected entities
   const affectedEntities = new Set();
@@ -460,11 +548,8 @@ export async function getSessionEntities(sessionId) {
     } 
     // For other events, we need to determine the entity type
     else if (event.entityId) {
-      // Find the entity's creation entry to get its type
-      const entityType = getEntityTypeFromId(event.entityId);
-      if (entityType) {
-        affectedEntities.add(`${entityType}:${event.entityId}`);
-      }
+      // We'll use the async function later when processing the set
+      affectedEntities.add(`unknown:${event.entityId}`);
     }
     
     // Also track connected entities
@@ -473,20 +558,157 @@ export async function getSessionEntities(sessionId) {
     }
   });
   
-  // Convert the set back to an array of entity objects
-  return Array.from(affectedEntities).map(entityKey => {
-    const [type, id] = entityKey.split(':');
+  // Convert the set back to an array of entity promises
+  const entityPromises = Array.from(affectedEntities).map(async entityKey => {
+    let [type, id] = entityKey.split(':');
+    
+    // If type is unknown, determine it
+    if (type === 'unknown') {
+      type = await getEntityTypeFromId(id);
+    }
+    
+    // Build the entity
+    const entity = await buildEntityFromHistory(type, id);
+    
     return {
       type,
       id,
-      entity: buildEntityFromHistory(type, id)
+      entity
     };
-  }).filter(item => item.entity !== null); // Filter out null entities
+  });
+  
+  // Resolve all promises
+  const entities = await Promise.all(entityPromises);
+  
+  // Filter out null entities (e.g., deleted ones)
+  return entities.filter(item => item.entity !== null);
 }
 
 // Get current data source
 export function getDataSource() {
   return { source: dataSource, initialized: isInitialized };
+}
+
+// Methods for creating and updating history entries
+export async function createEntity(entityType, entityData) {
+  const timestamp = new Date().toISOString();
+  const sessionId = entityData.sessionId || 'session-admin'; // Default to admin session
+  
+  // Ensure the entity has an ID
+  const entityId = entityData.id || `${entityType}-${Date.now()}`;
+  
+  // Create the history entry
+  const historyEntry = {
+    entityId,
+    sessionId,
+    changeType: 'creation',
+    timestamp,
+    editedBy: entityData.editedBy || 'admin',
+    data: {
+      ...entityData,
+      id: entityId,
+      entityType
+    }
+  };
+  
+  // Add to history
+  await createHistoryEntry(historyEntry);
+  
+  return entityId;
+}
+
+export async function updateEntity(entityType, entityId, updateData) {
+  const timestamp = new Date().toISOString();
+  const sessionId = updateData.sessionId || 'session-admin'; // Default to admin session
+  
+  // Create the history entry
+  const historyEntry = {
+    entityId,
+    sessionId,
+    changeType: 'update',
+    timestamp,
+    editedBy: updateData.editedBy || 'admin',
+    data: {
+      ...updateData,
+      entityType
+    }
+  };
+  
+  // Add to history
+  await createHistoryEntry(historyEntry);
+  
+  return entityId;
+}
+
+export async function deleteEntity(entityType, entityId) {
+  const timestamp = new Date().toISOString();
+  const sessionId = 'session-admin'; // Default to admin session
+  
+  // Create the history entry
+  const historyEntry = {
+    entityId,
+    sessionId,
+    changeType: 'deletion',
+    timestamp,
+    editedBy: 'admin',
+    data: {
+      entityType
+    }
+  };
+  
+  // Add to history
+  await createHistoryEntry(historyEntry);
+  
+  return true;
+}
+
+export async function addEntityConnection(entityType, entityId, connectedType, connectedId, reason) {
+  const timestamp = new Date().toISOString();
+  const sessionId = 'session-admin'; // Default to admin session
+  
+  // Create the history entry
+  const historyEntry = {
+    entityId,
+    sessionId,
+    changeType: 'connection_added',
+    timestamp,
+    editedBy: 'admin',
+    data: {
+      entityType,
+      connectedEntityType: connectedType,
+      connectedEntityId: connectedId,
+      reason
+    }
+  };
+  
+  // Add to history
+  await createHistoryEntry(historyEntry);
+  
+  return true;
+}
+
+export async function removeEntityConnection(entityType, entityId, connectedType, connectedId) {
+  const timestamp = new Date().toISOString();
+  const sessionId = 'session-admin'; // Default to admin session
+  
+  // Create the history entry
+  const historyEntry = {
+    entityId,
+    sessionId,
+    changeType: 'connection_removed',
+    timestamp,
+    editedBy: 'admin',
+    data: {
+      entityType,
+      connectedEntityType: connectedType,
+      connectedEntityId: connectedId
+    }
+  };
+  
+  // Add to history
+  await createHistoryEntry(historyEntry);
+  
+  return true;
 }
 
 // Re-export worldHistory unchanged as it's a different structure
@@ -511,11 +733,17 @@ export default {
   getEntityConnections,
   getSessionEntities,
   worldHistory,
-  // New history-based functions
+  // Event sourcing methods
+  createEntity,
+  updateEntity,
+  deleteEntity,
+  addEntityConnection,
+  removeEntityConnection,
+  // History-based functions
   buildEntityFromHistory,
   getAllEntities,
   getEntityEvents,
   getAllSessionRelatedEvents,
   getEntityAtSession,
-  getEntityTypeFromId  // Add this function to the default export as well
+  getEntityTypeFromId
 };

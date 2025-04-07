@@ -15,6 +15,7 @@ import {
   Timestamp,
   serverTimestamp
 } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
 
 class FirestoreService {
   constructor() {
@@ -27,9 +28,17 @@ class FirestoreService {
     return `${this.collectionsPrefix}${collectionName}`;
   }
 
-  // CRUD operations
-  async create(collectionName, data) {
+  // Get current user ID for history tracking
+  getCurrentUserId() {
+    const auth = getAuth();
+    return auth.currentUser ? auth.currentUser.uid : 'system';
+  }
+
+  // CRUD operations with history tracking
+  async create(collectionName, data, options = {}) {
     try {
+      const { trackHistory = true, sessionId = null, changeType = 'creation' } = options;
+      
       // Add created timestamp
       const dataWithTimestamp = {
         ...data,
@@ -37,24 +46,50 @@ class FirestoreService {
         updatedAt: serverTimestamp()
       };
 
+      let createdDoc;
       // If the data has an ID, use it, otherwise let Firestore generate one
       if (data.id) {
         const docRef = doc(db, this.getCollection(collectionName), data.id);
         await setDoc(docRef, dataWithTimestamp);
-        return { id: data.id, ...dataWithTimestamp };
+        createdDoc = { id: data.id, ...dataWithTimestamp };
       } else {
         const collectionRef = collection(db, this.getCollection(collectionName));
         const docRef = await addDoc(collectionRef, dataWithTimestamp);
         
         // Update the document with its ID
         await updateDoc(docRef, { id: docRef.id });
-        
-        return { id: docRef.id, ...dataWithTimestamp };
+        createdDoc = { id: docRef.id, ...dataWithTimestamp };
       }
+
+      // Create history entry if needed and if this is a trackable entity type
+      if (trackHistory && this.isTrackableEntityType(collectionName)) {
+        await this.createHistoryEvent({
+          entityId: createdDoc.id,
+          entityType: this.getSingularEntityType(collectionName),
+          sessionId: sessionId,
+          changeType: changeType,
+          data: createdDoc,
+          editedBy: this.getCurrentUserId()
+        });
+      }
+      
+      return createdDoc;
     } catch (error) {
       console.error(`Error creating document in ${collectionName}:`, error);
       throw error;
     }
+  }
+
+  // Helper to determine if an entity type should be tracked in history
+  isTrackableEntityType(collectionName) {
+    const trackableTypes = ['characters', 'npcs', 'locations', 'items', 'sessions'];
+    return trackableTypes.includes(collectionName);
+  }
+
+  // Helper to get singular entity type from collection name
+  getSingularEntityType(collectionName) {
+    // Remove trailing 's' to get singular form
+    return collectionName.endsWith('s') ? collectionName.slice(0, -1) : collectionName;
   }
 
   async get(collectionName, id) {
@@ -73,8 +108,16 @@ class FirestoreService {
     }
   }
 
-  async update(collectionName, id, data) {
+  async update(collectionName, id, data, options = {}) {
     try {
+      const { trackHistory = true, sessionId = null, changeType = 'update' } = options;
+      
+      // Get the current state before updating
+      let previousState = null;
+      if (trackHistory) {
+        previousState = await this.get(collectionName, id);
+      }
+      
       const docRef = doc(db, this.getCollection(collectionName), id);
       
       // Add updated timestamp
@@ -84,17 +127,53 @@ class FirestoreService {
       };
       
       await updateDoc(docRef, updateData);
-      return { id, ...updateData };
+      const updatedDoc = { id, ...updateData };
+      
+      // Create history entry if needed and if this is a trackable entity type
+      if (trackHistory && this.isTrackableEntityType(collectionName) && previousState) {
+        await this.createHistoryEvent({
+          entityId: id,
+          entityType: this.getSingularEntityType(collectionName),
+          sessionId: sessionId,
+          changeType: changeType,
+          data: updatedDoc,
+          previousData: previousState,
+          editedBy: this.getCurrentUserId()
+        });
+      }
+      
+      return updatedDoc;
     } catch (error) {
       console.error(`Error updating document in ${collectionName}:`, error);
       throw error;
     }
   }
 
-  async delete(collectionName, id) {
+  async delete(collectionName, id, options = {}) {
     try {
+      const { trackHistory = true, sessionId = null } = options;
+      
+      // Get the current state before deleting
+      let deletedEntity = null;
+      if (trackHistory) {
+        deletedEntity = await this.get(collectionName, id);
+      }
+      
       const docRef = doc(db, this.getCollection(collectionName), id);
       await deleteDoc(docRef);
+      
+      // Create history entry if needed and if this is a trackable entity type
+      if (trackHistory && this.isTrackableEntityType(collectionName) && deletedEntity) {
+        await this.createHistoryEvent({
+          entityId: id,
+          entityType: this.getSingularEntityType(collectionName),
+          sessionId: sessionId,
+          changeType: 'deletion',
+          previousData: deletedEntity,
+          editedBy: this.getCurrentUserId()
+        });
+      }
+      
       return true;
     } catch (error) {
       console.error(`Error deleting document from ${collectionName}:`, error);
@@ -185,7 +264,7 @@ class FirestoreService {
   async getAllHistoryEvents() {
     return this.getAll('historyEvents');
   }
-
+  
   // History event methods
   async createHistoryEvent(eventData) {
     // Make sure it has a timestamp
@@ -194,7 +273,7 @@ class FirestoreService {
       timestamp: eventData.timestamp || Timestamp.now()
     };
     
-    return this.create('historyEvents', event);
+    return this.create('historyEvents', event, { trackHistory: false });
   }
 
   async getSessionEvents(sessionId) {
@@ -218,26 +297,81 @@ class FirestoreService {
     ], { field: 'timestamp', direction: 'asc' });
   }
 
-  // Initialize the database with seed data
+  // Initialize the database with seed data in historyBasedDataExpanded format
   async seedDatabase(seedData) {
     try {
-      // Process each collection
-      const collections = Object.keys(seedData);
-      
-      for (const collectionName of collections) {
-        const items = seedData[collectionName];
-        
-        // Add each item to the collection
-        for (const item of items) {
-          await this.create(collectionName, item);
+      // If the data is in historyBasedDataExpanded format
+      if (seedData.sessions && seedData.historyEntries) {
+        // First import sessions
+        if (seedData.sessions && seedData.sessions.length > 0) {
+          for (const session of seedData.sessions) {
+            await this.create('sessions', session, { trackHistory: false });
+          }
+          console.log(`Seeded ${seedData.sessions.length} sessions`);
         }
         
-        console.log(`Seeded ${items.length} items to ${collectionName}`);
+        // Then import history entries
+        if (seedData.historyEntries && seedData.historyEntries.length > 0) {
+          // Sort by timestamp to ensure correct chronological order
+          const sortedEntries = [...seedData.historyEntries].sort((a, b) => 
+            new Date(a.timestamp) - new Date(b.timestamp)
+          );
+          
+          for (const entry of sortedEntries) {
+            // Create the entity in the current state collections first if it's a creation event
+            if (entry.changeType === 'creation' && entry.data) {
+              const entityType = entry.data.entityType;
+              if (entityType) {
+                const collectionName = `${entityType}s`;
+                // Don't track history for these initial creations since we're importing the history separately
+                await this.create(collectionName, entry.data, { trackHistory: false });
+              }
+            }
+            
+            // Add the history event
+            await this.create('historyEvents', entry, { trackHistory: false });
+          }
+          console.log(`Seeded ${sortedEntries.length} history entries`);
+        }
+        
+        return true;
+      } 
+      // Legacy format handling
+      else {
+        // Process each collection
+        const collections = Object.keys(seedData);
+        
+        for (const collectionName of collections) {
+          const items = seedData[collectionName];
+          
+          // Add each item to the collection
+          for (const item of items) {
+            await this.create(collectionName, item, { trackHistory: false });
+          }
+          
+          console.log(`Seeded ${items.length} items to ${collectionName}`);
+        }
+        
+        return true;
       }
-      
-      return true;
     } catch (error) {
       console.error('Error seeding database:', error);
+      throw error;
+    }
+  }
+
+  // Export data in historyBasedDataExpanded format
+  async exportDataInHistoryFormat() {
+    try {
+      const sessions = await this.getAllSessions();
+      const historyEntries = await this.getAllHistoryEvents();
+      
+      return {
+        sessions,
+        historyEntries
+      };
+    } catch (error) {
+      console.error('Error exporting data in history format:', error);
       throw error;
     }
   }

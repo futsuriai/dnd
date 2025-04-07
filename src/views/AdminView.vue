@@ -406,15 +406,9 @@ export default {
     
     async exportData() {
       try {
-        // Fetch all data types
-        const exportData = {
-          characters: await firestoreService.getAllCharacters(),
-          npcs: await firestoreService.getAllNpcs(),
-          locations: await firestoreService.getAllLocations(),
-          items: await firestoreService.getAllItems(),
-          sessions: await firestoreService.getAllSessions(),
-          historyEvents: await firestoreService.getAllHistoryEvents()
-        };
+        // Use the new exportDataInHistoryFormat method to get data in the same format
+        // as historyBasedDataExpanded (sessions + historyEntries)
+        const exportData = await firestoreService.exportDataInHistoryFormat();
         
         // Convert to JSON string
         const jsonString = JSON.stringify(exportData, null, 2);
