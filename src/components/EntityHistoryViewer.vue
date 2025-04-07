@@ -126,11 +126,12 @@
   </div>
 </template>
 
-<script>
-import { ref, onMounted, watch, computed } from 'vue';
+<script lang="ts">
+import { ref, onMounted, watch, defineComponent } from 'vue';
 import worldData from '../store/worldData';
+import { Entity, HistoryEntry, Session, SessionHistory } from '../store/worldData';
 
-export default {
+export default defineComponent({
   name: 'EntityHistoryViewer',
   props: {
     entityType: {
@@ -143,15 +144,16 @@ export default {
     }
   },
   setup(props) {
-    const entity = ref(null);
-    const sessions = ref([]);
-    const historyEntries = ref([]);
-    const selectedSessionId = ref('');
-    const isLoading = ref(true);
-    const errorMessage = ref('');
+    const entity = ref<Entity | null>(null);
+    const sessions = ref<Session[]>([]);
+    const historyEntries = ref<HistoryEntry[]>([]);
+    const selectedSessionId = ref<string>('');
+    const isLoading = ref<boolean>(true);
+    const errorMessage = ref<string>('');
+    const sessionCache = ref<Record<string, Session>>({});
     
     // Load all sessions for the filter dropdown
-    const loadSessions = async () => {
+    const loadSessions = async (): Promise<void> => {
       try {
         // Get all real sessions
         sessions.value = await worldData.getAllSessions();
@@ -163,7 +165,10 @@ export default {
           title: 'Admin Session',
           date: new Date().toISOString().split('T')[0],
           subtitle: 'Content created via Admin interface',
-          description: 'This is not a real gameplay session, but represents content created or modified through the admin interface.'
+          description: 'This is not a real gameplay session, but represents content created or modified through the admin interface.',
+          summary: '',
+          upcoming: false,
+          highlights: []
         });
         
         // Sort sessions chronologically
@@ -186,7 +191,7 @@ export default {
     };
     
     // Load entity with full history
-    const loadEntity = async () => {
+    const loadEntity = async (): Promise<void> => {
       try {
         isLoading.value = true;
         errorMessage.value = '';
@@ -217,7 +222,7 @@ export default {
           if (aSession !== bSession) return bSession - aSession;
           
           // Then by timestamp if in the same session
-          return new Date(b.timestamp) - new Date(a.timestamp);
+          return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime();
         });
       } catch (error) {
         console.error('Error loading entity history:', error);
@@ -228,7 +233,7 @@ export default {
     };
     
     // Load entity as it was at a specific session
-    const loadEntityAtSession = async () => {
+    const loadEntityAtSession = async (): Promise<void> => {
       try {
         if (!selectedSessionId.value) {
           // If no session selected, load current state
@@ -271,7 +276,7 @@ export default {
             if (aSession !== bSession) return bSession - aSession;
             
             // Then by timestamp if in the same session
-            return new Date(b.timestamp) - new Date(a.timestamp);
+            return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime();
           });
       } catch (error) {
         console.error('Error loading entity at session:', error);
@@ -282,7 +287,7 @@ export default {
     };
     
     // Format a date string for display
-    const formatDate = (dateString) => {
+    const formatDate = (dateString: string | undefined): string => {
       if (!dateString) return 'Unknown date';
       
       try {
@@ -298,7 +303,7 @@ export default {
     };
     
     // Format a timestamp for display
-    const formatTime = (timestamp) => {
+    const formatTime = (timestamp: string | undefined): string => {
       if (!timestamp) return '';
       
       try {
@@ -313,7 +318,7 @@ export default {
     };
     
     // Get session title by ID
-    const getSessionTitle = (sessionId) => {
+    const getSessionTitle = (sessionId: string | undefined): string => {
       if (!sessionId) return 'Unknown Session';
       
       // Handle special admin session case
@@ -326,7 +331,7 @@ export default {
     };
     
     // Get session date by ID
-    const getSessionDate = (sessionId) => {
+    const getSessionDate = (sessionId: string | undefined): string => {
       if (!sessionId) return '';
       
       // Handle special admin session case
@@ -339,7 +344,7 @@ export default {
     };
     
     // Get human-readable description for a history entry
-    const getEntryDescription = (entry) => {
+    const getEntryDescription = (entry: HistoryEntry): string => {
       if (!entry) return '';
       
       switch (entry.changeType) {
@@ -363,7 +368,7 @@ export default {
     };
     
     // Utility function to capitalize first letter
-    const capitalizeFirst = (str) => {
+    const capitalizeFirst = (str: string): string => {
       if (!str) return '';
       return str.charAt(0).toUpperCase() + str.slice(1);
     };
@@ -396,7 +401,7 @@ export default {
       capitalizeFirst
     };
   }
-};
+});
 </script>
 
 <style scoped>

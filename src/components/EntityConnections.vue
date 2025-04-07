@@ -34,120 +34,186 @@
   </div>
 </template>
 
-<script>
-import { ref, onMounted, computed } from 'vue';
+<script lang="ts">
+import { ref, computed, onMounted, defineComponent, PropType } from 'vue';
+import { useRouter } from 'vue-router';
 import worldData from '../store/worldData';
-import { getEntityConnections } from '../store/worldData';
+import { DisplayConnection } from '../store/worldData';
 
-export default {
+export default defineComponent({
   name: 'EntityConnections',
   props: {
     entityType: {
-      type: String,
-      required: true,
-      validator: value => ['character', 'npc', 'location', 'item'].includes(value)
+      type: String as PropType<string>,
+      required: true
     },
     entityId: {
-      type: String,
+      type: String as PropType<string>,
       required: true
     }
   },
-  data() {
-    return {
-      expanded: false,
-      connections: []
-    };
-  },
-  computed: {
-    connectionNamesPreview() {
-      if (this.connections.length === 0) return '';
+  setup(props) {
+    const router = useRouter();
+    const connections = ref<DisplayConnection[]>([]);
+    const isLoading = ref<boolean>(true);
+    const error = ref<string>('');
+    const sessionCache = ref<Record<string, any>>({});
+    const expanded = ref<boolean>(false);
+    
+    // Group connections by type for better display
+    const connectionsByType = computed(() => {
+      const groupedConnections: Record<string, DisplayConnection[]> = {};
       
-      // Get first 3 names and join with commas
-      const names = this.connections.slice(0, 3).map(c => c.name);
-      let preview = names.join(', ');
-      
-      // Add ellipsis if there are more connections
-      if (this.connections.length > 3) {
-        preview += ` +${this.connections.length - 3} more`;
-      }
-      
-      return preview;
-    }
-  },
-  methods: {
-    getConnectionTypeIcon(type) {
-      const icons = {
-        'location': '📌',
-        'character': '👤',
-        'npc': '👥',
-        'item': '🔮'
-      };
-      return icons[type] || '📌';
-    },
-    toggleConnections() {
-      this.expanded = !this.expanded;
-    },
-    navigateToEntity(entityType, entityId) {
-      if (!this.expanded) {
-        // If not expanded, just expand instead of navigating
-        this.expanded = true;
-        return;
-      }
-      
-      let routeName;
-      
-      if (entityType === 'location') {
-        routeName = 'Locations';
-      } else if (entityType === 'character') {
-        routeName = 'Characters';
-      } else if (entityType === 'npc') {
-        routeName = 'NPCs';
-      } else if (entityType === 'item') {
-        routeName = 'Items';
-      } else {
-        return;
-      }
-      
-      this.$router.push({ name: routeName, hash: `#${entityId}` })
-        .then(() => {
-          this.scrollToElement(entityId);
-        });
-    },
-    scrollToElement(id) {
-      setTimeout(() => {
-        const element = document.getElementById(id);
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      connections.value.forEach(conn => {
+        if (!groupedConnections[conn.entityType]) {
+          groupedConnections[conn.entityType] = [];
         }
-      }, 100);
-    },
-    getSessionName(sessionId) {
-      if (sessionId === 'session-0') {
-        return 'Initial Setup';
+        groupedConnections[conn.entityType].push(conn);
+      });
+      
+      // Sort groups for consistent display
+      return Object.keys(groupedConnections)
+        .sort()
+        .reduce((obj: Record<string, DisplayConnection[]>, key) => {
+          obj[key] = groupedConnections[key];
+          return obj;
+        }, {});
+    });
+    
+    // Create a preview of connection names
+    const connectionNamesPreview = computed(() => {
+      if (connections.value.length === 0) return '';
+      
+      const names = connections.value.map(conn => conn.name);
+      if (names.length <= 3) {
+        return names.join(', ');
+      }
+      return `${names.slice(0, 2).join(', ')} + ${names.length - 2} more`;
+    });
+    
+    // Toggle connections expanded state
+    const toggleConnections = () => {
+      expanded.value = !expanded.value;
+    };
+    
+    // Navigate to connected entity when clicked
+    const navigateToEntity = (entityType: string, id: string): void => {
+      router.push({
+        name: getTypeName(entityType).toLowerCase(),
+        params: { id }
+      });
+    };
+    
+    // Navigate to session
+    const navigateToSession = (sessionId: string): void => {
+      router.push({
+        name: 'session',
+        params: { id: sessionId }
+      });
+    };
+    
+    // Get connection type icon
+    const getConnectionTypeIcon = (entityType: string): string => {
+      return getConnectionIcon(entityType);
+    };
+    
+    // Get session name
+    const getSessionName = async (sessionId: string): Promise<string> => {
+      return formatSessionDate(sessionId);
+    };
+    
+    // Get icon for connection type
+    const getConnectionIcon = (entityType: string): string => {
+      switch (entityType) {
+        case 'character':
+          return '👤';
+        case 'npc':
+          return '🧙';
+        case 'location':
+          return '📍';
+        case 'item':
+          return '🧰';
+        default:
+          return '🔗';
+      }
+    };
+    
+    // Get human-readable type name
+    const getTypeName = (entityType: string): string => {
+      return entityType.charAt(0).toUpperCase() + entityType.slice(1) + 's';
+    };
+    
+    // Load connections for this entity
+    const loadConnections = async (): Promise<void> => {
+      try {
+        isLoading.value = true;
+        error.value = '';
+        
+        connections.value = await worldData.getEntityConnections(
+          props.entityType,
+          props.entityId
+        );
+      } catch (err) {
+        console.error('Error loading connections:', err);
+        error.value = 'Failed to load connections.';
+      } finally {
+        isLoading.value = false;
+      }
+    };
+    
+    // Format session date for display
+    const formatSessionDate = async (sessionId: string): Promise<string> => {
+      // Cached result
+      if (sessionCache.value[sessionId]) {
+        return sessionCache.value[sessionId];
       }
       
-      const session = getSession(sessionId);
-      if (session) {
-        return session.title;
+      // Special cases
+      if (sessionId === 'session-admin') {
+        sessionCache.value[sessionId] = 'Admin Session';
+        return 'Admin Session';
       }
-      return `Session ${sessionId.split('-')[1]}`;
-    },
-    navigateToSession(sessionId) {
-      this.$router.push({ name: 'Sessions', params: { id: sessionId } });
-    },
-    async loadConnections() {
-      this.connections = await getEntityConnections(this.entityType, this.entityId);
-    }
-  },
-  created() {
-    this.loadConnections();
-  },
-  watch: {
-    entityId() {
-      this.loadConnections();
-    }
+      
+      try {
+        // Get session details
+        const session = await worldData.getSession(sessionId);
+        if (session) {
+          const formattedDate = `Session ${sessionId.split('-')[1]} (${session.date})`;
+          sessionCache.value[sessionId] = formattedDate;
+          return formattedDate;
+        }
+        
+        // Default if session not found
+        return sessionId;
+      } catch (error) {
+        console.error(`Error getting session ${sessionId}:`, error);
+        return sessionId;
+      }
+    };
+    
+    // Load data on component mount
+    onMounted(() => {
+      loadConnections();
+    });
+    
+    return {
+      connections,
+      isLoading,
+      error,
+      connectionsByType,
+      expanded,
+      connectionNamesPreview,
+      toggleConnections,
+      navigateToEntity,
+      navigateToSession,
+      getConnectionTypeIcon,
+      getSessionName,
+      getConnectionIcon,
+      getTypeName,
+      formatSessionDate
+    };
   }
-}
+});
 </script>
 
 <style scoped>

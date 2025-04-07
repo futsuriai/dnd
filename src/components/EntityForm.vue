@@ -106,26 +106,42 @@
   </div>
 </template>
 
-<script>
-import { ref, computed, onMounted, watch } from 'vue';
+<script lang="ts">
+import { ref, computed, onMounted, watch, defineComponent, PropType } from 'vue';
 import worldData from '../store/worldData';
+import { Session, Entity } from '../store/worldData';
 
-export default {
+interface FormData {
+  id: string;
+  name: string;
+  sessionId: string;
+  entityType: string;
+  player?: string;
+  race?: string;
+  class?: string;
+  level?: number;
+  background?: string;
+  bio?: string;
+  last_action?: string;
+  [key: string]: any;
+}
+
+export default defineComponent({
   name: 'EntityForm',
   props: {
     entityType: {
-      type: String,
+      type: String as PropType<string>,
       required: true
     },
     entity: {
-      type: Object,
+      type: Object as PropType<Entity>,
       default: () => ({})
     }
   },
   emits: ['save', 'cancel'],
   setup(props, { emit }) {
     // Form data with defaults based on entity type
-    const formData = ref({
+    const formData = ref<FormData>({
       id: '',
       name: '',
       sessionId: 'session-admin',
@@ -142,7 +158,7 @@ export default {
     });
     
     // Available sessions
-    const sessions = ref([]);
+    const sessions = ref<Session[]>([]);
     
     // Initialize form with entity data if provided
     watch(() => props.entity, (newEntity) => {
@@ -157,7 +173,7 @@ export default {
     }, { immediate: true });
     
     // Load sessions for dropdown
-    const loadSessions = async () => {
+    const loadSessions = async (): Promise<void> => {
       try {
         sessions.value = await worldData.getAllSessions();
       } catch (error) {
@@ -168,12 +184,12 @@ export default {
     onMounted(loadSessions);
     
     // Capitalize first letter of a string
-    const capitalizeFirst = (str) => {
+    const capitalizeFirst = (str: string): string => {
       return str.charAt(0).toUpperCase() + str.slice(1);
     };
     
     // Submit the form
-    const submitForm = () => {
+    const submitForm = (): void => {
       // If no ID, generate one based on entity type and timestamp
       if (!formData.value.id) {
         formData.value.id = `${props.entityType}-${Date.now()}`;
@@ -196,7 +212,7 @@ export default {
       submitForm
     };
   }
-};
+});
 </script>
 
 <style scoped>

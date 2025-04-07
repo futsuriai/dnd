@@ -2,7 +2,7 @@
   <div class="auth-container">
     <div v-if="user" class="user-info">
       <div class="user-avatar">
-        <img :src="user.photoURL" :alt="user.displayName">
+        <img :src="user.photoURL || undefined" :alt="user.displayName || ''">
       </div>
       <div class="user-details">
         <div class="user-name">{{ user.displayName }}</div>
@@ -22,15 +22,18 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue';
 import authService from '../services/AuthService';
+import { User } from 'firebase/auth';
 
-export default {
+export default defineComponent({
   name: 'AuthComponent',
   data() {
     return {
-      user: null,
-      isEditor: false
+      user: null as User | null,
+      isEditor: false,
+      unsubscribe: null as (() => void) | null
     };
   },
   created() {
@@ -47,7 +50,7 @@ export default {
     }
   },
   methods: {
-    async signInWithGoogle() {
+    async signInWithGoogle(): Promise<void> {
       try {
         await authService.signInWithGoogle();
       } catch (error) {
@@ -55,7 +58,7 @@ export default {
         alert('Failed to sign in. Please try again.');
       }
     },
-    async signOut() {
+    async signOut(): Promise<void> {
       try {
         await authService.signOut();
       } catch (error) {
@@ -64,7 +67,7 @@ export default {
       }
     }
   }
-};
+});
 </script>
 
 <style scoped>

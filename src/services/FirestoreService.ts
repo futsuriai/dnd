@@ -1,4 +1,4 @@
-// FirestoreService.js
+// FirestoreService.ts
 // Handles all Firestore database interactions for the application
 
 import { db, dbPrefix } from '../firebaseConfig';
@@ -12,8 +12,33 @@ import {
   deleteDoc,
   query,
   where,
-  orderBy
+  orderBy,
+  DocumentReference,
+  CollectionReference,
+  DocumentData,
+  QuerySnapshot,
+  DocumentSnapshot
 } from 'firebase/firestore';
+import { HistoryEntry, Session, Entity } from '../store/worldData';
+
+// Define interfaces for data structures
+interface EntityState {
+  id: string;
+  entityType: string;
+  [key: string]: any;
+}
+
+interface DatabaseSeedData {
+  sessions?: Session[];
+  historyEntries?: HistoryEntry[];
+  [key: string]: any;
+}
+
+interface ExportData {
+  sessions: Session[];
+  historyEntries: HistoryEntry[];
+  [key: string]: any;
+}
 
 // Collection names with environment prefixes
 const COLLECTIONS = {
@@ -25,10 +50,10 @@ const COLLECTIONS = {
 
 class FirestoreService {
   // Get all history events
-  async getAllHistoryEvents() {
+  async getAllHistoryEvents(): Promise<HistoryEntry[]> {
     try {
-      const historySnap = await getDocs(collection(db, COLLECTIONS.HISTORY_ENTRIES));
-      return historySnap.docs.map(doc => doc.data());
+      const historySnap: QuerySnapshot<DocumentData> = await getDocs(collection(db, COLLECTIONS.HISTORY_ENTRIES));
+      return historySnap.docs.map(doc => doc.data() as HistoryEntry);
     } catch (error) {
       console.error('Error getting history events:', error);
       throw error;
@@ -36,12 +61,12 @@ class FirestoreService {
   }
 
   // Get all sessions
-  async getAllSessions() {
+  async getAllSessions(): Promise<Session[]> {
     try {
-      const sessionsSnap = await getDocs(
+      const sessionsSnap: QuerySnapshot<DocumentData> = await getDocs(
         query(collection(db, COLLECTIONS.SESSIONS), orderBy('id', 'desc'))
       );
-      return sessionsSnap.docs.map(doc => doc.data());
+      return sessionsSnap.docs.map(doc => doc.data() as Session);
     } catch (error) {
       console.error('Error getting sessions:', error);
       throw error;
@@ -49,10 +74,10 @@ class FirestoreService {
   }
 
   // Create a history entry
-  async createHistoryEntry(entryData) {
+  async createHistoryEntry(entryData: HistoryEntry): Promise<string> {
     try {
       // Add a document with auto-generated ID
-      const entryRef = await addDoc(collection(db, COLLECTIONS.HISTORY_ENTRIES), entryData);
+      const entryRef: DocumentReference = await addDoc(collection(db, COLLECTIONS.HISTORY_ENTRIES), entryData);
       console.log('History entry created with ID:', entryRef.id);
       return entryRef.id;
     } catch (error) {
@@ -62,7 +87,7 @@ class FirestoreService {
   }
 
   // Create or update an entity
-  async createOrUpdateEntity(entityType, entityData) {
+  async createOrUpdateEntity(entityType: string, entityData: EntityState): Promise<string> {
     try {
       // Set the document with the entity ID
       await setDoc(doc(db, COLLECTIONS.ENTITIES, entityData.id), {
@@ -78,11 +103,11 @@ class FirestoreService {
   }
 
   // Get an entity by ID
-  async getEntity(entityId) {
+  async getEntity(entityId: string): Promise<EntityState | null> {
     try {
-      const entityDoc = await getDoc(doc(db, COLLECTIONS.ENTITIES, entityId));
+      const entityDoc: DocumentSnapshot<DocumentData> = await getDoc(doc(db, COLLECTIONS.ENTITIES, entityId));
       if (entityDoc.exists()) {
-        return entityDoc.data();
+        return entityDoc.data() as EntityState;
       }
       return null;
     } catch (error) {
@@ -92,7 +117,7 @@ class FirestoreService {
   }
 
   // Delete an entity
-  async deleteEntity(entityId) {
+  async deleteEntity(entityId: string): Promise<boolean> {
     try {
       await deleteDoc(doc(db, COLLECTIONS.ENTITIES, entityId));
       return true;
@@ -103,7 +128,7 @@ class FirestoreService {
   }
 
   // Create or update a session
-  async createOrUpdateSession(sessionData) {
+  async createOrUpdateSession(sessionData: Session): Promise<string> {
     try {
       await setDoc(doc(db, COLLECTIONS.SESSIONS, sessionData.id), sessionData);
       return sessionData.id;
@@ -114,12 +139,12 @@ class FirestoreService {
   }
 
   // Clear the database (for imports)
-  async clearDatabase() {
+  async clearDatabase(): Promise<boolean> {
     try {
       // Get all entries in collections
-      const historyQuery = await getDocs(collection(db, COLLECTIONS.HISTORY_ENTRIES));
-      const sessionsQuery = await getDocs(collection(db, COLLECTIONS.SESSIONS));
-      const entitiesQuery = await getDocs(collection(db, COLLECTIONS.ENTITIES));
+      const historyQuery: QuerySnapshot<DocumentData> = await getDocs(collection(db, COLLECTIONS.HISTORY_ENTRIES));
+      const sessionsQuery: QuerySnapshot<DocumentData> = await getDocs(collection(db, COLLECTIONS.SESSIONS));
+      const entitiesQuery: QuerySnapshot<DocumentData> = await getDocs(collection(db, COLLECTIONS.ENTITIES));
       
       // Delete all history entries
       for (const entry of historyQuery.docs) {
@@ -145,7 +170,7 @@ class FirestoreService {
   }
 
   // Seed the database with initial data
-  async seedDatabase(data) {
+  async seedDatabase(data: DatabaseSeedData): Promise<boolean> {
     try {
       // Add sessions
       if (data.sessions && Array.isArray(data.sessions)) {
@@ -162,7 +187,7 @@ class FirestoreService {
         
         // Also create/update the final state entities
         // Group history entries by entity
-        const entriesByEntity = {};
+        const entriesByEntity: Record<string, HistoryEntry[]> = {};
         
         for (const entry of data.historyEntries) {
           if (!entriesByEntity[entry.entityId]) {
@@ -180,7 +205,7 @@ class FirestoreService {
           
           if (creationEntry && creationEntry.data.entityType) {
             // Start with initial state
-            let entityState = { 
+            let entityState: EntityState = { 
               id: entityId,
               entityType: creationEntry.data.entityType
             };
@@ -194,7 +219,7 @@ class FirestoreService {
               if (aSession !== bSession) return aSession - bSession;
               
               // If same session, sort by timestamp
-              return new Date(a.timestamp) - new Date(b.timestamp);
+              return new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime();
             });
             
             // Apply each entry to build final state
@@ -221,7 +246,7 @@ class FirestoreService {
   }
 
   // Export data in history format (for the export feature)
-  async exportDataInHistoryFormat() {
+  async exportDataInHistoryFormat(): Promise<ExportData> {
     try {
       // Get all sessions and history entries
       const sessions = await this.getAllSessions();
@@ -239,7 +264,7 @@ class FirestoreService {
   }
 
   // Generic CRUD operations for AdminView.vue
-  async create(collectionName, data) {
+  async create(collectionName: string, data: any): Promise<string> {
     try {
       if (collectionName === 'characters' || 
           collectionName === 'npcs' || 
@@ -247,7 +272,7 @@ class FirestoreService {
           collectionName === 'items') {
         // For entity collections, create via history entry and final state
         const entityType = collectionName.slice(0, -1); // Remove 's' to get type
-        const historyEntry = {
+        const historyEntry: HistoryEntry = {
           entityId: data.id,
           sessionId: data.sessionId || 'session-admin',
           timestamp: new Date().toISOString(),
@@ -276,7 +301,7 @@ class FirestoreService {
     }
   }
 
-  async update(collectionName, id, data) {
+  async update(collectionName: string, id: string, data: any): Promise<string> {
     try {
       if (collectionName === 'characters' || 
           collectionName === 'npcs' || 
@@ -284,7 +309,7 @@ class FirestoreService {
           collectionName === 'items') {
         // For entity collections, update via history entry and final state
         const entityType = collectionName.slice(0, -1); // Remove 's' to get type
-        const historyEntry = {
+        const historyEntry: HistoryEntry = {
           entityId: id,
           sessionId: data.sessionId || 'session-admin',
           timestamp: new Date().toISOString(),
@@ -313,7 +338,7 @@ class FirestoreService {
     }
   }
 
-  async delete(collectionName, id) {
+  async delete(collectionName: string, id: string): Promise<boolean> {
     try {
       if (collectionName === 'characters' || 
           collectionName === 'npcs' || 
@@ -321,7 +346,7 @@ class FirestoreService {
           collectionName === 'items') {
         // For entity collections, "delete" via history entry
         const entityType = collectionName.slice(0, -1); // Remove 's' to get type
-        const historyEntry = {
+        const historyEntry: HistoryEntry = {
           entityId: id,
           sessionId: 'session-admin',
           timestamp: new Date().toISOString(),
@@ -358,15 +383,15 @@ class FirestoreService {
   }
 
   // Methods needed by AdminView.vue
-  async getAllCharacters() {
+  async getAllCharacters(): Promise<Entity[]> {
     try {
-      const entitiesSnap = await getDocs(
+      const entitiesSnap: QuerySnapshot<DocumentData> = await getDocs(
         query(collection(db, COLLECTIONS.ENTITIES), where('entityType', '==', 'character'))
       );
       
       // Filter out deleted entities
       return entitiesSnap.docs
-        .map(doc => doc.data())
+        .map(doc => doc.data() as Entity)
         .filter(entity => !entity.deleted);
     } catch (error) {
       console.error('Error getting characters:', error);
@@ -374,15 +399,15 @@ class FirestoreService {
     }
   }
 
-  async getAllNpcs() {
+  async getAllNpcs(): Promise<Entity[]> {
     try {
-      const entitiesSnap = await getDocs(
+      const entitiesSnap: QuerySnapshot<DocumentData> = await getDocs(
         query(collection(db, COLLECTIONS.ENTITIES), where('entityType', '==', 'npc'))
       );
       
       // Filter out deleted entities
       return entitiesSnap.docs
-        .map(doc => doc.data())
+        .map(doc => doc.data() as Entity)
         .filter(entity => !entity.deleted);
     } catch (error) {
       console.error('Error getting NPCs:', error);
@@ -390,15 +415,15 @@ class FirestoreService {
     }
   }
 
-  async getAllLocations() {
+  async getAllLocations(): Promise<Entity[]> {
     try {
-      const entitiesSnap = await getDocs(
+      const entitiesSnap: QuerySnapshot<DocumentData> = await getDocs(
         query(collection(db, COLLECTIONS.ENTITIES), where('entityType', '==', 'location'))
       );
       
       // Filter out deleted entities
       return entitiesSnap.docs
-        .map(doc => doc.data())
+        .map(doc => doc.data() as Entity)
         .filter(entity => !entity.deleted);
     } catch (error) {
       console.error('Error getting locations:', error);
@@ -406,15 +431,15 @@ class FirestoreService {
     }
   }
 
-  async getAllItems() {
+  async getAllItems(): Promise<Entity[]> {
     try {
-      const entitiesSnap = await getDocs(
+      const entitiesSnap: QuerySnapshot<DocumentData> = await getDocs(
         query(collection(db, COLLECTIONS.ENTITIES), where('entityType', '==', 'item'))
       );
       
       // Filter out deleted entities
       return entitiesSnap.docs
-        .map(doc => doc.data())
+        .map(doc => doc.data() as Entity)
         .filter(entity => !entity.deleted);
     } catch (error) {
       console.error('Error getting items:', error);

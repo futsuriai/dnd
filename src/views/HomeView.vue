@@ -29,8 +29,10 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from 'vue';
+
+export default defineComponent({
   name: 'HomeView',
   data() {
     return {
@@ -41,7 +43,7 @@ export default {
       nextSession: 'Sunday, May 4th at 1:00 PM'
     };
   }
-}
+});
 </script>
 
 <style scoped>

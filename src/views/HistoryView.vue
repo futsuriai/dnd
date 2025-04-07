@@ -30,19 +30,29 @@
     </div>
   </template>
   
-  <script>
-  import { ref, onMounted } from 'vue';
-  import { worldHistory } from '../store/worldData';
-  
-  export default {
-    name: 'HistoryView',
-    data() {
-      return {
-        eras: worldHistory.eras || []
-      };
-    }
+<script lang="ts">
+import { defineComponent } from 'vue';
+import { worldHistory } from '../store/worldData';
+
+interface Era {
+  name: string;
+  period: string;
+  description: string[];
+  events?: {
+    year: string;
+    description: string;
+  }[];
+}
+
+export default defineComponent({
+  name: 'HistoryView',
+  data() {
+    return {
+      eras: (worldHistory.eras || []) as Era[]
+    };
   }
-  </script>
+});
+</script>
   
   <style scoped>
   .section-intro {

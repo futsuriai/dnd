@@ -21,22 +21,21 @@
   </div>
 </template>
 
-<script>
-import { ref, onMounted } from 'vue';
+<script lang="ts">
+import { defineComponent } from 'vue';
 import EntityCard from '../components/EntityCard.vue';
-import worldData from '../store/worldData';
+import worldData, { Entity } from '../store/worldData';
 
-export default {
+export default defineComponent({
   name: 'CharactersView',
   components: {
     EntityCard
   },
   data() {
     return {
-      characters: [],
+      characters: [] as Entity[],
       loading: true,
-      error: null,
-      // Flag to use Firestore data or fallback to local data (now handled in worldData.js)
+      error: null as string | null,
       useFirestore: true
     };
   },
@@ -45,7 +44,7 @@ export default {
     this.loadCharacters();
   },
   methods: {
-    async loadCharacters() {
+    async loadCharacters(): Promise<void> {
       this.loading = true;
       this.error = null;
       
@@ -58,9 +57,9 @@ export default {
         
         // Sort characters by name
         this.characters.sort((a, b) => {
-          return a.name.localeCompare(b.name);
+          return (a.name || '').localeCompare(b.name || '');
         });
-      } catch (err) {
+      } catch (err: any) {
         console.error('Error loading characters:', err);
         this.error = `Error loading characters: ${err.message}`;
       } finally {
@@ -68,7 +67,7 @@ export default {
       }
     }
   }
-}
+});
 </script>
 
 <style scoped>

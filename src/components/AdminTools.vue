@@ -195,63 +195,80 @@
   </div>
 </template>
 
-<script>
-import { ref, computed, onMounted, watch } from 'vue';
+<script lang="ts">
+import { defineComponent, ref, computed, onMounted, watch } from 'vue';
 import EntityForm from './EntityForm.vue';
 import EntityHistoryViewer from './EntityHistoryViewer.vue';
-import worldData from '../store/worldData';
+import worldData, { Entity, Session, DataSource } from '../store/worldData';
 import firestoreService from '../services/FirestoreService';
 import { historyBasedDataExpanded } from '../store/consolidatedData';
 
-export default {
+interface EventCounts {
+  historyEntries: number;
+  sessions: number;
+  total: number;
+}
+
+interface EntityCollection {
+  character: Entity[];
+  npc: Entity[];
+  location: Entity[];
+  item: Entity[];
+}
+
+export default defineComponent({
   name: 'AdminTools',
   components: {
     EntityForm,
     EntityHistoryViewer
   },
   setup() {
-    const isLoading = ref(false);
-    const message = ref('');
-    const messageType = ref('');
-    const eventCounts = ref(null);
-    const dataSource = ref({ source: 'loading...', initialized: false });
+    const isLoading = ref<boolean>(false);
+    const message = ref<string>('');
+    const messageType = ref<string>('');
+    const eventCounts = ref<EventCounts | null>(null);
+    const dataSource = ref<DataSource>({ source: 'loading...', initialized: false });
     
     // Entity management
-    const activeEntityType = ref('character');
-    const entities = ref({
+    const activeEntityType = ref<keyof EntityCollection>('character');
+    const entities = ref<EntityCollection>({
       character: [],
       npc: [],
       location: [],
       item: []
     });
-    const entitySearchQuery = ref('');
-    const isLoadingEntities = ref(false);
-    const showEntityModal = ref(false);
-    const showHistoryModal = ref(false);
-    const currentEntity = ref({});
-    const isNewEntity = ref(false);
-    const showDeleteConfirmation = ref(false);
+    const entitySearchQuery = ref<string>('');
+    const isLoadingEntities = ref<boolean>(false);
+    const showEntityModal = ref<boolean>(false);
+    const showHistoryModal = ref<boolean>(false);
+    const currentEntity = ref<Entity>({
+      id: '',
+      entityType: 'character'
+    });
+    const isNewEntity = ref<boolean>(false);
+    const showDeleteConfirmation = ref<boolean>(false);
     
     // Import/Export
-    const showImportDialog = ref(false);
-    const importText = ref('');
-    const clearBeforeImport = ref(false);
+    const showImportDialog = ref<boolean>(false);
+    const importText = ref<string>('');
+    const clearBeforeImport = ref<boolean>(false);
     
     // Computed property for filtered entities
     const filteredEntities = computed(() => {
       if (!entitySearchQuery.value) {
-        return entities.value[activeEntityType.value];
+        return entities.value[activeEntityType.value as keyof EntityCollection];
       }
       
       const query = entitySearchQuery.value.toLowerCase();
-      return entities.value[activeEntityType.value].filter(entity => 
+      return entities.value[activeEntityType.value as keyof EntityCollection].filter(entity => 
         entity.name && entity.name.toLowerCase().includes(query)
       );
     });
     
     onMounted(async () => {
       // Initialize world data and determine data source
-      dataSource.value = await worldData.initWorldData();
+      dataSource.value = await worldData.getDataSource();
+      await worldData.initWorldData();
       
       // Update event counts
       await updateEventCounts();
@@ -262,16 +279,16 @@ export default {
     
     // Watch for changes to activeEntityType and load entities if needed
     watch(activeEntityType, async (newType) => {
-      if (entities.value[newType].length === 0) {
+      if (entities.value[newType as keyof EntityCollection].length === 0) {
         await loadEntities(newType);
       }
     });
     
-    async function loadEntities(type) {
+    async function loadEntities(type: string): Promise<void> {
       isLoadingEntities.value = true;
       
       try {
-        let loadedEntities = [];
+        let loadedEntities: Entity[] = [];
         
         // Use appropriate loading method based on entity type
         switch (type) {
@@ -289,8 +306,8 @@ export default {
             break;
         }
         
-        entities.value[type] = loadedEntities;
-      } catch (error) {
+        entities.value[type as keyof EntityCollection] = loadedEntities;
+      } catch (error: any) {
         console.error(`Error loading ${type}s:`, error);
         message.value = `Error loading ${type}s: ${error.message}`;
         messageType.value = 'error';
@@ -300,7 +317,7 @@ export default {
     }
     
     // Get event counts from the database
-    async function updateEventCounts() {
+    async function updateEventCounts(): Promise<void> {
       try {
         const historyEntries = await firestoreService.getAllHistoryEvents();
         const sessions = await firestoreService.getAllSessions();
@@ -317,7 +334,7 @@ export default {
     }
     
     // Seed the database with initial data
-    async function seedDatabase() {
+    async function seedDatabase(): Promise<void> {
       try {
         isLoading.value = true;
         message.value = 'Seeding database...';
@@ -336,7 +353,7 @@ export default {
         
         message.value = 'Database seeded successfully!';
         messageType.value = 'success';
-      } catch (error) {
+      } catch (error: any) {
         console.error('Error seeding database:', error);
         message.value = `Error seeding database: ${error.message}`;
         messageType.value = 'error';
@@ -345,32 +362,32 @@ export default {
       }
     }
     
-    function createNewEntity() {
+    function createNewEntity(): void {
       currentEntity.value = {
         id: '', // Will be generated when saved
-        entityType: activeEntityType.value
+        entityType: activeEntityType.value as string
       };
       isNewEntity.value = true;
       showEntityModal.value = true;
     }
     
-    function editEntity(entity) {
+    function editEntity(entity: Entity): void {
       currentEntity.value = { ...entity };
       isNewEntity.value = false;
       showEntityModal.value = true;
     }
     
-    function viewEntityHistory(entity) {
+    function viewEntityHistory(entity: Entity): void {
       currentEntity.value = { ...entity };
       showHistoryModal.value = true;
     }
     
-    function confirmDeleteEntity(entity) {
+    function confirmDeleteEntity(entity: Entity): void {
       currentEntity.value = entity;
       showDeleteConfirmation.value = true;
     }
     
-    async function deleteEntity() {
+    async function deleteEntity(): Promise<void> {
       try {
         isLoading.value = true;
         
@@ -386,7 +403,7 @@ export default {
         
         message.value = `${capitalizeFirst(activeEntityType.value)} marked as deleted.`;
         messageType.value = 'success';
-      } catch (error) {
+      } catch (error: any) {
         console.error(`Error deleting ${activeEntityType.value}:`, error);
         message.value = `Error deleting ${activeEntityType.value}: ${error.message}`;
         messageType.value = 'error';
@@ -396,7 +413,7 @@ export default {
       }
     }
     
-    async function saveEntity(entityData) {
+    async function saveEntity(entityData: Record<string, any>): Promise<void> {
       try {
         isLoading.value = true;
         
@@ -425,7 +442,7 @@ export default {
         await updateEventCounts();
         
         messageType.value = 'success';
-      } catch (error) {
+      } catch (error: any) {
         console.error(`Error saving ${activeEntityType.value}:`, error);
         message.value = `Error saving ${activeEntityType.value}: ${error.message}`;
         messageType.value = 'error';
@@ -435,7 +452,7 @@ export default {
       }
     }
     
-    async function importData() {
+    async function importData(): Promise<void> {
       if (!importText.value) {
         alert('Please provide JSON data to import.');
         return;
@@ -464,7 +481,7 @@ export default {
         
         message.value = 'Data imported successfully!';
         messageType.value = 'success';
-      } catch (error) {
+      } catch (error: any) {
         console.error('Error importing data:', error);
         message.value = 'Failed to import data. Please check your JSON format and try again.';
         messageType.value = 'error';
@@ -473,7 +490,7 @@ export default {
       }
     }
     
-    async function exportData() {
+    async function exportData(): Promise<void> {
       try {
         isLoading.value = true;
         
@@ -502,7 +519,7 @@ export default {
         
         message.value = 'Data exported successfully!';
         messageType.value = 'success';
-      } catch (error) {
+      } catch (error: any) {
         console.error('Error exporting data:', error);
         message.value = `Error exporting data: ${error.message}`;
         messageType.value = 'error';
@@ -511,12 +528,15 @@ export default {
       }
     }
     
-    function closeEntityModal() {
+    function closeEntityModal(): void {
       showEntityModal.value = false;
-      currentEntity.value = {};
+      currentEntity.value = {
+        id: '',
+        entityType: activeEntityType.value as string
+      };
     }
     
-    function capitalizeFirst(str) {
+    function capitalizeFirst(str: string): string {
       return str.charAt(0).toUpperCase() + str.slice(1);
     }
     
@@ -552,7 +572,7 @@ export default {
       exportData
     };
   }
-};
+});
 </script>
 
 <style scoped>

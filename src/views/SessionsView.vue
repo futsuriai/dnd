@@ -74,7 +74,7 @@
                         <div v-for="entity in getSessionEntitiesByType(session.id, 'character')" 
                              :key="entity.id"
                              class="session-entity-card">
-                          <div class="entity-name">{{ entity.entity.name }}</div>
+                          <div class="entity-name">{{ entity.entity?.name || 'Unknown Entity' }}</div>
                           <div class="entity-changes">
                             <router-link :to="{ name: 'Characters', hash: '#' + entity.id }">
                               View changes
@@ -91,7 +91,7 @@
                         <div v-for="entity in getSessionEntitiesByType(session.id, 'npc')" 
                              :key="entity.id"
                              class="session-entity-card">
-                          <div class="entity-name">{{ entity.entity.name }}</div>
+                          <div class="entity-name">{{ entity.entity?.name || 'Unknown Entity' }}</div>
                           <div class="entity-changes">
                             <router-link :to="{ name: 'NPCs', hash: '#' + entity.id }">
                               View changes
@@ -108,7 +108,7 @@
                         <div v-for="entity in getSessionEntitiesByType(session.id, 'location')" 
                              :key="entity.id"
                              class="session-entity-card">
-                          <div class="entity-name">{{ entity.entity.name }}</div>
+                          <div class="entity-name">{{ entity.entity?.name || 'Unknown Entity' }}</div>
                           <div class="entity-changes">
                             <router-link :to="{ name: 'Locations', hash: '#' + entity.id }">
                               View changes
@@ -125,7 +125,7 @@
                         <div v-for="entity in getSessionEntitiesByType(session.id, 'item')" 
                              :key="entity.id"
                              class="session-entity-card">
-                          <div class="entity-name">{{ entity.entity.name }}</div>
+                          <div class="entity-name">{{ entity.entity?.name || 'Unknown Entity' }}</div>
                           <div class="entity-changes">
                             <router-link :to="{ name: 'Items', hash: '#' + entity.id }">
                               View changes
@@ -145,23 +145,36 @@
   </div>
 </template>
 
-<script>
-import { ref, onMounted, computed } from 'vue';
-import worldData from '../store/worldData';
+<script lang="ts">
+import { defineComponent, ref, onMounted, computed } from 'vue';
+import worldData, { Session, SessionEntity, Entity } from '../store/worldData';
 import firestoreService from '../services/FirestoreService';
 
-export default {
+interface OpenSections {
+  history: Record<string, boolean>;
+  entityChanges: Record<string, boolean>;
+}
+
+interface HistoryEvent {
+  type: string;
+  description: string;
+  timestamp: string;
+  entityType?: string;
+  changes?: any;
+}
+
+export default defineComponent({
   name: 'SessionsView',
   
   setup() {
-    const sessions = ref([]);
-    const loading = ref(true);
-    const error = ref(null);
-    const openSections = ref({
+    const sessions = ref<Session[]>([]);
+    const loading = ref<boolean>(true);
+    const error = ref<string | null>(null);
+    const openSections = ref<OpenSections>({
       history: {},
       entityChanges: {}
     });
-    const sessionEntities = ref({});
+    const sessionEntities = ref<Record<string, SessionEntity[]>>({});
     
     // Get sessions when component is mounted
     onMounted(async () => {
@@ -169,7 +182,7 @@ export default {
     });
     
     // Load sessions with Firestore first, fallback to local data
-    async function loadSessions() {
+    async function loadSessions(): Promise<void> {
       loading.value = true;
       error.value = null;
       
@@ -185,7 +198,7 @@ export default {
         for (const session of sessions.value) {
           await loadSessionEntities(session.id);
         }
-      } catch (err) {
+      } catch (err: any) {
         console.error('Error loading sessions:', err);
         error.value = `Error loading sessions: ${err.message}`;
       } finally {
@@ -194,7 +207,7 @@ export default {
     }
     
     // Load entities affected by a session
-    async function loadSessionEntities(sessionId) {
+    async function loadSessionEntities(sessionId: string): Promise<void> {
       if (!sessionEntities.value[sessionId]) {
         try {
           const entities = await worldData.getSessionEntities(sessionId);
@@ -207,44 +220,44 @@ export default {
     }
     
     // Get entities affected by a session
-    function getSessionEntitiesData(sessionId) {
+    function getSessionEntitiesData(sessionId: string): SessionEntity[] {
       return sessionEntities.value[sessionId] || [];
     }
     
     // Get entities of a specific type for a session
-    function getSessionEntitiesByType(sessionId, entityType) {
+    function getSessionEntitiesByType(sessionId: string, entityType: string): SessionEntity[] {
       const entities = getSessionEntitiesData(sessionId);
       return entities.filter(entity => entity.type === entityType);
     }
     
     // Get history events for a session
-    function getSessionHistoryEvents(sessionId) {
+    function getSessionHistoryEvents(sessionId: string): HistoryEvent[] {
       const session = sessions.value.find(s => s.id === sessionId);
       return session && session.events ? session.events : [];
     }
     
     // Toggle history visibility
-    function toggleHistory(sessionId) {
+    function toggleHistory(sessionId: string): void {
       openSections.value.history[sessionId] = !openSections.value.history[sessionId];
     }
     
     // Check if history is open
-    function isHistoryOpen(sessionId) {
+    function isHistoryOpen(sessionId: string): boolean {
       return !!openSections.value.history[sessionId];
     }
     
     // Toggle entity changes visibility
-    function toggleEntityChanges(sessionId) {
+    function toggleEntityChanges(sessionId: string): void {
       openSections.value.entityChanges[sessionId] = !openSections.value.entityChanges[sessionId];
     }
     
     // Check if entity changes are open
-    function isEntityChangesOpen(sessionId) {
+    function isEntityChangesOpen(sessionId: string): boolean {
       return !!openSections.value.entityChanges[sessionId];
     }
     
     // Format timestamp for display
-    function formatTimestamp(timestamp) {
+    function formatTimestamp(timestamp: string): string {
       if (!timestamp) return '';
       
       const date = new Date(timestamp);
@@ -252,7 +265,7 @@ export default {
     }
     
     // Format history event for display with HTML
-    function formatHistoryEvent(event) {
+    function formatHistoryEvent(event: HistoryEvent): string {
       if (!event) return '';
       
       // If event has a pre-formatted description, use it
@@ -295,7 +308,7 @@ export default {
       formatHistoryEvent
     };
   }
-}
+});
 </script>
 
 <style scoped>

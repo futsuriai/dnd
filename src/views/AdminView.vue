@@ -13,7 +13,7 @@
     <div v-else class="admin-content">
       <div class="dashboard-header">
         <h2>Campaign Manager</h2>
-        <p>Welcome, {{ user.displayName }}. Here you can manage all your campaign data.</p>
+        <p>Welcome, {{ user?.displayName }}. Here you can manage all your campaign data.</p>
       </div>
       
       <div class="section-tabs">
@@ -201,92 +201,114 @@
         
         <div class="modal-actions">
           <button class="cancel-button" @click="showConfirmDialog = false">Cancel</button>
-          <button class="delete-button" @click="confirmAction">{{ confirmActionText }}</button>
+          <button class="delete-button" @click="executeConfirmAction">{{ confirmActionText }}</button>
         </div>
       </div>
     </div>
   </div>
 </template>
 
-<script>
-import { ref, computed, watch, onMounted } from 'vue';
+<script lang="ts">
+import { defineComponent, ref, onMounted, onBeforeUnmount } from 'vue';
 import AuthComponent from '../components/AuthComponent.vue';
 import EntityForm from '../components/EntityForm.vue';
-import worldData from '../store/worldData';
+import worldData, { Entity, Session } from '../store/worldData';
 import authService from '../services/AuthService';
 import firestoreService from '../services/FirestoreService';
+import { User } from 'firebase/auth';
 
-export default {
+interface Section {
+  id: string;
+  name: string;
+}
+
+interface ConfirmOptions {
+  title: string;
+  message: string;
+  actionText: string;
+  action: () => Promise<void>;
+}
+
+export default defineComponent({
   name: 'AdminView',
   components: {
     AuthComponent,
     EntityForm
   },
-  data() {
-    return {
-      isAuthorized: false,
-      user: null,
-      activeSection: 'characters',
-      sections: [
-        { id: 'characters', name: 'Characters' },
-        { id: 'npcs', name: 'NPCs' },
-        { id: 'locations', name: 'Locations' },
-        { id: 'items', name: 'Items' },
-        { id: 'sessions', name: 'Sessions' },
-        { id: 'database', name: 'Database' }
-      ],
-      characters: [],
-      npcs: [],
-      locations: [],
-      items: [],
-      sessions: [],
-      
-      // Entity editing
-      showEntityModal: false,
-      isEditing: false,
-      currentEntityType: '',
-      currentEntity: null,
-      
-      // Import/Export
-      showImportDialog: false,
-      importText: '',
-      clearBeforeImport: false,
-      
-      // Confirmation dialog
-      showConfirmDialog: false,
-      confirmTitle: '',
-      confirmMessage: '',
-      confirmActionText: 'Confirm',
-      confirmAction: () => {}
-    };
-  },
-  created() {
-    // Subscribe to auth state changes
-    this.unsubscribe = authService.addAuthListener((user, isEditor) => {
-      this.user = user;
-      this.isAuthorized = isEditor;
-      
-      // Load data if authorized
-      if (isEditor) {
-        this.loadAllData();
+  setup() {
+    // Auth state
+    const isAuthorized = ref<boolean>(false);
+    const user = ref<User | null>(null);
+    
+    // UI state
+    const activeSection = ref<string>('characters');
+    const sections = ref<Section[]>([
+      { id: 'characters', name: 'Characters' },
+      { id: 'npcs', name: 'NPCs' },
+      { id: 'locations', name: 'Locations' },
+      { id: 'items', name: 'Items' },
+      { id: 'sessions', name: 'Sessions' },
+      { id: 'database', name: 'Database' }
+    ]);
+    
+    // Entity data
+    const characters = ref<Entity[]>([]);
+    const npcs = ref<Entity[]>([]);
+    const locations = ref<Entity[]>([]);
+    const items = ref<Entity[]>([]);
+    const sessions = ref<Session[]>([]);
+    
+    // Entity editing
+    const showEntityModal = ref<boolean>(false);
+    const isEditing = ref<boolean>(false);
+    const currentEntityType = ref<string>('');
+    const currentEntity = ref<Entity | undefined>(undefined);
+    
+    // Import/Export
+    const showImportDialog = ref<boolean>(false);
+    const importText = ref<string>('');
+    const clearBeforeImport = ref<boolean>(false);
+    
+    // Confirmation dialog
+    const showConfirmDialog = ref<boolean>(false);
+    const confirmTitle = ref<string>('');
+    const confirmMessage = ref<string>('');
+    const confirmActionText = ref<string>('Confirm');
+    const confirmAction = ref<() => Promise<void>>(() => Promise.resolve());
+    
+    // Auth subscription
+    let unsubscribe: (() => void) | null = null;
+    
+    onMounted(() => {
+      // Subscribe to auth state changes
+      unsubscribe = authService.addAuthListener((currentUser, isEditor) => {
+        user.value = currentUser;
+        isAuthorized.value = isEditor;
+        
+        // Load data if authorized
+        if (isEditor) {
+          loadAllData();
+        }
+      });
+    });
+    
+    onBeforeUnmount(() => {
+      // Clean up listener on component unmount
+      if (unsubscribe) {
+        unsubscribe();
       }
     });
-  },
-  beforeUnmount() {
-    // Clean up listener on component unmount
-    if (this.unsubscribe) {
-      this.unsubscribe();
-    }
-  },
-  methods: {
-    capitalizeFirstLetter(string) {
-      return string.charAt(0).toUpperCase() + string.slice(1);
-    },
     
-    async loadAllData() {
+    // Helper methods
+    const capitalizeFirstLetter = (str: string): string => {
+      return str.charAt(0).toUpperCase() + str.slice(1);
+    };
+    
+    // Data loading
+    const loadAllData = async (): Promise<void> => {
       try {
         // Load all entity types in parallel
-        const [characters, npcs, locations, items, sessions] = await Promise.all([
+        const [loadedCharacters, loadedNpcs, loadedLocations, loadedItems, loadedSessions] = await Promise.all([
           firestoreService.getAllCharacters(),
           firestoreService.getAllNpcs(),
           firestoreService.getAllLocations(),
@@ -294,122 +316,122 @@ export default {
           firestoreService.getAllSessions()
         ]);
         
-        this.characters = characters;
-        this.npcs = npcs;
-        this.locations = locations;
-        this.items = items;
-        this.sessions = sessions;
+        characters.value = loadedCharacters;
+        npcs.value = loadedNpcs;
+        locations.value = loadedLocations;
+        items.value = loadedItems;
+        sessions.value = loadedSessions;
       } catch (error) {
         console.error('Error loading data:', error);
         alert('Failed to load data. Please try again.');
       }
-    },
+    };
     
     // Entity CRUD
-    createNewEntity(type) {
-      this.isEditing = false;
-      this.currentEntityType = type;
-      this.currentEntity = {};
-      this.showEntityModal = true;
-    },
+    const createNewEntity = (type: string): void => {
+      isEditing.value = false;
+      currentEntityType.value = type;
+      currentEntity.value = { id: '', entityType: currentEntityType.value };
+      showEntityModal.value = true;
+    };
     
-    editEntity(type, entity) {
-      this.isEditing = true;
-      this.currentEntityType = type;
-      this.currentEntity = { ...entity };
-      this.showEntityModal = true;
-    },
+    const editEntity = (type: string, entity: Entity | Session): void => {
+      isEditing.value = true;
+      currentEntityType.value = type;
+      currentEntity.value = { ...entity, entityType: currentEntityType.value };
+      showEntityModal.value = true;
+    };
     
-    cancelEdit() {
-      this.showEntityModal = false;
-      this.currentEntity = null;
-    },
+    const cancelEdit = (): void => {
+      showEntityModal.value = false;
+      currentEntity.value = undefined;
+    };
     
-    async saveEntity(entityData) {
+    const saveEntity = async (entityData: Record<string, any>): Promise<void> => {
       try {
-        if (this.isEditing) {
+        if (isEditing.value) {
           await firestoreService.update(
-            this.currentEntityType + 's', 
+            currentEntityType.value + 's', 
             entityData.id, 
             entityData
           );
         } else {
           await firestoreService.create(
-            this.currentEntityType + 's', 
+            currentEntityType.value + 's', 
             entityData
           );
         }
         
         // Reload data after save
-        this.loadAllData();
-        this.showEntityModal = false;
+        await loadAllData();
+        showEntityModal.value = false;
       } catch (error) {
         console.error('Error saving entity:', error);
         alert('Failed to save. Please try again.');
       }
-    },
+    };
     
-    confirmDelete(type, entity) {
-      this.confirmTitle = `Delete ${this.capitalizeFirstLetter(type)}`;
-      this.confirmMessage = `Are you sure you want to delete ${entity.name || entity.title || entity.id}? This cannot be undone.`;
-      this.confirmActionText = 'Delete';
-      this.confirmAction = () => this.deleteEntity(type, entity.id);
-      this.showConfirmDialog = true;
-    },
+    const confirmDelete = (type: string, entity: Entity | Session): void => {
+      confirmTitle.value = `Delete ${capitalizeFirstLetter(type)}`;
+      confirmMessage.value = `Are you sure you want to delete ${(entity as any).name || (entity as Session).title || entity.id}? This cannot be undone.`;
+      confirmActionText.value = 'Delete';
+      confirmAction.value = () => deleteEntity(type, entity.id);
+      showConfirmDialog.value = true;
+    };
     
-    async deleteEntity(type, id) {
+    const deleteEntity = async (type: string, id: string): Promise<void> => {
       try {
         await firestoreService.delete(type + 's', id);
-        this.loadAllData();
-        this.showConfirmDialog = false;
+        await loadAllData();
+        showConfirmDialog.value = false;
       } catch (error) {
         console.error('Error deleting entity:', error);
         alert('Failed to delete. Please try again.');
       }
-    },
+    };
     
     // Database management
-    handleFileUpload(event) {
-      const file = event.target.files[0];
+    const handleFileUpload = (event: Event): void => {
+      const target = event.target as HTMLInputElement;
+      const file = target.files?.[0];
       if (!file) return;
       
       const reader = new FileReader();
       reader.onload = (e) => {
-        this.importText = e.target.result;
+        importText.value = e.target?.result as string;
       };
       reader.readAsText(file);
-    },
+    };
     
-    async importData() {
-      if (!this.importText) {
+    const importData = async (): Promise<void> => {
+      if (!importText.value) {
         alert('Please provide JSON data to import.');
         return;
       }
       
       try {
-        const data = JSON.parse(this.importText);
+        const data = JSON.parse(importText.value);
         
         // If clearBeforeImport is true, clear the database first
-        if (this.clearBeforeImport) {
+        if (clearBeforeImport.value) {
           await firestoreService.clearDatabase();
         }
         
         // Use the seedDatabase method to import data
         await firestoreService.seedDatabase(data);
         
-        this.loadAllData();
-        this.showImportDialog = false;
+        await loadAllData();
+        showImportDialog.value = false;
         alert('Data imported successfully!');
       } catch (error) {
         console.error('Error importing data:', error);
         alert('Failed to import data. Please check your JSON format and try again.');
       }
-    },
+    };
     
-    async exportData() {
+    const exportData = async (): Promise<void> => {
       try {
-        // Use the new exportDataInHistoryFormat method to get data in the same format
-        // as historyBasedDataExpanded (sessions + historyEntries)
+        // Use the exportDataInHistoryFormat method to get data
         const exportData = await firestoreService.exportDataInHistoryFormat();
         
         // Convert to JSON string
@@ -435,29 +457,85 @@ export default {
         console.error('Error exporting data:', error);
         alert('Failed to export data. Please try again.');
       }
-    },
+    };
     
-    confirmClearDatabase() {
-      this.confirmTitle = 'Clear Database';
-      this.confirmMessage = 'Are you sure you want to clear ALL data from the database? This action cannot be undone!';
-      this.confirmActionText = 'Clear Database';
-      this.confirmAction = this.clearDatabase;
-      this.showConfirmDialog = true;
-    },
+    const confirmClearDatabase = (): void => {
+      confirmTitle.value = 'Clear Database';
+      confirmMessage.value = 'Are you sure you want to clear ALL data from the database? This action cannot be undone!';
+      confirmActionText.value = 'Clear Database';
+      confirmAction.value = clearDatabase;
+      showConfirmDialog.value = true;
+    };
     
-    async clearDatabase() {
+    const clearDatabase = async (): Promise<void> => {
       try {
         await firestoreService.clearDatabase();
-        this.loadAllData();
-        this.showConfirmDialog = false;
+        await loadAllData();
+        showConfirmDialog.value = false;
         alert('Database cleared successfully.');
       } catch (error) {
         console.error('Error clearing database:', error);
         alert('Failed to clear database. Please try again.');
       }
-    }
+    };
+
+    const executeConfirmAction = async (): Promise<void> => {
+      if (confirmAction.value) {
+        await confirmAction.value();
+      }
+    };
+    
+    return {
+      // Auth state
+      isAuthorized,
+      user,
+      
+      // UI state
+      activeSection,
+      sections,
+      
+      // Entity data
+      characters,
+      npcs,
+      locations,
+      items,
+      sessions,
+      
+      // Entity editing
+      showEntityModal,
+      isEditing,
+      currentEntityType,
+      currentEntity,
+      
+      // Import/Export
+      showImportDialog,
+      importText,
+      clearBeforeImport,
+      
+      // Confirmation dialog
+      showConfirmDialog,
+      confirmTitle,
+      confirmMessage,
+      confirmActionText,
+      
+      // Methods
+      capitalizeFirstLetter,
+      loadAllData,
+      createNewEntity,
+      editEntity,
+      cancelEdit,
+      saveEntity,
+      confirmDelete,
+      deleteEntity,
+      handleFileUpload,
+      importData,
+      exportData,
+      confirmClearDatabase,
+      clearDatabase,
+      executeConfirmAction
+    };
   }
-};
+});
 </script>
 
 <style scoped>

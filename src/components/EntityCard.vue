@@ -6,7 +6,7 @@
         <!-- Avatar/Icon Section (for characters or with custom icon) -->
         <div v-if="showAvatar" class="avatar-container">
           <div class="avatar-placeholder">
-            <span>{{ getInitials(entity.name) }}</span>
+            <span>{{ getInitials(entity.name || '') }}</span>
           </div>
         </div>
         
@@ -180,72 +180,74 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { ref, computed, onMounted, defineComponent, PropType } from 'vue';
 import EntityConnections from './EntityConnections.vue';
 import { getSession } from '../store/worldData';
+import { Entity, Session } from '../store/worldData';
 
-export default {
+export default defineComponent({
   name: 'EntityCard',
   components: {
     EntityConnections
   },
   props: {
     entity: {
-      type: Object,
+      type: Object as PropType<Entity>,
       required: true
     },
     entityType: {
-      type: String,
+      type: String as PropType<'character' | 'npc' | 'location' | 'item'>,
       required: true,
-      validator: value => ['character', 'npc', 'location', 'item'].includes(value)
+      validator: (value: string) => ['character', 'npc', 'location', 'item'].includes(value)
     },
     showAvatar: {
       type: Boolean,
       default: false
     }
   },
-  data() {
-    return {
-      showHistory: false,
-      sessionCache: {} // Add a cache to store session data
-    };
-  },
-  computed: {
-    hasMetadata() {
-      if (this.entityType === 'location' && this.entity.region) return true;
-      if (this.entityType === 'character') return true;
-      if (this.entityType === 'npc') return true;
-      if (this.entityType === 'item') return true;
+  setup(props) {
+    const showHistory = ref<boolean>(false);
+    const sessionCache = ref<Record<string, Session>>({});
+    
+    const hasMetadata = computed<boolean>(() => {
+      if (props.entityType === 'location' && props.entity.region) return true;
+      if (props.entityType === 'character') return true;
+      if (props.entityType === 'npc') return true;
+      if (props.entityType === 'item') return true;
       return false;
-    },
-    hasActions() {
-      if (this.entityType === 'character' && this.entity.dndBeyondLink) return true;
+    });
+    
+    const hasActions = computed<boolean>(() => {
+      if (props.entityType === 'character' && props.entity.dndBeyondLink) return true;
       return false;
-    },
-    getSubtitle() {
-      if (this.entityType === 'character') {
-        return `${this.entity.race} ${this.entity.class}`;
+    });
+    
+    const getSubtitle = computed<string | null>(() => {
+      if (props.entityType === 'character') {
+        return `${props.entity.race} ${props.entity.class}`;
       }
       return null;
-    },
-    getSpecialClasses() {
-      const classes = {};
+    });
+    
+    const getSpecialClasses = computed(() => {
+      const classes: Record<string, boolean> = {};
       
       // Add item rarity class
-      if (this.entityType === 'item' && this.entity.rarity) {
-        classes[this.entity.rarity.toLowerCase().replace(' ', '-')] = true;
+      if (props.entityType === 'item' && props.entity.rarity) {
+        classes[props.entity.rarity.toLowerCase().replace(' ', '-')] = true;
       }
       
       return classes;
-    }
-  },
-  methods: {
-    getInitials(name) {
+    });
+    
+    const getInitials = (name: string): string => {
       return name.split(' ').map(word => word[0]).join('');
-    },
-    getEntityIcon() {
-      if (this.entityType === 'location') {
-        const cityIcons = {
+    };
+    
+    const getEntityIcon = (): string => {
+      if (props.entityType === 'location') {
+        const cityIcons: Record<string, string> = {
           capital: '🏛️',
           port: '⚓',
           trading: '🛒',
@@ -253,7 +255,7 @@ export default {
           default: '🏙️'
         };
         
-        const dungeonIcons = {
+        const dungeonIcons: Record<string, string> = {
           ruin: '🏚️',
           cave: '🕳️',
           temple: '🏯',
@@ -261,7 +263,7 @@ export default {
           default: '💀'
         };
         
-        const poiIcons = {
+        const poiIcons: Record<string, string> = {
           natural: '🌳',
           magic: '✨',
           shrine: '🔮',
@@ -270,21 +272,23 @@ export default {
           default: '⭐'
         };
         
-        if (this.entity.type === 'city') {
-          return cityIcons[this.entity.subtype] || cityIcons.default;
-        } else if (this.entity.type === 'dungeon') {
-          return dungeonIcons[this.entity.subtype] || dungeonIcons.default;
+        if (props.entity.type === 'city') {
+          return cityIcons[props.entity.subtype as string] || cityIcons.default;
+        } else if (props.entity.type === 'dungeon') {
+          return dungeonIcons[props.entity.subtype as string] || dungeonIcons.default;
         } else {
-          return poiIcons[this.entity.subtype] || poiIcons.default;
+          return poiIcons[props.entity.subtype as string] || poiIcons.default;
         }
       }
       
       return '';
-    },
-    toggleHistory() {
-      this.showHistory = !this.showHistory;
-    },
-    async getSessionName(sessionId) {
+    };
+    
+    const toggleHistory = (): void => {
+      showHistory.value = !showHistory.value;
+    };
+    
+    const getSessionName = (sessionId: string): string => {
       // Session 0 is special (was previously session-minus-1)
       if (sessionId === 'session-0') {
         return 'Initial Setup';
@@ -296,27 +300,41 @@ export default {
       }
       
       // Check if we've already cached this session
-      if (this.sessionCache[sessionId]) {
-        const session = this.sessionCache[sessionId];
+      if (sessionCache.value[sessionId]) {
+        const session = sessionCache.value[sessionId];
         return `${session.title} (${session.date})`;
       }
       
-      try {
-        // Await the Promise returned by getSession
-        const session = await getSession(sessionId);
-        if (session) {
-          // Cache the result for future use
-          this.sessionCache[sessionId] = session;
-          return `${session.title} (${session.date})`;
-        }
-        return sessionId;
-      } catch (error) {
-        console.error(`Error loading session ${sessionId}:`, error);
-        return sessionId;
-      }
-    }
+      // If not cached, fetch the session async
+      getSession(sessionId)
+        .then(session => {
+          if (session) {
+            // Cache the result for future use
+            sessionCache.value[sessionId] = session;
+          }
+        })
+        .catch(error => {
+          console.error(`Error loading session ${sessionId}:`, error);
+        });
+      
+      // Return a loading placeholder
+      return `Loading session...`;
+    };
+    
+    return {
+      showHistory,
+      sessionCache,
+      hasMetadata,
+      hasActions,
+      getSubtitle,
+      getSpecialClasses,
+      getInitials,
+      getEntityIcon,
+      toggleHistory,
+      getSessionName
+    };
   }
-}
+});
 </script>
 
 <style scoped>
