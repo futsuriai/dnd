@@ -290,7 +290,7 @@ export default defineComponent({
     
     const getSessionName = (sessionId: string): string => {
       // Session 0 is special (was previously session-minus-1)
-      if (sessionId === 'session-0') {
+      if (sessionId === 'session-minus-1') {
         return 'Initial Setup';
       }
       
