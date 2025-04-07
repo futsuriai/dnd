@@ -813,6 +813,30 @@ export async function removeEntityConnection(
   return true;
 }
 
+// Get latest non-upcoming session ID for use as default when creating/updating entities
+export async function getLatestSessionId(): Promise<string> {
+  // Get all sessions
+  const allSessions = await getAllSessionsData();
+  
+  // Filter out upcoming sessions
+  const nonUpcomingSessions = allSessions.filter(session => !session.upcoming);
+  
+  if (nonUpcomingSessions.length > 0) {
+    // Sort by session number (descending order)
+    nonUpcomingSessions.sort((a, b) => {
+      const aNum = parseInt(a.id.split('-')[1]) || 0;
+      const bNum = parseInt(b.id.split('-')[1]) || 0;
+      return bNum - aNum; // Descending order (newest first)
+    });
+    
+    // Return the latest session ID
+    return nonUpcomingSessions[0].id;
+  }
+  
+  // If no non-upcoming sessions exist, return 'session-1' as default
+  return 'session-1';
+}
+
 // Export worldHistory to ensure compatibility with the old JS file
 export { worldHistory };
 
@@ -851,7 +875,8 @@ const worldData = {
   clearCache,
   capitalizeFirst,
   getEntityNameFromId,
-  organizeHistoryBySession
+  organizeHistoryBySession,
+  getLatestSessionId
 };
 
 export default worldData;

@@ -158,25 +158,8 @@ export default defineComponent({
         // Get all real sessions
         sessions.value = await worldData.getAllSessions();
         
-        // Add a virtual "Admin Session" to handle admin-created content
-        // This solves the issue with "undefined" session information
-        sessions.value.push({
-          id: 'session-admin',
-          title: 'Admin Session',
-          date: new Date().toISOString().split('T')[0],
-          subtitle: 'Content created via Admin interface',
-          description: 'This is not a real gameplay session, but represents content created or modified through the admin interface.',
-          summary: '',
-          upcoming: false,
-          highlights: []
-        });
-        
         // Sort sessions chronologically
         sessions.value.sort((a, b) => {
-          // Put admin session at the end
-          if (a.id === 'session-admin') return 1;
-          if (b.id === 'session-admin') return -1;
-          
           // Extract session numbers for proper sorting
           const aNum = parseInt(a.id.split('-')[1]) || 0;
           const bNum = parseInt(b.id.split('-')[1]) || 0;

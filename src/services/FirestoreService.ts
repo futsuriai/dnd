@@ -20,6 +20,7 @@ import {
   DocumentSnapshot
 } from 'firebase/firestore';
 import { HistoryEntry, Session, Entity } from '../store/worldData';
+import worldData from '../store/worldData';
 
 // Define interfaces for data structures
 interface EntityState {
@@ -272,9 +273,13 @@ class FirestoreService {
           collectionName === 'items') {
         // For entity collections, create via history entry and final state
         const entityType = collectionName.slice(0, -1); // Remove 's' to get type
+        
+        // Get the latest non-upcoming session ID instead of using session-admin
+        const sessionId = data.sessionId || await worldData.getLatestSessionId();
+        
         const historyEntry: HistoryEntry = {
           entityId: data.id,
-          sessionId: data.sessionId || 'session-admin',
+          sessionId: sessionId,
           timestamp: new Date().toISOString(),
           changeType: 'creation',
           data: {
@@ -309,9 +314,13 @@ class FirestoreService {
           collectionName === 'items') {
         // For entity collections, update via history entry and final state
         const entityType = collectionName.slice(0, -1); // Remove 's' to get type
+        
+        // Get the latest non-upcoming session ID instead of using session-admin
+        const sessionId = data.sessionId || await worldData.getLatestSessionId();
+        
         const historyEntry: HistoryEntry = {
           entityId: id,
-          sessionId: data.sessionId || 'session-admin',
+          sessionId: sessionId,
           timestamp: new Date().toISOString(),
           changeType: 'update',
           data: {
@@ -346,9 +355,13 @@ class FirestoreService {
           collectionName === 'items') {
         // For entity collections, "delete" via history entry
         const entityType = collectionName.slice(0, -1); // Remove 's' to get type
+        
+        // Get the latest non-upcoming session ID instead of using session-admin
+        const sessionId = await worldData.getLatestSessionId();
+        
         const historyEntry: HistoryEntry = {
           entityId: id,
-          sessionId: 'session-admin',
+          sessionId: sessionId,
           timestamp: new Date().toISOString(),
           changeType: 'deletion',
           data: {

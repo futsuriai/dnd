@@ -78,7 +78,6 @@
       <div class="form-group session-selection">
         <label for="sessionId">Associated Session</label>
         <select id="sessionId" v-model="formData.sessionId" class="form-control" required>
-          <option value="session-admin">Admin Session (Default)</option>
           <option v-for="session in sessions" :key="session.id" :value="session.id">
             {{ session.title }}
           </option>
@@ -144,7 +143,7 @@ export default defineComponent({
     const formData = ref<FormData>({
       id: '',
       name: '',
-      sessionId: 'session-admin',
+      sessionId: '', // Will be set after loading sessions
       entityType: props.entityType,
       // Character-specific defaults
       player: '',
@@ -159,6 +158,7 @@ export default defineComponent({
     
     // Available sessions
     const sessions = ref<Session[]>([]);
+    const latestSessionId = ref<string>('');
     
     // Initialize form with entity data if provided
     watch(() => props.entity, (newEntity) => {
@@ -172,10 +172,37 @@ export default defineComponent({
       }
     }, { immediate: true });
     
-    // Load sessions for dropdown
+    // Load sessions for dropdown and set the default session
     const loadSessions = async (): Promise<void> => {
       try {
         sessions.value = await worldData.getAllSessions();
+        
+        // Find the latest non-upcoming session
+        const nonUpcomingSessions = sessions.value.filter(s => !s.upcoming);
+        
+        if (nonUpcomingSessions.length > 0) {
+          // Sort sessions by their ID number to find the latest
+          nonUpcomingSessions.sort((a, b) => {
+            const aNum = parseInt(a.id.split('-')[1]) || 0;
+            const bNum = parseInt(b.id.split('-')[1]) || 0;
+            return bNum - aNum; // Descending order (newest first)
+          });
+          
+          latestSessionId.value = nonUpcomingSessions[0].id;
+          
+          // Only set the sessionId if it hasn't been set by entity data
+          if (!formData.value.sessionId) {
+            formData.value.sessionId = latestSessionId.value;
+          }
+        } else {
+          // Fallback to first session or 'session-1' if no sessions
+          latestSessionId.value = sessions.value.length > 0 ? sessions.value[0].id : 'session-1';
+          
+          // Only set the sessionId if it hasn't been set by entity data
+          if (!formData.value.sessionId) {
+            formData.value.sessionId = latestSessionId.value;
+          }
+        }
       } catch (error) {
         console.error('Failed to load sessions:', error);
       }
