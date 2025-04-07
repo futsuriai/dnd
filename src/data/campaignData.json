@@ -1,17 +1,7 @@
 {
   "sessions": [
     {
-      "id": "session-0",
-      "title": "Session 0",
-      "subtitle": "Character Creation",
-      "date": "2025-05-04",
-      "upcoming": true,
-      "summary": "Character creation and world introduction. Come prepared with character concepts and backstory ideas based on Session -1!"
-    },
-    {
-      "id": "session-minus-1",
       "title": "Session -1",
-      "subtitle": "Initial world building and general framework discussions",
       "date": "2025-04-06",
       "summary": "Hopes, dreams and expectations setting. Discussed the world's themes, character concepts, and narrative boundaries.",
       "highlights": [
@@ -21,7 +11,17 @@
         "Shared initial character concepts and considered how each might fit into different societal niches.",
         "Had conversations about narrative boundaries and player comfort zones.",
         "Contemplated whether characters will have pre-existing connections when our adventure begins."
-      ]
+      ],
+      "subtitle": "Initial world building and general framework discussions",
+      "id": "session-minus-1"
+    },
+    {
+      "id": "session-0",
+      "subtitle": "Character Creation",
+      "upcoming": true,
+      "title": "Session 0",
+      "date": "2025-05-04",
+      "summary": "Character creation and world introduction. Come prepared with character concepts and backstory ideas based on Session -1!"
     }
   ],
   "historyEntries": [
@@ -41,6 +41,42 @@
         "level": 3,
         "background": "Forest Offspring",
         "bio": "An offspring of a mother tree where the whole forest is one sentient plant. Sent out into the world on a mission, carrying a magical item that is a by-product of the mother tree. Travels with a companion animal."
+      }
+    },
+    {
+      "entityId": "marc",
+      "sessionId": "session-minus-1",
+      "changeType": "creation",
+      "timestamp": "2025-04-06T10:04:00Z",
+      "editedBy": "12345",
+      "data": {
+        "entityType": "character",
+        "id": "marc",
+        "name": "Marc",
+        "player": "Marc",
+        "race": "Unknown",
+        "class": "Paladin",
+        "level": 3,
+        "background": "Backwoods Hero",
+        "bio": "A 'himbo' paladin from the backwoods, traveling to the city due to outside forces. Has taken an oath to a local god/spirit. Simple but good-hearted."
+      }
+    },
+    {
+      "entityId": "andres",
+      "sessionId": "session-minus-1",
+      "changeType": "creation",
+      "timestamp": "2025-04-06T10:03:00Z",
+      "editedBy": "12345",
+      "data": {
+        "entityType": "character",
+        "id": "andres",
+        "name": "Andres",
+        "player": "Andres",
+        "race": "Kalashtar",
+        "class": "Druid (Cleric presenting)",
+        "level": 3,
+        "background": "Cloister Scholar",
+        "bio": "Hosts a spirit that manifests as an existing god, which embedded itself after death. Lives a cloistered life in a monastery/church and received the spirit as a revelation. Mechanically a druid but spiritually a cleric. Unfamiliar with the ordinary world due to cloistered upbringing."
       }
     },
     {
@@ -77,42 +113,6 @@
         "level": 3,
         "background": "Eldritch/Ancient",
         "bio": "Connected to death, decay, and the darker aspects of nature. Lost their prey and purpose and is now adapting to a strange new world. Has an ancient, eldritch background with fey connections."
-      }
-    },
-    {
-      "entityId": "andres",
-      "sessionId": "session-minus-1",
-      "changeType": "creation",
-      "timestamp": "2025-04-06T10:03:00Z",
-      "editedBy": "12345",
-      "data": {
-        "entityType": "character",
-        "id": "andres",
-        "name": "Andres",
-        "player": "Andres",
-        "race": "Kalashtar",
-        "class": "Druid (Cleric presenting)",
-        "level": 3,
-        "background": "Cloister Scholar",
-        "bio": "Hosts a spirit that manifests as an existing god, which embedded itself after death. Lives a cloistered life in a monastery/church and received the spirit as a revelation. Mechanically a druid but spiritually a cleric. Unfamiliar with the ordinary world due to cloistered upbringing."
-      }
-    },
-    {
-      "entityId": "marc",
-      "sessionId": "session-minus-1",
-      "changeType": "creation",
-      "timestamp": "2025-04-06T10:04:00Z",
-      "editedBy": "12345",
-      "data": {
-        "entityType": "character",
-        "id": "marc",
-        "name": "Marc",
-        "player": "Marc",
-        "race": "Unknown",
-        "class": "Paladin",
-        "level": 3,
-        "background": "Backwoods Hero",
-        "bio": "A 'himbo' paladin from the backwoods, traveling to the city due to outside forces. Has taken an oath to a local god/spirit. Simple but good-hearted."
       }
     }
   ]
