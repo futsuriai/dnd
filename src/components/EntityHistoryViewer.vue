@@ -1,66 +1,125 @@
 <template>
   <div class="entity-history-viewer">
-    <div class="history-header">
-      <h3>{{ entityType.charAt(0).toUpperCase() + entityType.slice(1) }} History</h3>
-      
-      <div class="session-selector">
-        <label for="session-select">View As Of:</label>
-        <select id="session-select" v-model="selectedSessionId">
-          <option value="current">Current (Latest)</option>
-          <option v-for="session in relevantSessions" :key="session.id" :value="session.id">
+    <div v-if="isLoading" class="loading">
+      Loading history...
+    </div>
+    
+    <div v-else-if="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+    
+    <div v-else>
+      <!-- Session selector -->
+      <div class="session-filter">
+        <label for="session-filter">View entity as of session:</label>
+        <select 
+          id="session-filter" 
+          v-model="selectedSessionId"
+          class="form-control"
+          @change="loadEntityAtSession"
+        >
+          <option value="">Current state (all sessions)</option>
+          <option v-for="session in sessions" :key="session.id" :value="session.id">
             {{ session.title }} ({{ formatDate(session.date) }})
           </option>
         </select>
       </div>
-    </div>
-    
-    <div class="history-timeline" v-if="entityHistory.length > 0">
-      <div 
-        v-for="(historyItem, index) in sortedHistory" 
-        :key="index"
-        :class="['history-item', historyItem.type]"
-      >
-        <div class="history-item-header">
-          <div class="history-session">
-            {{ getSessionTitle(historyItem.sessionId) }}
+      
+      <!-- Entity details -->
+      <div v-if="entity" class="entity-details">
+        <h3>{{ entity.name }}</h3>
+        
+        <!-- Different fields based on entity type -->
+        <div v-if="entity.entityType === 'character'" class="character-details">
+          <div class="detail-row">
+            <div class="detail-label">Player</div>
+            <div class="detail-value">{{ entity.player || 'N/A' }}</div>
           </div>
-          <div class="history-date">
-            {{ formatDateTime(historyItem.timestamp) }}
+          
+          <div class="detail-row">
+            <div class="detail-label">Race</div>
+            <div class="detail-value">{{ entity.race || 'N/A' }}</div>
           </div>
-          <div class="history-type">
-            {{ capitalizeFirst(historyItem.type) }}
+          
+          <div class="detail-row">
+            <div class="detail-label">Class</div>
+            <div class="detail-value">{{ entity.class || 'N/A' }}</div>
+          </div>
+          
+          <div class="detail-row">
+            <div class="detail-label">Level</div>
+            <div class="detail-value">{{ entity.level || 'N/A' }}</div>
+          </div>
+          
+          <div class="detail-row">
+            <div class="detail-label">Background</div>
+            <div class="detail-value">{{ entity.background || 'N/A' }}</div>
+          </div>
+          
+          <div v-if="entity.bio" class="biography">
+            <div class="detail-label">Biography</div>
+            <div class="detail-value">{{ entity.bio }}</div>
           </div>
         </div>
         
-        <div class="history-item-content">
-          <div class="history-description">{{ historyItem.description }}</div>
-          
-          <div class="history-changes" v-if="historyItem.changes && Object.keys(historyItem.changes).length > 0">
-            <div v-for="(value, key) in displayableChanges(historyItem.changes)" :key="key" class="change-item">
-              <span class="change-key">{{ formatKey(key) }}:</span>
-              <span class="change-value">
-                {{ formatValue(value) }}
-              </span>
+        <!-- For NPCs -->
+        <div v-else-if="entity.entityType === 'npc'" class="npc-details">
+          <!-- Similar structure for NPC specific fields -->
+        </div>
+        
+        <!-- For Locations -->
+        <div v-else-if="entity.entityType === 'location'" class="location-details">
+          <!-- Location specific fields -->
+        </div>
+        
+        <!-- For Items -->
+        <div v-else-if="entity.entityType === 'item'" class="item-details">
+          <!-- Item specific fields -->
+        </div>
+        
+        <!-- Show point-in-time notice if viewing historical entity -->
+        <div v-if="selectedSessionId" class="point-in-time-notice">
+          <p>
+            Viewing entity as it appeared after 
+            <strong>{{ getSessionTitle(selectedSessionId) }}</strong>
+          </p>
+        </div>
+      </div>
+      
+      <!-- History timeline -->
+      <div class="history-timeline">
+        <h4>History</h4>
+        
+        <div v-if="historyEntries && historyEntries.length > 0" class="history-entries">
+          <div 
+            v-for="entry in historyEntries" 
+            :key="entry.timestamp"
+            class="history-entry"
+          >
+            <div class="entry-header">
+              <span class="session-name">{{ getSessionTitle(entry.sessionId) }}</span>
+              <span class="entry-date">({{ formatDate(getSessionDate(entry.sessionId)) }})</span>
+            </div>
+            
+            <div class="entry-content">
+              <div class="entry-icon" :class="entry.changeType">
+                <i v-if="entry.changeType === 'creation'" class="event-icon-creation">+</i>
+                <i v-else-if="entry.changeType === 'update'" class="event-icon-update">↻</i>
+                <i v-else-if="entry.changeType === 'deletion'" class="event-icon-deletion">×</i>
+                <i v-else class="event-icon-generic">•</i>
+              </div>
+              <div class="entry-details">
+                <div class="entry-description">
+                  {{ getEntryDescription(entry) }}
+                </div>
+                <div class="entry-timestamp">{{ formatTime(entry.timestamp) }}</div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-    
-    <div v-else class="no-history">
-      <p>No history available for this entity.</p>
-    </div>
-    
-    <!-- Entity Snapshot for selected session -->
-    <div class="entity-snapshot" v-if="entitySnapshot">
-      <h4>Entity Snapshot as of {{ getSessionTitle(selectedSessionId) }}</h4>
-      
-      <div class="snapshot-content">
-        <div v-for="(value, key) in displayableEntity(entitySnapshot)" :key="key" class="snapshot-item">
-          <span class="snapshot-key">{{ formatKey(key) }}:</span>
-          <span class="snapshot-value">
-            {{ formatValue(value) }}
-          </span>
+        
+        <div v-else class="no-history">
+          No history events found for this entity.
         </div>
       </div>
     </div>
@@ -68,16 +127,15 @@
 </template>
 
 <script>
-import { ref, computed, watch, onMounted } from 'vue';
-import entityStore from '../store/entityStore';
+import { ref, onMounted, watch, computed } from 'vue';
+import worldData from '../store/worldData';
 
 export default {
   name: 'EntityHistoryViewer',
   props: {
     entityType: {
       type: String,
-      required: true,
-      validator: value => ['character', 'npc', 'location', 'item'].includes(value)
+      required: true
     },
     entityId: {
       type: String,
@@ -85,160 +143,257 @@ export default {
     }
   },
   setup(props) {
-    // State
-    const selectedSessionId = ref('current');
-    const entitySnapshot = ref(null);
+    const entity = ref(null);
+    const sessions = ref([]);
+    const historyEntries = ref([]);
+    const selectedSessionId = ref('');
+    const isLoading = ref(true);
+    const errorMessage = ref('');
     
-    // Get the full entity with history
-    const entity = computed(() => entityStore.getEntity(props.entityType, props.entityId));
-    
-    // Entity history
-    const entityHistory = computed(() => entity.value?.history || []);
-    
-    // Get all sessions where this entity was modified
-    const relevantSessions = computed(() => {
-      const sessionIds = new Set(entityHistory.value.map(h => h.sessionId));
-      return entityStore.getAllSessions()
-        .filter(s => sessionIds.has(s.id))
-        .sort((a, b) => {
-          // Sort by session number
+    // Load all sessions for the filter dropdown
+    const loadSessions = async () => {
+      try {
+        // Get all real sessions
+        sessions.value = await worldData.getAllSessions();
+        
+        // Add a virtual "Admin Session" to handle admin-created content
+        // This solves the issue with "undefined" session information
+        sessions.value.push({
+          id: 'session-admin',
+          title: 'Admin Session',
+          date: new Date().toISOString().split('T')[0],
+          subtitle: 'Content created via Admin interface',
+          description: 'This is not a real gameplay session, but represents content created or modified through the admin interface.'
+        });
+        
+        // Sort sessions chronologically
+        sessions.value.sort((a, b) => {
+          // Put admin session at the end
+          if (a.id === 'session-admin') return 1;
+          if (b.id === 'session-admin') return -1;
+          
+          // Extract session numbers for proper sorting
           const aNum = parseInt(a.id.split('-')[1]) || 0;
           const bNum = parseInt(b.id.split('-')[1]) || 0;
+          
+          // Sort sessions by ID (ascending)
           return aNum - bNum;
         });
-    });
-    
-    // Sorted history (newest first)
-    const sortedHistory = computed(() => {
-      return [...entityHistory.value].sort((a, b) => {
-        return new Date(b.timestamp) - new Date(a.timestamp);
-      });
-    });
-    
-    // Update entity snapshot when session changes
-    watch(selectedSessionId, (newSessionId) => {
-      if (newSessionId === 'current') {
-        entitySnapshot.value = entity.value;
-      } else {
-        entitySnapshot.value = entityStore.getEntityAtSession(
-          props.entityType, 
-          props.entityId, 
-          newSessionId
-        );
+      } catch (error) {
+        console.error('Error loading sessions:', error);
+        errorMessage.value = 'Failed to load sessions.';
       }
-    });
+    };
     
-    // Initialize with current entity
-    onMounted(() => {
-      entitySnapshot.value = entity.value;
-    });
-    
-    // Helper function to get session title
-    function getSessionTitle(sessionId) {
-      if (sessionId === 'current') return 'Current';
-      
-      const session = entityStore.getSession(sessionId);
-      if (!session) return sessionId;
-      
-      return session.title || sessionId;
-    }
-    
-    // Format dates
-    function formatDate(dateString) {
-      if (!dateString) return '';
-      return new Date(dateString).toLocaleDateString();
-    }
-    
-    function formatDateTime(dateTimeString) {
-      if (!dateTimeString) return '';
-      return new Date(dateTimeString).toLocaleString();
-    }
-    
-    // Capitalize first letter
-    function capitalizeFirst(str) {
-      if (!str) return '';
-      return str.charAt(0).toUpperCase() + str.slice(1);
-    }
-    
-    // Format object key for display
-    function formatKey(key) {
-      if (!key) return '';
-      // Convert camelCase to Title Case
-      return key
-        .replace(/([A-Z])/g, ' $1')
-        .replace(/^./, str => str.toUpperCase());
-    }
-    
-    // Format value for display
-    function formatValue(value) {
-      if (value === null || value === undefined) return '';
-      if (typeof value === 'object') return JSON.stringify(value);
-      return value;
-    }
-    
-    // Filter out non-displayable changes
-    function displayableChanges(changes) {
-      const filtered = {};
-      
-      Object.entries(changes).forEach(([key, value]) => {
-        // Skip certain keys
-        if (['id', 'type', 'connections', 'history'].includes(key)) return;
+    // Load entity with full history
+    const loadEntity = async () => {
+      try {
+        isLoading.value = true;
+        errorMessage.value = '';
         
-        // Skip undefined values
-        if (value === undefined) return;
+        // Get entity with full history
+        entity.value = await worldData.buildEntityFromHistory(
+          props.entityType,
+          props.entityId
+        );
         
-        // Skip complex objects but keep arrays and primitive values
-        if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
-          // For connection changes, we'll show a simplified version
-          if (key === 'connection') {
-            filtered[key] = `Connected to ${value.entityType} "${value.entityId}" - ${value.reason}`;
-          }
+        if (!entity.value) {
+          errorMessage.value = 'Entity not found or has been deleted.';
           return;
         }
         
-        filtered[key] = value;
-      });
-      
-      return filtered;
-    }
+        // Load history entries for this entity
+        const entries = await worldData.getEntityEvents(
+          props.entityType,
+          props.entityId
+        );
+        
+        // Sort entries chronologically
+        historyEntries.value = entries.sort((a, b) => {
+          // First sort by session ID
+          const aSession = parseInt(a.sessionId.split('-')[1]) || 0;
+          const bSession = parseInt(b.sessionId.split('-')[1]) || 0;
+          
+          if (aSession !== bSession) return bSession - aSession;
+          
+          // Then by timestamp if in the same session
+          return new Date(b.timestamp) - new Date(a.timestamp);
+        });
+      } catch (error) {
+        console.error('Error loading entity history:', error);
+        errorMessage.value = 'Failed to load entity history.';
+      } finally {
+        isLoading.value = false;
+      }
+    };
     
-    // Filter entity for display
-    function displayableEntity(entity) {
-      if (!entity) return {};
-      
-      const filtered = {};
-      
-      Object.entries(entity).forEach(([key, value]) => {
-        // Skip certain keys
-        if (['history', 'connections'].includes(key)) return;
+    // Load entity as it was at a specific session
+    const loadEntityAtSession = async () => {
+      try {
+        if (!selectedSessionId.value) {
+          // If no session selected, load current state
+          await loadEntity();
+          return;
+        }
         
-        // Skip undefined values
-        if (value === undefined) return;
+        isLoading.value = true;
+        errorMessage.value = '';
         
-        // Skip complex objects but keep arrays and primitive values
-        if (typeof value === 'object' && value !== null && !Array.isArray(value)) return;
+        // Get entity as it was at the selected session
+        entity.value = await worldData.getEntityAtSession(
+          props.entityType,
+          props.entityId,
+          selectedSessionId.value
+        );
         
-        filtered[key] = value;
-      });
+        if (!entity.value) {
+          errorMessage.value = 'Entity not found at this point in time.';
+        }
+        
+        // Update history entries to only show those up to the selected session
+        const entries = await worldData.getEntityEvents(
+          props.entityType,
+          props.entityId
+        );
+        
+        // Filter entries up to the selected session
+        historyEntries.value = entries
+          .filter(entry => {
+            const entrySessionNum = parseInt(entry.sessionId.split('-')[1]) || 0;
+            const selectedSessionNum = parseInt(selectedSessionId.value.split('-')[1]) || 0;
+            return entrySessionNum <= selectedSessionNum;
+          })
+          .sort((a, b) => {
+            // First sort by session ID
+            const aSession = parseInt(a.sessionId.split('-')[1]) || 0;
+            const bSession = parseInt(b.sessionId.split('-')[1]) || 0;
+            
+            if (aSession !== bSession) return bSession - aSession;
+            
+            // Then by timestamp if in the same session
+            return new Date(b.timestamp) - new Date(a.timestamp);
+          });
+      } catch (error) {
+        console.error('Error loading entity at session:', error);
+        errorMessage.value = 'Failed to load entity at selected session.';
+      } finally {
+        isLoading.value = false;
+      }
+    };
+    
+    // Format a date string for display
+    const formatDate = (dateString) => {
+      if (!dateString) return 'Unknown date';
       
-      return filtered;
-    }
+      try {
+        const date = new Date(dateString);
+        return date.toLocaleDateString(undefined, {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric'
+        });
+      } catch (e) {
+        return dateString; // Fallback to original string
+      }
+    };
+    
+    // Format a timestamp for display
+    const formatTime = (timestamp) => {
+      if (!timestamp) return '';
+      
+      try {
+        const date = new Date(timestamp);
+        return date.toLocaleTimeString(undefined, {
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+      } catch (e) {
+        return '';
+      }
+    };
+    
+    // Get session title by ID
+    const getSessionTitle = (sessionId) => {
+      if (!sessionId) return 'Unknown Session';
+      
+      // Handle special admin session case
+      if (sessionId === 'session-admin') {
+        return 'Admin Session';
+      }
+      
+      const session = sessions.value.find(s => s.id === sessionId);
+      return session ? session.title : sessionId.replace('session-', 'Session ');
+    };
+    
+    // Get session date by ID
+    const getSessionDate = (sessionId) => {
+      if (!sessionId) return '';
+      
+      // Handle special admin session case
+      if (sessionId === 'session-admin') {
+        return new Date().toISOString().split('T')[0]; // Today's date
+      }
+      
+      const session = sessions.value.find(s => s.id === sessionId);
+      return session ? session.date : '';
+    };
+    
+    // Get human-readable description for a history entry
+    const getEntryDescription = (entry) => {
+      if (!entry) return '';
+      
+      switch (entry.changeType) {
+        case 'creation':
+          return `${capitalizeFirst(props.entityType)} was created`;
+        case 'update':
+          // Check if there's a custom action description
+          if (entry.data && entry.data.last_action) {
+            return entry.data.last_action;
+          }
+          return `${capitalizeFirst(props.entityType)} was updated`;
+        case 'deletion':
+          return `${capitalizeFirst(props.entityType)} was deleted`;
+        case 'connection_added':
+          return `Connected to ${entry.data.connectedEntityType} ${entry.data.connectedEntityId}`;
+        case 'connection_removed':
+          return `Connection removed`;
+        default:
+          return entry.changeType;
+      }
+    };
+    
+    // Utility function to capitalize first letter
+    const capitalizeFirst = (str) => {
+      if (!str) return '';
+      return str.charAt(0).toUpperCase() + str.slice(1);
+    };
+    
+    // Load data on mount
+    onMounted(async () => {
+      await loadSessions();
+      await loadEntity();
+    });
+    
+    // Watch for prop changes to reload data
+    watch([() => props.entityType, () => props.entityId], async () => {
+      selectedSessionId.value = ''; // Reset session filter
+      await loadEntity();
+    });
     
     return {
-      selectedSessionId,
       entity,
-      entityHistory,
-      entitySnapshot,
-      relevantSessions,
-      sortedHistory,
-      getSessionTitle,
+      sessions,
+      historyEntries,
+      selectedSessionId,
+      isLoading,
+      errorMessage,
+      loadEntityAtSession,
       formatDate,
-      formatDateTime,
-      capitalizeFirst,
-      formatKey,
-      formatValue,
-      displayableChanges,
-      displayableEntity
+      formatTime,
+      getSessionTitle,
+      getSessionDate,
+      getEntryDescription,
+      capitalizeFirst
     };
   }
 };
@@ -246,160 +401,191 @@ export default {
 
 <style scoped>
 .entity-history-viewer {
-  margin: 1rem 0;
-  padding: 1rem;
-  background: rgba(0, 0, 0, 0.1);
-  border-radius: 6px;
+  width: 100%;
+  color: #e0e0e0;
 }
 
-.history-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
-}
-
-.history-header h3 {
-  margin: 0;
-  color: var(--color-primary);
-}
-
-.session-selector {
-  display: flex;
-  align-items: center;
-}
-
-.session-selector label {
-  margin-right: 0.5rem;
-  font-weight: bold;
-}
-
-.session-selector select {
-  padding: 0.3rem 0.5rem;
-  border-radius: 4px;
+.loading, .error-message, .no-history {
+  padding: 20px;
+  text-align: center;
   background: rgba(0, 0, 0, 0.2);
-  color: var(--color-text);
-  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  margin: 20px 0;
+}
+
+.error-message {
+  color: #ff6b6b;
+}
+
+.session-filter {
+  margin-bottom: 20px;
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border-radius: 4px;
+  margin-top: 8px;
+}
+
+.entity-details {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.detail-row {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.detail-label {
+  font-weight: bold;
+  width: 120px;
+  flex-shrink: 0;
+}
+
+.detail-value {
+  flex-grow: 1;
+}
+
+.biography {
+  margin-top: 20px;
+}
+
+.biography .detail-label {
+  margin-bottom: 8px;
+}
+
+.biography .detail-value {
+  white-space: pre-line;
+  line-height: 1.5;
+}
+
+.point-in-time-notice {
+  margin-top: 20px;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+  border-left: 4px solid #ffab40;
 }
 
 .history-timeline {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  padding: 20px;
 }
 
-.history-item {
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 4px;
-  padding: 1rem;
+.history-entries {
+  border-left: 2px solid rgba(255, 255, 255, 0.1);
+  margin-left: 10px;
+  padding-left: 25px;
+}
+
+.history-entry {
+  margin-bottom: 20px;
   position: relative;
-  border-left: 4px solid var(--color-text-muted);
 }
 
-.history-item.create {
-  border-left-color: #4caf50; /* green */
+.history-entry:last-child {
+  margin-bottom: 0;
 }
 
-.history-item.update {
-  border-left-color: #2196f3; /* blue */
+.entry-header {
+  margin-bottom: 8px;
+  font-weight: 500;
 }
 
-.history-item.connect {
-  border-left-color: #ff9800; /* orange */
+.session-name {
+  font-size: 1.05rem;
 }
 
-.history-item-header {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 0.8rem;
+.entry-date {
+  opacity: 0.7;
   font-size: 0.9rem;
-  color: var(--color-text-muted);
+  margin-left: 5px;
 }
 
-.history-session {
-  font-weight: bold;
-  color: var(--color-primary);
-}
-
-.history-type {
-  font-style: italic;
-}
-
-.history-description {
-  margin-bottom: 0.8rem;
-  font-weight: bold;
-}
-
-.history-changes {
+.entry-content {
   display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  margin-top: 0.5rem;
-  padding-top: 0.5rem;
-  border-top: 1px dashed var(--border-color);
+  position: relative;
 }
 
-.change-item, .snapshot-item {
+.entry-icon {
+  position: absolute;
+  left: -35px;
+  width: 20px;
+  height: 20px;
   display: flex;
-  gap: 0.5rem;
-}
-
-.change-key, .snapshot-key {
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background: #242424;
+  font-size: 14px;
   font-weight: bold;
-  color: var(--color-primary);
-  min-width: 150px;
 }
 
-.change-value, .snapshot-value {
-  word-break: break-word;
+.entry-icon.creation i {
+  color: #4CAF50;
 }
 
-.entity-snapshot {
-  margin-top: 2rem;
-  padding: 1rem;
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 4px;
-  border-left: 4px solid var(--color-primary);
+.entry-icon.update i {
+  color: #2196F3;
 }
 
-.entity-snapshot h4 {
-  margin-top: 0;
-  margin-bottom: 1rem;
-  color: var(--color-primary);
+.entry-icon.deletion i {
+  color: #F44336;
 }
 
-.snapshot-content {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+.event-icon-creation, .event-icon-update, .event-icon-deletion, .event-icon-generic {
+  display: inline-block;
 }
 
-.no-history {
-  padding: 2rem;
-  text-align: center;
-  color: var(--color-text-muted);
-  font-style: italic;
+.entry-details {
+  flex-grow: 1;
+}
+
+.entry-description {
+  line-height: 1.4;
+}
+
+.entry-timestamp {
+  font-size: 0.8rem;
+  opacity: 0.7;
+  margin-top: 4px;
+}
+
+/* Event type styles */
+.history-entry .creation .entry-description {
+  color: #a5d6a7;
+}
+
+.history-entry .update .entry-description {
+  color: #90caf9;
+}
+
+.history-entry .deletion .entry-description {
+  color: #ef9a9a;
+}
+
+.history-entry .connection_added .entry-description,
+.history-entry .connection_removed .entry-description,
+.history-entry .connection_updated .entry-description {
+  color: #ce93d8;
 }
 
 @media (max-width: 768px) {
-  .history-header {
+  .detail-row {
     flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
   }
   
-  .history-item-header {
-    flex-direction: column;
-    gap: 0.3rem;
-  }
-  
-  .change-item, .snapshot-item {
-    flex-direction: column;
-    gap: 0.2rem;
-  }
-  
-  .change-key, .snapshot-key {
-    min-width: unset;
+  .detail-label {
+    width: 100%;
+    margin-bottom: 5px;
   }
 }
 </style>

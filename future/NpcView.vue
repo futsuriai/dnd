@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { getAllNpcs } from '../store/worldData';
+import { getAllNpcs } from '../src/store/worldData';
 import EntityCard from '../components/EntityCard.vue';
 
 export default {

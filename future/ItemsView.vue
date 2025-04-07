@@ -16,7 +16,7 @@
 
 <script>
 import EntityCard from '../components/EntityCard.vue';
-import { getAllItems } from '../store/worldData';
+import { getAllItems } from '../src/store/worldData';
 
 export default {
   name: 'ItemsView',

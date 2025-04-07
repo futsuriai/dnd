@@ -209,10 +209,12 @@
 </template>
 
 <script>
-import authService from '../services/AuthService';
-import firestoreService from '../services/FirestoreService';
+import { ref, computed, watch, onMounted } from 'vue';
 import AuthComponent from '../components/AuthComponent.vue';
 import EntityForm from '../components/EntityForm.vue';
+import worldData from '../store/worldData';
+import authService from '../services/AuthService';
+import firestoreService from '../services/FirestoreService';
 
 export default {
   name: 'AdminView',

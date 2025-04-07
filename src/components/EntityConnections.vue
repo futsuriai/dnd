@@ -35,7 +35,9 @@
 </template>
 
 <script>
-import { getEntityConnections, getSession } from '../store/worldData';
+import { ref, onMounted, computed } from 'vue';
+import worldData from '../store/worldData';
+import { getEntityConnections } from '../store/worldData';
 
 export default {
   name: 'EntityConnections',

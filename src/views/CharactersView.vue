@@ -22,6 +22,7 @@
 </template>
 
 <script>
+import { ref, onMounted } from 'vue';
 import EntityCard from '../components/EntityCard.vue';
 import worldData from '../store/worldData';
 

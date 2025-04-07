@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import { getLocations, getAllEntities } from '../store/worldData';
+import { getLocations, getAllEntities } from '../src/store/worldData';
 import EntityCard from '../components/EntityCard.vue';
 
 export default {

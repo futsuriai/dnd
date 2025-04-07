@@ -206,7 +206,8 @@ export default {
   },
   data() {
     return {
-      showHistory: false
+      showHistory: false,
+      sessionCache: {} // Add a cache to store session data
     };
   },
   computed: {
@@ -283,17 +284,36 @@ export default {
     toggleHistory() {
       this.showHistory = !this.showHistory;
     },
-    getSessionName(sessionId) {
+    async getSessionName(sessionId) {
       // Session 0 is special (was previously session-minus-1)
       if (sessionId === 'session-0') {
         return 'Initial Setup';
       }
       
-      const session = getSession(sessionId);
-      if (session) {
+      // Handle session-admin case
+      if (sessionId === 'session-admin') {
+        return 'Admin Session';
+      }
+      
+      // Check if we've already cached this session
+      if (this.sessionCache[sessionId]) {
+        const session = this.sessionCache[sessionId];
         return `${session.title} (${session.date})`;
       }
-      return sessionId;
+      
+      try {
+        // Await the Promise returned by getSession
+        const session = await getSession(sessionId);
+        if (session) {
+          // Cache the result for future use
+          this.sessionCache[sessionId] = session;
+          return `${session.title} (${session.date})`;
+        }
+        return sessionId;
+      } catch (error) {
+        console.error(`Error loading session ${sessionId}:`, error);
+        return sessionId;
+      }
     }
   }
 }

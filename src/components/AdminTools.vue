@@ -29,12 +29,6 @@
         >
           Items
         </button>
-        <button 
-          @click="activeEntityType = 'session'" 
-          :class="['tab-button', activeEntityType === 'session' ? 'active' : '']"
-        >
-          Sessions
-        </button>
       </div>
       
       <div class="entity-list-container">
@@ -55,6 +49,7 @@
           <div v-for="entity in filteredEntities" :key="entity.id" class="entity-item">
             <div class="entity-name">{{ entity.name }}</div>
             <div class="entity-actions">
+              <button @click="viewEntityHistory(entity)" class="history-button">History</button>
               <button @click="editEntity(entity)" class="edit-button">Edit</button>
               <button @click="confirmDeleteEntity(entity)" class="delete-button">Delete</button>
             </div>
@@ -85,6 +80,24 @@
         </div>
       </div>
       
+      <!-- Entity History Modal -->
+      <div v-if="showHistoryModal" class="modal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3>{{ currentEntity.name }} - History</h3>
+            <button @click="showHistoryModal = false" class="close-button">&times;</button>
+          </div>
+          
+          <div class="modal-body">
+            <EntityHistoryViewer 
+              v-if="currentEntity.id" 
+              :entityType="activeEntityType"
+              :entityId="currentEntity.id"
+            />
+          </div>
+        </div>
+      </div>
+      
       <!-- Delete Confirmation Modal -->
       <div v-if="showDeleteConfirmation" class="modal">
         <div class="modal-content">
@@ -108,13 +121,61 @@
     
     <div class="tool-section">
       <h3>Database Management</h3>
+      <div class="data-source-info">
+        <p><strong>Current Data Source:</strong> {{ dataSource.source || 'loading...' }}</p>
+      </div>
+
       <div class="event-counts" v-if="eventCounts">
         <p><strong>Total Events:</strong> {{ eventCounts.total }}</p>
         <ul>
           <li>History Entries: {{ eventCounts.historyEntries }}</li>
-          <li>World History Events: {{ eventCounts.worldHistoryEvents }}</li>
           <li>Sessions: {{ eventCounts.sessions }}</li>
         </ul>
+      </div>
+      
+      <div class="import-export-controls">
+        <h4>Import/Export Data</h4>
+        <div class="button-group">
+          <button @click="showImportDialog = true" class="action-button">Import Data</button>
+          <button @click="exportData" class="action-button">Export Data</button>
+        </div>
+      </div>
+      
+      <!-- Import Dialog -->
+      <div v-if="showImportDialog" class="modal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3>Import Data</h3>
+            <button @click="showImportDialog = false" class="close-button">&times;</button>
+          </div>
+          
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="importText">Paste JSON data:</label>
+              <textarea 
+                id="importText" 
+                v-model="importText" 
+                class="form-control" 
+                rows="10"
+                placeholder="Paste your exported data here..."
+              ></textarea>
+            </div>
+            
+            <div class="form-group checkbox-group">
+              <label>
+                <input type="checkbox" v-model="clearBeforeImport">
+                Clear existing data before import (WARNING: This will delete all existing data)
+              </label>
+            </div>
+            
+            <div class="modal-actions">
+              <button @click="showImportDialog = false" class="cancel-button">Cancel</button>
+              <button @click="importData" class="primary-button" :disabled="!importText">
+                Import Data
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
       
       <div class="actions">
@@ -135,22 +196,25 @@
 </template>
 
 <script>
-import { ref, onMounted, computed } from 'vue';
-import authService from '../services/AuthService';
+import { ref, computed, onMounted, watch } from 'vue';
 import EntityForm from './EntityForm.vue';
+import EntityHistoryViewer from './EntityHistoryViewer.vue';
 import worldData from '../store/worldData';
 import firestoreService from '../services/FirestoreService';
+import { historyBasedDataExpanded } from '../store/consolidatedData';
 
 export default {
   name: 'AdminTools',
   components: {
-    EntityForm
+    EntityForm,
+    EntityHistoryViewer
   },
   setup() {
     const isLoading = ref(false);
     const message = ref('');
     const messageType = ref('');
     const eventCounts = ref(null);
+    const dataSource = ref({ source: 'loading...', initialized: false });
     
     // Entity management
     const activeEntityType = ref('character');
@@ -158,18 +222,20 @@ export default {
       character: [],
       npc: [],
       location: [],
-      item: [],
-      session: []
+      item: []
     });
     const entitySearchQuery = ref('');
     const isLoadingEntities = ref(false);
     const showEntityModal = ref(false);
+    const showHistoryModal = ref(false);
     const currentEntity = ref({});
     const isNewEntity = ref(false);
     const showDeleteConfirmation = ref(false);
     
-    // Only authorized editors can see this component
-    const isAuthorized = ref(authService.isAuthorizedEditor());
+    // Import/Export
+    const showImportDialog = ref(false);
+    const importText = ref('');
+    const clearBeforeImport = ref(false);
     
     // Computed property for filtered entities
     const filteredEntities = computed(() => {
@@ -184,13 +250,11 @@ export default {
     });
     
     onMounted(async () => {
-      // Get event counts
-      eventCounts.value = getEventCounts();
+      // Initialize world data and determine data source
+      dataSource.value = await worldData.initWorldData();
       
-      // Set up auth listener
-      authService.addAuthListener((user, isEditor) => {
-        isAuthorized.value = isEditor;
-      });
+      // Update event counts
+      await updateEventCounts();
       
       // Load entities
       await loadEntities('character');
@@ -223,9 +287,6 @@ export default {
           case 'item':
             loadedEntities = await worldData.getAllItems();
             break;
-          case 'session':
-            loadedEntities = await worldData.getAllSessions();
-            break;
         }
         
         entities.value[type] = loadedEntities;
@@ -238,9 +299,55 @@ export default {
       }
     }
     
+    // Get event counts from the database
+    async function updateEventCounts() {
+      try {
+        const historyEntries = await firestoreService.getAllHistoryEvents();
+        const sessions = await firestoreService.getAllSessions();
+        
+        eventCounts.value = {
+          historyEntries: historyEntries.length,
+          sessions: sessions.length,
+          total: historyEntries.length + sessions.length
+        };
+      } catch (error) {
+        console.error('Error getting event counts:', error);
+        eventCounts.value = { historyEntries: 0, sessions: 0, total: 0 };
+      }
+    }
+    
+    // Seed the database with initial data
+    async function seedDatabase() {
+      try {
+        isLoading.value = true;
+        message.value = 'Seeding database...';
+        messageType.value = 'info';
+        
+        // Use the consolidated data from the store
+        await firestoreService.seedDatabase(historyBasedDataExpanded);
+        
+        // Reinitialize world data to use Firestore
+        await worldData.initWorldData({ forceInit: true });
+        dataSource.value = await worldData.getDataSource();
+        
+        // Reload entities and update counts
+        await loadEntities(activeEntityType.value);
+        await updateEventCounts();
+        
+        message.value = 'Database seeded successfully!';
+        messageType.value = 'success';
+      } catch (error) {
+        console.error('Error seeding database:', error);
+        message.value = `Error seeding database: ${error.message}`;
+        messageType.value = 'error';
+      } finally {
+        isLoading.value = false;
+      }
+    }
+    
     function createNewEntity() {
       currentEntity.value = {
-        id: '', // Will be generated by Firebase or assigned when saved
+        id: '', // Will be generated when saved
         entityType: activeEntityType.value
       };
       isNewEntity.value = true;
@@ -253,33 +360,31 @@ export default {
       showEntityModal.value = true;
     }
     
+    function viewEntityHistory(entity) {
+      currentEntity.value = { ...entity };
+      showHistoryModal.value = true;
+    }
+    
     function confirmDeleteEntity(entity) {
       currentEntity.value = entity;
       showDeleteConfirmation.value = true;
     }
     
     async function deleteEntity() {
-      if (!isAuthorized.value) {
-        message.value = 'You must be an authorized editor to perform this action.';
-        messageType.value = 'error';
-        showDeleteConfirmation.value = false;
-        return;
-      }
-      
       try {
         isLoading.value = true;
         
-        // Delete from Firestore
-        await firestoreService.delete(
-          `${activeEntityType.value}s`, // Collection name (e.g., "characters")
+        // Use worldData to create a deletion history entry
+        await worldData.deleteEntity(
+          activeEntityType.value,
           currentEntity.value.id
         );
         
-        // Remove from local array
-        entities.value[activeEntityType.value] = entities.value[activeEntityType.value]
-          .filter(e => e.id !== currentEntity.value.id);
+        // Reload entities to reflect the deletion
+        await loadEntities(activeEntityType.value);
+        await updateEventCounts();
         
-        message.value = `${capitalizeFirst(activeEntityType.value)} deleted successfully.`;
+        message.value = `${capitalizeFirst(activeEntityType.value)} marked as deleted.`;
         messageType.value = 'success';
       } catch (error) {
         console.error(`Error deleting ${activeEntityType.value}:`, error);
@@ -292,13 +397,6 @@ export default {
     }
     
     async function saveEntity(entityData) {
-      if (!isAuthorized.value) {
-        message.value = 'You must be an authorized editor to perform this action.';
-        messageType.value = 'error';
-        closeEntityModal();
-        return;
-      }
-      
       try {
         isLoading.value = true;
         
@@ -309,6 +407,8 @@ export default {
             activeEntityType.value,
             entityData
           );
+          
+          message.value = `${capitalizeFirst(activeEntityType.value)} created successfully.`;
         } else {
           // Update existing entity via history entry
           await worldData.updateEntity(
@@ -316,12 +416,14 @@ export default {
             entityData.id,
             entityData
           );
+          
+          message.value = `${capitalizeFirst(activeEntityType.value)} updated successfully.`;
         }
         
-        // Reload entities to reflect changes
+        // Reload entities and update counts
         await loadEntities(activeEntityType.value);
+        await updateEventCounts();
         
-        message.value = `${capitalizeFirst(activeEntityType.value)} ${isNewEntity.value ? 'created' : 'updated'} successfully.`;
         messageType.value = 'success';
       } catch (error) {
         console.error(`Error saving ${activeEntityType.value}:`, error);
@@ -330,6 +432,82 @@ export default {
       } finally {
         isLoading.value = false;
         closeEntityModal();
+      }
+    }
+    
+    async function importData() {
+      if (!importText.value) {
+        alert('Please provide JSON data to import.');
+        return;
+      }
+      
+      try {
+        isLoading.value = true;
+        const data = JSON.parse(importText.value);
+        
+        // If clearBeforeImport is true, clear the database first
+        if (clearBeforeImport.value) {
+          await firestoreService.clearDatabase();
+        }
+        
+        // Use the seedDatabase method to import data
+        await firestoreService.seedDatabase(data);
+        
+        // Reload all data
+        await worldData.initWorldData({ forceInit: true });
+        dataSource.value = await worldData.getDataSource();
+        await loadEntities(activeEntityType.value);
+        await updateEventCounts();
+        
+        showImportDialog.value = false;
+        importText.value = '';
+        
+        message.value = 'Data imported successfully!';
+        messageType.value = 'success';
+      } catch (error) {
+        console.error('Error importing data:', error);
+        message.value = 'Failed to import data. Please check your JSON format and try again.';
+        messageType.value = 'error';
+      } finally {
+        isLoading.value = false;
+      }
+    }
+    
+    async function exportData() {
+      try {
+        isLoading.value = true;
+        
+        // Use the exportDataInHistoryFormat to get data
+        const exportData = await firestoreService.exportDataInHistoryFormat();
+        
+        // Convert to JSON string with pretty formatting
+        const jsonString = JSON.stringify(exportData, null, 2);
+        
+        // Create a blob and download it
+        const blob = new Blob([jsonString], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        
+        // Create a download link and click it
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `dnd-campaign-export-${new Date().toISOString().split('T')[0]}.json`;
+        document.body.appendChild(a);
+        a.click();
+        
+        // Clean up
+        setTimeout(() => {
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        }, 100);
+        
+        message.value = 'Data exported successfully!';
+        messageType.value = 'success';
+      } catch (error) {
+        console.error('Error exporting data:', error);
+        message.value = `Error exporting data: ${error.message}`;
+        messageType.value = 'error';
+      } finally {
+        isLoading.value = false;
       }
     }
     
@@ -348,7 +526,7 @@ export default {
       messageType,
       seedDatabase,
       eventCounts,
-      isAuthorized,
+      dataSource,
       activeEntityType,
       entities,
       entitySearchQuery,
@@ -356,15 +534,22 @@ export default {
       filteredEntities,
       createNewEntity,
       editEntity,
+      viewEntityHistory,
       confirmDeleteEntity,
       deleteEntity,
       saveEntity,
       showEntityModal,
+      showHistoryModal,
       currentEntity,
       isNewEntity,
       closeEntityModal,
       showDeleteConfirmation,
-      capitalizeFirst
+      capitalizeFirst,
+      showImportDialog,
+      importText,
+      clearBeforeImport,
+      importData,
+      exportData
     };
   }
 };
@@ -389,7 +574,7 @@ export default {
   margin-top: 20px;
 }
 
-.primary-button, .edit-button, .delete-button, .cancel-button {
+.primary-button, .edit-button, .delete-button, .cancel-button, .history-button, .action-button {
   padding: 8px 16px;
   border-radius: 4px;
   cursor: pointer;
@@ -410,6 +595,16 @@ export default {
 
 .delete-button {
   background-color: #F44336;
+  color: white;
+}
+
+.history-button {
+  background-color: #9C27B0;
+  color: white;
+}
+
+.action-button {
+  background-color: #607D8B;
   color: white;
 }
 
@@ -444,7 +639,7 @@ export default {
   color: #0c5460;
 }
 
-.event-counts {
+.event-counts, .data-source-info {
   background-color: rgba(0, 0, 0, 0.1);
   padding: 10px;
   border-radius: 4px;
@@ -582,6 +777,26 @@ export default {
   font-weight: 500;
 }
 
+/* Import/Export styles */
+.import-export-controls {
+  margin-top: 30px;
+}
+
+.button-group {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.checkbox-group {
+  display: flex;
+  align-items: center;
+}
+
+.checkbox-group input {
+  margin-right: 10px;
+}
+
 @media (max-width: 768px) {
   .entity-controls {
     flex-direction: column;
@@ -594,6 +809,20 @@ export default {
   
   .modal-content {
     width: 95%;
+  }
+
+  .entity-actions {
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
+  .entity-tabs {
+    flex-wrap: wrap;
+  }
+
+  .tab-button {
+    flex-grow: 1;
+    text-align: center;
   }
 }
 </style>

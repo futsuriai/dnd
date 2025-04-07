@@ -31,6 +31,7 @@
   </template>
   
   <script>
+  import { ref, onMounted } from 'vue';
   import { worldHistory } from '../store/worldData';
   
   export default {

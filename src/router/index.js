@@ -1,11 +1,11 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
 import HomeView from '../views/HomeView.vue';
 import CharactersView from '../views/CharactersView.vue';
-import NpcView from '../views/NpcView.vue';
+//import NpcView from '../views/NpcView.vue';
 import HistoryView from '../views/HistoryView.vue';
-import ItemsView from '../views/ItemsView.vue';
+//import ItemsView from '../views/ItemsView.vue';
 import SessionsView from '../views/SessionsView.vue';
-import LocationsView from '../views/LocationsView.vue';
+//import LocationsView from '../views/LocationsView.vue';
 import AdminView from '../views/AdminView.vue';
 import authService from '../services/AuthService';
 
@@ -20,31 +20,31 @@ const routes = [
     name: 'Characters',
     component: CharactersView,
   },
-  {
-    path: '/npcs',
-    name: 'NPCs',
-    component: NpcView,
-  },
+  // {
+  //   path: '/npcs',
+  //   name: 'NPCs',
+  //   component: NpcView,
+  // },
   {
     path: '/history',
     name: 'History',
     component: HistoryView,
   },
-  {
-    path: '/items',
-    name: 'Items',
-    component: ItemsView,
-  },
+  // {
+  //   path: '/items',
+  //   name: 'Items',
+  //   component: ItemsView,
+  // },
   {
     path: '/sessions',
     name: 'Sessions',
     component: SessionsView,
   },
-  {
-    path: '/locations',
-    name: 'Locations',
-    component: LocationsView,
-  },
+  // {
+  //   path: '/locations',
+  //   name: 'Locations',
+  //   component: LocationsView,
+  // },
   {
     path: '/admin',
     name: 'Admin',
