@@ -47,7 +47,7 @@ const routes = [
 ];
 
 // Use the same base path logic as in vite.config.js
-const base = process.env.NODE_ENV === 'production' ? '/dnd/' : '/'
+const base = '/'
 
 const router = createRouter({
   history: createWebHashHistory(base),
