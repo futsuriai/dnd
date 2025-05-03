@@ -14,10 +14,11 @@
           <li><router-link to="/">Home</router-link></li>
           <li><router-link to="/sessions">Sessions</router-link></li>
           <li><router-link to="/characters">Characters</router-link></li>
-          <!-- <li><router-link to="/npcs">NPCs</router-link></li>
+          <!-- <li><router-link to="/npcs">NPCs</router-link></li> -->
           <li><router-link to="/locations">Locations</router-link></li>
-          <li><router-link to="/items">Items</router-link></li> -->
-          <li><router-link to="/history">History</router-link></li>
+          <!-- <li><router-link to="/items">Items</router-link></li> -->
+          <!-- <li><router-link to="/history">History</router-link></li> -->
+          <li><router-link to="/lore">Lore</router-link></li>
         </ul>
       </nav>
     </header>
@@ -45,7 +46,8 @@ export default {
     currentRouteName() {
       const route = this.$route.path;
       if (route === '/') return 'Home';
-      return route.charAt(1).toUpperCase() + route.slice(2).replace('/', '');
+      const name = route.charAt(1).toUpperCase() + route.slice(2).replace('/', '');
+      return name;
     }
   },
   methods: {
@@ -61,7 +63,6 @@ export default {
   },
   watch: {
     '$route'() {
-      // Close the menu when the route changes
       this.closeMenu();
     }
   },

@@ -1,53 +1,66 @@
 <template>
   <div class="content-section">
     <h1>World Locations</h1>
-    <p class="section-intro">Explore important places, cities, dungeons, and landmarks in our campaign world.</p>
-
     <div class="locations-container">
-      <div class="location-section">
-        <h2>Major Cities</h2>
-        <div v-if="getCitiesLocations().length" class="entity-grid">
-          <EntityCard 
-            v-for="location in getCitiesLocations()" 
-            :key="location.id" 
-            :entity="location" 
-            entityType="location" 
+      <!-- Iterate through Provinces -->
+      <div 
+        v-for="province in provinces" 
+        :key="province.id" 
+        class="location-section province-section"
+      >
+        <!-- Display Province Card -->
+        <EntityCard
+          :entity="province"
+          entityType="location"
+          :class="['location-card', `location-type-${province.type}`]"
+        />
+        
+        <!-- Nested Locations (Capitals, Cities within this Province) -->
+        <div v-if="getLocationsInProvince(province.id).length" class="nested-locations entity-grid">
+          <EntityCard
+            v-for="location in getLocationsInProvince(province.id)"
+            :key="location.id"
+            :entity="location"
+            entityType="location"
+            :class="['location-card', `location-type-${location.type}`]"
           />
         </div>
-        <p v-else class="empty-message">No major cities discovered yet.</p>
+        <p v-else class="empty-message nested-empty">No known locations within {{ province.name }}.</p>
       </div>
+      <p v-if="!provinces.length" class="empty-message">No provinces recorded yet.</p>
 
-      <div class="location-section">
+      <!-- Dungeons & Ruins Section (Conditional) -->
+      <div v-if="dungeons.length" class="location-section">
         <h2>Dungeons & Ruins</h2>
-        <div v-if="getDungeonsLocations().length" class="entity-grid">
+        <div class="entity-grid">
           <EntityCard 
-            v-for="location in getDungeonsLocations()" 
+            v-for="location in dungeons" 
             :key="location.id" 
             :entity="location" 
             entityType="location" 
           />
         </div>
-        <p v-else class="empty-message">No dungeons or ruins explored yet.</p>
       </div>
 
-      <div class="location-section">
+      <!-- Points of Interest Section (Conditional) -->
+      <div v-if="pointsOfInterest.length" class="location-section">
         <h2>Points of Interest</h2>
-        <div v-if="getPointsOfInterestLocations().length" class="entity-grid">
+        <div class="entity-grid">
           <EntityCard 
-            v-for="location in getPointsOfInterestLocations()" 
+            v-for="location in pointsOfInterest" 
             :key="location.id" 
             :entity="location" 
             entityType="location" 
           />
         </div>
-        <p v-else class="empty-message">No notable landmarks discovered yet.</p>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { getLocations } from '../store/worldData';
+// Import the raw data instead of the getter function
+import { locations } from '../store/locations'; 
 import EntityCard from '../components/EntityCard.vue';
 
 export default {
@@ -55,20 +68,107 @@ export default {
   components: {
     EntityCard
   },
-  methods: {
-    getCitiesLocations() {
-      return getLocations('city');
+  computed: {
+    // Filter locations directly within the component
+    allLocations() {
+      // In a real app, this might come from a Vuex store or API call
+      return locations; 
     },
-    getDungeonsLocations() {
-      return getLocations('dungeon');
+    provinces() {
+      return this.allLocations.filter(loc => loc.type === 'province');
     },
-    getPointsOfInterestLocations() {
-      return getLocations('poi');
+    dungeons() {
+      return this.allLocations.filter(loc => loc.type === 'dungeon');
+    },
+    pointsOfInterest() {
+      return this.allLocations.filter(loc => loc.type === 'poi');
     }
+  },
+  methods: {
+    getLocationsInProvince(provinceId) {
+      // Find locations (like capitals or cities) that list the provinceId in their connections
+      return this.allLocations.filter(loc => 
+        loc.type !== 'province' && // Exclude the province itself
+        loc.connections?.some(conn => conn.type === 'location' && conn.id === provinceId)
+      );
+    },
+    // Keep original getters for potential future use or different views if needed
+    // getCitiesLocations() { ... }, 
+    // getDungeonsLocations() { ... },
+    // getPointsOfInterestLocations() { ... }
   }
 };
 </script>
 
 <style scoped>
 /* Component-specific styles only - common styles moved to global CSS */
+.empty-message {
+  text-align: center;
+  margin-top: 1rem;
+  color: var(--text-muted);
+}
+
+.location-section {
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem; /* Add some space below each section */
+  border-bottom: 1px solid var(--background-tertiary); /* Separator line */
+}
+
+.location-section:last-child {
+  border-bottom: none; /* No line for the last section */
+}
+
+.province-section {
+  border-bottom: none; /* Provinces manage their own bottom margin */
+  margin-bottom: 2.5rem; /* More space after a province and its nested items */
+}
+
+.nested-locations {
+  margin-top: 1rem; /* Space between province card and nested items */
+  /* Removed margin-left and border-left for edge alignment */
+  padding-left: 0; /* Remove padding */
+  /* border-left: 2px solid var(--background-tertiary); /* Visual indicator for nesting - REMOVED */
+}
+
+.nested-empty {
+  /* Removed margin-left */
+  padding-left: 1rem; /* Add some padding to align text slightly */
+  font-style: italic;
+}
+
+/* Style Province cards */
+:deep(.location-card.location-type-province) {
+  border-left: 3px solid var(--color-accent); /* Thinner border */
+  background: rgba(var(--background-secondary-rgb), 0.1); /* Less prominent background */
+  margin-bottom: 0.5rem; /* Reduce bottom margin */
+  padding: 0;
+}
+
+:deep(.location-card) {
+  padding: 0;
+}
+
+
+:deep(.location-card.location-type-province .entity-description) {
+  margin-bottom: 0; /* Remove bottom margin */
+}
+
+:deep(.location-card .connections-header) {
+  margin-left: 1.25em;
+  padding-right: 0.5em;
+}
+
+
+
+/* Style Capital cards */
+:deep(.location-card.location-type-capital) {
+  border-left: 3px solid var(--color-primary); /* Example: Thinner primary border */
+  /* margin-left: 1rem; /* Adjust or remove if .nested-locations handles indentation */
+}
+
+:deep(.location-card.location-type-capital .entity-name) {
+  font-weight: bold; /* Bolder name for capitals */
+  color: var(--color-primary);
+}
+
 </style>

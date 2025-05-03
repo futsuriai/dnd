@@ -30,7 +30,8 @@
 </template>
 
 <script>
-import { getEntityConnections } from '../store/worldData';
+import { getEntityConnections, getLocation } from '../store/worldData'; // Import getLocation
+import { locations } from '../store/locations'; // Import locations data
 
 export default {
   name: 'EntityConnections',
@@ -38,7 +39,7 @@ export default {
     entityType: {
       type: String,
       required: true,
-      validator: value => ['character', 'npc', 'location', 'item'].includes(value)
+      validator: value => ['character', 'npc', 'location', 'item', 'lore'].includes(value)
     },
     entityId: {
       type: String,
@@ -51,8 +52,35 @@ export default {
     };
   },
   computed: {
+    parentProvinceId() {
+      if (this.entityType !== 'location') {
+        return null;
+      }
+      const currentLocation = locations.find(loc => loc.id === this.entityId);
+      if (!currentLocation || !currentLocation.connections) {
+        return null;
+      }
+      // Find a connection to a location entity that is a province
+      const provinceConnection = currentLocation.connections.find(conn => {
+        if (conn.type === 'location') {
+          const connectedLoc = getLocation(conn.id); // Use getLocation helper
+          return connectedLoc && connectedLoc.type === 'province';
+        }
+        return false;
+      });
+      return provinceConnection ? provinceConnection.id : null;
+    },
     connections() {
-      return getEntityConnections(this.entityType, this.entityId);
+      const rawConnections = getEntityConnections(this.entityType, this.entityId);
+      
+      // If this is a location and we found a parent province, filter out the connection back to it
+      if (this.parentProvinceId) {
+        return rawConnections.filter(conn => 
+          !(conn.entityType === 'location' && conn.id === this.parentProvinceId)
+        );
+      }
+      
+      return rawConnections; // Otherwise, return all connections
     },
     connectionNamesPreview() {
       if (this.connections.length === 0) return '';
@@ -75,9 +103,10 @@ export default {
         'location': '📌',
         'character': '👤',
         'npc': '👥',
-        'item': '🔮'
+        'item': '🔮',
+        'lore': '📜' // Add icon for lore
       };
-      return icons[type] || '📌';
+      return icons[type] || '🔗'; // Default icon
     },
     toggleConnections() {
       this.expanded = !this.expanded;
@@ -99,6 +128,8 @@ export default {
         routeName = 'NPCs';
       } else if (entityType === 'item') {
         routeName = 'Items';
+      } else if (entityType === 'lore') { // Add case for lore
+        routeName = 'Lore';
       } else {
         return;
       }

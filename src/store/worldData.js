@@ -3,21 +3,16 @@
 
 // Import data collections from separate files
 import { characters } from './characters.js';
-import { npcs } from './npcs.js';
+import { npcs } from '../../src_future/npcs.js';
 import { locations } from './locations.js';
-import { items } from './items.js';
+import { items } from '../../src_future/items.js';
 import { sessions } from './sessions.js';
-import { worldHistory } from './worldHistory.js';
+import { worldHistory } from '../../src_future/worldHistory.js';
+import { lore } from './lore.js';
 
 // HELPER FUNCTIONS
 
 // Getter functions
-export function getLocations(type = null) {
-  if (type) {
-    return locations.filter(loc => loc.type === type);
-  }
-  return locations;
-}
 
 export function getLocation(id) {
   return locations.find(loc => loc.id === id);
@@ -28,22 +23,43 @@ export function getCharacter(id) {
 }
 
 export function getNpc(id) {
-  return npcs.find(npc => npc.id === id);
-}
+    return npcs.find(npc => npc.id === id);
+  }
 
 export function getItem(id) {
-  return items.find(item => item.id === id);
+    return items.find(item => item.id === id);
 }
 
 export function getSession(id) {
-  return sessions.find(session => session.id === id);
+    return sessions.find(session => session.id === id);
+  }
+
+
+export function getLore(id) { // Updated to accept id
+  if (id) {
+    return lore.find(item => item.id === id);
+  }
+  return lore; // Return all if no id provided
+}
+
+export function getLocations(typeOrId) { // Updated to get by type or id
+  if (!typeOrId) {
+    return locations; // Return all if no type/id provided
+  }
+  // Check if it's likely an ID (simple check, adjust if needed)
+  if (locations.some(loc => loc.id === typeOrId)) {
+    return locations.find(loc => loc.id === typeOrId);
+  }
+  // Otherwise, filter by type
+  return locations.filter(loc => loc.type === typeOrId);
 }
 
 // Entity retrieval functions
 export function getEntity(type, id) {
   if (type === 'character') return getCharacter(id);
   if (type === 'npc') return getNpc(id);
-  if (type === 'location') return getLocation(id);
+  if (type === 'lore') return getLore(id); // Added lore retrieval
+  if (type === 'location') return getLocations(id);
   if (type === 'item') return getItem(id);
   if (type === 'session') return getSession(id);
   return null;
@@ -128,6 +144,7 @@ export function addSession(session) {
   return true;
 }
 
+
 // Connection functions
 export function getEntityConnections(type, id) {
   const entity = getEntity(type, id);
@@ -138,8 +155,10 @@ export function getEntityConnections(type, id) {
     const connectedEntity = getEntity(conn.type, conn.id);
 
     if (connectedEntity) {
+      // Use 'term' for lore, 'name' for others
+      const displayName = conn.type === 'lore' ? connectedEntity.term : connectedEntity.name;
       return {
-        name: connectedEntity.name,
+        name: displayName, // Use appropriate display name
         id: connectedEntity.id,
         reason: conn.reason,
         entityType: conn.type
@@ -149,24 +168,30 @@ export function getEntityConnections(type, id) {
   }).filter(Boolean);
 }
 
+// Updated addConnection to be potentially bidirectional if needed later,
+// but currently only adds to source as per original structure.
+// If bidirectional connections are desired, this function needs modification
+// to add the connection to the targetEntity as well.
 export function addConnection(sourceType, sourceId, targetType, targetId, reason) {
   const sourceEntity = getEntity(sourceType, sourceId);
-  const targetEntity = getEntity(targetType, targetId);
+  const targetEntity = getEntity(targetType, targetId); // Get target for validation
 
   if (!sourceEntity || !targetEntity) {
-    console.error('Source or target entity not found');
+    console.error('Source or target entity not found for connection:', { sourceType, sourceId, targetType, targetId });
     return false;
   }
 
-  // Initialize connections array if it doesn't exist
+  // Initialize connections array if it doesn't exist on source
   if (!sourceEntity.connections) {
     sourceEntity.connections = [];
   }
 
-  // Check if connection already exists
+  // Check if connection already exists on source
   const existingConnection = sourceEntity.connections.find(conn =>
     conn.type === targetType && conn.id === targetId
   );
+
+  const targetName = targetType === 'lore' ? targetEntity.term : targetEntity.name;
 
   if (existingConnection) {
     // Update reason if provided
@@ -174,16 +199,36 @@ export function addConnection(sourceType, sourceId, targetType, targetId, reason
       existingConnection.reason = reason;
     }
   } else {
-    // Add new connection
+    // Add new connection to source
     sourceEntity.connections.push({
       type: targetType,
       id: targetId,
-      reason: reason || `Connected to ${targetEntity.name}`
+      reason: reason || `Connected to ${targetName}`
     });
   }
 
+  // --- Optional: Add connection to target for bidirectionality ---
+  // This part is commented out to maintain current behavior. Uncomment if needed.
+  /*
+  if (!targetEntity.connections) {
+    targetEntity.connections = [];
+  }
+  const existingReverseConnection = targetEntity.connections.find(conn =>
+    conn.type === sourceType && conn.id === sourceId
+  );
+  const sourceName = sourceType === 'lore' ? sourceEntity.term : sourceEntity.name;
+  if (!existingReverseConnection) {
+     targetEntity.connections.push({
+       type: sourceType,
+       id: sourceId,
+       reason: `Connected from ${sourceName}` // Or use the provided reason? Needs decision.
+     });
+  }
+  */
+
   return true;
 }
+
 
 // Export the data collections for use in other files
 export {
@@ -192,13 +237,15 @@ export {
   locations,
   items,
   sessions,
-  worldHistory
+  worldHistory,
+  lore
 };
 
 // Export default worldData object for easy importing
 export default {
   characters,
   npcs,
+  lore,
   locations,
   items,
   sessions,
@@ -207,6 +254,7 @@ export default {
   getLocation,
   getCharacter,
   getNpc,
+  getLore,
   getItem,
   getSession,
   getEntity,

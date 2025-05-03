@@ -3,7 +3,7 @@
     <h1>Campaign Sessions</h1>
     <p class="section-intro">Chronicles of our adventures and key events from each session.</p>
 
-    <div class="sessions-container">
+    <div v-if="sessions.length" class="sessions-container">
       <div v-for="session in sessions" :key="session.id" class="session-card" :id="session.id">
         <div class="session-header" :class="{ 'upcoming': session.upcoming }">
           <div class="header-top-line">
@@ -32,6 +32,7 @@
         </div>
       </div>
     </div>
+    <p v-else class="empty-message">No sessions recorded yet.</p>
   </div>
 </template>
 
@@ -136,6 +137,12 @@ export default {
 
 .highlights li {
   margin-bottom: 0.5rem;
+}
+
+.empty-message {
+  text-align: center;
+  margin-top: 2rem;
+  color: var(--text-muted);
 }
 
 @media (max-width: 600px) {

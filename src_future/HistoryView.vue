@@ -3,7 +3,7 @@
       <h1>World History & Lore</h1>
       <p class="section-intro">The forgotten past and present of the world.</p>
   
-      <div class="timeline">
+      <div v-if="eras && eras.length" class="timeline">
         <div class="era" v-for="(era, index) in eras" :key="index">
           <div class="era-header">
             <h2>{{ era.name }}</h2>
@@ -27,6 +27,7 @@
           </div>
         </div>
       </div>
+      <p v-else class="empty-message">No history recorded yet.</p>
     </div>
   </template>
   
@@ -174,5 +175,11 @@
     .era-year {
       margin-bottom: 0.5rem;
     }
+  }
+
+  .empty-message {
+    text-align: center;
+    margin-top: 2rem;
+    color: var(--text-muted);
   }
   </style>

@@ -1,11 +1,12 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
 import HomeView from '../views/HomeView.vue';
 import CharactersView from '../views/CharactersView.vue';
-import NpcView from '../views/NpcView.vue';
-import HistoryView from '../views/HistoryView.vue';
-import ItemsView from '../views/ItemsView.vue';
+// import NpcView from '../views/NpcView.vue';
+// import HistoryView from '../views/HistoryView.vue';
+// import ItemsView from '../views/ItemsView.vue';
 import SessionsView from '../views/SessionsView.vue';
 import LocationsView from '../views/LocationsView.vue';
+import LoreView from '../views/LoreView.vue'; // Import LoreView
 
 const routes = [
   {
@@ -18,21 +19,21 @@ const routes = [
     name: 'Characters',
     component: CharactersView,
   },
-  {
-    path: '/npcs',
-    name: 'NPCs',
-    component: NpcView,
-  },
-  {
-    path: '/history',
-    name: 'History',
-    component: HistoryView,
-  },
-  {
-    path: '/items',
-    name: 'Items',
-    component: ItemsView,
-  },
+  // {
+  //   path: '/npcs',
+  //   name: 'NPCs',
+  //   component: NpcView,
+  // },
+  // {
+  //   path: '/history',
+  //   name: 'History',
+  //   component: HistoryView,
+  // },
+  // {
+  //   path: '/items',
+  //   name: 'Items',
+  //   component: ItemsView,
+  // },
   {
     path: '/sessions',
     name: 'Sessions',
@@ -42,6 +43,11 @@ const routes = [
     path: '/locations',
     name: 'Locations',
     component: LocationsView,
+  },
+  {
+    path: '/lore', // Add lore route
+    name: 'Lore',
+    component: LoreView,
   },
   // Add other routes here (e.g., Locations, Sessions)
 ];
