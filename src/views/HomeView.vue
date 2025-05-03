@@ -35,7 +35,7 @@
     data() {
       return {
         campaignName: '<Untitled Gaslamp Adventures>',
-        worldName: 'New Aetherwick (TBD)',
+        worldName: 'The Hariolar Empire',
         currentLocation: 'Session 0',
         currentQuest: 'Session 0',
         nextSession: 'Sunday, May 4th at 1:00 PM'
