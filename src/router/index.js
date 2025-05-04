@@ -7,6 +7,7 @@ import CharactersView from '../views/CharactersView.vue';
 import SessionsView from '../views/SessionsView.vue';
 import LocationsView from '../views/LocationsView.vue';
 import LoreView from '../views/LoreView.vue'; // Import LoreView
+import BastionCityView from '../views/BastionCityView.vue' // Import the new view
 
 const routes = [
   {
@@ -43,6 +44,11 @@ const routes = [
     path: '/locations',
     name: 'Locations',
     component: LocationsView,
+  },
+  {
+    path: '/bastion-city',
+    name: 'bastion-city',
+    component: BastionCityView // Add route for Bastion City
   },
   {
     path: '/lore', // Add lore route

@@ -42,6 +42,17 @@ export const locations = [
       { type: 'location', id: 'pharus', reason: 'Contains Pharus (Capital)' },
       { type: 'lore', id: 'pilgrimage-enlightened', reason: 'Ending point of the Pilgrimage' }
     ]
+  },
+  {
+    id: 'duskbreaker-lighthouse',
+    name: 'Duskbreaker Lighthouse',
+    type: 'landmark', // Or 'poi' if you prefer
+    description: 'A tall lighthouse on the coast of Bastion City, known for its magical beacon.',
+    fullText: 'The locus of [[Light Crystal]] research in the empire. Composed of various magic users, artificers, and artisans, they all work together to develop the latest technology.\n\nDespite being headquartered in a tall tower in the east side of [[Bastion City]], most of its finding are exported to [[Pharus]]. The first use case of light crystals were replacing the candlelit streetlamps in Bastion City.',
+    tags: ['landmark', 'bastion city'],
+    connections: [
+      { type: 'location', id: 'bastion-city', relationship: 'Located In' }
+    ]
   }
 ];
 

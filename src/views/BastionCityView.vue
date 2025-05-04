@@ -1,14 +1,14 @@
 <template>
   <div class="content-section">
-    <h1>Player Characters</h1>
-
+    <h1>Bastion City</h1>
+    <p>The capital of Hieroterra, where the campaign begins.</p>
+    
     <div class="entity-grid">
       <EntityCard 
-        v-for="character in characters" 
-        :key="character.id" 
-        :entity="character" 
-        entityType="character"
-        :showAvatar="true"
+        v-for="location in bastionLocations" 
+        :key="location.id" 
+        :entity="location" 
+        entityType="location"
         @show-full-text="showFullTextModal" 
       />
     </div>
@@ -23,23 +23,32 @@
 </template>
 
 <script>
-import { characters } from '../store/worldData';
-import EntityCard from '../components/EntityCard.vue';
+import EntityCard from '@/components/EntityCard.vue';
 import FullTextModal from '@/components/FullTextModal.vue'; // Import the modal
+import { locations } from '@/store/locations.js';
 
 export default {
-  name: 'CharactersView',
+  name: 'BastionCityView',
   components: {
     EntityCard,
     FullTextModal // Register the modal
   },
   data() {
     return {
-      characters,
       isModalVisible: false, // State for modal visibility
       modalText: '', // State for modal content
       modalTitle: '' // Add state for modal title
     };
+  },
+  computed: {
+    bastionLocations() {
+      // Filter locations that are explicitly tagged as 'bastion city' 
+      // or are connected to 'bastion-city'
+      return locations.filter(loc => 
+        loc.tags?.includes('bastion city') || 
+        loc.connections?.some(conn => conn.type === 'location' && conn.id === 'bastion-city')
+      );
+    }
   },
   methods: {
     showFullTextModal(payload) { // Accept payload object
@@ -53,9 +62,16 @@ export default {
       this.modalTitle = ''; // Clear title on close
     }
   }
-}
+};
 </script>
 
 <style scoped>
-/* Component-specific styles only - common styles moved to global CSS */
+.empty-message {
+  text-align: center;
+  margin-top: 1rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* Add any specific styles for this view if needed */
 </style>

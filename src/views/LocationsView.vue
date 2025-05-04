@@ -13,7 +13,13 @@
           :entity="province"
           entityType="location"
           :class="['location-card', `location-type-${province.type}`]"
-        />
+          @show-full-text="showFullTextModal"
+        >
+          <!-- Add a link specifically for Bastion City -->
+          <template v-if="province.id === 'bastion-city'" #actions>
+            <router-link :to="{ name: 'bastion-city' }" class="button-link">View City Locations</router-link>
+          </template>
+        </EntityCard>
         
         <!-- Nested Locations (Capitals, Cities within this Province) -->
         <div v-if="getLocationsInProvince(province.id).length" class="nested-locations entity-grid">
@@ -23,6 +29,7 @@
             :entity="location"
             entityType="location"
             :class="['location-card', `location-type-${location.type}`]"
+            @show-full-text="showFullTextModal"
           />
         </div>
         <p v-else class="empty-message nested-empty">No known locations within {{ province.name }}.</p>
@@ -38,6 +45,7 @@
             :key="location.id" 
             :entity="location" 
             entityType="location" 
+            @show-full-text="showFullTextModal"
           />
         </div>
       </div>
@@ -51,10 +59,18 @@
             :key="location.id" 
             :entity="location" 
             entityType="location" 
+            @show-full-text="showFullTextModal"
           />
         </div>
       </div>
     </div>
+    
+    <FullTextModal 
+      :visible="isModalVisible" 
+      :title="modalTitle" 
+      :text="modalText" 
+      @close="closeModal" 
+    />
   </div>
 </template>
 
@@ -62,11 +78,21 @@
 // Import the raw data instead of the getter function
 import { locations } from '../store/locations'; 
 import EntityCard from '../components/EntityCard.vue';
+import FullTextModal from '@/components/FullTextModal.vue'; // Import the modal
 
 export default {
   name: 'LocationsView',
   components: {
-    EntityCard
+    EntityCard,
+    FullTextModal // Register the modal
+  },
+  data() {
+    return {
+      locations: locations,
+      isModalVisible: false, // State for modal visibility
+      modalText: '', // State for modal content
+      modalTitle: '' // Add state for modal title
+    };
   },
   computed: {
     // Filter locations directly within the component
@@ -92,6 +118,16 @@ export default {
         loc.connections?.some(conn => conn.type === 'location' && conn.id === provinceId)
       );
     },
+    showFullTextModal(payload) { // Accept payload object
+      this.modalTitle = payload.title; // Set title
+      this.modalText = payload.text; // Set text
+      this.isModalVisible = true;
+    },
+    closeModal() { // Method to hide modal
+      this.isModalVisible = false;
+      this.modalText = '';
+      this.modalTitle = ''; // Clear title on close
+    }
     // Keep original getters for potential future use or different views if needed
     // getCitiesLocations() { ... }, 
     // getDungeonsLocations() { ... },

@@ -44,6 +44,10 @@ export default {
     entityId: {
       type: String,
       required: true
+    },
+    filterOutConnectionId: { // Add the new prop
+      type: String,
+      default: null
     }
   },
   data() {
@@ -71,27 +75,38 @@ export default {
       return provinceConnection ? provinceConnection.id : null;
     },
     connections() {
-      const rawConnections = getEntityConnections(this.entityType, this.entityId);
+      // Fetch connections using the helper function
+      let rawConnections = getEntityConnections(this.entityType, this.entityId);
       
-      // If this is a location and we found a parent province, filter out the connection back to it
-      if (this.parentProvinceId) {
-        return rawConnections.filter(conn => 
-          !(conn.entityType === 'location' && conn.id === this.parentProvinceId)
+      // Filter out the specific connection if filterOutConnectionId is provided
+      if (this.filterOutConnectionId) {
+        rawConnections = rawConnections.filter(conn => 
+          !(conn.entityType === 'location' && conn.id === this.filterOutConnectionId)
         );
       }
       
-      return rawConnections; // Otherwise, return all connections
+      // Existing logic to filter out parent province connection (if applicable)
+      // Note: This might need adjustment if filterOutConnectionId *is* the parent province ID,
+      // but the current logic should handle it okay as it filters based on the ID.
+      if (this.parentProvinceId && this.parentProvinceId !== this.filterOutConnectionId) {
+         rawConnections = rawConnections.filter(conn => 
+           !(conn.entityType === 'location' && conn.id === this.parentProvinceId)
+         );
+      }
+      
+      return rawConnections; 
     },
     connectionNamesPreview() {
-      if (this.connections.length === 0) return '';
+      const connectionsToPreview = this.connections; // Use the computed connections
+      if (!connectionsToPreview || connectionsToPreview.length === 0) return '';
       
       // Get first 3 names and join with commas
-      const names = this.connections.slice(0, 3).map(c => c.name);
+      const names = connectionsToPreview.slice(0, 3).map(c => c.name);
       let preview = names.join(', ');
       
       // Add ellipsis if there are more connections
-      if (this.connections.length > 3) {
-        preview += ` +${this.connections.length - 3} more`;
+      if (connectionsToPreview.length > 3) { // Use connectionsToPreview here
+        preview += ` +${connectionsToPreview.length - 3} more`;
       }
       
       return preview;

@@ -11,7 +11,7 @@
         </div>
         
         <div class="entity-title-container">
-          <h3 class="entity-title">{{ entity.name }}</h3>
+          <h3 class="entity-title">{{ entityType === 'lore' ? entity.term : entity.name }}</h3>
           
           <!-- Subtitle section -->
           <div v-if="getSubtitle" class="entity-subtitle">
@@ -99,6 +99,10 @@
       <!-- Description Section -->
       <div class="entity-description">
         <p>{{ entity.description || entity.bio }}</p>
+        <!-- Add Read More hint -->
+        <a v-if="entity.fullText" @click.prevent="showFullText" href="#" class="read-more-link">
+          Read More...
+        </a>
       </div>
       
       <!-- Action Buttons Section -->
@@ -114,7 +118,12 @@
     </div>
     
     <!-- EntityConnections Component -->
-    <EntityConnections :entityType="entityType" :entityId="entity.id" v-if="entity.id" />
+    <EntityConnections 
+      :entityType="entityType" 
+      :entityId="entity.id" 
+      :filter-out-connection-id="filterOutConnectionId"
+      v-if="entity.id" 
+    />
   </div>
 </template>
 
@@ -134,11 +143,15 @@ export default {
     entityType: {
       type: String,
       required: true,
-      validator: value => ['character', 'npc', 'location', 'item'].includes(value)
+      validator: value => ['character', 'npc', 'location', 'item', 'lore'].includes(value) // Add 'lore'
     },
     showAvatar: {
       type: Boolean,
       default: false
+    },
+    filterOutConnectionId: { // Add the new prop
+      type: String,
+      default: null
     }
   },
   computed: {
@@ -210,6 +223,13 @@ export default {
       }
       
       return '';
+    },
+    showFullText() {
+      // Emit an object containing both title and text
+      this.$emit('show-full-text', { 
+        title: this.entityType === 'lore' ? this.entity.term : this.entity.name, // Use term for lore title
+        text: this.entity.fullText 
+      });
     }
   }
 }
@@ -331,6 +351,20 @@ export default {
 .entity-description p {
   margin: 0;
   line-height: 1.6;
+}
+
+/* Read More link styling */
+.read-more-link {
+  display: inline-block;
+  margin-top: 0.5rem;
+  color: var(--color-accent);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+.read-more-link:hover {
+  text-decoration: underline;
 }
 
 /* Actions section */

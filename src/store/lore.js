@@ -2,6 +2,41 @@
 
 export const lore = [
   {
+    id: 'light-crystals',
+    term: 'Light Crystals',
+    description: 'A recently discovered technology revolutionizing The Hariolar Empire, involving magically rechargeable crystals found in ancient ruins.',
+    fullText: `A recently discovered technology that is causing a technological revolution in [[The Hariolar Empire/The Hariolar Empire|The Hariolar Empire]]. The study and development of light crystal technology is headquartered by the [[Duskbreaker Lighthouse]] in [[Bastion City]].
+
+Their first public use were replacing the candle-powered streetlamps of Bastion City.
+
+## Discovery
+
+Light crystals were first found by researchers who were exploring old [[Shadowed]] ruins from the [[Timeline of the World#The Age of Shadow]]. Further study was needed and researchers from across the empire came to Bastion City to study the crystals. Eventually, it was discovered that these crystals have an innate magical energy that can be used to power various things. Moreover, with little effort magic users can recharge these crystals.
+
+This innovation led to more research around Shadowed ruins where upon further digging in various ruins through the [[Hieroterra]] discovered a bounty of crystals. Since then a strong link between the Shadowed and the light crystals have been established.
+
+8 years ago (643 AE) , it was also discovered that deep within the Sunstone Quarry. Curiously, among them were the "Standing Stones", apparent artifacts from The Age of Shadow. 
+
+This led to further explorations of the quarry and mines within the empire, wherein more light crystals were found among ruins from the Age of Shadow.
+
+## Initial Controversy
+
+At first, the [[Eulogia of the Eternal Light]] opposed the usage of these crystals as they were found among the ruins of the Shadowed. The crystals and their research were deemed blasphemous in the eyes of the Eulogia given their obvious ties to the Shadowed.
+
+It was only after anonymous pamphlets were spread around the empire, arguing that the light crystals were a means of repent for the Shadowed that the Eulogia's stance changed.
+
+Rumours have it that the Imperial Family as well as the aristocracy favoured the technology. In even quieter whispers, it seemed the Eulogia itself was divided on the issue. The pamphlets gave the theological out that the Eulogia needed. Today, the Eulogia fully supports the research and is one of the main sponsors of the [[Duskbreaker Lighthouse]].`,
+    connections: [
+      { type: 'location', id: 'hariolar-empire', reason: 'Technological revolution centered here' },
+      { type: 'location', id: 'duskbreaker-lighthouse', reason: 'Headquarters for research' },
+      { type: 'location', id: 'bastion-city', reason: 'First public use (streetlamps), research hub' },
+      { type: 'lore', id: 'curse-shadowed', reason: 'Found in Shadowed ruins, initial controversy' },
+      { type: 'location', id: 'hieroterra', reason: 'Found in ruins here' },
+      // Note: Sunstone Quarry is mentioned but doesn't have a specific ID yet. Add if created.
+      { type: 'lore', id: 'eulogia-eternal-light', reason: 'Initial opposition, later support' }
+    ]
+  },
+  {
     id: 'nites', // Added ID
     term: 'Nites',
     description: 'The title for The Eternal Light when she walked this land. From Latin *nitēs*, present 2nd person singular, meaning "to shine, sparkle, radiant."\n\nPronounced knee-tehz.',
