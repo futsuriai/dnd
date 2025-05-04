@@ -4,19 +4,19 @@
       <!-- Header Section -->
       <div class="entity-header" :class="getSpecialClasses">
         <!-- Avatar/Icon Section (for characters or with custom icon) -->
-        <div v-if="showAvatar" class="avatar-container">
+        <div v-if="showAvatar" class="avatar-container" @click="handleAvatarClick" :style="{ cursor: entity.portraitUrl ? 'pointer' : 'default' }">
           <div class="avatar-placeholder">
-            <span>{{ getInitials(entity.name) }}</span>
+            <!-- Conditionally render image or initials -->
+            <img v-if="entity.avatarUrl" :src="entity.avatarUrl" :alt="entity.name + ' avatar'" class="avatar-image"/>
+            <span v-else>{{ getInitials(entity.name) }}</span>
           </div>
         </div>
         
         <div class="entity-title-container">
           <h3 class="entity-title">{{ entityType === 'lore' ? entity.term : entity.name }}</h3>
           
-          <!-- Subtitle section -->
-          <div v-if="getSubtitle" class="entity-subtitle">
-            {{ getSubtitle }}
-          </div>
+          <!-- Subtitle section - Use v-html for line break -->
+          <div v-if="getSubtitle" class="entity-subtitle" v-html="getSubtitle"></div>
           
           <!-- Status badge (for NPCs) -->
           <div v-if="entityType === 'npc' && entity.status" 
@@ -42,12 +42,7 @@
         </template>
         
         <!-- Character entities -->
-        <template v-else-if="entityType === 'character'">
-          <div class="detail-row">
-            <span class="detail-label">Player:</span>
-            <span class="detail-value">{{ entity.player }}</span>
-          </div>
-          
+        <template v-else-if="entityType === 'character'">         
           <div class="detail-row">
             <span class="detail-label">Level:</span>
             <span class="detail-value">{{ entity.level }}</span>
@@ -98,7 +93,8 @@
       
       <!-- Description Section -->
       <div class="entity-description">
-        <p>{{ entity.description || entity.bio }}</p>
+        <!-- Use v-html for potential markdown/links in bio, ensure safety if needed -->
+        <p v-html="entity.description || entity.bio"></p> 
         <!-- Add Read More hint -->
         <a v-if="entity.fullText" @click.prevent="showFullText" href="#" class="read-more-link">
           Read More...
@@ -149,6 +145,14 @@ export default {
       type: Boolean,
       default: false
     },
+    avatarUrl: { // Add avatarUrl prop
+      type: String,
+      default: null
+    },
+    portraitUrl: { // Add portraitUrl prop
+      type: String,
+      default: null
+    },
     filterOutConnectionId: { // Add the new prop
       type: String,
       default: null
@@ -168,7 +172,8 @@ export default {
     },
     getSubtitle() {
       if (this.entityType === 'character') {
-        return `${this.entity.race} ${this.entity.class}`;
+        // Return HTML with a line break
+        return `${this.entity.race}<br>${this.entity.class}`;
       }
       return null;
     },
@@ -230,6 +235,14 @@ export default {
         title: this.entityType === 'lore' ? this.entity.term : this.entity.name, // Use term for lore title
         text: this.entity.fullText 
       });
+    },
+    handleAvatarClick() {
+      if (this.entity.portraitUrl) {
+        this.$emit('show-portrait', { 
+          title: this.entity.name,
+          imageUrl: this.entity.portraitUrl 
+        });
+      }
     }
   }
 }
@@ -280,14 +293,16 @@ export default {
 
 .entity-subtitle {
   color: var(--color-text-muted);
-  margin: 0.2rem 0 0;
+  margin: 0.3rem 0 0.5rem; /* Increased bottom margin */
   font-size: 0.9rem;
   font-style: italic;
+  line-height: 1.4; /* Added line-height */
 }
 
 /* Avatar styling */
 .avatar-container {
   margin-right: 1rem;
+  flex-shrink: 0; /* Prevent shrinking */
 }
 
 .avatar-placeholder {
@@ -303,6 +318,13 @@ export default {
   font-weight: bold;
   font-family: var(--font-display);
   border: 2px solid var(--color-text);
+  overflow: hidden; /* Hide parts of image that overflow */
+}
+
+.avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Cover the area, cropping if needed */
 }
 
 /* Metadata section */
@@ -349,8 +371,15 @@ export default {
 }
 
 .entity-description p {
-  margin: 0;
+  margin: 0 0 0.5rem 0; /* Add bottom margin */
   line-height: 1.6;
+  /* Consider adding max-height and overflow for very long text */
+  /* max-height: 100px; */
+  /* overflow: hidden; */
+  /* text-overflow: ellipsis; */
+  /* display: -webkit-box; */
+  /* -webkit-line-clamp: 4; */ /* Limit to 4 lines */
+  /* -webkit-box-orient: vertical; */
 }
 
 /* Read More link styling */
