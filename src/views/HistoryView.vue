@@ -1,10 +1,10 @@
 <template>
     <div class="content-section">
-      <h1>World History & Lore</h1>
-      <p class="section-intro">The forgotten past and present of the world.</p>
+      <h1>NOT CANONICAL YET - World History & Lore</h1>
+      <p class="section-intro">PLACEHOLDER FOR DISPLAY PURPOSES - NOT CANONICAL</p>
   
-      <div v-if="eras && eras.length" class="timeline">
-        <div class="era" v-for="(era, index) in eras" :key="index">
+      <div v-if="reversedEras && reversedEras.length" class="timeline">
+        <div class="era" v-for="(era, index) in reversedEras" :key="index">
           <div class="era-header">
             <h2>{{ era.name }}</h2>
             <span class="era-year">{{ era.period }}</span>
@@ -18,7 +18,7 @@
             <div class="key-events" v-if="era.events && era.events.length">
               <h3>Key Events</h3>
               <ul>
-                <li v-for="(event, eIndex) in era.events" :key="eIndex">
+                <li v-for="(event, eIndex) in sortedEvents(era.events)" :key="eIndex">
                   <span class="event-year">{{ event.year }}:</span> 
                   {{ event.description }}
                 </li>
@@ -32,7 +32,7 @@
   </template>
   
   <script>
-  import { worldHistory } from '../store/worldData';
+  import { worldHistory } from '../store/worldHistory';
   
   export default {
     name: 'HistoryView',
@@ -40,6 +40,26 @@
       return {
         eras: worldHistory.eras || []
       };
+    },
+    computed: {
+      reversedEras() {
+        // Return a reversed copy of the eras array to show newest first
+        return [...this.eras].reverse();
+      }
+    },
+    methods: {
+      sortedEvents(events) {
+        // For events within an era, sort them in reverse chronological order
+        // We're making a shallow copy to avoid modifying the original data
+        if (!events || !events.length) return [];
+        return [...events].sort((a, b) => {
+          // Strip out any non-numeric prefix (like "c. ") and convert to number
+          const yearA = parseInt(a.year.replace(/[^\d-]/g, ''));
+          const yearB = parseInt(b.year.replace(/[^\d-]/g, ''));
+          // Reverse sort (newest first)
+          return yearB - yearA;
+        });
+      }
     }
   }
   </script>

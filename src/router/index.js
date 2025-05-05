@@ -2,7 +2,7 @@ import { createRouter, createWebHashHistory } from 'vue-router';
 import HomeView from '../views/HomeView.vue';
 import CharactersView from '../views/CharactersView.vue';
 // import NpcView from '../views/NpcView.vue';
-// import HistoryView from '../views/HistoryView.vue';
+import HistoryView from '../views/HistoryView.vue';
 // import ItemsView from '../views/ItemsView.vue';
 import SessionsView from '../views/SessionsView.vue';
 import LocationsView from '../views/LocationsView.vue';
@@ -25,11 +25,11 @@ const routes = [
   //   name: 'NPCs',
   //   component: NpcView,
   // },
-  // {
-  //   path: '/history',
-  //   name: 'History',
-  //   component: HistoryView,
-  // },
+  {
+    path: '/history',
+    name: 'History',
+    component: HistoryView,
+  },
   // {
   //   path: '/items',
   //   name: 'Items',

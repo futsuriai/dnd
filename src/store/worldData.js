@@ -7,7 +7,7 @@ import { npcs } from '../../src_future/npcs.js';
 import { locations } from './locations.js';
 import { items } from '../../src_future/items.js';
 import { sessions } from './sessions.js';
-import { worldHistory } from '../../src_future/worldHistory.js';
+import { worldHistory } from './worldHistory.js';
 import { lore } from './lore.js';
 
 // HELPER FUNCTIONS

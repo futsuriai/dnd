@@ -18,7 +18,7 @@
           <li><router-link to="/locations">Locations</router-link></li>
           <li><router-link to="/bastion-city">Bastion City</router-link> <!-- Add link to Bastion City --></li>
           <!-- <li><router-link to="/items">Items</router-link></li> -->
-          <!-- <li><router-link to="/history">History</router-link></li> -->
+          <li><router-link to="/history">History</router-link></li>
           <li><router-link to="/lore">Lore</router-link></li>
         </ul>
       </nav>
