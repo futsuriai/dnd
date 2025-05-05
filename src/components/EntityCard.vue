@@ -172,8 +172,9 @@ export default {
     },
     getSubtitle() {
       if (this.entityType === 'character') {
-        // Return HTML with a line break
-        return `${this.entity.race}<br>${this.entity.class}`;
+        // Create a more styled display with distinct lines for race and class
+        return `<div class="char-race">${this.entity.race}</div>
+                <div class="char-class">${this.entity.class}</div>`;
       }
       return null;
     },
@@ -293,10 +294,10 @@ export default {
 
 .entity-subtitle {
   color: var(--color-text-muted);
-  margin: 0.3rem 0 0.5rem; /* Increased bottom margin */
+  margin: 0.3rem 0 0.5rem;
   font-size: 0.9rem;
   font-style: italic;
-  line-height: 1.4; /* Added line-height */
+  line-height: 1.6; /* Increased line height for better spacing */
 }
 
 /* Avatar styling */
@@ -346,22 +347,42 @@ export default {
 /* Detail rows for character and NPC */
 .detail-row {
   display: flex;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.7rem;
+  flex-wrap: wrap; /* Allow wrapping for long backgrounds */
 }
 
 .detail-label {
   font-weight: bold;
   color: var(--color-primary);
-  width: 100px;
+  min-width: 100px;
+  margin-right: 0.5rem;
 }
 
 .detail-value {
-  flex-grow: 1;
+  flex: 1;
+  word-wrap: break-word; /* Handle long text */
+  max-width: 100%; /* Prevent overflow */
+  padding: 0 0.25rem; /* Add some padding */
 }
 
 .detail-icon {
   margin-right: 0.5rem;
   font-size: 1.2rem;
+}
+
+/* Character race and class styling */
+.char-race, .char-class {
+  margin: 0.15rem 0;
+  line-height: 1.3;
+}
+
+.char-race {
+  color: var(--color-text-muted);
+}
+
+.char-class {
+  color: var(--color-text-muted);
+  font-weight: 500;
 }
 
 /* Description section */

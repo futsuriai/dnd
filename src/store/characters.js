@@ -53,7 +53,7 @@ export const characters = [
     class: 'Gloomstalker Ranger',
     level: 3,
     background: 'Eldritch/Ancient',
-    bio: 'Connected to death, decay, and the darker aspects of nature. Lost their prey and purpose and is now adapting to a strange new world. Has an ancient, eldritch background with fey connections.',
+    bio: 'Connected to death and the darker aspects of nature. An ancient hunter who lost his prey and purpose. Spends his time observing this new world develop.  Will he continue to aimlessly flow with the tides of time or will he finally find prey worth hunting?',
     dndBeyondLink: 'https://www.dndbeyond.com/characters/145878200',
     avatarUrl: getImageUrl(avatarModules, 'nyx', 'avatar'),
     portraitUrl: getImageUrl(portraitModules, 'nyx', 'portrait'),
