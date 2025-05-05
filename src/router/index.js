@@ -47,7 +47,7 @@ const routes = [
   },
   {
     path: '/bastion-city',
-    name: 'bastion-city',
+    name: 'Bastion City',
     component: BastionCityView // Add route for Bastion City
   },
   {
