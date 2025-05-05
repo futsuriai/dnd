@@ -1,11 +1,6 @@
 <template>
     <div class="content-section">
       <h1>{{ campaignName }}</h1>
-      <!-- Campaign banner image -->
-      <div class="banner-container">
-        <img src="../assets/gaslamp.jpg" alt="Campaign Banner" class="campaign-banner">
-      </div>
-      
       <div class="campaign-quick-info">
         <div class="info-card">
           <h3 class="fancy-title">Current Location</h3>
@@ -21,6 +16,10 @@
           <h3 class="fancy-title">Next Session</h3>
           <p>{{ nextSession }}</p>
         </div>
+      </div>
+      <!-- Campaign banner image -->
+      <div class="banner-container">
+        <img src="../assets/gaslamp.jpg" alt="Campaign Banner" class="campaign-banner">
       </div>
     </div>
   </template>
@@ -77,7 +76,6 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 1.5rem;
-    margin-top: 3rem;
   }
   
   .info-card {
