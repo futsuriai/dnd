@@ -34,10 +34,10 @@
     name: 'HomeView',
     data() {
       return {
-        campaignName: '<Untitled Gaslamp Adventures>',
+        campaignName: 'In the Shadows of the Light',
         worldName: 'The Hariolar Empire',
-        currentLocation: 'Session 0',
-        currentQuest: 'Session 0',
+        currentLocation: 'Bastion City',
+        currentQuest: 'Session 1',
         nextSession: 'Sunday, May 4th at 1:00 PM'
       };
     }
