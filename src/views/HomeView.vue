@@ -1,10 +1,6 @@
 <template>
     <div class="content-section">
       <h1>{{ campaignName }}</h1>
-      <p class="intro-text">
-        Welcome to the central hub for our adventures in the realm of {{ worldName }}. 
-      </p>
-      
       <!-- Campaign banner image -->
       <div class="banner-container">
         <img src="../assets/gaslamp.jpg" alt="Campaign Banner" class="campaign-banner">
