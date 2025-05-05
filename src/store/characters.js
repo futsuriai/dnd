@@ -52,7 +52,7 @@ export const characters = [
     race: 'Shadar-kai',
     class: 'Gloomstalker Ranger',
     level: 3,
-    background: 'Eldritch/Ancient',
+    background: 'Ancient Fey',
     bio: 'Connected to death and the darker aspects of nature. An ancient hunter who lost his prey and purpose. Spends his time observing this new world develop.  Will he continue to aimlessly flow with the tides of time or will he finally find prey worth hunting?',
     dndBeyondLink: 'https://www.dndbeyond.com/characters/145878200',
     avatarUrl: getImageUrl(avatarModules, 'nyx', 'avatar'),
