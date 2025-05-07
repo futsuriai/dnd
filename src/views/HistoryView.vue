@@ -1,7 +1,7 @@
 <template>
     <div class="content-section">
-      <h1>NOT CANONICAL YET - World History & Lore</h1>
-      <p class="section-intro">PLACEHOLDER FOR DISPLAY PURPOSES - NOT CANONICAL</p>
+      <h1>World History & Lore</h1>
+      <p class="section-intro">The current year is <strong>651 AE</strong> (After Eulogia). The official calendar of The Hariolar Empire and the Eulogia of the Eternal Light.</p>
   
       <div v-if="reversedEras && reversedEras.length" class="timeline">
         <div class="era" v-for="(era, index) in reversedEras" :key="index">
@@ -18,7 +18,7 @@
             <div class="key-events" v-if="era.events && era.events.length">
               <h3>Key Events</h3>
               <ul>
-                <li v-for="(event, eIndex) in sortedEvents(era.events)" :key="eIndex">
+                <li v-for="(event, eIndex) in era.events" :key="eIndex">
                   <span class="event-year">{{ event.year }}:</span> 
                   {{ event.description }}
                 </li>
