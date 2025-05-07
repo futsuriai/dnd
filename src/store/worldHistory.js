@@ -45,7 +45,7 @@ export const worldHistory = {
       name: "Birth of the Hariolar Empire",
       period: "0 AE - 651 AE (Current Year)",
       description: [
-        "The First Emperor, who was among those closest to Nites, built a Pharus at the site of her sacrifice."
+        "The First Emperor, who was among those closest to Nites, built Pharus at the site of her sacrifice."
       ],
       events: [
         { year: "Early in era", description: "The First Emperor built Pharus at the site of Nites's sacrifice." }
