@@ -62,11 +62,11 @@ export const characters = [
   {
     id: 'ellara',
     name: 'Ellara',
-    race: 'Human (mechanically Kalashtar)',
-    class: 'Druid (Cleric presenting)',
+    race: 'Human',
+    class: 'Druid',
     level: 3,
-    background: 'Cloister Scholar',
-    bio: 'Hosts a spirit that manifests as an existing god, which embedded itself after death. Lives a cloistered life in a monastery/church and received the spirit as a revelation. Mechanically a druid but spiritually a cleric. Unfamiliar with the ordinary world due to cloistered upbringing.',
+    background: 'Euologian Acolyte',
+    bio: 'Lived a cloistered life in a priory in the Highlands and moved to Bastion City recently. A true believe in the Eulogia who misses her hometown and her connections there deeply. Not used to dealing with so many people she doesn\'t know but trying to put on a brave face.',
     dndBeyondLink: 'https://www.dndbeyond.com/characters/144318331',
     avatarUrl: getImageUrl(avatarModules, 'ellara', 'avatar'),
     portraitUrl: getImageUrl(portraitModules, 'ellara', 'portrait'),
@@ -81,7 +81,6 @@ export const characters = [
     background: 'Backwoods Hero',
     bio: 'A simple minded paladin from a small backwoods village at the foot of a mountain. He has taken an oath to the local deity of love and fertility, known as Hyr. His mentor and village elder ventured to the city to deal with a mysterious matter but months have passed and Ysidor must now retrace his elder’s steps.',
     dndBeyondLink: 'https://www.dndbeyond.com/characters/145877274',
-    // Use 'goliath' to match the filenames
     avatarUrl: getImageUrl(avatarModules, 'ysidor', 'avatar'),
     portraitUrl: getImageUrl(portraitModules, 'ysidor', 'portrait'),
     connections: []
