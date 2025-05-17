@@ -82,8 +82,8 @@ export const characters = [
     bio: 'A simple minded paladin from a small backwoods village at the foot of a mountain. He has taken an oath to the local deity of love and fertility, known as Hyr. His mentor and village elder ventured to the city to deal with a mysterious matter but months have passed and Ysidor must now retrace his elder’s steps.',
     dndBeyondLink: 'https://www.dndbeyond.com/characters/145877274',
     // Use 'goliath' to match the filenames
-    avatarUrl: getImageUrl(avatarModules, 'goliath', 'avatar'),
-    portraitUrl: getImageUrl(portraitModules, 'goliath', 'portrait'),
+    avatarUrl: getImageUrl(avatarModules, 'ysidor', 'avatar'),
+    portraitUrl: getImageUrl(portraitModules, 'ysidor', 'portrait'),
     connections: []
   }
 ];
