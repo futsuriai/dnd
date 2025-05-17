@@ -73,16 +73,13 @@ export const characters = [
     connections: []
   },
   {
-    // Note: The id here is 'tbd', but the image files are named 'goliath.*'
-    // We need to use 'goliath' to find the images.
-    // Consider changing the id to 'goliath' for consistency if this character is finalized.
-    id: 'tbd', // Or change to 'goliath'
-    name: 'TBD',
+    id: 'ysidor', 
+    name: 'Ysidor',
     race: 'Goliath',
     class: 'Paladin',
     level: 3,
     background: 'Backwoods Hero',
-    bio: 'A "himbo" paladin from the backwoods, traveling to the city due to outside forces. Has taken an oath to a local god/spirit. Simple but good-hearted.',
+    bio: 'A simple minded paladin from a small backwoods village at the foot of a mountain. He has taken an oath to the local deity of love and fertility, known as Hyr. His mentor and village elder ventured to the city to deal with a mysterious matter but months have passed and Ysidor must now retrace his elder’s steps.',
     dndBeyondLink: 'https://www.dndbeyond.com/characters/145877274',
     // Use 'goliath' to match the filenames
     avatarUrl: getImageUrl(avatarModules, 'goliath', 'avatar'),
