@@ -26,7 +26,7 @@ export const characters = [
     class: 'Ranger/Beastmaster',
     level: 3,
     background: 'Forest Offspring',
-    bio: 'An offspring of a mother tree where the whole forest is one sentient plant. Sent out into the world on a mission, carrying a magical item that is a by-product of the mother tree. Travels with a companion animal.',
+    bio: 'Child of the Mother Tree, her purpose is to experience and learn of the world. How much is imparted onto the world is the individual\'s choice, but the sentient Mother Tree encourages her children to learn and grow for the benefit of the whole. Not much is known of this sentient tree and her children by the outside world, but as their presence grows, they\'ve become hard to ignore. Tsi\'nyra, like many of her other siblings, travels with a companion animal and blessings from the Mother Tree herself.',
     dndBeyondLink: 'https://www.dndbeyond.com/characters/145877243',
     // Dynamically get the URL based on the id 'tsinyra'
     avatarUrl: getImageUrl(avatarModules, 'tsinyra', 'avatar'),
