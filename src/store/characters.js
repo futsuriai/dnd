@@ -34,16 +34,16 @@ export const characters = [
     connections: []
   },
   {
-    id: 'diraaz',
-    name: 'Diraaz',
+    id: 'berridin',
+    name: 'Berridin',
     race: 'Halfling',
     class: 'Bard - College of Mirages',
     level: 3,
     background: 'Aladdin street urchin (TBD)',
     bio: 'Lives on the edge of society and prefers to talk his way out of situations. Skilled in illusion magic and has an outsider perspective on societal norms.',
     dndBeyondLink: 'https://www.dndbeyond.com/characters/143977944',
-    avatarUrl: getImageUrl(avatarModules, 'diraaz', 'avatar'),
-    portraitUrl: getImageUrl(portraitModules, 'diraaz', 'portrait'),
+    avatarUrl: getImageUrl(avatarModules, 'berridin', 'avatar'),
+    portraitUrl: getImageUrl(portraitModules, 'berridin', 'portrait'),
     connections: []
   },
   {
