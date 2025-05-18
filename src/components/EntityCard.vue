@@ -13,7 +13,13 @@
         </div>
         
         <div class="entity-title-container">
-          <h3 class="entity-title">{{ entityType === 'lore' ? entity.term : entity.name }}</h3>
+          <!-- Make character names clickable -->
+          <h3 class="entity-title">
+            <router-link v-if="entityType === 'character'" :to="'/characters/' + entity.id">
+              {{ entity.name }}
+            </router-link>
+            <span v-else>{{ entityType === 'lore' ? entity.term : entity.name }}</span>
+          </h3>
           
           <!-- Subtitle section - Use v-html for line break -->
           <div v-if="getSubtitle" class="entity-subtitle" v-html="getSubtitle"></div>
@@ -290,6 +296,17 @@ export default {
   color: var(--color-primary);
   font-size: 1.3rem;
   line-height: 1.2;
+}
+
+.entity-title a {
+  color: var(--accent-color, #d4af37);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.entity-title a:hover {
+  color: var(--color-primary, #375a7f);
+  text-decoration: underline;
 }
 
 .entity-subtitle {

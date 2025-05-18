@@ -45,10 +45,27 @@ export default {
   },
   computed: {
     currentRouteName() {
+      // Get the current route path
       const route = this.$route.path;
+      
+      // Default for home route
       if (route === '/') return 'Home';
-      const name = route.charAt(1).toUpperCase() + route.slice(2).replace('/', '');
-      return name;
+      
+      // Extract main section from path
+      const pathParts = route.split('/').filter(Boolean);
+      const mainSection = pathParts[0];
+      
+      // Special handling for character detail pages
+      if (mainSection === 'characters' && pathParts.length > 1) {
+        // For character detail pages, show "Characters > CharacterName"
+        if (this.$route.name && this.$route.name !== 'Character Detail') {
+          return 'Characters';
+        }
+        return 'Characters';
+      }
+      
+      // For other routes, capitalize the first letter
+      return mainSection.charAt(0).toUpperCase() + mainSection.slice(1);
     }
   },
   methods: {

@@ -2,7 +2,14 @@
   <div class="content-section">
     <h1>Player Characters</h1>
 
-    <div class="entity-grid">
+    <!-- Character submenu only on main characters page, not on detail pages -->
+    <CharacterSubmenu v-if="!characterId" :currentCharacterId="characterId" />
+
+    <!-- Display character detail if ID provided -->
+    <CharacterDetailView v-if="characterId" :characterId="characterId" />
+    
+    <!-- Display list of characters if no ID -->
+    <div v-else class="entity-grid">
       <EntityCard 
         v-for="character in characters" 
         :key="character.id" 
@@ -30,12 +37,22 @@
 import { characters } from '../store/worldData';
 import EntityCard from '../components/EntityCard.vue';
 import FullTextModal from '@/components/FullTextModal.vue'; // Import the modal
+import CharacterSubmenu from '../components/CharacterSubmenu.vue'; // Import the submenu
+import CharacterDetailView from './CharacterDetailView.vue'; // Import the detail view
 
 export default {
   name: 'CharactersView',
   components: {
     EntityCard,
-    FullTextModal // Register the modal
+    FullTextModal,
+    CharacterSubmenu,
+    CharacterDetailView
+  },
+  props: {
+    id: {
+      type: String,
+      default: null
+    }
   },
   data() {
     return {
@@ -45,6 +62,11 @@ export default {
       modalTitle: '', // Add state for modal title
       modalImageUrl: null // Add state for image URL
     };
+  },
+  computed: {
+    characterId() {
+      return this.id;
+    }
   },
   methods: {
     showFullTextModal(payload) { // Accept payload object

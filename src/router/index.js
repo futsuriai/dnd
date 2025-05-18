@@ -7,7 +7,14 @@ import HistoryView from '../views/HistoryView.vue';
 import SessionsView from '../views/SessionsView.vue';
 import LocationsView from '../views/LocationsView.vue';
 import LoreView from '../views/LoreView.vue'; // Import LoreView
-import BastionCityView from '../views/BastionCityView.vue' // Import the new view
+import BastionCityView from '../views/BastionCityView.vue'; // Import the new view
+
+// Import character detail views
+import EllaraView from '../views/characters/EllaraView.vue';
+import TsinyraView from '../views/characters/TsinyraView.vue';
+import BerridinView from '../views/characters/BerridinView.vue';
+import NyxView from '../views/characters/NyxView.vue';
+import YsidorView from '../views/characters/YsidorView.vue';
 
 const routes = [
   {
@@ -55,7 +62,39 @@ const routes = [
     name: 'Lore',
     component: LoreView,
   },
-  // Add other routes here (e.g., Locations, Sessions)
+  // Character specific routes first (need to come before the generic route)
+  {
+    path: '/characters/ellara',
+    name: 'Ellara',
+    component: EllaraView
+  },
+  {
+    path: '/characters/tsinyra',
+    name: 'Tsi\'nyra',
+    component: TsinyraView
+  },
+  {
+    path: '/characters/berridin',
+    name: 'Berridin',
+    component: BerridinView
+  },
+  {
+    path: '/characters/nyx',
+    name: 'Nyx',
+    component: NyxView
+  },
+  {
+    path: '/characters/ysidor',
+    name: 'Ysidor',
+    component: YsidorView
+  },
+  // Generic character detail route (must come after specific routes)
+  {
+    path: '/characters/:id',
+    name: 'Character Detail',
+    component: CharactersView,
+    props: true
+  },
 ];
 
 // Use the same base path logic as in vite.config.js
