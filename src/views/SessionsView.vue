@@ -202,10 +202,11 @@ export default {
 
 /* Add styling for read more link */
 .read-more-link {
-  color: var(--color-primary);
+  color: var(--color-highlight);
   cursor: pointer;
   text-decoration: none;
-  font-weight: 500;
+  font-weight: 700; /* Increased font weight for better visibility */
+  font-size: 1.05em; /* Slightly increased font size */
   display: inline-block;
   margin-top: 0.5rem;
 }

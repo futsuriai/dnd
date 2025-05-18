@@ -8,7 +8,6 @@ export const sessions = [
     date: 'June 1, 2025',
     upcoming: true,
     description: 'The party continues their investigation into the mysterious disappearances in Bastion City, with focus on the imprisoned goliath and the strange circumstances surrounding the case. As they delve deeper into the city\'s shadows, they\'ll encounter both allies and obstacles in their quest for answers.',
-    summaryFile: 'session-2.md'
   },
   {
     id: 'session-1',
@@ -21,11 +20,15 @@ export const sessions = [
     highlights: [
       'Introduced Bastion City and the political landscape of Hieroterra Province under Duke Valerian Oleander.',
       'Established the East-West divide of the city, with the West being affluent and the East more modest, featuring the Duskbreaker Lighthouse.',
-      'Berridin and Ysidor visited the Halfling Quarter, where Berridin showed his connection to the community.',
-      'Ellara learned from the Denmother about a missing goliath who was likely imprisoned.',
-      'Nyx gathered vital intelligence about missing people and a particularly powerful goliath who was moved from an eastern prison to a western one.',
-      'Discovered that the missing goliath had reportedly defeated numerous attackers before being imprisoned.',
-      'Observed the mysterious reaction of a guard who became ill when discussing the goliath\'s transfer.'
+      'Tsi\'Nyra arrived at Nyx\'s at her mother\'s request searching for her missing sisters.',
+      'Ellara encountered Berridin and later Ysidor during Alm\'s Giving in the Eastern City.',
+      'After a commotion when Tsi\'Nyra and Nyx arrived Ellara took the group aside.',
+      'Ellara felt like this connection was meant to be and she was supposed to help desipte the Shadowed in the group',
+      'Ysidor asked about his mentor, Meri, who was missing. Ellara mentioned she was likely imprisoned after an incident where she took down 20 guards and shouted about the Lighthouse.',
+      'Berridin and Ysidor visited the Halfling Quarter, where Berridin showed his connection to the community. The Candy Incident of 650 AE was mentioned.',
+      'Ellara asked her the Denmother about Meri who was likely imprisoned.',
+      'Nyx gathered intelligence at a seedy bar from a guard about Meri and learned she was moved from the Eastern prison to one in the West.',
+      'The party agreed to meet in 2 days to discuss their next steps.',
     ]
   },
   {
@@ -35,7 +38,6 @@ export const sessions = [
     date: 'May 4, 2025',
     upcoming: false,
     description: 'Character creation and world introduction. Come prepared with character concepts and backstory ideas based on Session -1!',
-    summaryFile: 'session-0.md',
     highlights: [
       'Provided an overview of the world setting.',
       'Discussed the history of Eulogia.',
@@ -54,7 +56,6 @@ export const sessions = [
     subtitle: 'Initial world building and general framework discussions',
     date: 'April 6, 2025',
     description: 'Hopes, dreams and expectations setting. Discussed the world\'s themes, character concepts, and narrative boundaries.',
-    summaryFile: 'session-minus-1.md',
     highlights: [
       'Established our world as a Steampunk/Gaslamp Fantasy setting where magic and emerging technology exist in societal tension.',
       'Explored the possibility of an overarching church structure reminiscent of Catholicism, influencing the world\'s spiritual and political landscape.',
