@@ -20,6 +20,11 @@
           <div v-else class="session-summary">
             <p>{{ session.description }}</p>
             
+            <!-- Add Read More link if there's a summaryFile property -->
+            <a v-if="session.summaryFile" @click.prevent="showFullSummary(session)" href="#" class="read-more-link">
+              Read Full Summary...
+            </a>
+            
             <div v-if="session.highlights" class="highlights">
               <h4>Key Moments:</h4>
               <ul>
@@ -33,18 +38,68 @@
       </div>
     </div>
     <p v-else class="empty-message">No sessions recorded yet.</p>
+    
+    <!-- Add FullTextModal component -->
+    <FullTextModal 
+      :visible="isModalVisible" 
+      :title="modalTitle" 
+      :text="modalText" 
+      :loading="isLoading"
+      @close="closeModal" 
+    />
   </div>
 </template>
 
 <script>
 import { sessions } from '../store/worldData';
+import FullTextModal from '@/components/FullTextModal.vue'; // Import the modal
+import { loadSessionMarkdown } from '@/utils/markdownLoader'; // Import our markdown loader utility
 
 export default {
   name: 'SessionsView',
+  components: {
+    FullTextModal // Register the modal
+  },
   data() {
     return {
-      sessions
+      sessions,
+      isModalVisible: false, // State for modal visibility
+      modalText: '', // State for modal content
+      modalTitle: '', // Add state for modal title
+      isLoading: false // Track loading state
     };
+  },
+  methods: {
+    async showFullSummary(session) {
+      this.isLoading = true;
+      this.modalTitle = `${session.title}: ${session.subtitle}`;
+      
+      try {
+        // Load the markdown file dynamically using our utility
+        if (session.summaryFile) {
+          try {
+            const markdownContent = await loadSessionMarkdown(session.summaryFile);
+            this.modalText = markdownContent;
+          } catch (importError) {
+            console.error("Import error:", importError);
+            this.modalText = "Unable to load the session summary file.";
+          }
+        } else {
+          this.modalText = "No detailed summary available for this session.";
+        }
+      } catch (error) {
+        this.modalText = "An error occurred while loading the session summary.";
+        console.error("Error loading session summary:", error);
+      } finally {
+        this.isLoading = false;
+        this.isModalVisible = true;
+      }
+    },
+    closeModal() {
+      this.isModalVisible = false;
+      this.modalText = '';
+      this.modalTitle = '';
+    }
   }
 };
 </script>
@@ -145,18 +200,26 @@ export default {
   color: var(--text-muted);
 }
 
+/* Add styling for read more link */
+.read-more-link {
+  color: var(--color-highlight);
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: 700; /* Increased font weight for better visibility */
+  font-size: 1.05em; /* Slightly increased font size */
+  display: inline-block;
+  margin-top: 0.5rem;
+}
+
+.read-more-link:hover {
+  color: var(--color-accent);
+  text-decoration: underline;
+}
+
 @media (max-width: 600px) {
   .header-top-line {
     flex-wrap: wrap;
     gap: 0.5rem;
-  }
-  
-  .session-date {
-    align-self: flex-start;
-  }
-  
-  .session-subtitle {
-    margin-top: 0.5rem;
   }
 }
 </style>

@@ -32,8 +32,8 @@
         campaignName: 'In the Shadows of the Light',
         worldName: 'The Hariolar Empire',
         currentLocation: 'Bastion City',
-        currentQuest: 'Session 1',
-        nextSession: 'Sunday, May 4th at 1:00 PM'
+        currentQuest: 'Find the missing people',
+        nextSession: 'Sunday, June 1st at 1:00 PM'
       };
     }
   }
