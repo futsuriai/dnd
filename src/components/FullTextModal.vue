@@ -4,9 +4,13 @@
       <button class="close-button" @click="closeModal">&times;</button>
       <h2 v-if="title" class="modal-title">{{ title }}</h2> 
       
-      <!-- Conditionally display image or text -->
+      <!-- Conditionally display image, loading indicator, or text -->
       <div v-if="imageUrl" class="modal-image-container">
         <img :src="imageUrl" :alt="title || 'Modal Image'" class="modal-image"/>
+      </div>
+      <div v-else-if="loading" class="loading-container">
+        <div class="loading-spinner"></div>
+        <p>Loading session summary...</p>
       </div>
       <div v-else class="modal-body" v-html="renderMarkdown(text)"></div>
       
@@ -32,7 +36,11 @@ export default {
       type: String,
       default: ''
     },
-    imageUrl: String // Add imageUrl prop
+    imageUrl: String, // Add imageUrl prop
+    loading: { // Add loading prop
+      type: Boolean,
+      default: false
+    }
   },
   methods: {
     closeModal() {
@@ -156,5 +164,30 @@ export default {
   height: auto; /* Maintain aspect ratio */
   display: block; /* Remove extra space below image */
   margin: 0 auto; /* Center horizontally if needed */
+}
+
+/* Loading styles */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  height: 200px;
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  border-top-color: var(--color-primary);
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 </style>

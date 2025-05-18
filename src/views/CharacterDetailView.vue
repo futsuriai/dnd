@@ -24,7 +24,7 @@
                 View on D&D Beyond
               </a>
               <button v-if="character.portraitUrl" @click="showPortrait" class="view-portrait-btn">
-                View Portrait
+                View Full Image
               </button>
             </div>
           </div>
