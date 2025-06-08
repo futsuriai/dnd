@@ -103,9 +103,32 @@ export default {
   line-height: 1;
 }
 
-.close-button:hover {
-  color: var(--color-text);
+/* Add these styles for tables */
+.modal-body ::v-deep table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1em 0;
+  font-size: 0.9em;
+  font-family: var(--font-main);
 }
+
+.modal-body ::v-deep th,
+.modal-body ::v-deep td {
+  border: 1px solid var(--border-color);
+  padding: 0.5em 0.75em;
+  text-align: left;
+}
+
+.modal-body ::v-deep th {
+  background-color: var(--color-background-soft); /* Or a slightly darker shade of your modal background */
+  font-weight: bold;
+  color: var(--color-heading);
+}
+
+.modal-body ::v-deep tr:nth-child(even) {
+  background-color: var(--color-background-mute); /* For striped rows, if desired */
+}
+/* End of new table styles */
 
 .modal-body {
   margin-top: 0; /* Remove top margin as title provides spacing */
