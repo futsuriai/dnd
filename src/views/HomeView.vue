@@ -14,7 +14,7 @@
         
         <div class="info-card">
           <h3 class="fancy-title">Next Session</h3>
-          <p>{{ nextSession }}</p>
+          <p>{{ nextSessionDate }} at {{ nextSessionTime }}</p>
         </div>
       </div>
       <!-- Campaign banner image -->
@@ -25,15 +25,19 @@
   </template>
   
   <script>
+  import { sessions } from '../store/sessions.js'; // Import sessions data
+  
   export default {
     name: 'HomeView',
     data() {
+      const upcomingSession = sessions.find(session => session.upcoming);
       return {
-        campaignName: 'In the Shadows of the Light',
+        campaignName: 'A Blinding Light',
         worldName: 'The Hariolar Empire',
-        currentLocation: 'Bastion City',
-        currentQuest: 'Find the missing people',
-        nextSession: 'Sunday, June 1st at 1:00 PM'
+        currentLocation: upcomingSession ? upcomingSession.location : 'TBD',
+        currentQuest: upcomingSession ? upcomingSession.subtitle : 'TBD',
+        nextSessionDate: upcomingSession ? upcomingSession.date : 'TBD',
+        nextSessionTime: upcomingSession ? upcomingSession.time : 'TBD',
       };
     }
   }

@@ -2,12 +2,35 @@
 
 export const sessions = [
   {
+    id: 'session-3',
+    title: 'Session 3',
+    subtitle: 'Confronting the Proctor',
+    date: 'June 22, 2025',
+    time: '1:00 PM', // Added time
+    location: 'Bastion City', // Added location
+    upcoming: true,
+    description: 'Following the shocking revelation about Proctor Eduard, the party must decide their next move to save Marie. Their investigation will take them deeper into the heart of Bastion City\'s mysteries, testing their resolve and alliances.',
+  },
+  {
     id: 'session-2',
     title: 'Session 2',
-    subtitle: 'Following the Threads',
-    date: 'June 1, 2025',
-    upcoming: true,
-    description: 'The party continues their investigation into the mysterious disappearances in Bastion City, with focus on the imprisoned goliath and the strange circumstances surrounding the case. As they delve deeper into the city\'s shadows, they\'ll encounter both allies and obstacles in their quest for answers.',
+    subtitle: 'Dreams in the Shadow of the Light',
+    date: 'Jun 08, 2025',
+    upcoming: false,
+    description: 'The session begins with the PCs experiencing vivid dreams. Morning activities lead to new information for Ellara about Nyx and Marie. The party then ventures into West Bastion, investigating two prisons to find Ysidor\'s mentor, Marie. They discover that Marie was transferred under the personal custody of Proctor Eduard, deepening the mystery.',
+    summaryFile: 'session-2.md',
+    highlights: [
+      'Each character experiences vivid, revealing, or unsettling dreams, including Ysidor\'s memory of Marie and Ellara hearing foreign words of Eulogia.',
+      'Tsi\'Nyra joyfully discovers "breakfast!" at Nyx\'s townhouse, experimenting with various food combinations.',
+      'At the Eulogian Seminary, Ellara learns from the Denmother that Nyx is known as a "fixer" and that Marie was moved to a "western" prison.',
+      'Proctor Eduard expresses disdain for goliaths, to which Ellara offers a diplomatic rebuttal.',
+      'Berridin disguises Ysidor as a tall human named "Moose" for their trip to West Bastion.',
+      'The party, including a wide-eyed Tsi\'Nyra and "Moose," gets their first look at the opulent West Bastion.',
+      'After a failed bribery attempt at the first prison, Nyx successfully bribes a guard at Stonewall Tower for information.',
+      'Berridin cleverly uses Invisibility to slip past guards and discover a ledger entry: "Custody Transfer—His Holy Eminence Proctor Eduard."',
+      'A tense confrontation with a Stonewall Tower guard, who warns Ellara about "people much higher" pulling strings, hints at deeper mysteries.',
+      'The party confirms Marie was transferred under the personal custody of Proctor Eduard, directly implicating him leaving Ellaria stunned.',
+    ],
   },
   {
     id: 'session-1',
