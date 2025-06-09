@@ -6,6 +6,8 @@ export const sessions = [
     title: 'Session 3',
     subtitle: 'Confronting the Proctor',
     date: 'June 22, 2025',
+    time: '1:00 PM', // Added time
+    location: 'Bastion City', // Added location
     upcoming: true,
     description: 'Following the shocking revelation about Proctor Eduard, the party must decide their next move to save Marie. Their investigation will take them deeper into the heart of Bastion City\'s mysteries, testing their resolve and alliances.',
   },
