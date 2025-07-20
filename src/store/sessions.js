@@ -4,12 +4,12 @@ export const sessions = [
   {
     id: 'session-4',
     title: 'Session 4',
-    subtitle: 'The Road to Marie',
+    subtitle: 'The Road to Meri',
     location: 'Bastion City Outskirts',
     date: 'July 20, 2025',
     time: '10:00 AM',
     upcoming: true,
-    description: 'Following the ambush, the party continues their pursuit to find Marie and uncover the conspiracy behind the constructs.',
+    description: 'Following the ambush, the party continues their pursuit to find Meri and uncover the conspiracy behind the constructs.',
     highlights: [],
   },
   {
@@ -20,10 +20,10 @@ export const sessions = [
     time: '1:00 PM', // Added time
     location: 'Bastion City', // Added location
     upcoming: false,
-    description: 'The party confronts Proctor Eduard at the seminary and secures Marie’s release, shares camaraderie at The Drunken Goose, sets out by carriage at dawn, survives an ambush by ancient warforged powered by light crystals, and uncovers clues to the mastermind behind the trap.',
+    description: 'The party confronts Proctor Eduard at the seminary and secures Meri’s release, shares camaraderie at The Drunken Goose, sets out by carriage at dawn, survives an ambush by ancient warforged powered by light crystals, and uncovers clues to the mastermind behind the trap.',
     summaryFile: 'session-3.md',
     highlights: [
-      'Confrontation at the Eulogian Seminary and discovery that Marie was released.',
+      'Confrontation at the Eulogian Seminary and discovery that Meri was released.',
       'Colorful downtime at the Drunken Goose tavern revealing character bonds and humor.',
       'Ellara’s ritual and theological probe reveal cryptic counsel from Proctor Eduard.',
       'Group reunion at the East Gate and plans for a mounted pursuit.',
@@ -39,19 +39,19 @@ export const sessions = [
     subtitle: 'Dreams in the Shadow of the Light',
     date: 'Jun 08, 2025',
     upcoming: false,
-    description: 'The session begins with the PCs experiencing vivid dreams. Morning activities lead to new information for Ellara about Nyx and Marie. The party then ventures into West Bastion, investigating two prisons to find Ysidor\'s mentor, Marie. They discover that Marie was transferred under the personal custody of Proctor Eduard, deepening the mystery.',
+    description: 'The session begins with the PCs experiencing vivid dreams. Morning activities lead to new information for Ellara about Nyx and Meri. The party then ventures into West Bastion, investigating two prisons to find Ysidor\'s mentor, Meri. They discover that Meri was transferred under the personal custody of Proctor Eduard, deepening the mystery.',
     summaryFile: 'session-2.md',
     highlights: [
-      'Each character experiences vivid, revealing, or unsettling dreams, including Ysidor\'s memory of Marie and Ellara hearing foreign words of Eulogia.',
+      'Each character experiences vivid, revealing, or unsettling dreams, including Ysidor\'s memory of Meri and Ellara hearing foreign words of Eulogia.',
       'Tsi\'Nyra joyfully discovers "breakfast!" at Nyx\'s townhouse, experimenting with various food combinations.',
-      'At the Eulogian Seminary, Ellara learns from the Denmother that Nyx is known as a "fixer" and that Marie was moved to a "western" prison.',
+      'At the Eulogian Seminary, Ellara learns from the Denmother that Nyx is known as a "fixer" and that Meri was moved to a "western" prison.',
       'Proctor Eduard expresses disdain for goliaths, to which Ellara offers a diplomatic rebuttal.',
       'Berridin disguises Ysidor as a tall human named "Moose" for their trip to West Bastion.',
       'The party, including a wide-eyed Tsi\'Nyra and "Moose," gets their first look at the opulent West Bastion.',
       'After a failed bribery attempt at the first prison, Nyx successfully bribes a guard at Stonewall Tower for information.',
       'Berridin cleverly uses Invisibility to slip past guards and discover a ledger entry: "Custody Transfer—His Holy Eminence Proctor Eduard."',
       'A tense confrontation with a Stonewall Tower guard, who warns Ellara about "people much higher" pulling strings, hints at deeper mysteries.',
-      'The party confirms Marie was transferred under the personal custody of Proctor Eduard, directly implicating him leaving Ellaria stunned.',
+      'The party confirms Meri was transferred under the personal custody of Proctor Eduard, directly implicating him leaving Ellaria stunned.',
     ],
   },
   {
