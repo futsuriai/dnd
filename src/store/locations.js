@@ -53,6 +53,26 @@ export const locations = [
     connections: [
       { type: 'location', id: 'bastion-city', relationship: 'Located In' }
     ]
+  },
+  {
+    id: 'eulogian-seminary',
+    name: 'Eulogian Seminary',
+    type: 'poi',
+    description: 'A religious school and center of the Eulogia of the Eternal Light located in West Bastion, where acolytes like Ellara train in theology and ritual.',
+    tags: ['seminary', 'west bastion'],
+    connections: [
+      { type: 'location', id: 'bastion-city', relationship: 'Located In' }
+    ]
+  },
+  {
+    id: 'drunken-goose',
+    name: 'The Drunken Goose Tavern',
+    type: 'tavern',
+    description: 'A favorite tavern of artisans, soldiers, and working-class folk in West Bastion. The party often meets here to gather information and unwind.',
+    tags: ['tavern', 'west bastion'],
+    connections: [
+      { type: 'location', id: 'bastion-city', relationship: 'Located In' }
+    ]
   }
 ];
 

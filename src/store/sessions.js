@@ -2,14 +2,36 @@
 
 export const sessions = [
   {
+    id: 'session-4',
+    title: 'Session 4',
+    subtitle: 'The Road to Marie',
+    location: 'Bastion City Outskirts',
+    date: 'July 20, 2025',
+    time: '10:00 AM',
+    upcoming: true,
+    description: 'Following the ambush, the party continues their pursuit to find Marie and uncover the conspiracy behind the constructs.',
+    highlights: [],
+  },
+  {
     id: 'session-3',
     title: 'Session 3',
     subtitle: 'Confronting the Proctor',
     date: 'June 22, 2025',
     time: '1:00 PM', // Added time
     location: 'Bastion City', // Added location
-    upcoming: true,
-    description: 'Following the shocking revelation about Proctor Eduard, the party must decide their next move to save Marie. Their investigation will take them deeper into the heart of Bastion City\'s mysteries, testing their resolve and alliances.',
+    upcoming: false,
+    description: 'The party confronts Proctor Eduard at the seminary and secures Marie’s release, shares camaraderie at The Drunken Goose, sets out by carriage at dawn, survives an ambush by ancient warforged powered by light crystals, and uncovers clues to the mastermind behind the trap.',
+    summaryFile: 'session-3.md',
+    highlights: [
+      'Confrontation at the Eulogian Seminary and discovery that Marie was released.',
+      'Colorful downtime at the Drunken Goose tavern revealing character bonds and humor.',
+      'Ellara’s ritual and theological probe reveal cryptic counsel from Proctor Eduard.',
+      'Group reunion at the East Gate and plans for a mounted pursuit.',
+      'Ambush by three ancient warforged constructs powered by light crystals.',
+      'Tactical battle with no party casualties and dramatic finishing moves.',
+      'Investigation uncovers constructs were laid as a trap using Bastion City light technology.',
+      'Lingering questions about the mastermind behind the ambush and the shadow connection.',
+    ],
   },
   {
     id: 'session-2',
