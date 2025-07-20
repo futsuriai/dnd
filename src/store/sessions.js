@@ -20,14 +20,14 @@ export const sessions = [
     time: '1:00 PM', // Added time
     location: 'Bastion City', // Added location
     upcoming: false,
-    description: 'The party confronts Proctor Eduard at the seminary and secures Meri’s release, shares camaraderie at The Drunken Goose, sets out by carriage at dawn, survives an ambush by ancient warforged powered by light crystals, and uncovers clues to the mastermind behind the trap.',
+    description: 'The party confronts Proctor Eduard at the seminary and secures Meri’s release, shares camaraderie at The Drunken Goose, sets out by carriage at dawn, survives an ambush by warforged powered by light crystals, and uncovers clues to the mastermind behind the trap.',
     summaryFile: 'session-3.md',
     highlights: [
       'Confrontation at the Eulogian Seminary and discovery that Meri was released.',
       'Colorful downtime at the Drunken Goose tavern revealing character bonds and humor.',
       'Ellara’s ritual and theological probe reveal cryptic counsel from Proctor Eduard.',
       'Group reunion at the East Gate and plans for a mounted pursuit.',
-      'Ambush by three ancient warforged constructs powered by light crystals.',
+      'Ambush by three warforged constructs powered by light crystals.',
       'Tactical battle with no party casualties and dramatic finishing moves.',
       'Investigation uncovers constructs were laid as a trap using Bastion City light technology.',
       'Lingering questions about the mastermind behind the ambush and the shadow connection.',

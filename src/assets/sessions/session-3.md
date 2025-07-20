@@ -220,7 +220,7 @@ The halfling, having stealthed ahead, crept closer for a better look:
 - **Perception roll: Natural 1** – In the dim light, he couldn't tell if it was a goliath, but it wasn't moving
 
 **The Activation:**
-When Berridin popped his head out and approached openly, the figures stirred. Red eyes blazed to life, and three ancient warforged rose with metallic grinding sounds—nearly as tall as a goliath, constructed of scrap metal.
+When Berridin popped his head out and approached openly, the figures stirred. Red eyes blazed to life, and three warforged rose with metallic grinding sounds—nearly as tall as a goliath, constructed of scrap metal.
 
 ---
 
@@ -268,7 +268,7 @@ As the party caught their breath and tended their wounds, several disturbing que
 
 - **Who set this trap?** The cart tracks suggested it came from Bastion's direction
 - **Was this meant for them specifically?** Or was it intended for Meri?
-- **What connection exists between the Duskbreaker Lighthouse technology and these ancient warforged?**
+- **What connection exists between the Duskbreaker Lighthouse technology and these warforged?**
 - **How did someone acquire and weaponize constructs powered by light crystals?**
 
 The road ahead stretched into uncertainty, but one thing was clear – their journey to find Meri had become far more dangerous than anyone anticipated.
