@@ -2,8 +2,8 @@
 
 export const sessions = [
   {
-    id: 'session-4',
-    title: 'Session 4',
+    id: 'session-5',
+    title: 'Session 5',
     subtitle: 'The Road to Meri',
     location: 'Bastion City Outskirts',
     date: 'July 20, 2025',
@@ -11,6 +11,20 @@ export const sessions = [
     upcoming: true,
     description: 'Following the ambush, the party continues their pursuit to find Meri and uncover the conspiracy behind the constructs.',
     highlights: [],
+  },
+  {
+    id: 'session-4',
+    title: 'Session 4',
+    subtitle: 'The Road to Meri',
+    location: 'Bastion City Outskirts',
+    date: 'July 20, 2025',
+    time: '10:00 AM',
+    upcoming: false,
+    description: 'Following the ambush, the party continues their pursuit to find Meri and uncover the conspiracy behind the constructs.',
+    summaryFile: 'session-4.md',
+    highlights: [
+      'Placeholder',
+    ],
   },
   {
     id: 'session-3',
