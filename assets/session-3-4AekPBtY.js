@@ -7,10 +7,10 @@ const e=`## Session 3 – *Shadows on the Road*
 
 ### 1 · The Seminary Confrontation
 
-The party faced a crucial decision: whether to directly confront Ellara's mentor, Proctor Eduard, about his connection to Marie's disappearance. The debate revealed their different approaches to truth-seeking.
+The party faced a crucial decision: whether to directly confront Ellara's mentor, Proctor Eduard, about his connection to Meri's disappearance. The debate revealed their different approaches to truth-seeking.
 
 **The Disagreement:**
-- **Ellara** believed in the direct approach: "It's the right thing to do"—ask Eduard straight out about Marie's fate
+- **Ellara** believed in the direct approach: "It's the right thing to do"—ask Eduard straight out about Meri's fate
 - **Nyx** urged caution: "If he is involved, why would he tell you? Maybe he'll deny it. If you reach out, it'll make finding the truth more difficult. I'm speaking from experience—we should find out on our own."
 - **Ysidor** offered sage wisdom: "You should always trust your elders"
 
@@ -80,7 +80,7 @@ He explained: "She was concerned about her village, but she's now on her way hom
 **The Details:**
 - The incident occurred near the Duskbreaker Tower during some research
 - "Those shadowed, you know how they are, and she panicked"
-- Marie had left that morning and should be "half a day away"
+- Meri had left that morning and should be "half a day away"
 - Her village was "named after some blasphemous deity"
 
 **The Warning:**
@@ -110,7 +110,7 @@ Ysidor was ecstatic: "I need to go find her!"
 
 **Planning the Pursuit:**
 - **Distance:** Ysidor's village was "next to my home... it took me like a month to get here from there"
-- **Marie's head start:** Half a day on foot
+- **Meri's head start:** Half a day on foot
 - **Their advantage:** Horses could potentially catch up to someone on foot
 
 **Berridin's Drunken Wisdom:**
@@ -267,11 +267,11 @@ The constructs hadn't been here long – they were part of a recent ambush setup
 As the party caught their breath and tended their wounds, several disturbing questions remained:
 
 - **Who set this trap?** The cart tracks suggested it came from Bastion's direction
-- **Was this meant for them specifically?** Or was it intended for Marie?
+- **Was this meant for them specifically?** Or was it intended for Meri?
 - **What connection exists between the Duskbreaker Lighthouse technology and these ancient warforged?**
 - **How did someone acquire and weaponize constructs powered by light crystals?**
 
-The road ahead stretched into uncertainty, but one thing was clear – their journey to find Marie had become far more dangerous than anyone anticipated.
+The road ahead stretched into uncertainty, but one thing was clear – their journey to find Meri had become far more dangerous than anyone anticipated.
 
 ---
 
