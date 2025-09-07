@@ -12,7 +12,7 @@
           </div>
         </div>
         
-        <div class="entity-title-container">
+  <div class="entity-title-container">
           <!-- Make character names clickable -->
           <h3 class="entity-title">
             <router-link v-if="entityType === 'character'" :to="'/characters/' + entity.id">
@@ -23,13 +23,11 @@
           
           <!-- Subtitle section - Use v-html for line break -->
           <div v-if="getSubtitle" class="entity-subtitle" v-html="getSubtitle"></div>
-          
-          <!-- Status badge (for NPCs) -->
-          <div v-if="entityType === 'npc' && entity.status" 
-               class="entity-status" 
-               :class="entity.status.toLowerCase()">
-            <span class="status-indicator"></span>
-            <span>{{ entity.status }}</span>
+          <!-- Badge + History row -->
+          <div v-if="badgeLabel || fallbackBadgeLabel || hasHistory" class="entity-badge-row">
+            <span v-if="badgeLabel" :class="badgeLabel === 'Updated' ? 'badge-updated' : 'badge-new'">{{ badgeLabel }}</span>
+            <span v-else-if="fallbackBadgeLabel" class="badge-stale">{{ fallbackBadgeLabel }}</span>
+            <button v-if="hasHistory" class="history-btn" @click="showHistory" aria-label="View change history" title="View change history">History</button>
           </div>
         </div>
         
@@ -37,6 +35,7 @@
         <span v-if="entityType === 'item' && entity.rarity" class="entity-rarity">
           {{ entity.rarity }}
         </span>
+        
       </div>
       
       <!-- Metadata Section -->
@@ -63,13 +62,10 @@
         <!-- NPC entities -->
         <template v-else-if="entityType === 'npc'">
           <div class="detail-row">
-            <span class="detail-icon">📍</span>
-            <span>{{ entity.location }}</span>
+            <span class="detail-inline">📍&nbsp;{{ entity.location }}</span>
           </div>
-          
           <div class="detail-row">
-            <span class="detail-icon">👑</span>
-            <span>{{ entity.role }}</span>
+            <span class="detail-inline">👤&nbsp;{{ entity.role }}</span>
           </div>
         </template>
         
@@ -131,6 +127,7 @@
 
 <script>
 import EntityConnections from './EntityConnections.vue';
+import { getEntityUpdateHistory, currentSession } from '@/store/config.js';
 
 export default {
   name: 'EntityCard',
@@ -175,6 +172,25 @@ export default {
     hasActions() {
       if (this.entityType === 'character' && this.entity.dndBeyondLink) return true;
       return false;
+    },
+    badgeLabel() {
+      const sessions = getEntityUpdateHistory(this.entity);
+      if (sessions.includes(currentSession)) {
+        return sessions.length === 1 ? 'New' : 'Updated';
+      }
+      return null;
+    },
+    fallbackBadgeLabel() {
+      const sessions = getEntityUpdateHistory(this.entity);
+      if (!sessions || !sessions.length) return null;
+      if (sessions.includes(currentSession)) return null;
+      const last = Math.max(...sessions);
+      return `Session ${last}`;
+    },
+    hasHistory() {
+  const hasSessions = getEntityUpdateHistory(this.entity).length > 0;
+  const hasNotes = Array.isArray(this.entity.history) && this.entity.history.length > 0;
+  return hasSessions || hasNotes;
     },
     getSubtitle() {
       if (this.entityType === 'character') {
@@ -250,6 +266,31 @@ export default {
           imageUrl: this.entity.portraitUrl 
         });
       }
+    },
+    showHistory() {
+      const sessions = getEntityUpdateHistory(this.entity);
+      const notes = Array.isArray(this.entity.history) ? this.entity.history : [];
+      if (!sessions.length && !notes.length) return;
+      const title = `History: ${this.entityType === 'lore' ? this.entity.term : this.entity.name}`;
+      // Index notes by session
+      const notesBySession = {};
+      notes.forEach(n => {
+        if (n && typeof n.session === 'number') {
+          if (!notesBySession[n.session]) notesBySession[n.session] = [];
+          if (n.note) notesBySession[n.session].push(n.note);
+        }
+      });
+      // Build a single combined list of sessions (from updates and notes)
+      const allSessions = Array.from(new Set([
+        ...sessions,
+        ...notes.map(n => (typeof n.session === 'number' ? n.session : null)).filter(s => typeof s === 'number')
+      ])).sort((a, b) => a - b);
+      const lines = allSessions.map(s => {
+        const n = notesBySession[s] && notesBySession[s].length ? ` — ${notesBySession[s].join(' • ')}` : (sessions.includes(s) ? ' — Updated' : '');
+        return `- Session ${s}${n}`;
+      });
+      const text = lines.join('\n');
+      this.$emit('show-full-text', { title, text });
     }
   }
 }
@@ -366,6 +407,7 @@ export default {
   display: flex;
   margin-bottom: 0.7rem;
   flex-wrap: wrap; /* Allow wrapping for long backgrounds */
+  align-items: baseline;
 }
 
 .detail-label {
@@ -385,6 +427,13 @@ export default {
 .detail-icon {
   margin-right: 0.5rem;
   font-size: 1.2rem;
+}
+.detail-inline { display: inline; }
+
+/* Keep icon with text on wrap */
+.detail-text {
+  display: inline;
+  white-space: normal;
 }
 
 /* Character race and class styling */
@@ -441,58 +490,58 @@ export default {
   justify-content: center;
 }
 
-/* NPC status styles */
-.entity-status {
-  margin-top: 0.5rem;
-  display: inline-flex;
-  align-items: center;
+/* Badges */
+.badge-new {
+  display: inline-block;
+  margin-top: 0.4rem;
+  padding: 0.1rem 0.4rem;
+  font-size: 0.75rem;
   font-weight: bold;
-  padding: 0.3rem 0.5rem;
-  border-radius: 4px;
-  align-self: flex-start;
+  color: #111;
+  background: #ffd54f;
+  border-radius: 3px;
+}
+.badge-updated {
+  display: inline-block;
+  margin-top: 0.4rem;
+  padding: 0.1rem 0.4rem;
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: #111;
+  background: #90caf9; /* light blue */
+  border-radius: 3px;
+}
+.badge-stale {
+  display: inline-block;
+  margin-top: 0.4rem;
+  padding: 0.1rem 0.4rem;
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: #111;
+  background: #e0e0e0; /* grey */
+  border-radius: 3px;
 }
 
-.status-indicator {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  margin-right: 0.5rem;
+.entity-badge-row {
+  margin-top: 0.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-.ally .status-indicator {
-  background-color: #4caf50;
+.history-btn {
+  margin-left: auto; /* push to the right within header */
+  font-size: 0.85rem;
+  line-height: 1.1;
+  color: var(--color-accent);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  padding: 0;
 }
-
-.neutral .status-indicator {
-  background-color: #ffeb3b;
-}
-
-.enemy .status-indicator {
-  background-color: #f44336;
-}
-
-.unknown .status-indicator {
-  background-color: #9e9e9e;
-}
-
-.ally {
-  color: #4caf50;
-  background-color: rgba(76, 175, 80, 0.1);
-}
-
-.neutral {
-  color: #ffeb3b;
-  background-color: rgba(255, 235, 59, 0.1);
-}
-
-.enemy {
-  color: #f44336;
-  background-color: rgba(244, 67, 54, 0.1);
-}
-
-.unknown {
-  color: #9e9e9e;
-  background-color: rgba(158, 158, 158, 0.1);
+.history-btn:hover {
+  text-decoration: underline;
 }
 
 /* Item properties */

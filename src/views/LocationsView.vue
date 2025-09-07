@@ -107,7 +107,8 @@ export default {
       return this.allLocations.filter(loc => loc.type === 'dungeon');
     },
     pointsOfInterest() {
-      return this.allLocations.filter(loc => loc.type === 'poi');
+  const poiTypes = ['poi', 'landmark', 'tavern'];
+  return this.allLocations.filter(loc => poiTypes.includes(loc.type));
     }
   },
   methods: {

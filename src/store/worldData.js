@@ -3,7 +3,7 @@
 
 // Import data collections from separate files
 import { characters } from './characters.js';
-import { npcs } from '../../src_future/npcs.js';
+import { npcs } from './npcs.js';
 import { locations } from './locations.js';
 import { items } from '../../src_future/items.js';
 import { sessions } from './sessions.js';

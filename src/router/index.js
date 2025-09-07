@@ -6,6 +6,7 @@ import HistoryView from '../views/HistoryView.vue';
 // import ItemsView from '../views/ItemsView.vue';
 import SessionsView from '../views/SessionsView.vue';
 import LocationsView from '../views/LocationsView.vue';
+import NpcsView from '../views/NpcsView.vue';
 import LoreView from '../views/LoreView.vue'; // Import LoreView
 import BastionCityView from '../views/BastionCityView.vue'; // Import the new view
 
@@ -21,6 +22,11 @@ const routes = [
     path: '/',
     name: 'Home',
     component: HomeView,
+  },
+  {
+    path: '/npcs',
+    name: 'NPCs',
+    component: NpcsView,
   },
   {
     path: '/characters',
