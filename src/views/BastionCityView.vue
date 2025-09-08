@@ -26,6 +26,7 @@
 import EntityCard from '@/components/EntityCard.vue';
 import FullTextModal from '@/components/FullTextModal.vue'; // Import the modal
 import { locations } from '@/store/locations.js';
+import { sortEntitiesByLastSession } from '@/utils/entitySorting.js'; // Import sorting utility
 
 export default {
   name: 'BastionCityView',
@@ -44,10 +45,11 @@ export default {
     bastionLocations() {
       // Filter locations that are explicitly tagged as 'bastion city' 
       // or are connected to 'bastion-city'
-      return locations.filter(loc => 
+      const bastionLocationList = locations.filter(loc => 
         loc.tags?.includes('bastion city') || 
         loc.connections?.some(conn => conn.type === 'location' && conn.id === 'bastion-city')
       );
+      return sortEntitiesByLastSession(bastionLocationList);
     }
   },
   methods: {

@@ -79,6 +79,7 @@
 import { locations } from '../store/locations'; 
 import EntityCard from '../components/EntityCard.vue';
 import FullTextModal from '@/components/FullTextModal.vue'; // Import the modal
+import { sortEntitiesByLastSession } from '../utils/entitySorting.js'; // Import sorting utility
 
 export default {
   name: 'LocationsView',
@@ -101,23 +102,27 @@ export default {
       return locations; 
     },
     provinces() {
-      return this.allLocations.filter(loc => loc.type === 'province');
+      const provinceList = this.allLocations.filter(loc => loc.type === 'province');
+      return sortEntitiesByLastSession(provinceList);
     },
     dungeons() {
-      return this.allLocations.filter(loc => loc.type === 'dungeon');
+      const dungeonList = this.allLocations.filter(loc => loc.type === 'dungeon');
+      return sortEntitiesByLastSession(dungeonList);
     },
     pointsOfInterest() {
-  const poiTypes = ['poi', 'landmark', 'tavern'];
-  return this.allLocations.filter(loc => poiTypes.includes(loc.type));
+      const poiTypes = ['poi', 'landmark', 'tavern'];
+      const poiList = this.allLocations.filter(loc => poiTypes.includes(loc.type));
+      return sortEntitiesByLastSession(poiList);
     }
   },
   methods: {
     getLocationsInProvince(provinceId) {
       // Find locations (like capitals or cities) that list the provinceId in their connections
-      return this.allLocations.filter(loc => 
+      const locationsInProvince = this.allLocations.filter(loc => 
         loc.type !== 'province' && // Exclude the province itself
         loc.connections?.some(conn => conn.type === 'location' && conn.id === provinceId)
       );
+      return sortEntitiesByLastSession(locationsInProvince);
     },
     showFullTextModal(payload) { // Accept payload object
       this.modalTitle = payload.title; // Set title

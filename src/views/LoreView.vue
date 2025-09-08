@@ -27,6 +27,7 @@ import EntityCard from '@/components/EntityCard.vue';
 import FullTextModal from '@/components/FullTextModal.vue'; // Import the modal
 import EntityConnections from '@/components/EntityConnections.vue'; // Import EntityConnections
 import { lore } from '@/store/lore.js';
+import { sortEntitiesByLastSession } from '@/utils/entitySorting.js'; // Import sorting utility
   
 export default {
   name: 'LoreView',
@@ -37,11 +38,15 @@ export default {
   },
   data() {
     return {
-      loreEntries: lore,
       isModalVisible: false, // State for modal visibility
       modalText: '', // State for modal content
       modalTitle: '' // Add state for modal title
     };
+  },
+  computed: {
+    loreEntries() {
+      return sortEntitiesByLastSession(lore);
+    }
   },
   methods: {
       formatDescription(description) {

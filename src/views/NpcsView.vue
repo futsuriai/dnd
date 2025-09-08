@@ -57,6 +57,7 @@ import EntityCard from '@/components/EntityCard.vue';
 import FullTextModal from '@/components/FullTextModal.vue';
 import { npcs } from '@/store/npcs.js';
 import { getEntityUpdateHistory, currentSession } from '@/store/config.js';
+import { sortEntitiesByLastSession } from '@/utils/entitySorting.js'; // Import sorting utility
 
 export default {
   name: 'NpcsView',
@@ -75,13 +76,15 @@ export default {
   },
   computed: {
     majorNpcs() {
-  // Treat as major if not explicitly marked minor and meets heuristic (fullText or ally/enemy)
-  return this.npcs.filter(n => (n.prominence !== 'minor') && (n.fullText || ['ally', 'enemy'].includes((n.status || '').toLowerCase())));
+      // Treat as major if not explicitly marked minor and meets heuristic (fullText or ally/enemy)
+      const majorList = this.npcs.filter(n => (n.prominence !== 'minor') && (n.fullText || ['ally', 'enemy'].includes((n.status || '').toLowerCase())));
+      return sortEntitiesByLastSession(majorList);
     },
     minorNpcs() {
-  // Explicitly include those marked minor, plus anything not in majors
-  const majors = new Set(this.majorNpcs.map(m => m.id));
-  return this.npcs.filter(n => n.prominence === 'minor' || !majors.has(n.id));
+      // Explicitly include those marked minor, plus anything not in majors
+      const majors = new Set(this.majorNpcs.map(m => m.id));
+      const minorList = this.npcs.filter(n => n.prominence === 'minor' || !majors.has(n.id));
+      return sortEntitiesByLastSession(minorList);
     }
   },
   methods: {
