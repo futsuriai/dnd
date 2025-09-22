@@ -47,7 +47,7 @@ export const npcs = [
         role: 'Eulogian Proctor',
         location: 'Eulogian Seminary, West Bastion',
         description: 'Ellara\'s mentor at the Seminary. Directly implicated by Meri as a figure she saw after being captured.',
-        fullText: 'Proctor Eduard projects calm authority and orthodoxy within the Eulogian Seminary. He warned of Lighthouse hubris and claimed to have set Meri free, directing concerned parties away from further investigation. However, testimony from basement laboratory staff ties Eulogian liaison Donnathan Reeves to systematic deliveries "per protocol"—leaving Eduard\'s direct role unclear. Whether he was deceived, complicit, or actively opposed to the conspiracy remains to be proven.',
+        fullText: 'Proctor Eduard projects calm authority and orthodoxy within the Eulogian Seminary. He warned of Lighthouse hubris and claimed to have set Meri free, directing concerned parties away from further investigation. However, Meri\'s testimony directly identified him as the priest who attached her to the synthesis machine. This revelation paints his previous actions and denials in a sinister light, suggesting deep complicity in the Lighthouse\'s atrocities, despite his outward piety and condemnation of their "ambition."',
         history: [
             { session: 2, note: 'Named on custody transfer ledger for Meri.' },
             { session: 3, note: 'Claimed to have released Meri, directing the party out of the city.' },
