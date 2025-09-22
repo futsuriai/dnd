@@ -6,18 +6,20 @@ export const npcs = [
         id: 'meri',
         name: 'Meri',
         role: 'Goliath Mentor',
-        location: 'Bastion Hinterlands',
-        description: 'Mentor to Ysidor. Arrested in Bastion City after speaking against the Lighthouse; later found captive beneath the Lighthouse and rescued.',
+        location: 'Heading to Hyrta',
+        description: 'Mentor to Ysidor. Arrested in Bastion City after speaking against the Lighthouse; later found captive beneath the Lighthouse and rescued. Is now heading to her home village with Ysidor\'s sending stone.',
         fullText: 'A towering goliath of granite-gray skin and lilac-silver hair, Meri served as Ysidor\'s mentor, drilling him in blessing and stance with her characteristic phrase: "Hold your guard higher, little hill." After being reported as violent and dangerous following an altercation near the Lighthouse, she was transferred under Proctor Eduard\'s custody and ultimately subjected to horrific basement experiments involving crystal synthesis. She was rescued partway through the process and is now recovering from her ordeal.',
         history: [
             { session: 1, note: 'Established as Ysidor\'s missing mentor.' },
             { session: 2, note: 'Rumored transfer under Proctor Eduard after arrest in Bastion City.' },
             { session: 3, note: 'No sign in the old road.' },
-            { session: 6, note: 'Found alive in basement lab; extracted to safety from the lighthouse.' }
+            { session: 6, note: 'Found alive in basement lab; extracted to safety from the lighthouse.' },
+            { session: 7, note: 'Rescued and freed; departed for Hyrta' }
         ],
         connections: [
             { type: 'character', id: 'ysidor', reason: 'Mentor and guardian' },
             { type: 'location', id: 'duskbreaker-lighthouse', reason: 'Held captive beneath the Lighthouse' },
+            { type: 'location', id: 'hyrta', reason: 'Home village' },
             { type: 'lore', id: 'light-crystals', reason: 'Subject of crystal synthesis process' }
         ]
     },
@@ -44,13 +46,14 @@ export const npcs = [
         name: 'Proctor Eduard',
         role: 'Eulogian Proctor',
         location: 'Eulogian Seminary, West Bastion',
-        description: 'Ellara\'s mentor at the Seminary. Polite veneer, disdain for "shadowed." Seems to be unaware of the full extent of the conspiracy but recent events have cast doubt on his role.',
+        description: 'Ellara\'s mentor at the Seminary. Directly implicated by Meri as a figure she saw after being captured.',
         fullText: 'Proctor Eduard projects calm authority and orthodoxy within the Eulogian Seminary. He warned of Lighthouse hubris and claimed to have set Meri free, directing concerned parties away from further investigation. However, testimony from basement laboratory staff ties Eulogian liaison Donnathan Reeves to systematic deliveries "per protocol"—leaving Eduard\'s direct role unclear. Whether he was deceived, complicit, or actively opposed to the conspiracy remains to be proven.',
         history: [
             { session: 2, note: 'Named on custody transfer ledger for Meri.' },
             { session: 3, note: 'Claimed to have released Meri, directing the party out of the city.' },
             { session: 4, note: 'Expressed shock; promised to escalate investigation.' },
-            { session: 6, note: 'Complicity questioned via Reeves hand-offs; stance uncertain.' }
+            { session: 6, note: 'Complicity questioned via Reeves hand-offs; stance uncertain.' },
+            { session: 7, note: 'Directly implicated by Meri since she was able to describe him after her capture' }
         ],
         connections: [
             { type: 'character', id: 'ellara', reason: 'Mentor at the Seminary' },
@@ -69,12 +72,14 @@ export const npcs = [
         fullText: 'Donnathan Reeves serves as the diplomatic face of the Duskbreaker Lighthouse, frequently traveling to maintain relationships with political authorities, particularly in the capital city of Pharus. Basement laboratory testimony has identified him as the crucial liaison who facilitates the delivery of living "subjects" into Lighthouse custody for crystal synthesis experiments. These transfers are conducted "per protocol," suggesting an established and sanctioned arrangement between the Lighthouse and Eulogian authorities. His role makes him a key political lever and potentially the keystone figure in understanding the full scope of the institutional conspiracy.',
         history: [
             { session: 5, note: 'Identified as Director of Relations, liaising in Pharus.' },
-            { session: 6, note: 'Named as hand-off for delivered “subjects” per protocol.' }
+            { session: 6, note: 'Named as hand-off for delivered “subjects” per protocol.' },
+            { session: 7, note: 'Introduced to Ellara by Proctor Eduard in the Seminary mess hall.' }
         ],
         connections: [
             { type: 'location', id: 'duskbreaker-lighthouse', reason: 'Executive at the Lighthouse' },
             { type: 'location', id: 'pharus', reason: 'Operating theater in the capital' },
-            { type: 'lore', id: 'lightkeepers', reason: 'Operates under/with the council' }
+            { type: 'lore', id: 'lightkeepers', reason: 'Operates under/with the council' },
+            { type: 'location', id: 'eulogian-seminary', reason: 'Present at Seminary; introduced to Ellara' }
         ]
     },
     {

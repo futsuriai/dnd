@@ -2,15 +2,36 @@
 
 export const sessions = [
   {
-    id: 'session-7',
-    title: 'Session 7',
-    subtitle: 'Crossroads at the Old Growth',
-    location: 'Bastion City Outskirts',
-    date: 'September 21, 2025',
+    id: 'session-8',
+    title: 'Session 8',
+    subtitle: 'An Unholy Alliance',
+    location: 'Bastion City',
+    date: 'September 28, 2025',
     time: '1:00 PM',
     upcoming: true,
-    description: 'With Meri rescued and the Lighthouse on high alert, the party regroups under the old growth outside Bastion City. They must stabilize Meri, corroborate Dawn\'s testimony with logs and custody records, and decide whether to confront Proctor Eduard now or gather proof first — potentially by tracing upstairs crystal allocations. Faith, politics, and the warforged program all hang in the balance.',
+    description: 'Now face-to-face with both Proctor Eduard and Director of Relations Donnathan Reeves, Ellara must navigate a tense meeting where any misstep could be fatal. With Nyx providing backup and Ysidor ready for a fight, the party aims to expose the conspiracy without becoming its next victims. The increased warforged presence looms large, a constant reminder of the stakes.',
     highlights: [],
+  },
+  {
+    id: 'session-7',
+    title: 'Session 7',
+    subtitle: 'Crossroads at Dawn',
+    location: 'Bastion Outskirts & City',
+    date: 'September 21, 2025',
+    time: '1:00 PM',
+    upcoming: false,
+    description: 'After rescuing Meri, the party shelters in an abandoned barn where she reveals the full truth: Proctor Eduard himself operated the synthesis machine on her as part of a plan to suppress her people and seize their land for light crystal mining. A rift forms as Ysidor feels duty-bound to return to his village, Hyrta, while Ellara and Nyx argue they must stay to fight the conspiracy at its source. Ultimately, Ysidor agrees to stay for one month. The party returns to Bastion to find security heightened with new warforged, and Ellara comes face-to-face with both Eduard and his political liaison, Donnathan Reeves.',
+    summaryFile: 'session-7.md',
+    highlights: [
+      'Meri reveals Proctor Eduard personally operated the synthesis machine on her.',
+      'The motive for the experiments is revealed: to clear the way for imperial mining of light crystals in Hyrta, Meri\'s village.',
+      'A tense party debate leads to a split: Meri departs for Hyrta, while the others return to Bastion to confront Eduard.',
+      'Nyx reveals he is also Shadowed, declaring he will not be turned into a "light bulb."',
+      'Ysidor commits to staying in Bastion for one month to help before returning to his people.',
+      'New-model warforged are seen on patrol at the East Gate and the Lighthouse, indicating a security increase.',
+      'Proctor Eduard introduces Ellara to Donnathan Reeves, the Director of Relations at the Lighthouse, connecting the two main conspirators.',
+      'The party uses sending stones to maintain communication after splitting up.'
+    ],
   },
   {
     id: 'session-6',

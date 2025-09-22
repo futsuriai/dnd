@@ -66,7 +66,8 @@ export const locations = [
       { session: 3, note: 'Linked to warforged constructs encountered outside the city.' },
       { session: 4, note: 'Spider recon reveals a deep underground complex beneath the structure.' },
       { session: 5, note: 'Infiltration maps R&D floors; titan chassis and advanced warforged observed.' },
-      { session: 6, note: 'Basement lab confirmed to be synthesizing crystals from living subjects.' }
+      { session: 6, note: 'Basement lab confirmed to be synthesizing crystals from living subjects.' },
+      { session: 7, note: 'Security increased with modern warforged deployment' }
     ],
     connections: [
       { type: 'location', id: 'bastion-city', relationship: 'Located In' }
@@ -81,7 +82,8 @@ export const locations = [
     history: [
       { session: 2, note: 'Ellara learns of Meri\'s transfer to Proctor Eduard\'s custody.' },
       { session: 3, note: 'Ellara confronts Proctor Eduard, who says he gave orders to releas Meri.' },
-      { session: 4, note: 'Ellara reports the warforged attack; Eduard pledges to escalate the matter.' }
+      { session: 4, note: 'Ellara reports the warforged attack; Eduard pledges to escalate the matter.' },
+      { session: 7, note: 'Eduard introduces Reeves to Ellara in mess hall' }
     ],
     connections: [
       { type: 'location', id: 'bastion-city', relationship: 'Located In' }
@@ -202,10 +204,11 @@ export const locations = [
     id: 'old-growth-tree',
     name: 'Old Growth Tree',
     type: 'poi',
-    description: 'A large ancient tree outside Bastion City used as a rendezvous point. Distinguished from any "mangled" trees in the area.',
+    description: 'A large ancient gnarled tree outside Bastion City used as a rendezvous point. Distinguished from any "mangled" trees in the area.',
     tags: ['natural', 'meeting point'],
     history: [
-      { session: 6, note: 'The party regrouped here after escaping the Lighthouse with Meri.' }
+      { session: 6, note: 'The party regrouped here after escaping the Lighthouse with Meri.' },
+      { session: 7, note: 'Starting point for the night flight and party discussions' }
     ],
     connections: [
       { type: 'location', id: 'bastion-city', reason: 'Outside the city limits' }
@@ -273,6 +276,47 @@ export const locations = [
     ],
     connections: [
       { type: 'location', id: 'bastion-city', reason: 'Located In' }
+    ]
+  },
+  {
+    id: 'abandoned-barn',
+    name: 'Abandoned Barn',
+    type: 'poi',
+    description: 'A decrepit barn north of Bastion City used as shelter during the party\'s escape.',
+    tags: ['shelter', 'north bastion'],
+    history: [
+      { session: 7, note: 'Used as shelter during escape from the Lighthouse' }
+    ],
+    connections: [
+      { type: 'location', id: 'bastion-city', reason: 'North of the city' }
+    ]
+  },
+  {
+    id: 'hyrta',
+    name: 'Hyrta',
+    type: 'village',
+    description: 'A goliath village in the mountains, home to Meri and Ysidor and threatened by imperial mining interests.',
+    tags: ['village', 'goliath', 'mountains'],
+    history: [
+      { session: 1, note: 'Ysidor\'s home village.' },
+      { session: 7, note: 'Meri\'s is heading home as it is facing mining disputes' }
+    ],
+    connections: [
+      { type: 'location', id: 'hieroterra', reason: 'Village within the province' }
+    ]
+  },
+  {
+    id: 'bastion-east-gate',
+    name: 'Bastion East Gate',
+    type: 'poi',
+    description: 'The eastern entrance to Bastion City, now featuring increased security with modern warforged posted as of Session 7.',
+    tags: ['gate', 'security', 'bastion city'],
+    history: [
+      { session: 7, note: 'New warforged security measures implemented' }
+    ],
+    connections: [
+      { type: 'location', id: 'bastion-city', reason: 'Eastern entrance' },
+      { type: 'location', id: 'old-trade-road', reason: 'Gate leads to the old trade road' }
     ]
   },
   {

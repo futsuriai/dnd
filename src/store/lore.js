@@ -54,12 +54,14 @@ Session 6 revealed that the Lighthouse conducts a secret basement program to syn
     history: [
       { session: 3, note: 'First encountered as a trio of rusted constructs in an ambush on the Old Trade Road.' },
       { session: 5, note: 'Upgraded units and a titan-scale chassis were observed during the Lighthouse infiltration.' },
-      { session: 6, note: 'The goal of continuous operation is linked to the synthetic crystal program.' }
+      { session: 6, note: 'The goal of continuous operation is linked to the synthetic crystal program.' },
+      { session: 7, note: 'New-model units posted at Bastion East Gate (inactive) and on Lighthouse exterior watch as security posture shifts.' }
     ],
     connections: [
       { type: 'location', id: 'duskbreaker-lighthouse', reason: 'Manufactured and researched here' },
       { type: 'location', id: 'old-trade-road', reason: 'Ambush site for early models' },
-      { type: 'lore', id: 'light-crystals', reason: 'Powered by light crystals' }
+      { type: 'lore', id: 'light-crystals', reason: 'Powered by light crystals' },
+      { type: 'location', id: 'bastion-east-gate', reason: 'Deployed as part of city security' }
     ]
   },
   {
