@@ -136,8 +136,8 @@ Something had changed at the **East Gate**. A **new-model warforged** stood **in
 | **Thread** | **Status & Evidence** |
 | --- | --- |
 | **Meri** | **Alive and free**, heading for Hyrta; warns “the **engines of the Empire** aren’t slowing.” Has Ysidor's **sending stone**. |
-| **Berridin** | Accompanying Meri to **Hyrta**, communicating with the party via **sending stone**. |
-| **Ysidor’s Clock** | Stays **one month** to help address the Lighthouse, then returns home. |
+| **Berridin** | Tragically not accompanying Meri to **Hyrta**. |
+| **Ysidor’s Clock** | Staying **one month** to help address the Lighthouse, then returns home. |
 | **Team Plan** | **Ellara** to seek a **meeting with Proctor Eduard**; **Nyx** insists on **hedging** roles/egress; **Berridin** to **observe** Lighthouse reaction from a distance. |
 | **Security Posture** | East Gate: **newer warforged** posted outside/inside, both **inactive**. Lighthouse exterior: **two active modern warforged** on watch. |
 | **Political Vector** | **Eduard** personally introduces **Donnathan Reeves (Director of Relations)** to Ellara—putting the named liaison directly in the party’s orbit. |
