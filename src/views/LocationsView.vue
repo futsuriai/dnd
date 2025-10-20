@@ -103,7 +103,8 @@ export default {
     },
     provinces() {
       const provinceList = this.allLocations.filter(loc => loc.type === 'province');
-      return sortEntitiesByLastSession(provinceList);
+      const sortedProvinces = sortEntitiesByLastSession(provinceList);
+      return this.prioritizeEntities(sortedProvinces, ['hieroterra']);
     },
     dungeons() {
       const dungeonList = this.allLocations.filter(loc => loc.type === 'dungeon');
@@ -133,6 +134,23 @@ export default {
       this.isModalVisible = false;
       this.modalText = '';
       this.modalTitle = ''; // Clear title on close
+    },
+    prioritizeEntities(entities, priorityIds = []) {
+      if (!Array.isArray(priorityIds) || priorityIds.length === 0) {
+        return entities;
+      }
+
+      const remaining = [...entities];
+      const prioritized = [];
+
+      priorityIds.forEach(id => {
+        const matchIndex = remaining.findIndex(entity => entity.id === id);
+        if (matchIndex !== -1) {
+          prioritized.push(remaining.splice(matchIndex, 1)[0]);
+        }
+      });
+
+      return prioritized.concat(remaining);
     }
     // Keep original getters for potential future use or different views if needed
     // getCitiesLocations() { ... }, 

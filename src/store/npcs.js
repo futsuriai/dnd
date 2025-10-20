@@ -6,7 +6,7 @@ export const npcs = [
         id: 'meri',
         name: 'Meri',
         role: 'Goliath Mentor',
-        location: 'Heading to Hyrta',
+    location: 'Heading to Hýrda',
         description: 'Mentor to Ysidor. Arrested in Bastion City after speaking against the Lighthouse; later found captive beneath the Lighthouse and rescued. Is now heading to her home village with Ysidor\'s sending stone.',
         fullText: 'A towering goliath of granite-gray skin and lilac-silver hair, Meri served as Ysidor\'s mentor, drilling him in blessing and stance with her characteristic phrase: "Hold your guard higher, little hill." After being reported as violent and dangerous following an altercation near the Lighthouse, she was transferred under Proctor Eduard\'s custody and ultimately subjected to horrific basement experiments involving crystal synthesis. She was rescued partway through the process and is now recovering from her ordeal.',
         history: [
@@ -14,7 +14,7 @@ export const npcs = [
             { session: 2, note: 'Rumored transfer under Proctor Eduard after arrest in Bastion City.' },
             { session: 3, note: 'No sign in the old road.' },
             { session: 6, note: 'Found alive in basement lab; extracted to safety from the lighthouse.' },
-            { session: 7, note: 'Rescued and freed; departed for Hyrta' }
+            { session: 7, note: 'Rescued and freed; departed for Hýrda' }
         ],
         connections: [
             { type: 'character', id: 'ysidor', reason: 'Mentor and guardian' },
@@ -46,8 +46,8 @@ export const npcs = [
         name: 'Proctor Eduard',
         role: 'Eulogian Proctor',
         location: 'Eulogian Seminary, West Bastion',
-        description: 'Ellara\'s mentor at the Seminary, the fifth son of the Marchenbau line. Directly implicated by Meri as a figure she saw after being captured.',
-        fullText: 'Proctor Eduard projects calm authority and orthodoxy within the Eulogian Seminary. He warned of Lighthouse hubris and claimed to have set Meri free, directing concerned parties away from further investigation. However, Meri\'s testimony directly identified him as the priest who attached her to the synthesis machine. This revelation paints his previous actions and denials in a sinister light, suggesting deep complicity in the Lighthouse\'s atrocities, despite his outward piety and condemnation of their "ambition." Session 8 confirmed his noble lineage as a Marchenbau scion and highlighted his wary trust of Donnathan Reeves, whom he expects to follow his own loyalties.',
+        description: 'Ellara\'s mentor at the Seminary. As the fifth son of the previous Marchioness of Marchenbau, he was sent to the seminary instead of Torchlight College. He is the grand-uncle of Empress Consort Lyssandra. Directly implicated by Meri as a figure she saw after being captured.',
+        fullText: 'Proctor Eduard projects calm authority and orthodoxy within the Eulogian Seminary. As the fifth son of the previous Marchioness of Marchenbau, he was sent to the seminary instead of Torchlight College. He is the grand-uncle of Empress Consort Lyssandra. He warned of Lighthouse hubris and claimed to have set Meri free, directing concerned parties away from further investigation. However, Meri\'s testimony directly identified him as the priest who attached her to the synthesis machine. This revelation paints his previous actions and denials in a sinister light, suggesting deep complicity in the Lighthouse\'s atrocities, despite his outward piety and condemnation of their "ambition."',
         history: [
             { session: 2, note: 'Named on custody transfer ledger for Meri.' },
             { session: 3, note: 'Claimed to have released Meri, directing the party out of the city.' },
@@ -62,7 +62,8 @@ export const npcs = [
             { type: 'location', id: 'stonewall-tower', reason: 'Named in custody transfer ledger (Session 2)' },
             { type: 'lore', id: 'eulogia-eternal-light', reason: 'Clergy of the faith' },
             { type: 'lore', id: 'marchenbau', reason: 'Scion of the Marchenbau noble house' },
-            { type: 'npc', id: 'donnathan-reeves', reason: 'Old ally and political liaison' }
+            { type: 'npc', id: 'donnathan-reeves', reason: 'Old ally and political liaison' },
+            { type: 'npc', id: 'empress-consort-lyssandra', reason: 'Grand-uncle' }
         ]
     },
     {

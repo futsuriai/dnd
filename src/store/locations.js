@@ -27,8 +27,10 @@ export const locations = [
     type: 'empire',
     description: 'The imperial polity encompassing provinces like Hieroterra and Ordonne; home of the Eulogia of the Eternal Light.',
     connections: [
+      { type: 'location', id: 'boixden', reason: 'Province within the empire' },
       { type: 'location', id: 'hieroterra', reason: 'Province within the empire' },
       { type: 'location', id: 'ordonne', reason: 'Province within the empire' },
+      { type: 'location', id: 'vasellia', reason: 'Province within the empire' },
       { type: 'location', id: 'pharus', reason: 'Seat of imperial power' }
     ]
   },
@@ -52,6 +54,22 @@ export const locations = [
     connections: [
       { type: 'location', id: 'pharus', reason: 'Contains Pharus (Capital)' },
       { type: 'lore', id: 'pilgrimage-enlightened', reason: 'Ending point of the Pilgrimage' }
+    ]
+  },
+  {
+    id: 'torchlight-college',
+    name: 'Torchlight College',
+    type: 'poi',
+    description: 'The empire\'s premier university in Ordonne, alma mater to nobles like Donnathan Reeves and Duke Valerian Oleander.',
+    tags: ['academy', 'ordonne'],
+    history: [
+      { session: 8, note: 'Reeves planned to visit while coordinating with Grand Duke Valerian Oleander.' }
+    ],
+    connections: [
+      { type: 'location', id: 'ordonne', relationship: 'Located In' },
+      { type: 'npc', id: 'donnathan-reeves', reason: 'Alumnus' },
+      { type: 'npc', id: 'duke-valerian-oleander', reason: 'Alumnus' },
+      { type: 'lore', id: 'torchlight-college', reason: 'Central institution' }
     ]
   },
   {
@@ -294,13 +312,13 @@ export const locations = [
   },
   {
     id: 'hyrta',
-    name: 'Hyrta',
+    name: 'Hýrda',
     type: 'village',
     description: 'A goliath village in the mountains, home to Meri and Ysidor and threatened by imperial mining interests.',
     tags: ['village', 'goliath', 'mountains'],
     history: [
       { session: 1, note: 'Ysidor\'s home village.' },
-      { session: 7, note: 'Meri\'s is heading home as it is facing mining disputes' }
+      { session: 7, note: 'Meri is heading home as it is facing mining disputes' }
     ],
     connections: [
       { type: 'location', id: 'hieroterra', reason: 'Village within the province' }
@@ -360,6 +378,30 @@ export const locations = [
     ]
   },
   {
+    id: 'boixden-capital',
+    name: 'Boixden',
+    type: 'capital',
+    description: 'The fortified capital of the province of Boixden and ancestral seat of the Marchenbau family.',
+    tags: ['capital', 'boixden'],
+    history: [
+      { session: 8, note: 'Identified as the Marchenbau family\'s provincial seat during the Meri investigation.' }
+    ],
+    connections: [
+      { type: 'location', id: 'boixden', relationship: 'Province Capital' },
+      { type: 'lore', id: 'marchenbau', reason: 'Family seat' }
+    ]
+  },
+  {
+    id: 'luxembough',
+    name: 'Luxembough',
+    type: 'city',
+    description: 'Not much is known about this city.',
+    tags: ['city', 'boixden'],
+    connections: [
+      { type: 'location', id: 'boixden', relationship: 'Located In' }
+    ]
+  },
+  {
     id: 'boixden',
     name: 'Boixden',
     type: 'province',
@@ -370,6 +412,33 @@ export const locations = [
     connections: [
       { type: 'location', id: 'hariolar-empire', reason: 'Province within the empire' },
       { type: 'lore', id: 'marchenbau', reason: 'Home of the Marchenbau family' }
+    ]
+  },
+  {
+    id: 'vasellia',
+    name: 'Vasellia',
+    type: 'province',
+    description: 'A fertile coastal province of the Hariolar Empire renowned for its luminous vineyards and viscounties.',
+    history: [
+      { session: 8, note: 'Viscount Donnathan Reeves referenced his family holdings here while departing Bastion.' }
+    ],
+    connections: [
+      { type: 'location', id: 'hariolar-empire', reason: 'Province within the empire' },
+      { type: 'npc', id: 'donnathan-reeves', reason: 'Holds the title Viscount Sommeil here' }
+    ]
+  },
+  {
+    id: 'sommeil',
+    name: 'Sommeil',
+    type: 'town',
+    description: 'The viscounty seat of Donnathan Reeves, nestled among Vasellia\'s vineyards and famed for luminous wines.',
+    tags: ['town', 'vasellia', 'vineyards'],
+    history: [
+      { session: 8, note: 'Reeves confirmed his title as Viscount Sommeil before departing for the ducal palace.' }
+    ],
+    connections: [
+      { type: 'location', id: 'vasellia', relationship: 'Viscounty within the province' },
+      { type: 'npc', id: 'donnathan-reeves', reason: 'Title holder' }
     ]
   },
   {
