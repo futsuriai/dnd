@@ -410,7 +410,6 @@ export const locations = [
       { session: 8, note: 'Revealed as home province of Proctor Eduard\'s family' }
     ],
     connections: [
-      { type: 'location', id: 'hariolar-empire', reason: 'Province within the empire' },
       { type: 'lore', id: 'marchenbau', reason: 'Home of the Marchenbau family' }
     ]
   },
@@ -423,7 +422,6 @@ export const locations = [
       { session: 8, note: 'Viscount Donnathan Reeves referenced his family holdings here while departing Bastion.' }
     ],
     connections: [
-      { type: 'location', id: 'hariolar-empire', reason: 'Province within the empire' },
       { type: 'npc', id: 'donnathan-reeves', reason: 'Holds the title Viscount Sommeil here' }
     ]
   },
