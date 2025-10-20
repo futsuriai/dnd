@@ -67,7 +67,8 @@ export const locations = [
       { session: 4, note: 'Spider recon reveals a deep underground complex beneath the structure.' },
       { session: 5, note: 'Infiltration maps R&D floors; titan chassis and advanced warforged observed.' },
       { session: 6, note: 'Basement lab confirmed to be synthesizing crystals from living subjects.' },
-      { session: 7, note: 'Security increased with modern warforged deployment' }
+      { session: 7, note: 'Security increased with modern warforged deployment' },
+      { session: 8, note: 'Security breach; party\'s rune passes compromised; forecourt battle with warforged' }
     ],
     connections: [
       { type: 'location', id: 'bastion-city', relationship: 'Located In' }
@@ -343,6 +344,47 @@ export const locations = [
     ],
     connections: [
       { type: 'location', id: 'bastion-city', reason: 'Located In' }
+    ]
+  },
+  {
+    id: 'badwater-well',
+    name: 'Badwater Well',
+    type: 'poi',
+    description: 'An obscure landmark in East Bastion used as a discreet meeting point.',
+    tags: ['meeting point', 'east bastion'],
+    history: [
+      { session: 8, note: 'Designated as rendezvous point after the Lighthouse gate incident' }
+    ],
+    connections: [
+      { type: 'location', id: 'bastion-city', reason: 'Located In' }
+    ]
+  },
+  {
+    id: 'boixden',
+    name: 'Boixden',
+    type: 'province',
+    description: 'An imperial province of The Hariolar Empire, home to the noble Marchenbau family.',
+    history: [
+      { session: 8, note: 'Revealed as home province of Proctor Eduard\'s family' }
+    ],
+    connections: [
+      { type: 'location', id: 'hariolar-empire', reason: 'Province within the empire' },
+      { type: 'lore', id: 'marchenbau', reason: 'Home of the Marchenbau family' }
+    ]
+  },
+  {
+    id: 'ducal-palace',
+    name: 'Ducal Palace',
+    type: 'landmark',
+    description: 'The residence and seat of power for Duke Valerian Oleander in Bastion City. Director Reeves frequently visits for days at a time.',
+    tags: ['palace', 'bastion city'],
+    history: [
+      { session: 8, note: 'Reeves announced plans to visit for several days' }
+    ],
+    connections: [
+      { type: 'location', id: 'bastion-city', reason: 'Located In' },
+      { type: 'npc', id: 'duke-valerian-oleander', reason: 'Ducal residence' },
+      { type: 'npc', id: 'donnathan-reeves', reason: 'Frequent visitor' }
     ]
   }
 ];

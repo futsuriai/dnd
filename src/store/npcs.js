@@ -46,40 +46,48 @@ export const npcs = [
         name: 'Proctor Eduard',
         role: 'Eulogian Proctor',
         location: 'Eulogian Seminary, West Bastion',
-        description: 'Ellara\'s mentor at the Seminary. Directly implicated by Meri as a figure she saw after being captured.',
-        fullText: 'Proctor Eduard projects calm authority and orthodoxy within the Eulogian Seminary. He warned of Lighthouse hubris and claimed to have set Meri free, directing concerned parties away from further investigation. However, Meri\'s testimony directly identified him as the priest who attached her to the synthesis machine. This revelation paints his previous actions and denials in a sinister light, suggesting deep complicity in the Lighthouse\'s atrocities, despite his outward piety and condemnation of their "ambition."',
+        description: 'Ellara\'s mentor at the Seminary, the fifth son of the Marchenbau line. Directly implicated by Meri as a figure she saw after being captured.',
+        fullText: 'Proctor Eduard projects calm authority and orthodoxy within the Eulogian Seminary. He warned of Lighthouse hubris and claimed to have set Meri free, directing concerned parties away from further investigation. However, Meri\'s testimony directly identified him as the priest who attached her to the synthesis machine. This revelation paints his previous actions and denials in a sinister light, suggesting deep complicity in the Lighthouse\'s atrocities, despite his outward piety and condemnation of their "ambition." Session 8 confirmed his noble lineage as a Marchenbau scion and highlighted his wary trust of Donnathan Reeves, whom he expects to follow his own loyalties.',
         history: [
             { session: 2, note: 'Named on custody transfer ledger for Meri.' },
             { session: 3, note: 'Claimed to have released Meri, directing the party out of the city.' },
             { session: 4, note: 'Expressed shock; promised to escalate investigation.' },
             { session: 6, note: 'Complicity questioned via Reeves hand-offs; stance uncertain.' },
-            { session: 7, note: 'Directly implicated by Meri since she was able to describe him after her capture' }
+            { session: 7, note: 'Directly implicated by Meri since she was able to describe him after her capture' },
+            { session: 8, note: 'Reveals Marchenbau heritage and cautions Ellara that Reeves is bound to his own ambitions.' }
         ],
         connections: [
             { type: 'character', id: 'ellara', reason: 'Mentor at the Seminary' },
             { type: 'location', id: 'eulogian-seminary', reason: 'Post and influence' },
             { type: 'location', id: 'stonewall-tower', reason: 'Named in custody transfer ledger (Session 2)' },
-            { type: 'lore', id: 'eulogia-eternal-light', reason: 'Clergy of the faith' }
+            { type: 'lore', id: 'eulogia-eternal-light', reason: 'Clergy of the faith' },
+            { type: 'lore', id: 'marchenbau', reason: 'Scion of the Marchenbau noble house' },
+            { type: 'npc', id: 'donnathan-reeves', reason: 'Old ally and political liaison' }
         ]
     },
     {
         id: 'donnathan-reeves',
         name: 'Donnathan Reeves',
         role: 'Director of Relations, Duskbreaker Lighthouse',
-        location: 'Pharus (often traveling)',
+        location: 'Bastion City & Pharus',
         prominence: 'minor',
-        description: 'Political liaison between the Lighthouse and Eulogians. Named as the hand-off agent for "subjects".',
-        fullText: 'Donnathan Reeves serves as the diplomatic face of the Duskbreaker Lighthouse, frequently traveling to maintain relationships with political authorities, particularly in the capital city of Pharus. Basement laboratory testimony has identified him as the crucial liaison who facilitates the delivery of living "subjects" into Lighthouse custody for crystal synthesis experiments. These transfers are conducted "per protocol," suggesting an established and sanctioned arrangement between the Lighthouse and Eulogian authorities. His role makes him a key political lever and potentially the keystone figure in understanding the full scope of the institutional conspiracy.',
+        description: 'Viscount Donnathan "Lord Sommeil" Reeves, the Lighthouse\'s diplomatic liaison to imperial nobility and the Eulogians; named as the hand-off agent for living "subjects".',
+        fullText: 'Donnathan Reeves serves as the diplomatic face of the Duskbreaker Lighthouse, frequently traveling to maintain relationships with political authorities, particularly in the capital city of Pharus. Basement laboratory testimony has identified him as the crucial liaison who facilitates the delivery of living "subjects" into Lighthouse custody for crystal synthesis experiments. These transfers are conducted "per protocol," suggesting an established and sanctioned arrangement between the Lighthouse and Eulogian authorities. His role makes him a key political lever and potentially the keystone figure in understanding the full scope of the institutional conspiracy. Session 8 revealed that Reeves holds the hereditary title Viscount Sommeil, hails from a vintner family, and maintains direct access to Grand Duke Valerian Oleander, rekindling Torchlight College ties while shuttling between Bastion and the ducal palace.',
         history: [
             { session: 5, note: 'Identified as Director of Relations, liaising in Pharus.' },
             { session: 6, note: 'Named as hand-off for delivered “subjects” per protocol.' },
-            { session: 7, note: 'Introduced to Ellara by Proctor Eduard in the Seminary mess hall.' }
+            { session: 7, note: 'Introduced to Ellara by Proctor Eduard in the Seminary mess hall.' },
+            { session: 8, note: 'Confirmed as Viscount Sommeil; heading to the ducal palace after conferring with Proctor Eduard.' }
         ],
         connections: [
             { type: 'location', id: 'duskbreaker-lighthouse', reason: 'Executive at the Lighthouse' },
             { type: 'location', id: 'pharus', reason: 'Operating theater in the capital' },
             { type: 'lore', id: 'lightkeepers', reason: 'Operates under/with the council' },
-            { type: 'location', id: 'eulogian-seminary', reason: 'Present at Seminary; introduced to Ellara' }
+            { type: 'location', id: 'eulogian-seminary', reason: 'Present at Seminary; introduced to Ellara' },
+            { type: 'location', id: 'ducal-palace', reason: 'Frequent visitor and liaison to the duke' },
+            { type: 'npc', id: 'proctor-eduard', reason: 'Longtime ally coordinating political cover' },
+            { type: 'npc', id: 'duke-valerian-oleander', reason: 'College acquaintance with current access' },
+            { type: 'lore', id: 'torchlight-college', reason: 'Alumnus; met Valerian at the college' }
         ]
     },
     {
@@ -231,7 +239,7 @@ export const npcs = [
         name: 'Dawn',
         role: 'Lead Technician (Basement Lab)',
         location: 'Duskbreaker Lighthouse',
-        description: 'Lead technician overseeing the basement synthesis rig. Briefed “Director Faberge” on protocol, chain of custody via Donnathan Reeves, and the synthesis process using living Shadowed subjects.',
+        description: 'Lead technician overseeing the basement synthesis rig. Briefed "Director Faberge" on protocol, chain of custody via Donnathan Reeves, and the synthesis process using living Shadowed subjects.',
         history: [
             { session: 6, note: 'Disclosed basement synthesis details and Reeves hand-off; complied with orders to halt run and move Meri to Med Bay.' }
         ],
@@ -241,6 +249,22 @@ export const npcs = [
             { type: 'character', id: 'michelle-faberge', reason: 'Reported to as Director of Research' },
             { type: 'character', id: 'donnathan-reeves', reason: 'Named as liaison delivering subjects per protocol' },
             { type: 'lore', id: 'light-crystals', reason: 'Operates crystal synthesis process' }
+        ]
+    },
+    {
+        id: 'empress-consort-lyssandra',
+        name: 'Empress Consort Lyssandra',
+        role: 'Empress Consort of The Hariolar Empire',
+        location: 'Pharus',
+        description: 'Grand-niece of Proctor Eduard who married into the imperial family. Met Donnathan Reeves in Pharus.',
+        history: [
+            { session: 8, note: 'First mentioned as Eduard\'s grand-niece and acquaintance of Reeves' }
+        ],
+        connections: [
+            { type: 'npc', id: 'proctor-eduard', reason: 'Grand-uncle' },
+            { type: 'lore', id: 'marchenbau', reason: 'Family origin' },
+            { type: 'npc', id: 'donnathan-reeves', reason: 'Met in Pharus' },
+            { type: 'location', id: 'pharus', reason: 'Imperial residence' }
         ]
     }
 ];

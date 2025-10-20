@@ -44,7 +44,8 @@ Session 6 revealed that the Lighthouse conducts a secret basement program to syn
       { session: 1, note: 'Introduced as new technology from the Duskbreaker Lighthouse.' },
       { session: 3, note: 'Discovered powering warforged constructs on the Old Trade Road.' },
       { session: 5, note: 'Research into phosphorus additives to increase capacity tenfold is revealed.' },
-      { session: 6, note: 'Secret synthesis program revealed: enhanced crystals are forged from living Shadowed beings.' }
+        { session: 6, note: 'Secret synthesis program revealed: enhanced crystals are forged from living Shadowed beings.' },
+        { session: 8, note: 'Ellara\'s vision of a screaming lamp highlights the suffering infused into every synthetic crystal.' }
     ]
   },
   {
@@ -141,6 +142,80 @@ Session 6 revealed that the Lighthouse conducts a secret basement program to syn
     connections: [ // Added connection
       { type: 'location', id: 'hieroterra', reason: 'Starting point' },
       { type: 'location', id: 'ordonne', reason: 'Ending point' }
+    ]
+  },
+  {
+    id: 'torchlight-college',
+    term: 'Torchlight College',
+    description: 'The premiere educational institution of The Hariolar Empire, located in Ordonne province about a day\'s wagon ride from Pharus. A five-year boarding program for nobility and aristocracy beginning at age 16.',
+    fullText: `The premiere educational institution of The Hariolar Empire, located within Ordonne imperial province, about a day's wagon ride from Pharus.
+
+## Education and Enrollment
+
+At the age of 16, members of the nobility and aristocracy attend to complete their education as well as socialize with their peers. It is a 5-year boarding program with boarding facilities.
+
+The primary goal is to network among current generations to ensure they have ties they can call upon when they are in positions of power. All first-born, heir apparent, and heir presumptive are sent, while second-born and even third-born are not uncommon. Gifted nobility will also be sent. Lesser children will complete their education elsewhere.
+
+## Recent Changes
+
+Recently, the college has opened its doors to the newly rich, if they are willing to pay enough. There has also been a scholarship system available, funded by the Duskbreaker Lighthouse.`,
+    connections: [
+      { type: 'location', id: 'hariolar-empire', reason: 'Educational institution' },
+      { type: 'location', id: 'ordonne', reason: 'Located in this province' },
+      { type: 'location', id: 'pharus', reason: 'About a day\'s travel away' },
+      { type: 'location', id: 'duskbreaker-lighthouse', reason: 'Funds scholarship program' },
+      { type: 'npc', id: 'donnathan-reeves', reason: 'Alumnus' },
+      { type: 'npc', id: 'duke-valerian-oleander', reason: 'Alumnus' }
+    ],
+    history: [
+      { session: 8, note: 'Revealed as alma mater where Reeves and Duke Valerian met' }
+    ]
+  },
+  {
+    id: 'marchenbau',
+    term: 'Marchenbau',
+    description: 'Noble family from the imperial province of Boixden. Proctor Eduard is the fifth son of the previous Marchioness.',
+    connections: [
+      { type: 'location', id: 'boixden', reason: 'Family seat' },
+      { type: 'npc', id: 'proctor-eduard', reason: 'Fifth son of previous Marchioness' },
+      { type: 'npc', id: 'empress-consort-lyssandra', reason: 'Family member, Eduard\'s grand-niece' }
+    ],
+    history: [
+      { session: 8, note: 'Eduard\'s noble lineage revealed during conversation with Reeves' }
+    ]
+  },
+  {
+    id: 'imperial-peerage',
+    term: 'Imperial Peerage System',
+    description: 'The hierarchical system of nobility in The Hariolar Empire, including ranks from Emperor/Empress down through Grand Duke/Duchess, Marquess/Marchioness, Count/Countess, Viscount/Viscountess, to Baron/Baroness.',
+    fullText: `The formal system of nobility and forms of address in The Hariolar Empire.
+
+## Direct Speech
+
+| Rank                       | Formal                                                       | Styled Subsequent |
+| -------------------------- | ------------------------------------------------------------ | ----------------- |
+| Emperor / Empress          | Your Holy Radiance, Emperor / Empress of the Hariolar Empire | Your Radiance     |
+| Grand Duke / Grand Duchess | Your Grace Grand Duke / Duchess of {Land}                    | Your Grace        |
+| Marquess / Marchioness     | Your Most Honorable Marquess / Marchioness of {Land}         | My Lord / Lady    |
+| Count / Countess           | Your Right Honorable Count / Countess of {Land}              | My Lord / Lady    |
+| Viscount / Viscountess     | Your Honorable Viscount / Viscountess of {Land}              | My Lord / Lady    |
+| Baron / Baroness           | Your Honorable Baron / Baroness of {Land}                    | My Lord / Lady    |
+
+## Indirect Speech
+
+| Rank                       | Option 1                                                          | Option 2                           |
+| -------------------------- | ----------------------------------------------------------------- | ---------------------------------- |
+| Emperor / Empress          | His / Her Holy Radiance, Emperor / Empress of the Hariolar Empire | His / Her Radiance                 |
+| Grand Duke / Grand Duchess | Grand Duke / Duchess {First Name}                                 | His Grace {Family Name} / {Land}   |
+| Marquess / Marchioness     | Marquess / Marchioness {First Name}                               | Lord / Lady {Family Name} / {Land} |
+| Count / Countess           | Count / Countess {First Name}                                     | Lord / Lady {Family Name} / {Land} |
+| Viscount / Viscountess     | Viscount / Viscountess {First Name}                               | Lord / Lady {Family Name} / {Land} |
+| Baron / Baroness           | Baron / Baroness {First Name}                                     | Lord / Lady {Family Name} / {Land} |`,
+    connections: [
+      { type: 'location', id: 'hariolar-empire', reason: 'Governing system' }
+    ],
+    history: [
+      { session: 8, note: 'Forms of address referenced in noble interactions' }
     ]
   }
 ];

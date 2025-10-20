@@ -6,7 +6,7 @@ Inputs you must use:
    - Lore: src/store/lore.js
    - Locations: src/store/locations.js
    - NPCs: src/store/npcs.js
-   - Sessions index: src/store/sessions.js (for session numbering reference)
+   - Sessions index: src/store/sessions.js (for session metadata and numbering)
 
 Mode
 - MODE: report (default) | autofix
@@ -35,10 +35,29 @@ Task
    - If exists but no history for session N: Add appropriate history entry
    - If missing connections revealed in session: Add connections
    - If description needs updating based on new information: Update description
+5) Update sessions.js for session N:
+   - Check if session N already has upcoming: false and populated highlights
+   - If no, update session N entry with:
+     - Set upcoming: false
+     - Add summaryFile: 'session-N.md'
+     - Update subtitle if needed based on session content
+     - Update description with brief summary
+     - Populate highlights array with 5-10 key events
+   - If yes, verify added highlights properly convey what happened and match the session but don't duplicate data
+   - Create session N+1 stub at top of array:
+     - id: 'session-N+1'
+     - title: 'Session N+1'
+     - subtitle: '<something fitting for where we left off>'
+     - upcoming: true
+     - Empty highlights array
+     - Placeholder description
 
 Output
 1) Processing Report (Markdown):
    - Latest Session: N
+   - Session Index Updated
+     - Updated session N metadata (upcoming, highlights, description, summaryFile)
+     - Created session N+1 stub (if applicable)
    - New Entities Created
      - <type> <id> — evidence: "<short quote>"; rationale
    - History Entries Added
@@ -50,6 +69,12 @@ Output
    - Confidence: low/medium/high per bullet.
 
 2) If MODE=autofix, append a Unified Diff (patch) that:
+   - Updates sessions.js for session N (unless already processed):
+     - Mark session N as upcoming: false
+     - Add summaryFile reference
+     - Populate highlights with key events
+     - Update description with session summary
+     - Create session N+1 stub with upcoming: true
    - Creates new entity stubs for clearly-new entities with initial history entry
    - Adds history entry { session: N, note: '<short cause>' } for existing entities when a significant event occurred
    - Adds obvious connections with a brief reason
@@ -64,6 +89,7 @@ Constraints
 - When unsure (low confidence), report only — do not autofix.
 - Do not introduce new updatedInSessions values. Prefer history entries.
 - Focus on the latest session only - do not process historical sessions.
+- Session index updates: Only update session N if it has upcoming: true or empty highlights. If already processed (upcoming: false and populated highlights), skip session update.
 
 Heuristics & Mapping
 - NPC cues: "met <Name>", "<Name>, the <role>", titles (Proctor, Captain, Smith), speech acts.
@@ -113,6 +139,9 @@ Session Discovery
 Report template (example)
 ---
 Latest Session: 7
+- Session Index Updated
+  - Updated session 7: marked complete, added highlights and summary
+  - Created session 8 stub for next session
 - New Entities Created
   - location emerald-dock — evidence: "arrived at the Emerald Dock" — new location mentioned.
 - History Entries Added
@@ -124,4 +153,4 @@ Latest Session: 7
 ---
 
 Patch header (autofix):
-- summary: process session 7; add 1 location stub; add 2 history entries; add 1 connection; update 1 description.
+- summary: process session 7; update session index; add 1 location stub; add 2 history entries; add 1 connection; update 1 description.

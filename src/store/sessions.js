@@ -2,15 +2,37 @@
 
 export const sessions = [
   {
-    id: 'session-8',
-    title: 'Session 8',
-    subtitle: 'An Unholy Alliance',
+    id: 'session-9',
+    title: 'Session 9',
+    subtitle: 'Ellara is Always Right',
     location: 'Bastion City',
-    date: 'September 28, 2025',
+    date: 'November 2, 2025',
     time: '1:00 PM',
     upcoming: true,
-    description: 'Now face-to-face with both Proctor Eduard and Director of Relations Donnathan Reeves, Ellara must navigate a tense meeting where any misstep could be fatal. With Nyx providing backup and Ysidor ready for a fight, the party aims to expose the conspiracy without becoming its next victims. The increased warforged presence looms large, a constant reminder of the stakes.',
+    description: 'The party regroups after the failed Lighthouse reconnaissance. With compromised passes and scattered across the city, they must decide their next move while Eduard and Reeves continue their political machinations.',
     highlights: [],
+  },
+  {
+    id: 'session-8',
+    title: 'Session 8',
+    subtitle: 'The Screaming Lamp',
+    location: 'Seminary & Bastion Streets',
+    date: 'October 19, 2025',
+    time: '1:00 PM',
+    upcoming: false,
+    summaryFile: 'session-8.md',
+    description: 'Ellara meets Director Reeves and learns of the deep connections between Proctor Eduard, the Lighthouse, and the imperial nobility. Her vision of a screaming lamp leads to a moral reckoning about light crystals. Meanwhile, the party\'s botched reconnaissance at the Lighthouse leaves their rune passes compromised and forces them to scatter across the city.',
+    highlights: [
+      'Proctor Eduard revealed as fifth son of Marchioness of Marchenbau with connections to Empress Consort',
+      'Director Reeves confirmed as Viscount Sommeil and old college friend of Grand Duke Valerian Oleander',
+      'Ellara\'s vision of the screaming lamp represents the suffering of all Shadowed in light crystals',
+      'Failed Lighthouse reconnaissance: party\'s rune passes compromised, alarms triggered',
+      'Chaotic forecourt battle with warforged and guards as party attempts escape',
+      'Berridin and Ysidor flee together using mirror images and bardic inspiration',
+      'Nyx uses Blessing of the Raven Queen to teleport to safety',
+      'Party scatters with rendezvous set at Badwater Well',
+      'Internal trust frayed as Ellara catches Berridin lying about the mission'
+    ],
   },
   {
     id: 'session-7',
