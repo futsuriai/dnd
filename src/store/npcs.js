@@ -24,6 +24,33 @@ export const npcs = [
         ]
     },
     {
+        id: 'lady-jacinta',
+        name: 'Lady Jacinta',
+        role: 'Noblewoman',
+        location: 'West Bastion',
+        description: 'Elderly, wealthy widow with an "open heart" who is friends with Donnathan Reeves\' mother.',
+        history: [
+            { session: 9, note: 'Mistook Ysidor for a sickly boy and "rescued" him; revealed Reeves\' relationship with the Duke.' }
+        ],
+        connections: [
+            { type: 'npc', id: 'donnathan-reeves', reason: 'Family friend' },
+            { type: 'location', id: 'lady-jacintas-estate', reason: 'Resides at' }
+        ]
+    },
+    {
+        id: 'guard-diane',
+        name: 'Diane',
+        role: 'Ducal Guard',
+        location: 'The Golden Dove',
+        description: 'A pious Eulogian guard stationed at The Golden Dove.',
+        history: [
+            { session: 9, note: 'Confirmed Proctor Eduard attends ducal functions.' }
+        ],
+        connections: [
+            { type: 'location', id: 'the-golden-dove', reason: 'Stationed at' }
+        ]
+    },
+    {
         id: 'michelle-faberge',
         name: 'Michelle Faberge',
         role: 'Director of Research, Duskbreaker Lighthouse',
@@ -73,12 +100,13 @@ export const npcs = [
         location: 'Bastion City & Pharus',
         prominence: 'minor',
         description: 'Viscount Donnathan "Lord Sommeil" Reeves, the Lighthouse\'s diplomatic liaison to imperial nobility and the Eulogians; named as the hand-off agent for living "subjects".',
-        fullText: 'Donnathan Reeves serves as the diplomatic face of the Duskbreaker Lighthouse, frequently traveling to maintain relationships with political authorities, particularly in the capital city of Pharus. Basement laboratory testimony has identified him as the crucial liaison who facilitates the delivery of living "subjects" into Lighthouse custody for crystal synthesis experiments. These transfers are conducted "per protocol," suggesting an established and sanctioned arrangement between the Lighthouse and Eulogian authorities. His role makes him a key political lever and potentially the keystone figure in understanding the full scope of the institutional conspiracy. Session 8 revealed that Reeves holds the hereditary title Viscount Sommeil, hails from a vintner family, and maintains direct access to Grand Duke Valerian Oleander, rekindling Torchlight College ties while shuttling between Bastion and the ducal palace.',
+        fullText: 'Donnathan Reeves serves as the diplomatic face of the Duskbreaker Lighthouse, frequently traveling to maintain relationships with political authorities, particularly in the capital city of Pharus. Basement laboratory testimony has identified him as the crucial liaison who facilitates the delivery of living "subjects" into Lighthouse custody for crystal synthesis experiments. These transfers are conducted "per protocol," suggesting an established and sanctioned arrangement between the Lighthouse and Eulogian authorities. His role makes him a key political lever and potentially the keystone figure in understanding the full scope of the institutional conspiracy. Session 8 revealed that Reeves holds the hereditary title Viscount Sommeil, hails from a vintner family, and maintains direct access to Grand Duke Valerian Oleander, rekindling Torchlight College ties while shuttling between Bastion and the ducal palace. It is an "open secret" that he and the Duke are lovers.',
         history: [
             { session: 5, note: 'Identified as Director of Relations, liaising in Pharus.' },
             { session: 6, note: 'Named as hand-off for delivered “subjects” per protocol.' },
             { session: 7, note: 'Introduced to Ellara by Proctor Eduard in the Seminary mess hall.' },
-            { session: 8, note: 'Confirmed as Viscount Sommeil; heading to the ducal palace after conferring with Proctor Eduard.' }
+            { session: 8, note: 'Confirmed as Viscount Sommeil; heading to the ducal palace after conferring with Proctor Eduard.' },
+            { session: 9, note: 'Revealed to be the lover of Grand Duke Oleander; stays at the Palace.' }
         ],
         connections: [
             { type: 'location', id: 'duskbreaker-lighthouse', reason: 'Executive at the Lighthouse' },
@@ -87,7 +115,7 @@ export const npcs = [
             { type: 'location', id: 'eulogian-seminary', reason: 'Present at Seminary; introduced to Ellara' },
             { type: 'location', id: 'ducal-palace', reason: 'Frequent visitor and liaison to the duke' },
             { type: 'npc', id: 'proctor-eduard', reason: 'Longtime ally coordinating political cover' },
-            { type: 'npc', id: 'duke-valerian-oleander', reason: 'College acquaintance with current access' },
+            { type: 'npc', id: 'duke-valerian-oleander', reason: 'College acquaintance and romantic partner' },
             { type: 'lore', id: 'torchlight-college', reason: 'Alumnus; met Valerian at the college' }
         ]
     },
@@ -96,14 +124,16 @@ export const npcs = [
         name: 'Duke Valerian Oleander',
         role: 'Duke of Hieroterra',
         location: 'Bastion City',
-        description: 'Provincial ruler of Hieroterra; mentioned as having been warned about the Lighthouse hubris and politics around light crystals.',
+        description: 'Provincial ruler of Hieroterra; mentioned as having been warned about the Lighthouse hubris and politics around light crystals. Revealed to be the lover of Donnathan Reeves.',
         history: [
             { session: 1, note: 'Named as Duke of Hieroterra during city introduction.' },
-            { session: 4, note: 'Eduard claims to have warned the duke about Lighthouse hubris.' }
+            { session: 4, note: 'Eduard claims to have warned the duke about Lighthouse hubris.' },
+            { session: 9, note: 'Revealed to be the lover of Donnathan Reeves.' }
         ],
         connections: [
             { type: 'location', id: 'bastion-city', reason: 'Seat of ducal power' },
-            { type: 'location', id: 'hieroterra', reason: 'Province lord' }
+            { type: 'location', id: 'hieroterra', reason: 'Province lord' },
+            { type: 'npc', id: 'donnathan-reeves', reason: 'Romantic partner' }
         ]
     },
     {

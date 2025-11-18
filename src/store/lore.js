@@ -115,7 +115,8 @@ Session 6 revealed that the Lighthouse conducts a secret basement program to syn
       { session: 1, note: 'Introduced as the dominant faith and the organizer of the Alms Giving event.' },
       { session: 2, note: 'Proctor Eduard\'s involvement in Meri\'s custody transfer is discovered.' },
       { session: 4, note: 'Tensions with the Duskbreaker Lighthouse over ambition and control are discussed by Eduard.' },
-      { session: 6, note: 'Implicated in the secret synthesis program through liaison Donnathan Reeves, who delivers subjects.' }
+      { session: 6, note: 'Implicated in the secret synthesis program through liaison Donnathan Reeves, who delivers subjects.' },
+      { session: 9, note: 'Schism regarding warforged mentioned; Eduard argues they are gifts of light.' }
     ],
     connections: [
       { type: 'npc', id: 'proctor-eduard', reason: 'Clergy member (Proctor)' },

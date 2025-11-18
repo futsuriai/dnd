@@ -365,13 +365,55 @@ export const locations = [
     ]
   },
   {
+    id: 'civic-hall-of-records',
+    name: 'Civic Hall of Records',
+    type: 'poi',
+    description: 'Administrative center in West Bastion holding housing and property records.',
+    tags: ['government', 'west bastion'],
+    history: [
+      { session: 9, note: 'Nyx accessed records to find Reeves\' estate address.' }
+    ],
+    connections: [
+      { type: 'location', id: 'bastion-city', relationship: 'Located In' }
+    ]
+  },
+  {
+    id: 'lady-jacintas-estate',
+    name: 'Lady Jacinta\'s Estate',
+    type: 'poi',
+    description: 'The manor of Lady Jacinta in West Bastion. A place of aggressive hospitality.',
+    tags: ['residence', 'west bastion'],
+    history: [
+      { session: 9, note: 'Ysidor was taken here for medical attention; Nyx retrieved him.' }
+    ],
+    connections: [
+      { type: 'location', id: 'bastion-city', relationship: 'Located In' },
+      { type: 'npc', id: 'lady-jacinta', reason: 'Owner' }
+    ]
+  },
+  {
+    id: 'the-golden-dove',
+    name: 'The Golden Dove',
+    type: 'tavern',
+    description: 'A high-end tavern near the Ducal Palace. Nyx has claimed to be staying here as part of a cover story.',
+    tags: ['tavern', 'luxury', 'west bastion'],
+    history: [
+      { session: 9, note: 'Scouted by Ellara and Berridin; Nyx claims to be staying here.' }
+    ],
+    connections: [
+      { type: 'location', id: 'bastion-city', relationship: 'Located In' },
+      { type: 'location', id: 'ducal-palace', relationship: 'Nearby' }
+    ]
+  },
+  {
     id: 'badwater-well',
     name: 'Badwater Well',
     type: 'poi',
     description: 'An obscure landmark in East Bastion used as a discreet meeting point.',
     tags: ['meeting point', 'east bastion'],
     history: [
-      { session: 8, note: 'Designated as rendezvous point after the Lighthouse gate incident' }
+      { session: 8, note: 'Designated as rendezvous point after the Lighthouse gate incident' },
+      { session: 9, note: 'Party rendezvous point; Nyx confirms safety.' }
     ],
     connections: [
       { type: 'location', id: 'bastion-city', reason: 'Located In' }
@@ -446,7 +488,8 @@ export const locations = [
     description: 'The residence and seat of power for Duke Valerian Oleander in Bastion City. Director Reeves frequently visits for days at a time.',
     tags: ['palace', 'bastion city'],
     history: [
-      { session: 8, note: 'Reeves announced plans to visit for several days' }
+      { session: 8, note: 'Reeves announced plans to visit for several days' },
+      { session: 9, note: 'Scouted by Ellara and Berridin; deactivated warforged observed at gates.' }
     ],
     connections: [
       { type: 'location', id: 'bastion-city', reason: 'Located In' },

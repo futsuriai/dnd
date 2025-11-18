@@ -2,15 +2,36 @@
 
 export const sessions = [
   {
+    id: 'session-10',
+    title: 'Session 10',
+    subtitle: 'The Ball',
+    date: 'November 16, 2025',
+    upcoming: true,
+    description: 'The party prepares to infiltrate the Ducal Ball or exploit the Lady Jacinta connection to get close to Donnathan Reeves.',
+    highlights: [],
+  },
+  {
     id: 'session-9',
     title: 'Session 9',
-    subtitle: 'Ellara is Always Right',
+    subtitle: 'The Golden Dove and the Sickly Son',
     location: 'Bastion City',
     date: 'November 2, 2025',
     time: '1:00 PM',
-    upcoming: true,
-    description: 'The party regroups after the failed Lighthouse reconnaissance. With compromised passes and scattered across the city, they must decide their next move while Eduard and Reeves continue their political machinations.',
-    highlights: [],
+    upcoming: false,
+    summaryFile: 'session-9.md',
+    description: 'The party splits to gather intelligence on Donnathan Reeves. Nyx and Ysidor infiltrate the Civic Hall of Records, leading to Ysidor\'s accidental "abduction" by a well-meaning noblewoman. Meanwhile, Ellara and Berridin scout the Ducal Palace and uncover a high-end tavern that becomes central to their cover story.',
+    highlights: [
+      'Party rendezvous at Badwater Well; Nyx is paranoid but eventually confirms safety.',
+      'Nyx and Ysidor adopt disguises "Alexander" and "Elk" to visit the Civic Hall of Records.',
+      'Ysidor (as "Elk") is "rescued" by Lady Jacinta, who mistakes his disguise for a terrible illness.',
+      'Nyx retrieves Reeves\' address (Viscount Sommeil\'s estate) but learns he stays at the Palace.',
+      'Lady Jacinta reveals it is an "open secret" that Reeves and Grand Duke Oleander are lovers.',
+      'Nyx lies to Jacinta about staying at "The Golden Dove" to maintain cover.',
+      'Ellara and Berridin scout the Palace and enter The Golden Dove tavern.',
+      'Berridin overhears rumors of a Ball for the Duke\'s "returned friend".',
+      'Ellara confirms with Guard Diane that Proctor Eduard attends these functions.',
+      'Nyx realizes he must now book a room at The Golden Dove to support his lie.'
+    ],
   },
   {
     id: 'session-8',
