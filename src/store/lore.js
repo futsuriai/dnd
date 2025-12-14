@@ -166,10 +166,12 @@ Recently, the college has opened its doors to the newly rich, if they are willin
       { type: 'location', id: 'pharus', reason: 'About a day\'s travel away' },
       { type: 'location', id: 'duskbreaker-lighthouse', reason: 'Funds scholarship program' },
       { type: 'npc', id: 'donnathan-reeves', reason: 'Alumnus' },
-      { type: 'npc', id: 'duke-valerian-oleander', reason: 'Alumnus' }
+      { type: 'npc', id: 'duke-valerian-oleander', reason: 'Alumnus' },
+      { type: 'npc', id: 'lady-ophelia-xanteres-oleander', reason: 'Recent graduate' }
     ],
     history: [
-      { session: 8, note: 'Revealed as alma mater where Reeves and Duke Valerian met' }
+      { session: 8, note: 'Revealed as alma mater where Reeves and Duke Valerian met' },
+      { session: 10, note: 'Lady Ophelia returned from the college, sparking the ball in her honor' }
     ]
   },
   {
@@ -217,6 +219,31 @@ Recently, the college has opened its doors to the newly rich, if they are willin
     ],
     history: [
       { session: 8, note: 'Forms of address referenced in noble interactions' }
+    ]
+  },
+  {
+    id: 'whitaker-family',
+    term: 'The Whitaker Brothers',
+    description: 'A noble family from County Cork in Vasellia. The six Whitaker brothers are each identified by a signature color.',
+    fullText: `The Whitaker family holds lands in County Cork, an inland province of Vasellia. Lord Whitaker has six sons, each associated with a signature color:
+
+| Brother | Color | Status |
+| ------- | ----- | ------ |
+| Whitaker I | Red | Heir to the family lands |
+| Whitaker II | Blue | Attended Torchlight College |
+| Whitaker III | Orange | Exiled after a scandal involving a viscount's daughter at a ball |
+| Whitaker IV | Brown | Explorer, currently traveling in Boaden |
+| Whitaker V | Yellow | Joined the Eulogian clergy |
+| Whitaker VI (Witty) | Purple | Aspiring alchemist in Bastion City |
+
+The family employs halfling servants who traditionally adopt "normal" human names. Witty's manservant Jarvis has recently gone missing, along with a large portion of Witty's wardrobe.`,
+    connections: [
+      { type: 'location', id: 'vasellia', reason: 'Family province' },
+      { type: 'character', id: 'witty', reason: 'Sixth son' },
+      { type: 'lore', id: 'torchlight-college', reason: 'Whitaker II attended' }
+    ],
+    history: [
+      { session: 10, note: 'Brothers referenced when party adopted Whitaker identities for the ball' }
     ]
   }
 ];

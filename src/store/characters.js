@@ -84,6 +84,22 @@ export const characters = [
     avatarUrl: getImageUrl(avatarModules, 'ysidor', 'avatar'),
     portraitUrl: getImageUrl(portraitModules, 'ysidor', 'portrait'),
     connections: []
+  },
+  {
+    id: 'witty',
+    name: 'Whitaker "Witty" Whitman VI',
+    race: 'Human',
+    class: 'Artificer',
+    level: 3,
+    background: 'Noble',
+    bio: 'The sixth and youngest son of Lord Whitaker, Witty is an eccentric noble obsessed with gases, alchemy, and gaining access to the Duskbreaker Lighthouse. He dreams of founding the "Institute of Philosophical Pneumatics" and came to Bastion City to network with nobility and secure an interview with Director Faberge—unaware she is dead. His manservant Jarvis has gone missing along with much of his wardrobe. Inventor of "Success Gas"—a narcotic mixture of snake venom and sphinx anal glands—which he genuinely believes grants intelligence. Purple is his signature color.',
+    dndBeyondLink: 'https://www.dndbeyond.com/characters/155766880',
+    avatarUrl: getImageUrl(avatarModules, 'witty', 'avatar'),
+    portraitUrl: getImageUrl(portraitModules, 'witty', 'portrait'),
+    connections: [
+      { type: 'location', id: 'lord-whitakers-estate', reason: 'Resides at' },
+      { type: 'npc', id: 'donnathan-reeves', reason: 'Family acquaintance from past balls' }
+    ]
   }
 ];
 

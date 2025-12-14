@@ -3,6 +3,21 @@
 export const npcs = [
     // Major NPCs (show like CharactersView with portraits/avatars)
     {
+        id: 'lady-ophelia-xanteres-oleander',
+        name: 'Lady Ophelia Xanteres Oleander',
+        role: 'Marchioness of Bastion City',
+        location: 'Ducal Palace, Bastion City',
+        description: 'Grand Duke Valerian Oleander\'s niece and heir. Recently returned from Torchlight College. The ball was held in her honor.',
+        history: [
+            { session: 10, note: 'Introduced at the ball; hinted at army delays at a mining town' }
+        ],
+        connections: [
+            { type: 'npc', id: 'duke-valerian-oleander', reason: 'Niece and heir' },
+            { type: 'lore', id: 'torchlight-college', reason: 'Recent graduate' },
+            { type: 'location', id: 'ducal-palace', reason: 'Resides at' }
+        ]
+    },
+    {
         id: 'meri',
         name: 'Meri',
         role: 'Goliath Mentor',
@@ -81,7 +96,8 @@ export const npcs = [
             { session: 4, note: 'Expressed shock; promised to escalate investigation.' },
             { session: 6, note: 'Complicity questioned via Reeves hand-offs; stance uncertain.' },
             { session: 7, note: 'Directly implicated by Meri since she was able to describe him after her capture' },
-            { session: 8, note: 'Reveals Marchenbau heritage and cautions Ellara that Reeves is bound to his own ambitions.' }
+            { session: 8, note: 'Reveals Marchenbau heritage and cautions Ellara that Reeves is bound to his own ambitions.' },
+            { session: 10, note: 'Invited Ellara to the Grand Duke\'s ball; escorted her as his guest' }
         ],
         connections: [
             { type: 'character', id: 'ellara', reason: 'Mentor at the Seminary' },
@@ -103,10 +119,11 @@ export const npcs = [
         fullText: 'Donnathan Reeves serves as the diplomatic face of the Duskbreaker Lighthouse, frequently traveling to maintain relationships with political authorities, particularly in the capital city of Pharus. Basement laboratory testimony has identified him as the crucial liaison who facilitates the delivery of living "subjects" into Lighthouse custody for crystal synthesis experiments. These transfers are conducted "per protocol," suggesting an established and sanctioned arrangement between the Lighthouse and Eulogian authorities. His role makes him a key political lever and potentially the keystone figure in understanding the full scope of the institutional conspiracy. Session 8 revealed that Reeves holds the hereditary title Viscount Sommeil, hails from a vintner family, and maintains direct access to Grand Duke Valerian Oleander, rekindling Torchlight College ties while shuttling between Bastion and the ducal palace. It is an "open secret" that he and the Duke are lovers.',
         history: [
             { session: 5, note: 'Identified as Director of Relations, liaising in Pharus.' },
-            { session: 6, note: 'Named as hand-off for delivered “subjects” per protocol.' },
+            { session: 6, note: 'Named as hand-off for delivered "subjects" per protocol.' },
             { session: 7, note: 'Introduced to Ellara by Proctor Eduard in the Seminary mess hall.' },
             { session: 8, note: 'Confirmed as Viscount Sommeil; heading to the ducal palace after conferring with Proctor Eduard.' },
-            { session: 9, note: 'Revealed to be the lover of Grand Duke Oleander; stays at the Palace.' }
+            { session: 9, note: 'Revealed to be the lover of Grand Duke Oleander; stays at the Palace.' },
+            { session: 10, note: 'Greeted party at the ball; recognized "Orange" Whitaker with dangerous familiarity' }
         ],
         connections: [
             { type: 'location', id: 'duskbreaker-lighthouse', reason: 'Executive at the Lighthouse' },
@@ -128,12 +145,14 @@ export const npcs = [
         history: [
             { session: 1, note: 'Named as Duke of Hieroterra during city introduction.' },
             { session: 4, note: 'Eduard claims to have warned the duke about Lighthouse hubris.' },
-            { session: 9, note: 'Revealed to be the lover of Donnathan Reeves.' }
+            { session: 9, note: 'Revealed to be the lover of Donnathan Reeves.' },
+            { session: 10, note: 'Hosted the ball celebrating his niece Ophelia\'s return; greeted the party' }
         ],
         connections: [
             { type: 'location', id: 'bastion-city', reason: 'Seat of ducal power' },
             { type: 'location', id: 'hieroterra', reason: 'Province lord' },
-            { type: 'npc', id: 'donnathan-reeves', reason: 'Romantic partner' }
+            { type: 'npc', id: 'donnathan-reeves', reason: 'Romantic partner' },
+            { type: 'npc', id: 'lady-ophelia-xanteres-oleander', reason: 'Niece and heir' }
         ]
     },
     {
@@ -198,10 +217,11 @@ export const npcs = [
         name: 'The Denmother',
         role: 'Seminary Matron',
         location: 'Eulogian Seminary',
-        description: 'Ellara\'s kindly superior with a fondness for confiscated romance scrolls and gossip.',
+        description: 'Ellara\'s kindly superior with a fondness for confiscated romance scrolls and gossip. Deeply suspicious of nobility.',
         history: [
             { session: 1, note: 'Ellara sought information about Meri; advised she was likely in an eastern prison.' },
-            { session: 2, note: 'Provided rumors about Nyx and Meri’s transfer; comic relief via “romance scrolls.”' }
+            { session: 2, note: 'Provided rumors about Nyx and Meri\'s transfer; comic relief via "romance scrolls."' },
+            { session: 10, note: 'Gave Ellara a book on court manners; warned that nobles are "hedonists"' }
         ],
         connections: [
             { type: 'location', id: 'eulogian-seminary', reason: 'Seminary matron' }

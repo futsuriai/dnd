@@ -2,13 +2,34 @@
 
 export const sessions = [
   {
+    id: 'session-11',
+    title: 'Session 11',
+    subtitle: 'Inside the Ball',
+    date: 'December 14, 2025',
+    upcoming: true,
+    description: 'The party has infiltrated the Grand Duke\'s ball as the Whitaker brothers. With their cover intact but danger implied, the night is officially underway.',
+    highlights: [],
+  },
+  {
     id: 'session-10',
     title: 'Session 10',
-    subtitle: 'The Ball',
+    subtitle: 'The Brothers Whitaker',
     date: 'November 16, 2025',
-    upcoming: true,
-    description: 'The party prepares to infiltrate the Ducal Ball or exploit the Lady Jacinta connection to get close to Donnathan Reeves.',
-    highlights: [],
+    upcoming: false,
+    summaryFile: 'session-10.md',
+    description: 'A new ally emerges as Lord Whitaker the 6th ("Witty") joins the party. After securing lodging at the Golden Goose and acquiring funds from Nyx\'s townhouse, the group devises a plan to infiltrate the Grand Duke\'s ball by impersonating the Whitaker brothers. Ellara attends as Proctor Eduard\'s guest, while Berridin, Nyx, and Ysidor pose as Whitakers 3-5. The ball celebrates Lady Ophelia\'s return from Torchlight College, and the party successfully enters—though Donnathan Reeves greets "Orange" with dangerous familiarity.',
+    highlights: [
+      'Ellara receives a formal invitation to the Grand Duke\'s ball from Proctor Eduard.',
+      'Nyx books a room at the Golden Goose hotel with a sickle as collateral.',
+      'Lord Whitaker the 6th ("Witty") is introduced—an eccentric noble seeking lighthouse connections.',
+      'Berridin and Ysidor raid Nyx\'s cache for 82 gold; Nyx threatens consequences.',
+      'Witty invents "Success Gas"—snake venom and sphinx glands—affecting Ysidor and Berridin.',
+      'The party adopts Whitaker brother identities: Berridin as #3 (Orange), Nyx as #4 (Brown), Ysidor as #5 (Yellow).',
+      'Lady Ophelia Xanteres Oleander, the Grand Duke\'s niece and heir, is the guest of honor.',
+      'Ellara arrives with Eduard and is introduced to the Duke, Reeves, and Ophelia.',
+      'Ophelia hints at army delays at a mining town before being redirected.',
+      'Donnathan Reeves greets the "Whitaker brothers" with suspicion about #3\'s return from exile.',
+    ],
   },
   {
     id: 'session-9',

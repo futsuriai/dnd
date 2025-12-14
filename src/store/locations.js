@@ -2,6 +2,33 @@
 
 export const locations = [
   {
+    id: 'the-golden-goose',
+    name: 'The Golden Goose',
+    type: 'inn',
+    description: 'An upscale hotel in Bastion City where Nyx has booked a room using a sickle as collateral. Often mistakenly called "The Golden Dove."',
+    tags: ['hotel', 'bastion city'],
+    history: [
+      { session: 10, note: 'Nyx booked a room here; party used it as meeting point' }
+    ],
+    connections: [
+      { type: 'location', id: 'bastion-city', reason: 'Located In' }
+    ]
+  },
+  {
+    id: 'lord-whitakers-estate',
+    name: 'Lord Whitaker\'s Estate',
+    type: 'poi',
+    description: 'The Bastion City residence of Lord Whitaker the 6th, located on the West Side. Used as staging ground for the ball infiltration.',
+    tags: ['residence', 'west bastion'],
+    history: [
+      { session: 10, note: 'Party prepared for the ball here; Berridin cooked spicy curry' }
+    ],
+    connections: [
+      { type: 'location', id: 'bastion-city', reason: 'Located in West Bastion' },
+      { type: 'npc', id: 'lord-whitaker-6th', reason: 'Owner' }
+    ]
+  },
+  {
     id: 'hieroterra',
     name: 'Hieroterra',
     type: 'province',
@@ -292,6 +319,7 @@ export const locations = [
     history: [
       { session: 1, note: 'Introduced as Nyx\'s residence where he receives a letter and hosts Tsi\'Nyra.' },
       { session: 2, note: 'Described as modestly upscale for East Bastion with nice fixtures.' },
+      { session: 10, note: 'Berridin and Ysidor stayed here; raided Nyx\'s cache for gold' }
     ],
     connections: [
       { type: 'location', id: 'bastion-city', reason: 'Located In' }
@@ -489,7 +517,8 @@ export const locations = [
     tags: ['palace', 'bastion city'],
     history: [
       { session: 8, note: 'Reeves announced plans to visit for several days' },
-      { session: 9, note: 'Scouted by Ellara and Berridin; deactivated warforged observed at gates.' }
+      { session: 9, note: 'Scouted by Ellara and Berridin; deactivated warforged observed at gates.' },
+      { session: 10, note: 'Site of the Grand Duke\'s ball; party infiltrated as Whitaker brothers' }
     ],
     connections: [
       { type: 'location', id: 'bastion-city', reason: 'Located In' },
