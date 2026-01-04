@@ -1,14 +1,31 @@
-// Session data for the world
-
 export const sessions = [
+  {
+    id: 'session-12',
+    title: 'Session 12',
+    subtitle: 'The Black Swan',
+    date: 'January 4, 2026',
+    upcoming: true,
+    description: 'With their cover blown and a bounty on Meri\'s head, the party must navigate the dangerous aftermath of the ball.',
+    highlights: [],
+  },
   {
     id: 'session-11',
     title: 'Session 11',
-    subtitle: 'Inside the Ball',
+    subtitle: 'The Grand Soiree',
     date: 'December 14, 2025',
-    upcoming: true,
-    description: 'The party has infiltrated the Grand Duke\'s ball as the Whitaker brothers. With their cover intact but danger implied, the night is officially underway.',
-    highlights: [],
+    upcoming: false,
+    summaryFile: 'session-11.md',
+    description: 'The party infiltrates the Grand Duke\'s ball as the Whitaker brothers. Berridin flirts with Lady Ophelia, Witty charms Lady Jacintha, and Nyx is cornered by Donnathan Reeves. The "Whitaker" cover is blown, but critical intel is gained: the Duke and Reeves are lovers, and they are aware of the resistance.',
+    highlights: [
+      'Berridin (Whitaker 3) dances with Lady Ophelia, who hints at army delays and "resistance".',
+      'Witty (Whitaker 6) charms Lady Jacinta, learning about the Duke\'s potential intentions for his niece.',
+      'Nyx (Whitaker 4) is confronted by Donnathan Reeves, who knows the brothers are fakes but buys Nyx\'s "black sheep" act partially.',
+      'Reeves introduces Nyx to Grand Duke Valerian Oleander, revealing their romantic relationship.',
+      'Berridin eavesdrops on the "Big Four" (Duke, Ophelia, Reeves, Eduard) discussing the resistance and new warforged models.',
+      'Proctor Eduard reveals to Reeves that he has Ellara "wrapped around his finger" and is watching her.',
+      'Nyx receives a "Black Swan" commission: a 250g bounty on Meri\'s head.',
+      'The party\'s Whitaker cover is effectively burned, though Witty remains safe.'
+    ],
   },
   {
     id: 'session-10',

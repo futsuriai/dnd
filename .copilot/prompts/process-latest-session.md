@@ -48,6 +48,7 @@ Task
      - id: 'session-N+1'
      - title: 'Session N+1'
      - subtitle: '<something fitting for where we left off>'
+     - date: '<today\'s date>'
      - upcoming: true
      - Empty highlights array
      - Placeholder description
@@ -74,7 +75,7 @@ Output
      - Add summaryFile reference
      - Populate highlights with key events
      - Update description with session summary
-     - Create session N+1 stub with upcoming: true
+     - Create session N+1 stub with upcoming: true and today's date at the top of the array
    - Creates new entity stubs for clearly-new entities with initial history entry
    - Adds history entry { session: N, note: '<short cause>' } for existing entities when a significant event occurred
    - Adds obvious connections with a brief reason

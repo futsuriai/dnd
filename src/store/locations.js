@@ -412,7 +412,8 @@ export const locations = [
     description: 'The manor of Lady Jacinta in West Bastion. A place of aggressive hospitality.',
     tags: ['residence', 'west bastion'],
     history: [
-      { session: 9, note: 'Ysidor was taken here for medical attention; Nyx retrieved him.' }
+      { session: 9, note: 'Ysidor was taken here for medical attention; Nyx retrieved him.' },
+      { session: 11, note: 'Witty woke up here after the ball; Jacintha provided breakfast and gossip.' }
     ],
     connections: [
       { type: 'location', id: 'bastion-city', relationship: 'Located In' },
@@ -432,6 +433,16 @@ export const locations = [
       { type: 'location', id: 'bastion-city', relationship: 'Located In' },
       { type: 'location', id: 'ducal-palace', relationship: 'Nearby' }
     ]
+  },
+  {
+    id: 'boaden',
+    name: 'Boaden',
+    type: 'location',
+    description: 'A distant location where Whitaker 4 (Nyx\'s cover) was supposedly traveling. Mentioned by Donnathan Reeves as being far from Bastion.',
+    history: [
+      { session: 11, note: 'Mentioned by Donnathan Reeves as a place difficult to reach from Bastion.' }
+    ],
+    connections: []
   },
   {
     id: 'badwater-well',
@@ -518,7 +529,8 @@ export const locations = [
     history: [
       { session: 8, note: 'Reeves announced plans to visit for several days' },
       { session: 9, note: 'Scouted by Ellara and Berridin; deactivated warforged observed at gates.' },
-      { session: 10, note: 'Site of the Grand Duke\'s ball; party infiltrated as Whitaker brothers' }
+      { session: 10, note: 'Site of the Grand Duke\'s ball; party infiltrated as Whitaker brothers' },
+      { session: 11, note: 'The ball continued here; party gathered intel and eavesdropped on the leadership.' }
     ],
     connections: [
       { type: 'location', id: 'bastion-city', reason: 'Located In' },

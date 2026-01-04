@@ -56,7 +56,8 @@ Session 6 revealed that the Lighthouse conducts a secret basement program to syn
       { session: 3, note: 'First encountered as a trio of rusted constructs in an ambush on the Old Trade Road.' },
       { session: 5, note: 'Upgraded units and a titan-scale chassis were observed during the Lighthouse infiltration.' },
       { session: 6, note: 'The goal of continuous operation is linked to the synthetic crystal program.' },
-      { session: 7, note: 'New-model units posted at Bastion East Gate (inactive) and on Lighthouse exterior watch as security posture shifts.' }
+      { session: 7, note: 'New-model units posted at Bastion East Gate (inactive) and on Lighthouse exterior watch as security posture shifts.' },
+      { session: 11, note: 'Reeves mentioned "new models" could easily handle the resistance.' }
     ],
     connections: [
       { type: 'location', id: 'duskbreaker-lighthouse', reason: 'Manufactured and researched here' },
@@ -243,7 +244,8 @@ The family employs halfling servants who traditionally adopt "normal" human name
       { type: 'lore', id: 'torchlight-college', reason: 'Whitaker II attended' }
     ],
     history: [
-      { session: 10, note: 'Brothers referenced when party adopted Whitaker identities for the ball' }
+      { session: 10, note: 'Brothers referenced when party adopted Whitaker identities for the ball' },
+      { session: 11, note: 'Cover used for the Grand Duke\'s ball; Reeves and the Duke suspect/know the brothers are fakes.' }
     ]
   }
 ];

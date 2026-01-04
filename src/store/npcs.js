@@ -9,7 +9,8 @@ export const npcs = [
         location: 'Ducal Palace, Bastion City',
         description: 'Grand Duke Valerian Oleander\'s niece and heir. Recently returned from Torchlight College. The ball was held in her honor.',
         history: [
-            { session: 10, note: 'Introduced at the ball; hinted at army delays at a mining town' }
+            { session: 10, note: 'Introduced at the ball; hinted at army delays at a mining town' },
+            { session: 11, note: 'Danced with Berridin; discussed "false light" with Ellara; revealed knowledge of resistance.' }
         ],
         connections: [
             { type: 'npc', id: 'duke-valerian-oleander', reason: 'Niece and heir' },
@@ -29,7 +30,8 @@ export const npcs = [
             { session: 2, note: 'Rumored transfer under Proctor Eduard after arrest in Bastion City.' },
             { session: 3, note: 'No sign in the old road.' },
             { session: 6, note: 'Found alive in basement lab; extracted to safety from the lighthouse.' },
-            { session: 7, note: 'Rescued and freed; departed for Hýrda' }
+            { session: 7, note: 'Rescued and freed; departed for Hýrda' },
+            { session: 11, note: 'Target of a "Black Swan" commission: a 250g bounty on her head.' }
         ],
         connections: [
             { type: 'character', id: 'ysidor', reason: 'Mentor and guardian' },
@@ -45,7 +47,8 @@ export const npcs = [
         location: 'West Bastion',
         description: 'Elderly, wealthy widow with an "open heart" who is friends with Donnathan Reeves\' mother.',
         history: [
-            { session: 9, note: 'Mistook Ysidor for a sickly boy and "rescued" him; revealed Reeves\' relationship with the Duke.' }
+            { session: 9, note: 'Mistook Ysidor for a sickly boy and "rescued" him; revealed Reeves\' relationship with the Duke.' },
+            { session: 11, note: 'Hosted Witty after the ball; shared gossip about Ophelia and the Duke.' }
         ],
         connections: [
             { type: 'npc', id: 'donnathan-reeves', reason: 'Family friend' },
@@ -97,7 +100,8 @@ export const npcs = [
             { session: 6, note: 'Complicity questioned via Reeves hand-offs; stance uncertain.' },
             { session: 7, note: 'Directly implicated by Meri since she was able to describe him after her capture' },
             { session: 8, note: 'Reveals Marchenbau heritage and cautions Ellara that Reeves is bound to his own ambitions.' },
-            { session: 10, note: 'Invited Ellara to the Grand Duke\'s ball; escorted her as his guest' }
+            { session: 10, note: 'Invited Ellara to the Grand Duke\'s ball; escorted her as his guest' },
+            { session: 11, note: 'Privately claimed to control Ellara, stating she will "do as expected."' }
         ],
         connections: [
             { type: 'character', id: 'ellara', reason: 'Mentor at the Seminary' },
@@ -123,7 +127,8 @@ export const npcs = [
             { session: 7, note: 'Introduced to Ellara by Proctor Eduard in the Seminary mess hall.' },
             { session: 8, note: 'Confirmed as Viscount Sommeil; heading to the ducal palace after conferring with Proctor Eduard.' },
             { session: 9, note: 'Revealed to be the lover of Grand Duke Oleander; stays at the Palace.' },
-            { session: 10, note: 'Greeted party at the ball; recognized "Orange" Whitaker with dangerous familiarity' }
+            { session: 10, note: 'Greeted party at the ball; recognized "Orange" Whitaker with dangerous familiarity' },
+            { session: 11, note: 'Confronted Nyx about Whitaker identity; revealed romantic relationship with Grand Duke Oleander.' }
         ],
         connections: [
             { type: 'location', id: 'duskbreaker-lighthouse', reason: 'Executive at the Lighthouse' },
@@ -146,7 +151,8 @@ export const npcs = [
             { session: 1, note: 'Named as Duke of Hieroterra during city introduction.' },
             { session: 4, note: 'Eduard claims to have warned the duke about Lighthouse hubris.' },
             { session: 9, note: 'Revealed to be the lover of Donnathan Reeves.' },
-            { session: 10, note: 'Hosted the ball celebrating his niece Ophelia\'s return; greeted the party' }
+            { session: 10, note: 'Hosted the ball celebrating his niece Ophelia\'s return; greeted the party' },
+            { session: 11, note: 'Hosted the ball; discussed resistance delays with inner circle.' }
         ],
         connections: [
             { type: 'location', id: 'bastion-city', reason: 'Seat of ducal power' },
