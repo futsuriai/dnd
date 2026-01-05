@@ -22,6 +22,12 @@ History-first policy (important)
   - First introduction to the campaign (if the entity becomes part of the canon data store)
   - A notable scene occurred there (battle, heist, negotiation) that impacts the world model
 
+Source of Truth (Entity Names)
+- `ENTITY_LIST.md`: This file contains the canonical list of all IDs and Display Names.
+- ALWAYS consult this file first. Do not guess IDs. Match the existing ID exactly.
+- If a name is similar but not identical, assume it is the existing entity unless context clearly dictates otherwise.
+- If you add a NEW entity to the data stores, you must also update `ENTITY_LIST.md` in your autofix (or instruct the user to run `npm run generate-list`).
+
 Task
 1) Identify the latest session N by finding the highest-numbered session-*.md file
 2) Parse the session summary and extract referenced entities with heuristics:
@@ -30,8 +36,10 @@ Task
      - Be careful not to treat party members Nyx, Tsi'Nyra, Ellara, Ysidor, Berridin as NPCs
    - Lore: factions, councils, orders, technologies, divine aspects, processes.
 3) Normalize each reference into a canonical id (kebab-case, see ID rules).
+   - Consult `ENTITY_LIST.md` to match existing names/IDs first.
 4) For each entity:
    - If missing from data stores: Create new entity stub (see Stub Rules)
+     - NOTE: If you add a new entity, you must also update `ENTITY_LIST.md` with the new ID and Name in your autofix patch.
    - If exists but no history for session N: Add appropriate history entry
    - If missing connections revealed in session: Add connections
    - If description needs updating based on new information: Update description
