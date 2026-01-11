@@ -42,7 +42,7 @@ Once alone, Ysidor leaned in for a "subtle" whisper that was barely quiet.
 
 ### Nyx and Donnathan
 Nyx, watching from the sidelines (**Perception 7**), found **Donnathan Reeves** suddenly at his shoulder.
-**Reeves:** "Whitaker 4, it's been a while. How did your brother convince you to come here? Last I heard you were up in **Boaden**."
+**Reeves:** "Whitaker 4, it's been a while. How did your brother convince you to come here? Last I heard you were up in **Boixden**."
 **Nyx:** "I was busy, but he has a way of getting me to... join things I might normally not."
 **Reeves:** "Younger brothers... I know I do it with mine all the time. Well, you've filled out a lot since the last time I saw you."
 **Nyx:** "Well thank you. How have you been?"
@@ -138,13 +138,13 @@ Nyx gave a low chuckle. Reeves opened a door to a massive room where **Grand Duk
 They deconstructed the "Whitaker" ruse immediately. They knew Witty was real, but suspected the brothers were fakes.
 **Reeves:** "The Whitmans... I don't know them well but there is nothing under the light that would bring the **4th son** to Bastion City... That *was* Witty but... who are you? What brought you?"
 **Nyx:** (Stony-faced) "What makes you think I'm not his brother?"
-**Reeves:** "Like I said, everything Witty wants is the love of his family... 1 and 2 would be too obvious. The **4th son** got away from the family, it's harder to get further to **Boaden**, the chances are very very high you aren't that."
+**Reeves:** "Like I said, everything Witty wants is the love of his family... 1 and 2 would be too obvious. The **4th son** got away from the family, it's harder to get further to **Boixden**, the chances are very very high you aren't that."
 **Nyx:** (Exhaling, dropping the act) "He is a sweet kid indeed... I thought something like this would happen. I **am** his brother... I wanted some information so here I am. But you've drawn me out."
 **Reeves:** (**Insight 13 vs Deception 8**) "Interesting if true... So you're just using the brother for something else... I'm sure you do. I'm the Director of Relations at the Lighthouse."
 **Nyx:** "I've heard whispers of a situation... about the use of **Shadowed** to power our entire city."
 **Reeves:** "Our city is not powered entirely by shadows, what do you mean?"
 **Nyx:** "That's the whispers I have heard."
-**Reeves:** "All the way up in Boaden that's what you heard? ... The Shadowed, maybe not the most orthodox thing, but they are a **convenient boogeyman**... nothing in the light would be as dark as that. It's just fearmongering and ignorance."
+**Reeves:** "All the way up in Boixden that's what you heard? ... The Shadowed, maybe not the most orthodox thing, but they are a **convenient boogeyman**... nothing in the light would be as dark as that. It's just fearmongering and ignorance."
 **Nyx:** "You'd know best."
 **Reeves:** "Is that all, Whitaker the 4th? Well then you and your 'brothers' can go home. I have a Duke to take care of. Don't slam the door on the way out."
 
@@ -178,7 +178,7 @@ Berridin found Nyx outside. They grabbed Ysidor and huddled to compare notes.
 **Jacintha:** "It looks like your brother tried to flirt with the heiress but to no avail, as **Proctor Eduard's guest** sought her companionship instead. Maybe you'll have more gossip for me."
 Witty realized he should check his home.
 
-**Nyx:** Checked his underworld drop spots. He found a new commission: **A stylized black swan**. It was a request for the head of the leader of the stone goliaths in **Hyrta** (Meri). **Price: 250 gold.**
+**Nyx:** Checked his underworld drop spots. He found a new commission: **A stylized black swan**. It was a request for the head of the leader of the stone goliaths in **Hýrda** (Meri). **Price: 250 gold.**
 
 On the street, Nyx found a lost Witty in purple robes.
 **Nyx:** "It's me, Alexander." (Winks)
