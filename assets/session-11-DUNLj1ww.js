@@ -131,7 +131,7 @@ Berridin saw this but chose not to interfere (**Insight 17** vs Nyx's Performanc
 
 Nyx was led to a private quarter. Reeves began unbuttoning his shirt, exposing his chest.
 **Reeves:** "It's been a while since I saw Whitman boys... I know I was a bit older but we did run in the same circles."
-Nyx gave a low chuckle. Reeves opened a door to a massive room where **Grand Duke Valerian Oleander** waited, sleeves rolled up, with an amber drink.
+Nyx gave a low chuckle. Reeves opened a door to a massive room where **Grand Duke Valerian Oliander** waited, sleeves rolled up, with an amber drink.
 **Reeves:** "Ollie, I brought a gift... This little one." (He wrapped an arm around Nyx from behind, finger on his face). "He tried to trick us."
 **Duke:** "**What is it this time, my sweet?**"
 
@@ -164,7 +164,7 @@ Eduard found Ellara.
 
 **The Boys:**
 Berridin found Nyx outside. They grabbed Ysidor and huddled to compare notes.
-**Nyx:** "I met Oleander and Reeves. They suspected me... I asked them directly about the Shadowed powering the light crystals. They denied it... but Donnathan lied. They are suspicious of all of us."
+**Nyx:** "I met Oliander and Reeves. They suspected me... I asked them directly about the Shadowed powering the light crystals. They denied it... but Donnathan lied. They are suspicious of all of us."
 **Berridin:** "So just to be clear... you didn't actually score?"
 **Nyx:** "No, I don't swing that way."
 **Berridin:** "Okay good... I managed to overhear a call between the 4 most powerful people in the city. They are aware that **Meri** instigated a rebellion that's slowing them down. She's a thorn in their side. Everyone seems to be aware... the Duke, the niece, Reeves, and **Proctor Eduard**. They're all super racist against Shadowed. But I really don't think Eduard is as good as Ellara makes him seem. He basically said he has Ellara wrapped around his finger."

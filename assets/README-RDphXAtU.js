@@ -15,6 +15,28 @@ Files should be named according to the session ID:
 2. Add the session details in markdown format (see examples in existing files)
 3. Update the sessions.js file to include a \`summaryFile\` property with the filename
 
+## Transcripts
+
+Session transcripts are stored in the \`transcripts/\` subdirectory with the naming convention:
+- \`session_N_corrected.txt\` - The corrected/edited transcript for session N
+
+To link a transcript to a session, add the \`transcriptFile\` property in \`sessions.js\`:
+\`\`\`javascript
+{
+  id: 'session-12',
+  summaryFile: 'session-12.md',
+  transcriptFile: 'session_12_corrected.txt',  // Add this line
+  // ... other properties
+}
+\`\`\`
+
+### Transcript Format
+
+Transcripts should use the timestamped format:
+\`\`\`
+[HH:MM:SS] Speaker Name: Dialogue text...
+\`\`\`
+
 ## Format Guidelines
 
 Each session summary should include:
