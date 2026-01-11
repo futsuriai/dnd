@@ -4,6 +4,7 @@ This file is auto-generated. Do not edit manually.
 
 ## Lore
 
+- `black-swan`: The Black Swan
 - `curse-shadowed`: The Curse of the Shadowed
 - `eternal-light`: The Eternal Light
 - `eulogia-eternal-light`: Eulogia of the Eternal Light
@@ -32,6 +33,7 @@ This file is auto-generated. Do not edit manually.
 - `civic-hall-of-records`: Civic Hall of Records
 - `drunken-goose`: The Drunken Goose Tavern
 - `ducal-palace`: Ducal Palace
+- `dunston-and-kirks`: Dunston & Kirk's
 - `duskbreaker-lighthouse`: Duskbreaker Lighthouse
 - `eulogian-seminary`: Eulogian Seminary
 - `faberge-workshop`: Faberge

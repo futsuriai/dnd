@@ -2,6 +2,19 @@
 
 export const lore = [
   {
+    id: 'black-swan',
+    term: 'The Black Swan',
+    description: 'A mysterious patron on bounty-hunter contract boards, known for reliable, high-risk, high-reward work. Posted a 250g bounty to "remove" Meri using ambiguous language. Nyx suspects this may be Grand Duke Valerian Oleander.',
+    history: [
+      { session: 11, note: 'Black Swan commission first revealed: 250g bounty on Meri' },
+      { session: 12, note: 'Party discussed taking the contract to protect Meri; Nyx suspects the Black Swan is the Grand Duke' }
+    ],
+    connections: [
+      { type: 'npc', id: 'meri', reason: 'Target of bounty' },
+      { type: 'npc', id: 'duke-valerian-oleander', reason: 'Suspected patron' }
+    ]
+  },
+  {
     id: 'light-crystals',
     term: 'Light Crystals',
     description: 'A recently discovered technology revolutionizing The Hariolar Empire, involving magically rechargeable crystals found in ancient ruins. Session 6 revealed that the Lighthouse secretly synthesizes enhanced crystals by consuming living Shadowed beings.',

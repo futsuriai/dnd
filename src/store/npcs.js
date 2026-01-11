@@ -31,7 +31,8 @@ export const npcs = [
             { session: 3, note: 'No sign in the old road.' },
             { session: 6, note: 'Found alive in basement lab; extracted to safety from the lighthouse.' },
             { session: 7, note: 'Rescued and freed; departed for Hýrda' },
-            { session: 11, note: 'Target of a "Black Swan" commission: a 250g bounty on her head.' }
+            { session: 11, note: 'Target of a "Black Swan" commission: a 250g bounty on her head.' },
+            { session: 12, note: 'Reported ~20 soldiers encamped near Hýrda under ducal decree; party contacted via sending stone' }
         ],
         connections: [
             { type: 'character', id: 'ysidor', reason: 'Mentor and guardian' },
@@ -48,7 +49,8 @@ export const npcs = [
         description: 'Elderly, wealthy widow with an "open heart" who is friends with Donnathan Reeves\' mother.',
         history: [
             { session: 9, note: 'Mistook Ysidor for a sickly boy and "rescued" him; revealed Reeves\' relationship with the Duke.' },
-            { session: 11, note: 'Hosted Witty after the ball; shared gossip about Ophelia and the Duke.' }
+            { session: 11, note: 'Hosted Witty after the ball; shared gossip about Ophelia and the Duke.' },
+            { session: 12, note: 'Advised Witty to visit Dunston & Kirk\'s for a balloon; warned him about Berridin as a swindler' }
         ],
         connections: [
             { type: 'npc', id: 'donnathan-reeves', reason: 'Family friend' },
@@ -101,7 +103,8 @@ export const npcs = [
             { session: 7, note: 'Directly implicated by Meri since she was able to describe him after her capture' },
             { session: 8, note: 'Reveals Marchenbau heritage and cautions Ellara that Reeves is bound to his own ambitions.' },
             { session: 10, note: 'Invited Ellara to the Grand Duke\'s ball; escorted her as his guest' },
-            { session: 11, note: 'Privately claimed to control Ellara, stating she will "do as expected."' }
+            { session: 11, note: 'Privately claimed to control Ellara, stating she will "do as expected."' },
+            { session: 12, note: 'Gave Ellara his blessing to travel and gifted her "Josephine\'s Insights on the Nature of Eulogia"' }
         ],
         connections: [
             { type: 'character', id: 'ellara', reason: 'Mentor at the Seminary' },

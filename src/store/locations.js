@@ -2,6 +2,19 @@
 
 export const locations = [
   {
+    id: 'dunston-and-kirks',
+    name: 'Dunston & Kirk\'s',
+    type: 'poi',
+    description: 'A bespoke workshop in Bastion City where gnomes, dwarves, halflings, and elves craft custom devices including hot air balloons. They do not stock inventory—everything is made to order with a minimum 4-week turnaround.',
+    tags: ['workshop', 'bastion city'],
+    history: [
+      { session: 12, note: 'Party visited to procure a balloon but learned 4-week minimum turnaround made it impractical' }
+    ],
+    connections: [
+      { type: 'location', id: 'bastion-city', reason: 'Located in' }
+    ]
+  },
+  {
     id: 'the-golden-goose',
     name: 'The Golden Goose',
     type: 'inn',
@@ -21,7 +34,8 @@ export const locations = [
     description: 'The Bastion City residence of Lord Whitaker the 6th, located on the West Side. Used as staging ground for the ball infiltration.',
     tags: ['residence', 'west bastion'],
     history: [
-      { session: 10, note: 'Party prepared for the ball here; Berridin cooked spicy curry' }
+      { session: 10, note: 'Party prepared for the ball here; Berridin cooked spicy curry' },
+      { session: 12, note: 'Party regrouped here morning after the ball; discussed Black Swan bounty via sending stones' }
     ],
     connections: [
       { type: 'location', id: 'bastion-city', reason: 'Located in West Bastion' },
@@ -129,7 +143,8 @@ export const locations = [
       { session: 2, note: 'Ellara learns of Meri\'s transfer to Proctor Eduard\'s custody.' },
       { session: 3, note: 'Ellara confronts Proctor Eduard, who says he gave orders to releas Meri.' },
       { session: 4, note: 'Ellara reports the warforged attack; Eduard pledges to escalate the matter.' },
-      { session: 7, note: 'Eduard introduces Reeves to Ellara in mess hall' }
+      { session: 7, note: 'Eduard introduces Reeves to Ellara in mess hall' },
+      { session: 12, note: 'Ellara received Eduard\'s blessing and a theology book before departing for Hýrda' }
     ],
     connections: [
       { type: 'location', id: 'bastion-city', relationship: 'Located In' }
@@ -342,11 +357,12 @@ export const locations = [
     id: 'hyrta',
     name: 'Hýrda',
     type: 'village',
-    description: 'A goliath village in the mountains, home to Meri and Ysidor and threatened by imperial mining interests.',
+    description: 'A goliath village in the mountains, home to Meri and Ysidor. Currently threatened by imperial mining interests with soldiers encamped nearby under a ducal decree.',
     tags: ['village', 'goliath', 'mountains'],
     history: [
       { session: 1, note: 'Ysidor\'s home village.' },
-      { session: 7, note: 'Meri is heading home as it is facing mining disputes' }
+      { session: 7, note: 'Meri is heading home as it is facing mining disputes' },
+      { session: 12, note: '~20 soldiers encamped nearby under ducal decree; party en route by carriage' }
     ],
     connections: [
       { type: 'location', id: 'hieroterra', reason: 'Village within the province' }
@@ -413,7 +429,8 @@ export const locations = [
     tags: ['residence', 'west bastion'],
     history: [
       { session: 9, note: 'Ysidor was taken here for medical attention; Nyx retrieved him.' },
-      { session: 11, note: 'Witty woke up here after the ball; Jacintha provided breakfast and gossip.' }
+      { session: 11, note: 'Witty woke up here after the ball; Jacintha provided breakfast and gossip.' },
+      { session: 12, note: 'Witty and Berridin visited to inquire about balloon procurement and horses' }
     ],
     connections: [
       { type: 'location', id: 'bastion-city', relationship: 'Located In' },

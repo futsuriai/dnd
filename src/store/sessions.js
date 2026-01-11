@@ -1,12 +1,32 @@
 export const sessions = [
   {
+    id: 'session-13',
+    title: 'Session 13',
+    subtitle: 'The Road to Hýrda',
+    date: 'January 11, 2026',
+    upcoming: true,
+    description: 'The party travels by carriage toward Meri\'s village, racing against time and the Duke\'s forces.',
+    highlights: [],
+  },
+  {
     id: 'session-12',
     title: 'Session 12',
-    subtitle: 'The Black Swan',
+    subtitle: 'Swans, Stones, and Sky Schemes',
     date: 'January 4, 2026',
-    upcoming: true,
-    description: 'With their cover blown and a bounty on Meri\'s head, the party must navigate the dangerous aftermath of the ball.',
-    highlights: [],
+    upcoming: false,
+    summaryFile: 'session-12.md',
+    description: 'The party learns of a bounty on Meri posted by the mysterious "Black Swan," discovers soldiers encamped near Hýrda under ducal decree, fails to procure a hot air balloon, and departs Bastion by carriage.',
+    highlights: [
+      'Nyx reveals the "Black Swan" has posted a 250g bounty to "remove" Meri.',
+      'Meri reports ~20 soldiers encamped near her village under a ducal decree.',
+      'Nyx suspects the Black Swan is Grand Duke Valerian Oleander.',
+      'Witty\'s bath interlude features a rubber ducky and purple shower cap.',
+      'Lady Jacintha provides balloon procurement advice and warns about Berridin.',
+      'Dunston & Kirk\'s cannot provide a balloon in time—4 weeks minimum, bespoke only.',
+      'Ellara receives Proctor Eduard\'s blessing and a theology book before departing.',
+      'Berridin haggles a carriage rental from 30g to 26g, pocketing a 4g "finder\'s fee."',
+      'Party departs Bastion by carriage, estimated 2 weeks to reach Meri.'
+    ],
   },
   {
     id: 'session-11',
