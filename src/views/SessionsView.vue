@@ -29,7 +29,7 @@
               
               <!-- Add Transcript link if there's a transcriptFile property -->
               <a v-if="session.transcriptFile" @click.prevent="showTranscript(session)" href="#" class="transcript-link">
-                🎙️ View Transcript
+                📝 View Transcript
               </a>
             </div>
             
@@ -63,6 +63,42 @@
 import { sessions } from '../store/worldData';
 import FullTextModal from '@/components/FullTextModal.vue'; // Import the modal
 import { loadSessionMarkdown, loadSessionTranscript } from '@/utils/markdownLoader'; // Import our loader utilities
+
+// Import avatar images for transcript display
+const avatarModules = import.meta.glob('@/assets/avatars/avatar/*', { eager: true, import: 'default' });
+
+// Map speaker names to avatar file ids
+const speakerAvatarMap = {
+  'Nyx': 'nyx',
+  'Ellara': 'ellara', 
+  'Berridin': 'berridin',
+  'Ysidor': 'ysidor',
+  'Tsi\'Nyra': 'tsinyra',
+  'Tsinyra': 'tsinyra',
+  'Whitaker "Witty" Whitman VI': 'witty',
+  'Witty': 'witty',
+  'GM': 'gm' // GM has no avatar but we track it
+};
+
+// Get avatar URL for a speaker
+function getAvatarUrl(speaker) {
+  const id = speakerAvatarMap[speaker];
+  if (!id || id === 'gm') return null;
+  
+  for (const path in avatarModules) {
+    if (path.includes(`/avatar/${id}.`)) {
+      return avatarModules[path];
+    }
+  }
+  return null;
+}
+
+// Get speaker class for color coding
+function getSpeakerClass(speaker) {
+  const id = speakerAvatarMap[speaker];
+  if (id) return `speaker-${id}`;
+  return 'speaker-unknown';
+}
 
 export default {
   name: 'SessionsView',
@@ -133,9 +169,8 @@ export default {
       }
     },
     formatTranscript(content) {
-      // Format the transcript for better readability as markdown
+      // Format the transcript for better readability as HTML with avatars
       // Each line is in format: [HH:MM:SS] Speaker: Text
-      // Convert to proper markdown with line breaks between speakers
       
       const lines = content.split('\n').filter(line => line.trim());
       let formattedLines = [];
@@ -148,21 +183,40 @@ export default {
           const [, timestamp, speaker, text] = match;
           const trimmedSpeaker = speaker.trim();
           
-          // Add extra spacing when speaker changes for readability
-          if (currentSpeaker !== null && currentSpeaker !== trimmedSpeaker) {
-            formattedLines.push(''); // Add blank line between different speakers
-          }
+          // Add visual separator when speaker changes
+          const isNewSpeaker = currentSpeaker !== null && currentSpeaker !== trimmedSpeaker;
           currentSpeaker = trimmedSpeaker;
           
-          // Format with colored timestamp and bold speaker
-          formattedLines.push(`\`${timestamp}\` **${trimmedSpeaker}:** ${text}`);
+          // Get avatar for this speaker
+          const avatarUrl = getAvatarUrl(trimmedSpeaker);
+          const avatarHtml = avatarUrl 
+            ? `<img src="${avatarUrl}" alt="${trimmedSpeaker}" class="transcript-avatar" />`
+            : `<span class="transcript-avatar-placeholder">${trimmedSpeaker.charAt(0)}</span>`;
+          
+          // Determine speaker class for color coding (character-specific)
+          const speakerClass = getSpeakerClass(trimmedSpeaker);
+          
+          // Build the line HTML - order: timestamp, avatar, speaker, text
+          const lineHtml = `<div class="transcript-line${isNewSpeaker ? ' new-speaker' : ''}">
+            <span class="transcript-timestamp">${timestamp}</span>
+            ${avatarHtml}
+            <span class="transcript-speaker ${speakerClass}">${trimmedSpeaker}:</span>
+            <span class="transcript-text">${this.escapeHtml(text)}</span>
+          </div>`;
+          
+          formattedLines.push(lineHtml);
         } else if (line.trim()) {
-          // Keep non-matching lines as-is
-          formattedLines.push(line);
+          // Keep non-matching lines as plain text
+          formattedLines.push(`<div class="transcript-line transcript-plain">${this.escapeHtml(line)}</div>`);
         }
       }
       
-      return formattedLines.join('\n\n'); // Double newline for proper markdown paragraph breaks
+      return formattedLines.join('');
+    },
+    escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
     },
     closeModal() {
       this.isModalVisible = false;
@@ -295,17 +349,19 @@ export default {
 
 /* Add styling for transcript link */
 .transcript-link {
-  color: var(--color-secondary, #9b59b6);
+  color: var(--color-text-muted, #8a9ba8);
   cursor: pointer;
   text-decoration: none;
   font-weight: 700;
   font-size: 1.05em;
   display: inline-block;
+  opacity: 0.85;
 }
 
 .transcript-link:hover {
-  color: var(--color-accent);
+  color: var(--color-highlight);
   text-decoration: underline;
+  opacity: 1;
 }
 
 @media (max-width: 600px) {

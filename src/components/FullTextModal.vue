@@ -12,7 +12,7 @@
         <div class="loading-spinner"></div>
         <p>Loading...</p>
       </div>
-      <div v-else class="modal-body" :class="contentClass" v-html="renderMarkdown(text)"></div>
+      <div v-else class="modal-body" :class="contentClass" v-html="renderContent(text)"></div>
       
     </div>
   </div>
@@ -49,6 +49,15 @@ export default {
   methods: {
     closeModal() {
       this.$emit('close');
+    },
+    renderContent(text) {
+      if (!text) return '';
+      // For transcript content, HTML is already formatted - pass through directly
+      if (this.contentClass === 'transcript-content') {
+        return text;
+      }
+      // Otherwise, render as markdown
+      return this.renderMarkdown(text);
     },
     renderMarkdown(text) {
       if (!text) return '';
@@ -221,40 +230,118 @@ export default {
 /* Transcript-specific styles */
 .modal-body.transcript-content {
   font-family: var(--font-main);
-  font-size: 0.95rem;
-  line-height: 1.8;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  padding: 0;
 }
 
-.modal-body.transcript-content ::v-deep p {
-  margin-bottom: 0.6em;
-  padding: 0.4em 0.6em;
+/* Transcript line container */
+.modal-body.transcript-content ::v-deep .transcript-line {
+  display: flex;
+  align-items: flex-start;
+  padding: 0.3em 0.5em;
   border-radius: 4px;
-  transition: background-color 0.2s;
+  gap: 0.5em;
+  transition: background-color 0.15s;
 }
 
-.modal-body.transcript-content ::v-deep p:hover {
+.modal-body.transcript-content ::v-deep .transcript-line:hover {
   background-color: var(--color-background-soft, rgba(255,255,255,0.05));
 }
 
-/* Style the timestamp in transcripts */
-.modal-body.transcript-content ::v-deep code {
-  background-color: var(--color-background-mute, rgba(100,100,100,0.3));
+/* Add subtle separator when speaker changes */
+.modal-body.transcript-content ::v-deep .transcript-line.new-speaker {
+  margin-top: 0.6em;
+  border-top: 1px solid var(--border-color, rgba(255,255,255,0.1));
+  padding-top: 0.6em;
+}
+
+/* Avatar styling */
+.modal-body.transcript-content ::v-deep .transcript-avatar {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 1px solid var(--border-color, rgba(255,255,255,0.2));
+}
+
+/* Placeholder for speakers without avatars (like GM) */
+.modal-body.transcript-content ::v-deep .transcript-avatar-placeholder {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--color-background-mute, #444);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7em;
+  font-weight: bold;
   color: var(--text-muted, #888);
-  padding: 0.15em 0.4em;
-  border-radius: 3px;
-  font-size: 0.85em;
+  flex-shrink: 0;
+  border: 1px solid var(--border-color, rgba(255,255,255,0.2));
+}
+
+/* Timestamp styling */
+.modal-body.transcript-content ::v-deep .transcript-timestamp {
+  color: var(--text-muted, #666);
+  font-size: 0.75em;
   font-family: var(--font-mono, monospace);
-  margin-right: 0.5em;
+  opacity: 0.6;
+  flex-shrink: 0;
+  min-width: 55px;
 }
 
 /* Speaker name styling */
-.modal-body.transcript-content ::v-deep strong {
-  color: var(--color-primary, #4a9eff);
+.modal-body.transcript-content ::v-deep .transcript-speaker {
+  font-weight: 600;
+  flex-shrink: 0;
+  min-width: 80px;
 }
 
-/* Color-code different speakers for easier reading */
-.modal-body.transcript-content ::v-deep p:has(strong:contains("GM")) strong,
-.modal-body.transcript-content ::v-deep p strong[data-speaker="GM"] {
-  color: var(--color-accent, #e6a23c);
+/* Character-specific speaker colors - subtle nods to avatar color schemes */
+.modal-body.transcript-content ::v-deep .transcript-speaker.speaker-gm {
+  color: #e6a23c; /* Warm amber/orange for GM */
+}
+
+.modal-body.transcript-content ::v-deep .transcript-speaker.speaker-nyx {
+  color: #9a8fbd; /* Muted purple/shadow - Shadar-kai */
+}
+
+.modal-body.transcript-content ::v-deep .transcript-speaker.speaker-ellara {
+  color: #d4a855; /* Warm gold - Eulogian light/druid */
+}
+
+.modal-body.transcript-content ::v-deep .transcript-speaker.speaker-berridin {
+  color: #c49a6c; /* Earthy tan/brown - Halfling */
+}
+
+.modal-body.transcript-content ::v-deep .transcript-speaker.speaker-ysidor {
+  color: #7ba3c4; /* Cool blue/grey - Goliath/mountain */
+}
+
+.modal-body.transcript-content ::v-deep .transcript-speaker.speaker-tsinyra {
+  color: #7cb587; /* Natural green - Genasi/nature */
+}
+
+.modal-body.transcript-content ::v-deep .transcript-speaker.speaker-witty {
+  color: #b08dc9; /* Purple - his signature color */
+}
+
+.modal-body.transcript-content ::v-deep .transcript-speaker.speaker-unknown {
+  color: var(--color-text-muted, #888);
+}
+
+/* Dialogue text */
+.modal-body.transcript-content ::v-deep .transcript-text {
+  color: var(--color-text, #ddd);
+  flex: 1;
+}
+
+/* Plain text lines (non-dialogue) */
+.modal-body.transcript-content ::v-deep .transcript-line.transcript-plain {
+  color: var(--text-muted, #888);
+  font-style: italic;
+  padding-left: 2em;
 }
 </style>
