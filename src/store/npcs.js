@@ -3,17 +3,17 @@
 export const npcs = [
     // Major NPCs (show like CharactersView with portraits/avatars)
     {
-        id: 'lady-ophelia-xanteres-oleander',
-        name: 'Lady Ophelia Xanteres Oleander',
+        id: 'lady-ophelia-xanteres-oliander',
+        name: 'Lady Ophelia Xanteres Oliander',
         role: 'Marchioness of Bastion City',
         location: 'Ducal Palace, Bastion City',
-        description: 'Grand Duke Valerian Oleander\'s niece and heir. Recently returned from Torchlight College. The ball was held in her honor.',
+        description: 'Grand Duke Valerian Oliander\'s niece and heir. Recently returned from Torchlight College. The ball was held in her honor.',
         history: [
             { session: 10, note: 'Introduced at the ball; hinted at army delays at a mining town' },
             { session: 11, note: 'Danced with Berridin; discussed "false light" with Ellara; revealed knowledge of resistance.' }
         ],
         connections: [
-            { type: 'npc', id: 'duke-valerian-oleander', reason: 'Niece and heir' },
+            { type: 'npc', id: 'duke-valerian-oliander', reason: 'Niece and heir' },
             { type: 'lore', id: 'torchlight-college', reason: 'Recent graduate' },
             { type: 'location', id: 'ducal-palace', reason: 'Resides at' }
         ]
@@ -123,15 +123,15 @@ export const npcs = [
         location: 'Bastion City & Pharus',
         prominence: 'minor',
         description: 'Viscount Donnathan "Lord Sommeil" Reeves, the Lighthouse\'s diplomatic liaison to imperial nobility and the Eulogians; named as the hand-off agent for living "subjects".',
-        fullText: 'Donnathan Reeves serves as the diplomatic face of the Duskbreaker Lighthouse, frequently traveling to maintain relationships with political authorities, particularly in the capital city of Pharus. Basement laboratory testimony has identified him as the crucial liaison who facilitates the delivery of living "subjects" into Lighthouse custody for crystal synthesis experiments. These transfers are conducted "per protocol," suggesting an established and sanctioned arrangement between the Lighthouse and Eulogian authorities. His role makes him a key political lever and potentially the keystone figure in understanding the full scope of the institutional conspiracy. Session 8 revealed that Reeves holds the hereditary title Viscount Sommeil, hails from a vintner family, and maintains direct access to Grand Duke Valerian Oleander, rekindling Torchlight College ties while shuttling between Bastion and the ducal palace. It is an "open secret" that he and the Duke are lovers.',
+        fullText: 'Donnathan Reeves serves as the diplomatic face of the Duskbreaker Lighthouse, frequently traveling to maintain relationships with political authorities, particularly in the capital city of Pharus. Basement laboratory testimony has identified him as the crucial liaison who facilitates the delivery of living "subjects" into Lighthouse custody for crystal synthesis experiments. These transfers are conducted "per protocol," suggesting an established and sanctioned arrangement between the Lighthouse and Eulogian authorities. His role makes him a key political lever and potentially the keystone figure in understanding the full scope of the institutional conspiracy. Session 8 revealed that Reeves holds the hereditary title Viscount Sommeil, hails from a vintner family, and maintains direct access to Grand Duke Valerian Oliander, rekindling Torchlight College ties while shuttling between Bastion and the ducal palace. It is an "open secret" that he and the Duke are lovers.',
         history: [
             { session: 5, note: 'Identified as Director of Relations, liaising in Pharus.' },
             { session: 6, note: 'Named as hand-off for delivered "subjects" per protocol.' },
             { session: 7, note: 'Introduced to Ellara by Proctor Eduard in the Seminary mess hall.' },
             { session: 8, note: 'Confirmed as Viscount Sommeil; heading to the ducal palace after conferring with Proctor Eduard.' },
-            { session: 9, note: 'Revealed to be the lover of Grand Duke Oleander; stays at the Palace.' },
+            { session: 9, note: 'Revealed to be the lover of Grand Duke Oliander; stays at the Palace.' },
             { session: 10, note: 'Greeted party at the ball; recognized "Orange" Whitaker with dangerous familiarity' },
-            { session: 11, note: 'Confronted Nyx about Whitaker identity; revealed romantic relationship with Grand Duke Oleander.' }
+            { session: 11, note: 'Confronted Nyx about Whitaker identity; revealed romantic relationship with Grand Duke Oliander.' }
         ],
         connections: [
             { type: 'location', id: 'duskbreaker-lighthouse', reason: 'Executive at the Lighthouse' },
@@ -140,13 +140,13 @@ export const npcs = [
             { type: 'location', id: 'eulogian-seminary', reason: 'Present at Seminary; introduced to Ellara' },
             { type: 'location', id: 'ducal-palace', reason: 'Frequent visitor and liaison to the duke' },
             { type: 'npc', id: 'proctor-eduard', reason: 'Longtime ally coordinating political cover' },
-            { type: 'npc', id: 'duke-valerian-oleander', reason: 'College acquaintance and romantic partner' },
+            { type: 'npc', id: 'duke-valerian-oliander', reason: 'College acquaintance and romantic partner' },
             { type: 'lore', id: 'torchlight-college', reason: 'Alumnus; met Valerian at the college' }
         ]
     },
     {
-        id: 'duke-valerian-oleander',
-        name: 'Duke Valerian Oleander',
+        id: 'duke-valerian-oliander',
+        name: 'Duke Valerian Oliander',
         role: 'Duke of Hieroterra',
         location: 'Bastion City',
         description: 'Provincial ruler of Hieroterra; mentioned as having been warned about the Lighthouse hubris and politics around light crystals. Revealed to be the lover of Donnathan Reeves.',
@@ -161,7 +161,7 @@ export const npcs = [
             { type: 'location', id: 'bastion-city', reason: 'Seat of ducal power' },
             { type: 'location', id: 'hieroterra', reason: 'Province lord' },
             { type: 'npc', id: 'donnathan-reeves', reason: 'Romantic partner' },
-            { type: 'npc', id: 'lady-ophelia-xanteres-oleander', reason: 'Niece and heir' }
+            { type: 'npc', id: 'lady-ophelia-xanteres-oliander', reason: 'Niece and heir' }
         ]
     },
     {

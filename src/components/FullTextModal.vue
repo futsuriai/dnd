@@ -10,9 +10,9 @@
       </div>
       <div v-else-if="loading" class="loading-container">
         <div class="loading-spinner"></div>
-        <p>Loading session summary...</p>
+        <p>Loading...</p>
       </div>
-      <div v-else class="modal-body" v-html="renderMarkdown(text)"></div>
+      <div v-else class="modal-body" :class="contentClass" v-html="renderMarkdown(text)"></div>
       
     </div>
   </div>
@@ -40,6 +40,10 @@ export default {
     loading: { // Add loading prop
       type: Boolean,
       default: false
+    },
+    contentClass: { // Add contentClass prop for styling variants
+      type: String,
+      default: ''
     }
   },
   methods: {
@@ -212,5 +216,45 @@ export default {
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+/* Transcript-specific styles */
+.modal-body.transcript-content {
+  font-family: var(--font-main);
+  font-size: 0.95rem;
+  line-height: 1.8;
+}
+
+.modal-body.transcript-content ::v-deep p {
+  margin-bottom: 0.6em;
+  padding: 0.4em 0.6em;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.modal-body.transcript-content ::v-deep p:hover {
+  background-color: var(--color-background-soft, rgba(255,255,255,0.05));
+}
+
+/* Style the timestamp in transcripts */
+.modal-body.transcript-content ::v-deep code {
+  background-color: var(--color-background-mute, rgba(100,100,100,0.3));
+  color: var(--text-muted, #888);
+  padding: 0.15em 0.4em;
+  border-radius: 3px;
+  font-size: 0.85em;
+  font-family: var(--font-mono, monospace);
+  margin-right: 0.5em;
+}
+
+/* Speaker name styling */
+.modal-body.transcript-content ::v-deep strong {
+  color: var(--color-primary, #4a9eff);
+}
+
+/* Color-code different speakers for easier reading */
+.modal-body.transcript-content ::v-deep p:has(strong:contains("GM")) strong,
+.modal-body.transcript-content ::v-deep p strong[data-speaker="GM"] {
+  color: var(--color-accent, #e6a23c);
 }
 </style>

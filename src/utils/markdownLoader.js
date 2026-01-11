@@ -1,7 +1,7 @@
 /**
- * Utility for loading markdown content
+ * Utility for loading markdown and transcript content
  * 
- * This utility provides a function to load markdown files from the assets directory
+ * This utility provides functions to load markdown and transcript files from the assets directory
  * using Vite's dynamic import capabilities.
  */
 
@@ -38,6 +38,58 @@ export async function loadSessionMarkdown(filename) {
     // console.log('Constructed modulePath:', modulePath);
     throw new Error(`Markdown file definition not found: ${filename}. Ensure it is located in src/assets/sessions/ and the filename is correct.`);
   }
+}
+
+/**
+ * Load a transcript file from the assets/sessions/transcripts directory
+ * 
+ * @param {string} filename - The filename of the transcript file (e.g., 'session_12_corrected.txt')
+ * @returns {Promise<string>} - The content of the transcript file
+ * @throws {Error} - If the file cannot be loaded
+ */
+export async function loadSessionTranscript(filename) {
+  const transcriptModules = import.meta.glob('@/assets/sessions/transcripts/*.txt', { as: 'raw' });
+  const modulePath = `/src/assets/sessions/transcripts/${filename}`;
+
+  if (transcriptModules[modulePath]) {
+    try {
+      const moduleLoader = transcriptModules[modulePath];
+      const rawTranscriptContent = await moduleLoader();
+      return rawTranscriptContent;
+    } catch (error) {
+      console.error(`Error loading transcript content for ${filename}:`, error);
+      throw new Error(`Failed to load content for transcript file: ${filename}`);
+    }
+  } else {
+    console.error(`Transcript module not found for path: ${modulePath}`);
+    console.error('Available transcript modules:', Object.keys(transcriptModules));
+    throw new Error(`Transcript file not found: ${filename}. Ensure it is located in src/assets/sessions/transcripts/.`);
+  }
+}
+
+/**
+ * Get the default transcript filename for a session
+ * Convention: session-N.md -> session_N_corrected.txt
+ * 
+ * @param {string} sessionId - The session ID (e.g., 'session-12')
+ * @returns {string} - The expected transcript filename
+ */
+export function getTranscriptFilename(sessionId) {
+  // Convert session-12 to session_12_corrected.txt
+  const sessionNum = sessionId.replace('session-', '');
+  return `session_${sessionNum}_corrected.txt`;
+}
+
+/**
+ * Check if a transcript exists for a given session
+ * 
+ * @param {string} filename - The transcript filename to check
+ * @returns {boolean} - Whether the transcript file exists
+ */
+export function transcriptExists(filename) {
+  const transcriptModules = import.meta.glob('@/assets/sessions/transcripts/*.txt', { as: 'raw' });
+  const modulePath = `/src/assets/sessions/transcripts/${filename}`;
+  return !!transcriptModules[modulePath];
 }
 
 /**

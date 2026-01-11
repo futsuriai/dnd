@@ -4,14 +4,14 @@ export const lore = [
   {
     id: 'black-swan',
     term: 'The Black Swan',
-    description: 'A mysterious patron on bounty-hunter contract boards, known for reliable, high-risk, high-reward work. Posted a 250g bounty to "remove" Meri using ambiguous language. Nyx suspects this may be Grand Duke Valerian Oleander.',
+    description: 'A mysterious patron on bounty-hunter contract boards, known for reliable, high-risk, high-reward work. Posted a 250g bounty to "remove" Meri using ambiguous language. Nyx suspects this may be Grand Duke Valerian Oliander.',
     history: [
       { session: 11, note: 'Black Swan commission first revealed: 250g bounty on Meri' },
       { session: 12, note: 'Party discussed taking the contract to protect Meri; Nyx suspects the Black Swan is the Grand Duke' }
     ],
     connections: [
       { type: 'npc', id: 'meri', reason: 'Target of bounty' },
-      { type: 'npc', id: 'duke-valerian-oleander', reason: 'Suspected patron' }
+      { type: 'npc', id: 'duke-valerian-oliander', reason: 'Suspected patron' }
     ]
   },
   {
@@ -180,8 +180,8 @@ Recently, the college has opened its doors to the newly rich, if they are willin
       { type: 'location', id: 'pharus', reason: 'About a day\'s travel away' },
       { type: 'location', id: 'duskbreaker-lighthouse', reason: 'Funds scholarship program' },
       { type: 'npc', id: 'donnathan-reeves', reason: 'Alumnus' },
-      { type: 'npc', id: 'duke-valerian-oleander', reason: 'Alumnus' },
-      { type: 'npc', id: 'lady-ophelia-xanteres-oleander', reason: 'Recent graduate' }
+      { type: 'npc', id: 'duke-valerian-oliander', reason: 'Alumnus' },
+      { type: 'npc', id: 'lady-ophelia-xanteres-oliander', reason: 'Recent graduate' }
     ],
     history: [
       { session: 8, note: 'Revealed as alma mater where Reeves and Duke Valerian met' },

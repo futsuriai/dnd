@@ -20,10 +20,18 @@
           <div v-else class="session-summary">
             <p>{{ session.description }}</p>
             
-            <!-- Add Read More link if there's a summaryFile property -->
-            <a v-if="session.summaryFile" @click.prevent="showFullSummary(session)" href="#" class="read-more-link">
-              Read Full Summary...
-            </a>
+            <!-- Session links container -->
+            <div class="session-links">
+              <!-- Add Read More link if there's a summaryFile property -->
+              <a v-if="session.summaryFile" @click.prevent="showFullSummary(session)" href="#" class="read-more-link">
+                📜 Read Full Summary
+              </a>
+              
+              <!-- Add Transcript link if there's a transcriptFile property -->
+              <a v-if="session.transcriptFile" @click.prevent="showTranscript(session)" href="#" class="transcript-link">
+                🎙️ View Transcript
+              </a>
+            </div>
             
             <div v-if="session.highlights" class="highlights">
               <h4>Key Moments:</h4>
@@ -45,6 +53,7 @@
       :title="modalTitle" 
       :text="modalText" 
       :loading="isLoading"
+      :contentClass="modalContentClass"
       @close="closeModal" 
     />
   </div>
@@ -53,7 +62,7 @@
 <script>
 import { sessions } from '../store/worldData';
 import FullTextModal from '@/components/FullTextModal.vue'; // Import the modal
-import { loadSessionMarkdown } from '@/utils/markdownLoader'; // Import our markdown loader utility
+import { loadSessionMarkdown, loadSessionTranscript } from '@/utils/markdownLoader'; // Import our loader utilities
 
 export default {
   name: 'SessionsView',
@@ -66,13 +75,15 @@ export default {
       isModalVisible: false, // State for modal visibility
       modalText: '', // State for modal content
       modalTitle: '', // Add state for modal title
-      isLoading: false // Track loading state
+      isLoading: false, // Track loading state
+      modalContentClass: '' // CSS class for modal content
     };
   },
   methods: {
     async showFullSummary(session) {
       this.isLoading = true;
       this.modalTitle = `${session.title}: ${session.subtitle}`;
+      this.modalContentClass = ''; // Reset class for summaries
       
       try {
         // Load the markdown file dynamically using our utility
@@ -95,10 +106,69 @@ export default {
         this.isModalVisible = true;
       }
     },
+    async showTranscript(session) {
+      this.isLoading = true;
+      this.modalTitle = `${session.title}: ${session.subtitle} — Transcript`;
+      this.modalContentClass = 'transcript-content'; // Add class for transcript styling
+      
+      try {
+        if (session.transcriptFile) {
+          try {
+            const transcriptContent = await loadSessionTranscript(session.transcriptFile);
+            // Format transcript for display (it's already timestamped)
+            this.modalText = this.formatTranscript(transcriptContent);
+          } catch (importError) {
+            console.error("Import error:", importError);
+            this.modalText = "Unable to load the session transcript file.";
+          }
+        } else {
+          this.modalText = "No transcript available for this session.";
+        }
+      } catch (error) {
+        this.modalText = "An error occurred while loading the transcript.";
+        console.error("Error loading transcript:", error);
+      } finally {
+        this.isLoading = false;
+        this.isModalVisible = true;
+      }
+    },
+    formatTranscript(content) {
+      // Format the transcript for better readability as markdown
+      // Each line is in format: [HH:MM:SS] Speaker: Text
+      // Convert to proper markdown with line breaks between speakers
+      
+      const lines = content.split('\n').filter(line => line.trim());
+      let formattedLines = [];
+      let currentSpeaker = null;
+      
+      for (const line of lines) {
+        // Match timestamp and speaker pattern
+        const match = line.match(/^\[(\d{2}:\d{2}:\d{2})\]\s*([^:]+):\s*(.*)$/);
+        if (match) {
+          const [, timestamp, speaker, text] = match;
+          const trimmedSpeaker = speaker.trim();
+          
+          // Add extra spacing when speaker changes for readability
+          if (currentSpeaker !== null && currentSpeaker !== trimmedSpeaker) {
+            formattedLines.push(''); // Add blank line between different speakers
+          }
+          currentSpeaker = trimmedSpeaker;
+          
+          // Format with colored timestamp and bold speaker
+          formattedLines.push(`\`${timestamp}\` **${trimmedSpeaker}:** ${text}`);
+        } else if (line.trim()) {
+          // Keep non-matching lines as-is
+          formattedLines.push(line);
+        }
+      }
+      
+      return formattedLines.join('\n\n'); // Double newline for proper markdown paragraph breaks
+    },
     closeModal() {
       this.isModalVisible = false;
       this.modalText = '';
       this.modalTitle = '';
+      this.modalContentClass = '';
     }
   }
 };
@@ -200,6 +270,14 @@ export default {
   color: var(--text-muted);
 }
 
+/* Add styling for session links container */
+.session-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 0.75rem;
+}
+
 /* Add styling for read more link */
 .read-more-link {
   color: var(--color-highlight);
@@ -208,10 +286,24 @@ export default {
   font-weight: 700; /* Increased font weight for better visibility */
   font-size: 1.05em; /* Slightly increased font size */
   display: inline-block;
-  margin-top: 0.5rem;
 }
 
 .read-more-link:hover {
+  color: var(--color-accent);
+  text-decoration: underline;
+}
+
+/* Add styling for transcript link */
+.transcript-link {
+  color: var(--color-secondary, #9b59b6);
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1.05em;
+  display: inline-block;
+}
+
+.transcript-link:hover {
   color: var(--color-accent);
   text-decoration: underline;
 }

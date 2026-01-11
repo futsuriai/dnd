@@ -74,11 +74,11 @@ This file is auto-generated. Do not edit manually.
 - `denmother`: The Denmother
 - `donnathan-reeves`: Donnathan Reeves
 - `drunken-goose-barkeep`: Barkeep
-- `duke-valerian-oleander`: Duke Valerian Oleander
+- `duke-valerian-oliander`: Duke Valerian Oliander
 - `empress-consort-lyssandra`: Empress Consort Lyssandra
 - `guard-diane`: Diane
 - `lady-jacinta`: Lady Jacinta
-- `lady-ophelia-xanteres-oleander`: Lady Ophelia Xanteres Oleander
+- `lady-ophelia-xanteres-oliander`: Lady Ophelia Xanteres Oliander
 - `lex`: Lex
 - `meri`: Meri
 - `michelle-faberge`: Michelle Faberge

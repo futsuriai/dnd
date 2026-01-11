@@ -101,15 +101,15 @@ export const locations = [
     id: 'torchlight-college',
     name: 'Torchlight College',
     type: 'poi',
-    description: 'The empire\'s premier university in Ordonne, alma mater to nobles like Donnathan Reeves and Duke Valerian Oleander.',
+    description: 'The empire\'s premier university in Ordonne, alma mater to nobles like Donnathan Reeves and Duke Valerian Oliander.',
     tags: ['academy', 'ordonne'],
     history: [
-      { session: 8, note: 'Reeves planned to visit while coordinating with Grand Duke Valerian Oleander.' }
+      { session: 8, note: 'Reeves planned to visit while coordinating with Grand Duke Valerian Oliander.' }
     ],
     connections: [
       { type: 'location', id: 'ordonne', relationship: 'Located In' },
       { type: 'npc', id: 'donnathan-reeves', reason: 'Alumnus' },
-      { type: 'npc', id: 'duke-valerian-oleander', reason: 'Alumnus' },
+      { type: 'npc', id: 'duke-valerian-oliander', reason: 'Alumnus' },
       { type: 'lore', id: 'torchlight-college', reason: 'Central institution' }
     ]
   },
@@ -541,7 +541,7 @@ export const locations = [
     id: 'ducal-palace',
     name: 'Ducal Palace',
     type: 'landmark',
-    description: 'The residence and seat of power for Duke Valerian Oleander in Bastion City. Director Reeves frequently visits for days at a time.',
+    description: 'The residence and seat of power for Duke Valerian Oliander in Bastion City. Director Reeves frequently visits for days at a time.',
     tags: ['palace', 'bastion city'],
     history: [
       { session: 8, note: 'Reeves announced plans to visit for several days' },
@@ -551,7 +551,7 @@ export const locations = [
     ],
     connections: [
       { type: 'location', id: 'bastion-city', reason: 'Located In' },
-      { type: 'npc', id: 'duke-valerian-oleander', reason: 'Ducal residence' },
+      { type: 'npc', id: 'duke-valerian-oliander', reason: 'Ducal residence' },
       { type: 'npc', id: 'donnathan-reeves', reason: 'Frequent visitor' }
     ]
   }
