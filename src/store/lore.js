@@ -238,8 +238,8 @@ Recently, the college has opened its doors to the newly rich, if they are willin
   {
     id: 'whitaker-family',
     term: 'The Whitaker Brothers',
-    description: 'A noble family from County Cork in Vasellia. The six Whitaker brothers are each identified by a signature color.',
-    fullText: `The Whitaker family holds lands in County Cork, an inland province of Vasellia. Lord Whitaker has six sons, each associated with a signature color:
+    description: 'A noble family from County Cork in Vaselia. The six Whitaker brothers are each identified by a signature color.',
+    fullText: `The Whitaker family holds lands in County Cork, an inland province of Vaselia. Lord Whitaker has six sons, each associated with a signature color:
 
 | Brother | Color | Status |
 | ------- | ----- | ------ |
@@ -252,7 +252,7 @@ Recently, the college has opened its doors to the newly rich, if they are willin
 
 The family employs halfling servants who traditionally adopt "normal" human names. Witty's manservant Jarvis has recently gone missing, along with a large portion of Witty's wardrobe.`,
     connections: [
-      { type: 'location', id: 'vasellia', reason: 'Family province' },
+      { type: 'location', id: 'vaselia', reason: 'Family province' },
       { type: 'character', id: 'witty', reason: 'Sixth son' },
       { type: 'lore', id: 'torchlight-college', reason: 'Whitaker II attended' }
     ],

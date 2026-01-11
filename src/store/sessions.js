@@ -174,7 +174,7 @@ export const sessions = [
       'Nyx gains entry as "Stanley," a guard with substance abuse issues, and maps internal security protocols.',
       'The party discovers the lighthouse\'s multi-tier warforged development program including titan-scale constructs.',
       'Research reveals phosphorus additives can increase crystal capacity tenfold, enabling 24/7 warforged operation.',
-      'Director of Relations Donnathan Reeves is in Pharos liaising with Eulogians, revealing political dimensions.',
+      'Director of Relations Donnathan Reeves is in Pharus liaising with Eulogians, revealing political dimensions.',
       'Ellara performs last rites for Faberge after meeting artificer Darius, who mentions his missing colleague.',
       'The party acquires critical assets: Director and guard security passes, sending stones, and prototype devices.',
       'Internal lighthouse documents use invisible ink, suggesting hidden layers of information.',

@@ -29,11 +29,10 @@ This file is auto-generated. Do not edit manually.
 - `bastion-east-gate`: Bastion East Gate
 - `boaden`: Boaden
 - `boixden`: Boixden
-- `boixden-capital`: Boixden
 - `civic-hall-of-records`: Civic Hall of Records
 - `drunken-goose`: The Drunken Goose Tavern
 - `ducal-palace`: Ducal Palace
-- `dunston-and-kirks`: Dunston & Kirk's
+- `dunston-and-kirks`: Dunston & Kirk\
 - `duskbreaker-lighthouse`: Duskbreaker Lighthouse
 - `eulogian-seminary`: Eulogian Seminary
 - `faberge-workshop`: Faberge
@@ -62,7 +61,7 @@ This file is auto-generated. Do not edit manually.
 - `the-golden-dove`: The Golden Dove
 - `the-golden-goose`: The Golden Goose
 - `torchlight-college`: Torchlight College
-- `vasellia`: Vasellia
+- `vaselia`: Vaselia
 
 ## NPCs
 

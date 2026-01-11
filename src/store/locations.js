@@ -71,7 +71,7 @@ export const locations = [
       { type: 'location', id: 'boixden', reason: 'Province within the empire' },
       { type: 'location', id: 'hieroterra', reason: 'Province within the empire' },
       { type: 'location', id: 'ordonne', reason: 'Province within the empire' },
-      { type: 'location', id: 'vasellia', reason: 'Province within the empire' },
+      { type: 'location', id: 'vaselia', reason: 'Province within the empire' },
       { type: 'location', id: 'pharus', reason: 'Seat of imperial power' }
     ]
   },
@@ -476,8 +476,8 @@ export const locations = [
     ]
   },
   {
-    id: 'boixden-capital',
-    name: 'Boixden',
+    id: 'luxembough',
+    name: 'Luxembough',
     type: 'capital',
     description: 'The fortified capital of the province of Boixden and ancestral seat of the Marchenbau family.',
     tags: ['capital', 'boixden'],
@@ -487,16 +487,6 @@ export const locations = [
     connections: [
       { type: 'location', id: 'boixden', relationship: 'Province Capital' },
       { type: 'lore', id: 'marchenbau', reason: 'Family seat' }
-    ]
-  },
-  {
-    id: 'luxembough',
-    name: 'Luxembough',
-    type: 'city',
-    description: 'Not much is known about this city.',
-    tags: ['city', 'boixden'],
-    connections: [
-      { type: 'location', id: 'boixden', relationship: 'Located In' }
     ]
   },
   {
@@ -512,8 +502,8 @@ export const locations = [
     ]
   },
   {
-    id: 'vasellia',
-    name: 'Vasellia',
+    id: 'vaselia',
+    name: 'Vaselia',
     type: 'province',
     description: 'A fertile coastal province of the Hariolar Empire renowned for its luminous vineyards and viscounties.',
     history: [
@@ -527,13 +517,13 @@ export const locations = [
     id: 'sommeil',
     name: 'Sommeil',
     type: 'town',
-    description: 'The viscounty seat of Donnathan Reeves, nestled among Vasellia\'s vineyards and famed for luminous wines.',
-    tags: ['town', 'vasellia', 'vineyards'],
+    description: 'The viscounty seat of Donnathan Reeves, nestled among Vaselia\'s vineyards and famed for luminous wines.',
+    tags: ['town', 'vaselia', 'vineyards'],
     history: [
       { session: 8, note: 'Reeves confirmed his title as Viscount Sommeil before departing for the ducal palace.' }
     ],
     connections: [
-      { type: 'location', id: 'vasellia', relationship: 'Viscounty within the province' },
+      { type: 'location', id: 'vaselia', relationship: 'Viscounty within the province' },
       { type: 'npc', id: 'donnathan-reeves', reason: 'Title holder' }
     ]
   },
