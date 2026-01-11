@@ -169,7 +169,7 @@ Witty asked if they were a “travelling troupe.” Nyx called it a mission. Wit
 
 ### The Whitaker Lineage (as told by Witty)
 
-Witty explained he was the **6th son** of Lord Whitaker of an inland province of **Vasilia**, in **County Cork**.
+Witty explained he was the **6th son** of Lord Whitaker of an inland province of **Vaselia**, in **County Cork**.
 
 * Whitaker 1 & 2: Torchlight.
 * Whitaker 3: “I’d rather not talk about him.”

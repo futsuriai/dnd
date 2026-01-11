@@ -149,7 +149,7 @@ Subordinate (“Tingle”) arrives, stammering. Rapid‑fire report extracted:
 * Applications: perpetual (24/7) warforged activation; municipal lamps requiring yearly (not weekly) recharge.
 * Warforged Titan theoretical expansions.
 * Files for Titan application: held by **Beth** in Engineering (Floor 10); not yet present; Director often uses an elevator alternative.
-* Director of Relations **Donnathan Reeves** currently in Ordonne’s capital (Pharos) liaising with the Eulogians.
+* Director of Relations **Donnathan Reeves** currently in Ordonne’s capital (Pharus) liaising with the Eulogians.
 
 Dismissal delivered with surgical froideur; morale impact noted.
 
@@ -253,7 +253,7 @@ Inventory & Intel Share (verbatim completeness retained):
 * Warforged Titan concept & upgraded chassis lines.
 * Autonomous command research vs centralized command stone vulnerability.
 * Field Test recall pending—expectation of “only animals” engagement (false or naive assumption).
-* Director of Relations (Donnathan Reeves) in Pharos (capital) engaging Eulogians—political vector.
+* Director of Relations (Donnathan Reeves) in Pharus (capital) engaging Eulogians—political vector.
 * Wizard Specialist Lex: absent; to “see you tomorrow.”
 * Engineering Contact: Beth (Floor 10) — source of Titan application files.
 * Tools & Assets Acquired:
@@ -284,7 +284,7 @@ Group Ethics Line (Current Draft): Avoid further lethal force if alternatives ex
 | Warforged Program | Multi-tier development: upgraded chassis + titan-scale units; goal of 24/7 activation via phosphorus-boosted crystals; autonomy research vs command stone vulnerability; ethical debates ongoing. |
 | Field Test Trap | Road encounter confirmed as Lighthouse constructs; staff narrative: intended to affect only animals (either lie or ignorance); impending diagnostic once units “return.” |
 | Energy Research | Phosphorus additive expands capacity tenfold; potential civic (lamps) & militarized (continuous warforged) deployment. |
-| Political Vector | Director of Relations Donnathan Reeves in Pharos liaising with Eulogians—tension front shifting to capital diplomacy. |
+| Political Vector | Director of Relations Donnathan Reeves in Pharus liaising with Eulogians—tension front shifting to capital diplomacy. |
 | Missing Personnel | Lex (wizard specialist) absent; Michelle Faberge (Director of Research) actually deceased (party-secret); Darius’s concern foreshadows internal shock when death is discovered. |
 | Security Posture | Reliance on runestone passes; complacent guard culture; social engineering vulnerabilities; invisible/inaccessible documentation mediums (ink) gating internal knowledge. |
 | Moral Fault Line | Nyx’s killing vs Ellara’s doctrines; emergent party code to minimize lethal outcomes going forward. |
@@ -300,7 +300,7 @@ Group Ethics Line (Current Draft): Avoid further lethal force if alternatives ex
 
 1. **Deep Descent:** Use Director pass to penetrate basement levels (risk: security cascade if Faberge’s absence noticed; time-sensitive before her nonappearance triggers alerts).
 2. **Document Exploitation:** Acquire invisible ink deciphering method (spectacles? arcane filter? reagent) to harvest internal memos.
-3. **Intercept Reeves:** Establish contact network in Pharos or shadow his return—political pressure vector.
+3. **Intercept Reeves:** Establish contact network in Pharus or shadow his return—political pressure vector.
 4. **Leverage Darius:** Cultivate alliance via water purification research; moral high ground + intel ingress.
 5. **Locate Lex:** Determine if absence is personal, coercive, or connected to Meri; potential arcane key to command-spell capture.
 6. **Ethical Line Maintenance:** Formalize non-lethal incapacitation protocols (sleep agents, restraints) to preserve Ellara’s alignment and minimize internal fracture.

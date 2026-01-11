@@ -14,7 +14,7 @@ Picking up from the mess hall, Ellara found herself in the company of Proctor Ed
 
 **Ellara:** (explaining her presence)
 
-**Reeves:** "Oh, Eduard is an old friend. I met his niece, **Empress Consort Lyssandra**, in Pharos…"
+**Reeves:** "Oh, Eduard is an old friend. I met his niece, **Empress Consort Lyssandra**, in Pharus…"
 
 He continued, "I like to say I handle **public relations** for the Duskbreaker Lighthouse. I act as liaison between the imperial family, nobility, and the Eulogians, and I've worked closely with Eduard as he sees the benefit of the technology we're developing."
 
