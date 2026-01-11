@@ -81,7 +81,7 @@ Berridin approached with the easy confidence of a man who was about to become a 
 **Berridin:** “You look a little lost there, fella.”
 **Witty:** “I am. I seem to have gotten turned around.” 
 
-Witty explained he was looking for his manservant, **Jarvis**—a halfling from the Whitaker estate in **Vassilia**—gone missing a few days ago. 
+Witty explained he was looking for his manservant, **Jarvis**—a halfling from the Whitaker estate in **Vaselia**—gone missing a few days ago. 
 
 Berridin performed the appropriate fake competence:
 
@@ -173,7 +173,7 @@ Witty explained he was the **6th son** of Lord Whitaker of an inland province of
 
 * Whitaker 1 & 2: Torchlight.
 * Whitaker 3: “I’d rather not talk about him.”
-* Whitaker 4: a traveler, exploring **Boaden**.
+* Whitaker 4: a traveler, exploring **Boixden**.
 * Whitaker 5: joined the clergy. 
 
 He claimed the nickname “Witty” came from sheer genius: *“In every situation I just think to myself what would a genius do… and I just do that.”* 

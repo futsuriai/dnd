@@ -56,7 +56,7 @@ Ysidor’s shoulders squared. “Then I need to go back. My duty is to our peopl
 
 The debate that followed drew a line through the heart of the party.
 
-**Meri:** "I will always let Little Hill follow his heart, but my duty is to **Hyrta**."
+**Meri:** "I will always let Little Hill follow his heart, but my duty is to **Hýrda**."
 **Nyx:** "…or we follow you to your village and the threat will always remain."
 
 He thought back on his work in Bastion (**Insight 21**): how he'd worked for the elite, how they didn't care *how* a job got done, just *that* it was. They paid people like him to get what they wanted, and he knew there was a high likelihood he'd be hired to find Meri if he just went back. He laid his cards on the table.
@@ -135,8 +135,8 @@ Something had changed at the **East Gate**. A **new-model warforged** stood **in
 
 | **Thread** | **Status & Evidence** |
 | --- | --- |
-| **Meri** | **Alive and free**, heading for Hyrta; warns “the **engines of the Empire** aren’t slowing.” Has Ysidor's **sending stone**. |
-| **Berridin** | Tragically not accompanying Meri to **Hyrta**. |
+| **Meri** | **Alive and free**, heading for Hýrda; warns "the **engines of the Empire** aren't slowing." Has Ysidor's **sending stone**. |
+| **Berridin** | Tragically not accompanying Meri to **Hýrda**. |
 | **Ysidor’s Clock** | Staying **one month** to help address the Lighthouse, then returns home. |
 | **Team Plan** | **Ellara** to seek a **meeting with Proctor Eduard**; **Nyx** insists on **hedging** roles/egress; **Berridin** to **observe** Lighthouse reaction from a distance. |
 | **Security Posture** | East Gate: **newer warforged** posted outside/inside, both **inactive**. Lighthouse exterior: **two active modern warforged** on watch. |
