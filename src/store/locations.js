@@ -451,16 +451,7 @@ export const locations = [
       { type: 'location', id: 'ducal-palace', relationship: 'Nearby' }
     ]
   },
-  {
-    id: 'boaden',
-    name: 'Boaden',
-    type: 'location',
-    description: 'A distant location where Whitaker 4 (Nyx\'s cover) was supposedly traveling. Mentioned by Donnathan Reeves as being far from Bastion.',
-    history: [
-      { session: 11, note: 'Mentioned by Donnathan Reeves as a place difficult to reach from Bastion.' }
-    ],
-    connections: []
-  },
+
   {
     id: 'badwater-well',
     name: 'Badwater Well',
@@ -493,9 +484,10 @@ export const locations = [
     id: 'boixden',
     name: 'Boixden',
     type: 'province',
-    description: 'An imperial province of The Hariolar Empire, home to the noble Marchenbau family.',
+    description: 'An imperial province of The Hariolar Empire, home to the noble Marchenbau family. Mentioned as a distant location where Whitaker 4 (Nyx\'s cover) was supposedly traveling.',
     history: [
-      { session: 8, note: 'Revealed as home province of Proctor Eduard\'s family' }
+      { session: 8, note: 'Revealed as home province of Proctor Eduard\'s family' },
+      { session: 11, note: 'Mentioned by Donnathan Reeves as a place difficult to reach from Bastion.' }
     ],
     connections: [
       { type: 'lore', id: 'marchenbau', reason: 'Home of the Marchenbau family' }

@@ -27,7 +27,6 @@ This file is auto-generated. Do not edit manually.
 - `basement-lab`: Basement Synthesis Laboratory
 - `bastion-city`: Bastion City
 - `bastion-east-gate`: Bastion East Gate
-- `boaden`: Boaden
 - `boixden`: Boixden
 - `civic-hall-of-records`: Civic Hall of Records
 - `drunken-goose`: The Drunken Goose Tavern
