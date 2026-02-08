@@ -32,13 +32,28 @@ export const npcs = [
             { session: 6, note: 'Found alive in basement lab; extracted to safety from the lighthouse.' },
             { session: 7, note: 'Rescued and freed; departed for Hýrda' },
             { session: 11, note: 'Target of a "Black Swan" commission: a 250g bounty on her head.' },
-            { session: 12, note: 'Reported ~20 soldiers encamped near Hýrda under ducal decree; party contacted via sending stone' }
+            { session: 12, note: 'Reported ~20 soldiers encamped near Hýrda under ducal decree; party contacted via sending stone' },
+            { session: 13, note: 'A bounty hunter sent after her was killed on the road; a note read "Hyrda".' }
         ],
         connections: [
             { type: 'character', id: 'ysidor', reason: 'Mentor and guardian' },
             { type: 'location', id: 'duskbreaker-lighthouse', reason: 'Held captive beneath the Lighthouse' },
             { type: 'location', id: 'hyrta', reason: 'Home village' },
             { type: 'lore', id: 'light-crystals', reason: 'Subject of crystal synthesis process' }
+        ]
+    },
+    {
+        id: 'samantha',
+        name: 'Samantha',
+        role: 'Bounty Hunter (Disguised)',
+        location: 'Road to Hýrda',
+        description: 'A bounty hunter who posed as a desperate mother to infiltrate the party; killed at their campfire.',
+        history: [
+            { session: 13, note: 'Posed as a traveler with a baby to ambush the party; killed in the ensuing fight.' }
+        ],
+        connections: [
+            { type: 'npc', id: 'meri', reason: 'Targeted for bounty' },
+            { type: 'location', id: 'hyrta', reason: 'Heading toward Hýrda to find Meri' }
         ]
     },
     {

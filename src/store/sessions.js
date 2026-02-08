@@ -1,12 +1,32 @@
 export const sessions = [
   {
+    id: 'session-14',
+    title: 'Session 14',
+    subtitle: 'Smoke on the Horizon',
+    date: 'February 8, 2026',
+    upcoming: true,
+    description: 'The party closes in on Hýrda and the Grand Duke\'s encampment.',
+    highlights: [],
+  },
+  {
     id: 'session-13',
     title: 'Session 13',
-    subtitle: 'The Road to Hýrda',
+    subtitle: 'Loans, Lies, and a False Baby',
     date: 'January 11, 2026',
-    upcoming: true,
-    description: 'The party travels by carriage toward Meri\'s village, racing against time and the Duke\'s forces.',
-    highlights: [],
+    upcoming: false,
+    summaryFile: 'session-13.md',
+    description: 'A risky 1,000g loan backs the journey as the party leaves Bastion, survives a disguised bounty hunter, and finally sights Hýrda with a ducal encampment nearby.',
+    highlights: [
+      'Witty and Berridin secure a 1,000g loan against the Whitman estate at the Bastion bank.',
+      'Nyx presses Berridin on the group\'s funds and the promise of a future zeppelin business.',
+      'The party departs at first light, passing sleeping warforged at the East Gate.',
+      'Berridin warns Ellara about Proctor Eduard\'s comments; she remains unconvinced.',
+      'Samantha arrives with a swaddled baby, then reveals herself as a bounty hunter.',
+      'A brutal campfire fight ends with the hunter dead and a note reading "Hyrda" on her body.',
+      'Nyx institutes a verification protocol while Ellara reels from her first close-up death.',
+      'On the seventh day, the party sees Hýrda and a nearby Grand Duke encampment of ~20 soldiers.',
+      'The session ends with a level up for the party.'
+    ],
   },
   {
     id: 'session-12',

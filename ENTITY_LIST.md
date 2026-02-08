@@ -81,6 +81,7 @@ This file is auto-generated. Do not edit manually.
 - `meri`: Meri
 - `michelle-faberge`: Michelle Faberge
 - `proctor-eduard`: Proctor Eduard
+- `samantha`: Samantha
 - `stanley-guard`: Stanley
 - `tingle`: Tingle
 
@@ -92,4 +93,3 @@ This file is auto-generated. Do not edit manually.
 - `tsinyra`: Tsi\
 - `witty`: Whitaker 
 - `ysidor`: Ysidor
-

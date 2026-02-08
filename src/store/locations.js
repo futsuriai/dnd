@@ -362,7 +362,8 @@ export const locations = [
     history: [
       { session: 1, note: 'Ysidor\'s home village.' },
       { session: 7, note: 'Meri is heading home as it is facing mining disputes' },
-      { session: 12, note: '~20 soldiers encamped nearby under ducal decree; party en route by carriage' }
+      { session: 12, note: '~20 soldiers encamped nearby under ducal decree; party en route by carriage' },
+      { session: 13, note: 'Party sighted a Grand Duke encampment of ~20 soldiers near the village.' }
     ],
     connections: [
       { type: 'location', id: 'hieroterra', reason: 'Village within the province' }
