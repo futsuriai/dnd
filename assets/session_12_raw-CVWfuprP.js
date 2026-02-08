@@ -13,7 +13,7 @@ const e=`[00:00:00] Berridin: So fancy.
 [00:00:32] GM: to handle some problems there,
 [00:00:34] GM: as well as Nyx kind of went and followed
 [00:00:37] GM: and had an interesting rendezvous with Donathan
-[00:00:42] GM: and Valerian Oleander.
+[00:00:42] GM: and Valerian Oliander.
 [00:00:48] Berridin: Just in the
 [00:00:50] GM: So, quite being that, after that,
 [00:00:58] GM: everyone kind of made their way home

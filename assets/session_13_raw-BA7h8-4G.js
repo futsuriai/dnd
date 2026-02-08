@@ -1,0 +1,4615 @@
+const e=`[00:00:00] GM: oh I was like what the fuck is that I saw the pop up first and I'm like who's Craig
+[00:00:01] Ellara: now recording it's okay wait is it evening i thought like when we have left early okay
+[00:00:03] Whitaker "Witty" Whitman VI: thanks craig i just want to say that it could get around the world in 80 days so like at maximum we
+[00:00:04] Nyx: yeah we're getting hacked don't bring it up again i'm done i'm done with you
+[00:00:15] GM: anyways last we left off finding out that Hilda was going to be attacked and
+[00:00:22] GM: reaching out to Mary and knowing that there are already soldiers of the Grand
+[00:00:27] GM: duke kind of outside the area the party decided to go and gave assistance they
+[00:00:36] GM: were trying to figure out what the best way was there seemed to be some admin
+[00:00:41] GM: admin wanting to fly however it was determined that it would take a little
+[00:00:48] GM: bit too long to get the proper vehicle as it would be custom-made and maybe the
+[00:00:55] GM: funds might not be there who knows
+[00:00:57] GM: they also discussed Nick's discussed his findings previously about the black
+[00:01:02] GM: swan and the hit on Mary's life or more more discreetly put to be disposed so
+[00:01:13] GM: with that the party decided to kind of go a little bit traditional and you know
+[00:01:19] GM: get a wagon and horses kind of putting the airship did original who knows what
+[00:01:25] GM: they were thinking on hold for the next few days
+[00:01:26] GM: for now one would hope as I recall the party was going to meet up at Whitty's
+[00:01:31] Nyx: so it's evening nix kind of just says okay so let's all right after that yeah it's the night
+[00:01:32] Berridin: It's coming back.
+[00:01:33] Berridin: Act two, it's coming back.
+[00:01:37] Berridin: I'm down.
+[00:01:42] GM: house with the horses as they kind of split up and some went to get the horses
+[00:01:49] GM: and I believe also a Laura did have a conversation with Proctor Edward letting
+[00:01:56] GM: letting him know she would be gone by the time the party was ready to go so I
+[00:01:58] GM: I am sure he will be on for a while and he gave her full support as well as a
+[00:02:05] GM: little book to study while she was gone so kind we're at the Whittiest state the
+[00:02:13] GM: Whitaker the Whitman estate as it were I believe everyone has come back you have
+[00:02:21] GM: your horses I think you got three horses at the end didn't did a little deal try
+[00:02:25] GM: that didn't work didn't get a little deal I'll try to get his
+[00:02:27] GM: horse him and let him go in his car but he left in no time it's not that he was
+[00:02:28] GM: finder fees uh nix may be a little upset uh but yeah so it is evening you have horses carriage
+[00:02:42] GM: um it took you a whole day to figure all this out for clarity opened the last session opened
+[00:03:02] Ellara: okay surely if you do like a you go in oh wait outside whitaker whitman obviously what's his
+[00:03:03] Nyx: before yeah and yeah no that was both in real time and in game time
+[00:03:08] GM: in the morning where you had witty kind of wandering the streets nix runs into him
+[00:03:14] GM: brings witty home you spent a good part of the late morning early afternoon and into the afternoon
+[00:03:22] GM: chasing down an airship your personal erica a lot of time was spent on this
+[00:03:32] Nyx: i'm a little i'm a little bitter about it i'll be honest
+[00:03:36] GM: it was a two-hour quest um
+[00:03:41] Nyx: when i found out it didn't have forward propulsion
+[00:03:47] Nyx: i'm just led here under false pretenses um yeah so nix just kind of was literally i i'm imagining
+[00:03:51] GM: honestly you gotta roll with the punch
+[00:03:53] GM: is i just remember andres's searches after just sleep over at witty's i guess or uh if you want
+[00:04:05] Whitaker "Witty" Whitman VI: would have gotten there like regardless of which direction we went we would have been there within
+[00:04:10] Whitaker "Witty" Whitman VI: 80 days so at least we had a good view well is the bank still open will it open in the morning
+[00:04:13] Ysidor: in other words we don't serve poor people witty the first oh my god
+[00:04:14] Nyx: little side thing i do imagine the scene like if this were animated adventure and we did that we
+[00:04:20] Nyx: went through it and we did that and we did that and we did that and we did that and we did that
+[00:04:20] Nyx: the hot air balloon and there's a scene where like we're flying over where mary is supposed
+[00:04:24] Nyx: to be and everything's on fire like and all the soldiers there all the automatons are there
+[00:04:30] Nyx: the war forges everything's destroyed and you witty just goes well at least we got the hot air
+[00:04:38] Nyx: balloon yeah anyway i digress so nix just goes upon you all right look so we're heading out
+[00:04:50] Nyx: tomorrow morning let's get there at first light let's leave a first light grab all your stuff
+[00:04:59] Nyx: so make sure you have everything before we head out
+[00:05:06] Nyx: i think barrett you should go to the bank with witty that's my way down
+[00:05:15] Whitaker "Witty" Whitman VI: before we leave i should probably like before i leave a city see like if i'm able to withdraw
+[00:05:20] Whitaker "Witty" Whitman VI: any funds from my family uh account okay yeah yeah i think i mentioned that last time yeah
+[00:05:26] GM: we could say before everyone got back you did do that you wanna turn back time for a minute
+[00:05:33] Whitaker "Witty" Whitman VI: yeah that'd be great uh yeah i think i was on my own at this point yeah it didn't last me i
+[00:05:34] GM: okay so we will um rewind a little who would have been with you just you on your own um
+[00:05:47] GM: i think
+[00:05:48] GM: quick okay yeah so um after um after a little bit of walking uh you went you come across this ornate
+[00:05:50] Whitaker "Witty" Whitman VI: invited him to see if he wanted to come to the bank well actually he probably might want to come
+[00:05:54] Whitaker "Witty" Whitman VI: with me if i said i was going to get money good afternoon uh good afternoon ma'am i am uh
+[00:06:08] GM: building uh almost um massive columns in the front with a steeple roof all made of stone
+[00:06:12] Nyx: oh good i'm not here
+[00:06:17] GM: um a very um mix of neoclassical and art uh deco kind of design and as you go in massive doors
+[00:06:26] GM: larger than you
+[00:06:28] GM: side, you see gorgeous tiles, bronze works, all that. And there's like, kind of further in,
+[00:06:38] GM: there's like guards at the door, at least two you can see. And there's kind of a few other people
+[00:06:47] GM: there. Kind of, there's a line, and there seems to be one kind of teller of a sort. And yeah,
+[00:06:57] GM: after a bit, you're in line, you know, maybe about 10, 20 minutes later, and he goes,
+[00:07:06] GM: excuse me, it's your turn to go to the teller. And she goes, well, good afternoon, sir.
+[00:07:12] GM: How may I help you? Hold on a moment, I will go and get that ledger. And you see,
+[00:07:18] Whitaker "Witty" Whitman VI: of the whitman estate and i need to make a withdrawal from
+[00:07:22] Whitaker "Witty" Whitman VI: our
+[00:07:22] Whitaker "Witty" Whitman VI: uh
+[00:07:22] Whitaker "Witty" Whitman VI: funds what was he he made a withdrawal how of how much okay when was that when was the last
+[00:07:28] GM: she steps back in kind of going and she kind of goes to a wall with multiple tomes,
+[00:07:35] GM: and you see her mumbling and kind of alphabetically,
+[00:07:38] GM: with Haker, she pulls up this massive volume, and she's going through it. And she goes,
+[00:07:43] GM: well, I see the last withdrawal was authorized by one Jarvis. He was in your employ.
+[00:07:56] GM: Well, there's a history of, there's a history of withdrawals. There has been a withdrawal of
+[00:08:05] GM: every week, about 200 gold, about two weeks ago.
+[00:08:12] Whitaker "Witty" Whitman VI: withdrawal he made oh about two weeks ago perfect so um can i make uh both last week's withdrawal
+[00:08:21] Whitaker "Witty" Whitman VI: and this week's withdrawal so 400 gold well this is this is you know an interesting development
+[00:08:26] GM: Wow.
+[00:08:28] GM: Here's the thing. It would seem, the withdrawal two weeks ago,
+[00:08:36] GM: he depleted the remainder of the funds.
+[00:08:44] Whitaker "Witty" Whitman VI: because uh you know jarvis quit uh more than that
+[00:08:52] Whitaker "Witty" Whitman VI: ago and uh so this would be fraud um so uh what's what's your bank yeah
+[00:08:57] GM: When did he quit? I thought it was two weeks ago.
+[00:09:00] Whitaker "Witty" Whitman VI: uh well you know time you know in in in in spirit he quit before he made that withdrawal
+[00:09:01] GM: I fucked up.
+[00:09:09] Whitaker "Witty" Whitman VI: um whether or not you know you know he had he had physically walked away or not you know he
+[00:09:16] Whitaker "Witty" Whitman VI: was planning it so you know i feel like this is fraud is there sort of a you know a fraud division
+[00:09:19] GM: Sir, it is unfortunate. However, clients are responsible for accrediting users and giving them
+[00:09:21] Whitaker "Witty" Whitman VI: here
+[00:09:22] Whitaker "Witty" Whitman VI: uh first first uh have you heard of my father uh lord whitman uh is good for any reimbursement
+[00:09:30] GM: the right to withdraw from the accounts.
+[00:09:33] GM: We are not liable should you revoke, should you not revoke access to the accounts?
+[00:09:40] GM: It is an unfortunate situation. However, there's nothing I can do at the moment,
+[00:09:44] GM: as there is no way for us to know that this was a fraudulent activity.
+[00:09:48] GM: As per our accounts, he is still allowed to withdraw from your account.
+[00:09:55] GM: Okay.
+[00:10:09] Whitaker "Witty" Whitman VI: uh for a like forward you know uh that the bank could provide to our account on loan
+[00:10:19] Whitaker "Witty" Whitman VI: he's here oh yeah he's he's
+[00:10:20] GM: So, should your father be the one to pull out a loan?
+[00:10:28] GM: i would need his presence um here um there are many nobles who use their parents names to pull
+[00:10:35] GM: out loans and we have seen it in our best practice to ensure that those parental figures are here in
+[00:10:42] GM: person to do such withdrawals um so we will gladly give you a loan once your father um appears why
+[00:10:51] Whitaker "Witty" Whitman VI: here he's right outside can i go get him uh so i like walk outside and like kind of give din a
+[00:10:57] GM: not yeah yeah uh yeah go for it describe well it's a cantrip it's a cantrip so it doesn't even
+[00:10:59] Berridin: You want me to turn you into the dad?
+[00:11:02] Whitaker "Witty" Whitman VI: little head shake uh to go with me um and then i kind of like before we get aside we kind of like
+[00:11:08] Whitaker "Witty" Whitman VI: turn i pull him into the bathroom and uh i ask him if he can like you know like that that suit
+[00:11:15] Whitaker "Witty" Whitman VI: he made me if he can make me like a new suit that might make me uh you know look more older yeah
+[00:11:26] Whitaker "Witty" Whitman VI: no no
+[00:11:26] Berridin: Into your dad?
+[00:11:28] Nyx: love the smell of in the morning bobby i bet you didn't have be the bank teller on your bingo card
+[00:11:30] Whitaker "Witty" Whitman VI: wait wait you can become the dad that would be so much easier
+[00:11:33] Whitaker "Witty" Whitman VI: what uh actually i'm just a temporarily without liquid assets
+[00:11:33] Berridin: Wait, wait.
+[00:11:34] Berridin: I need to clarify some things.
+[00:11:38] Berridin: Are you broke,
+[00:11:40] Berridin: Witty?
+[00:11:40] Berridin: Oh my god.
+[00:11:48] Whitaker "Witty" Whitman VI: they're that now that see see i'm i'm just a billionaire who's down on his luck
+[00:11:51] Berridin: You're a MAGA Republican?
+[00:11:52] Berridin: How am I going to get paid
+[00:11:57] Whitaker "Witty" Whitman VI: okay i'm gonna pull myself up by the bootstrings by the bootstraps um and have you help me
+[00:12:03] Whitaker "Witty" Whitman VI: well this is you're gonna and you're gonna become my dad and you're gonna be the dad of my dad
+[00:12:08] Berridin: if you don't have any money?
+[00:12:14] Whitaker "Witty" Whitman VI: you're gonna be able to make withdraw from our you know accounts on loan yeah yeah um yeah can i uh
+[00:12:19] Berridin: Okay, okay, okay.
+[00:12:21] Berridin: Do you have a picture or something?
+[00:12:24] Berridin: Can you describe him to me?
+[00:12:29] Whitaker "Witty" Whitman VI: you know make just a minor illusion of like a little like uh sculpture of of him cool so i don't
+[00:12:45] Whitaker "Witty" Whitman VI: know how to do that but i do that yeah so i i like pull out like a little like kind of uh
+[00:12:47] Berridin: Nice.
+[00:12:48] GM: spell slot um just describe what this little effigy of your father looks like yeah you can
+[00:12:59] Whitaker "Witty" Whitman VI: head that doesn't have like much shape it's just kind of like this round thing
+[00:13:03] Whitaker "Witty" Whitman VI: and um i kind of uh you know cast an illusion on it and like kind of like a chia pet like it
+[00:13:14] Whitaker "Witty" Whitman VI: kind of like starts like growing out like a little uh like gas gases actually start kind
+[00:13:22] Whitaker "Witty" Whitman VI: of like blowing out of it and kind of like swirl around it and form into this uh three-dimensional
+[00:13:28] Whitaker "Witty" Whitman VI: picture of of uh a man with a severe
+[00:13:33] Whitaker "Witty" Whitman VI: he looks like me but with like a severe mustache and like very thick eyebrows
+[00:13:39] Whitaker "Witty" Whitman VI: um yeah yeah lord whitman i don't know if we decided on a first name uh
+[00:13:46] Berridin: Okay.
+[00:13:47] Berridin: Yeah, perfect.
+[00:13:49] Berridin: Can I cast
+[00:13:50] Berridin: Disguise Self?
+[00:13:55] GM: you can do it um
+[00:14:00] GM: so you cast aside self um roll a deception
+[00:14:11] Berridin: This is so interesting.
+[00:14:13] Berridin: Oh, shit.
+[00:14:17] Nyx: today i said igor i was kind of igor
+[00:14:18] GM: i have nothing on my bingo card 90 percent of the time what you y'all do yeah so 11 okay cool
+[00:14:28] GM: um you see like um i'll say because din no shade to you you just never kind of met
+[00:14:34] Berridin: Yeah.
+[00:14:37] GM: um witty's father before right so you got all the major within 11 you got all the major parts right
+[00:14:40] Berridin: Yeah.
+[00:14:44] GM: like you know it is very the essence but like if you look like if you looked at the
+[00:14:51] GM: first page in the book it's a fact that you're going to have uh like you'll be a little bit
+[00:14:57] GM: off if you're gonna get an illusion versus that maybe there is a
+[00:15:01] Berridin: Okay, Din has just, like, nailed it.
+[00:15:05] Berridin: Wait, what's this guy's name again,
+[00:15:08] Berridin: Witty?
+[00:15:09] Berridin: Lord Whitman?
+[00:15:15] GM: little bit off right but hey who else knows what he looks like except for witty here
+[00:15:15] Berridin: Okay.
+[00:15:16] Whitaker "Witty" Whitman VI: uh look what was that yeah igor
+[00:15:16] Berridin: What is his first name?
+[00:15:23] Berridin: I'm the second?
+[00:15:25] Whitaker "Witty" Whitman VI: uh igor whitman sounds great igor whitman
+[00:15:26] Nyx: you're really embodying the igor name yeah we all i saw as we all have under the you know
+[00:15:33] Whitaker "Witty" Whitman VI: uh and he's the second igor whitman the second yeah yeah but the first died so that's why he
+[00:15:41] Whitaker "Witty" Whitman VI: inherited but he kept the the two oh uh rainbow i mean he's like yeah yeah it's a it's a swirl
+[00:15:44] Ysidor: oh yeah oh my god
+[00:15:46] Berridin: Okay.
+[00:15:46] Berridin: What do you think?
+[00:15:47] GM: what is his first name oh my god oh interesting i i love how unhappy my family is
+[00:15:50] Ellara: color whoa is that his color or is that because he's at the head of the family what are the rate
+[00:15:59] Whitaker "Witty" Whitman VI: it's it's it's kind of like uh you know well you could describe it as a rainbow color i described
+[00:16:09] Whitaker "Witty" Whitman VI: it as a rainbow color because it's really just like a color that's not really any particular
+[00:16:13] Whitaker "Witty" Whitman VI: color at all
+[00:16:16] Whitaker "Witty" Whitman VI: it's like uh yeah yeah it's a it's a a like all it reflects all sorts all colors and that
+[00:16:24] Whitaker "Witty" Whitman VI: yeah it does reflect him as the head of the of the household i was thinking like a you know
+[00:16:31] Berridin: I know, it's so interesting.
+[00:16:32] Berridin: Witty,
+[00:16:33] Berridin: help me pinpoint
+[00:16:36] Berridin: this guy's voice.
+[00:16:38] Berridin: What is he? Kind of like a gruff
+[00:16:40] Berridin: figure or...
+[00:16:42] Berridin: Pirate Baron.
+[00:16:43] Whitaker "Witty" Whitman VI: baron just like a pirate baron kind of thing um yeah um no like like not not pirate like a
+[00:16:48] Berridin: Okay.
+[00:16:54] Whitaker "Witty" Whitman VI: you know cheesy cartoon villain baron um like you know from those uh what was the
+[00:16:55] Berridin: Oh, yeah.
+[00:17:01] Whitaker "Witty" Whitman VI: that like racing uh cartoon with like scooby-doo like the hannah bearer racing cartoons there's
+[00:17:08] Whitaker "Witty" Whitman VI: like i got yeah there's like a guy with like a really thin like little long mustache you know
+[00:17:13] Whitaker "Witty" Whitman VI: uh yeah yeah yeah exactly exactly wario is right where i'm thinking here maybe closer to yeah
+[00:17:13] Berridin: Classic. Okay.
+[00:17:15] Berridin: I'm kind of getting, like, a little Wario
+[00:17:17] Berridin: vibes.
+[00:17:23] Whitaker "Witty" Whitman VI: waluigi wow
+[00:17:26] Whitaker "Witty" Whitman VI: um so yeah and i like open open up the
+[00:17:27] Berridin: Wow.
+[00:17:28] Berridin: Okay. Let's do it.
+[00:17:30] Berridin: I'm ready.
+[00:17:31] Berridin: Din is overconfident,
+[00:17:33] Berridin: if anything.
+[00:17:39] Berridin: Yes.
+[00:17:41] Berridin: Come, Witty.
+[00:17:45] Berridin: Tally on with me.
+[00:17:46] Whitaker "Witty" Whitman VI: i open up the bathroom door uh back into the like bank and kind of like look both ways and then uh
+[00:17:53] Whitaker "Witty" Whitman VI: kind of like slip out uh in front of in front of my dad oh we have to do this in an alley
+[00:18:00] Berridin: I
+[00:18:01] Berridin: walk...
+[00:18:02] GM: oh it's like opalescent i'm loving this color lore
+[00:18:05] Berridin: Okay, yeah, we did it in an alley, then.
+[00:18:06] GM: there's no bathroom in the bank
+[00:18:06] Whitaker "Witty" Whitman VI: oh okay yeah sure
+[00:18:09] GM: uh lord whitman i assume oh i see yes he didn't meant to say uh you were just outside i'm glad
+[00:18:12] Berridin: Bye.
+[00:18:13] Whitaker "Witty" Whitman VI: and yeah hell i'm dead oh mine's empty
+[00:18:14] Berridin: Okay.
+[00:18:15] Berridin: We're walking right in, okay?
+[00:18:17] Berridin: Okay, picture this.
+[00:18:19] Berridin: Okay, we're walking right in,
+[00:18:20] Berridin: and we're not even gonna stand in line, okay?
+[00:18:23] Berridin: We're just gonna go straight up to the front of the line
+[00:18:25] Berridin: if it even existed.
+[00:18:26] Berridin: Going to the same guy, okay?
+[00:18:29] Berridin: I'm going, I'm pushing people
+[00:18:31] Berridin: aside, if it's necessary.
+[00:18:37] Berridin: Why, yes, this is
+[00:18:38] Berridin: Lord Whitman,
+[00:18:40] Berridin: and I'm here with my
+[00:18:41] Berridin: youngest, most
+[00:18:43] Berridin: unaccomplished son here.
+[00:18:46] Berridin: Hooligans, I always call them.
+[00:18:52] GM: he was able to find you well before we approve this loan we just need to ensure no counterfeits
+[00:18:57] GM: as you know um there's been a lot of use of magic and such in these cases a lot of young nobles
+[00:19:05] GM: down in the luck or spending too much time in gambling halls hiring actors and such to impersonate
+[00:19:12] GM: parental figures to take out more loans um so i would just yes exactly we want to make sure no
+[00:19:18] Berridin: Hooligans.
+[00:19:21] GM: hooligans um scam us uh yes so uh if you would stand still for a moment um did you i did i am you
+[00:19:24] Berridin: Those rich rats.
+[00:19:31] Berridin: Okay. I'm sorry, did you send me...
+[00:19:33] GM: um something can you just respond first
+[00:19:37] GM: yes uh i i sent you both in the private channel and in uh just a dm yeah sorry
+[00:19:44] Berridin: What?
+[00:19:48] Berridin: Oh.
+[00:19:50] Berridin: Okay, okay, okay.
+[00:19:51] GM: yeah yeah yours is empty jim has one no jim has one um um no okay yeah um yeah so they scan
+[00:19:55] Nyx: general shooting the shit campaign to a blinding light i'm not going to say that i'm not going to
+[00:19:57] Nyx: like if you look at all the channels you should have one with your name on it and that's the
+[00:20:02] Nyx: private probably wait i'll be back i have to go study how liens work i love the jet
+[00:20:04] Whitaker "Witty" Whitman VI: oh oh they said both okay
+[00:20:05] Berridin: Oh. Okay.
+[00:20:08] Whitaker "Witty" Whitman VI: hey can i can i set can i step up and and
+[00:20:16] Berridin: Let me, like, write a story.
+[00:20:19] Berridin: If that makes sense.
+[00:20:37] GM: and she goes uh like for a second um
+[00:20:41] GM: she she's uh she looks at you and goes
+[00:20:46] GM: she's like oh i see yes yes yes um there was some magic detected however it seems
+[00:20:59] GM: more nobles these days they like to very much um i see the family resemblance but they very
+[00:21:07] GM: much like to kind of put off a little bit more than they are um
+[00:21:12] GM: you know glitz everything up i don't blame you for that well well um now given that your refinements
+[00:21:18] Berridin: Don't give away my secret
+[00:21:20] Berridin: there, young lass.
+[00:21:28] GM: were a little less than honest um and i can see the family resemblance so i'm i'm confident you
+[00:21:38] GM: are his father we will need some liability um you i believe uh your son mentioned a state we can put
+[00:21:46] GM: a lien against the estate if um if if you so wish hey give me a moment uh about five minutes later
+[00:21:53] Berridin: My property in this city,
+[00:21:56] Berridin: is that what you're saying?
+[00:21:59] Berridin: Oh, sure, yeah, no problem.
+[00:22:05] GM: she comes back with a large stack of papers uh please sign where it's x um just to know um we
+[00:22:13] GM: will be able to give you a 1 000 1000 gold loan um however you do not repay it repay it we will
+[00:22:19] GM: cease possession of your estate um payments start in one month um the payment turns out to be a
+[00:22:22] Berridin: What, what, what, what's the payment terms?
+[00:22:28] GM: are...
+[00:22:30] GM: Fuck, I have to do math.
+[00:22:35] Berridin: Well, uh,
+[00:22:37] Ellara: what are the rates what are the rates because down the street offered me two percent
+[00:22:38] Berridin: ma'am,
+[00:22:39] GM: Yes.
+[00:22:40] Berridin: can you,
+[00:22:41] Ellara: oh my god bobby's bobby's furiously like researching like medieval punishment for
+[00:22:41] Berridin: can you see my account?
+[00:22:43] GM: The worst is...
+[00:22:45] Berridin: Can you see my account
+[00:22:46] Berridin: in your system?
+[00:22:48] GM: Oh, we do have an account
+[00:22:51] GM: for the estate in Bastion City where there
+[00:22:53] GM: was funds from other institutes
+[00:22:55] GM: transferred in. However, there's no
+[00:22:57] GM: more funds, and
+[00:22:58] GM: unless you were going to...
+[00:23:01] GM: Unless you had a certified
+[00:23:02] GM: statement from...
+[00:23:05] GM: I believe from what I see
+[00:23:07] GM: here is from the...
+[00:23:09] GM: Fuck, I'm
+[00:23:11] GM: doubting my own lore.
+[00:23:13] GM: From the
+[00:23:14] GM: Vasilian Banks, unless you have a certified
+[00:23:14] Berridin: Yes, yes,
+[00:23:17] GM: statement from the Vasilian
+[00:23:19] GM: Banks that is
+[00:23:21] GM: encoded magically, I wouldn't
+[00:23:23] GM: be able to put funds in.
+[00:23:26] GM: So the only way within
+[00:23:27] GM: Bastion City and the purview of this bank
+[00:23:29] GM: is to put a lien against
+[00:23:31] GM: your current estate.
+[00:23:33] GM: But I'm sure you'll be able to pay this, correct?
+[00:23:35] GM: Um, hold on.
+[00:23:37] Berridin: we'll handle it
+[00:23:39] Berridin: in the coming...
+[00:23:41] Whitaker "Witty" Whitman VI: and say would we be able to do 2 000 against the property it's a really really nice property
+[00:23:51] GM: I will have to...
+[00:23:53] GM: We can do a thousand.
+[00:23:55] GM: However, we...
+[00:23:56] GM: For two thousand, we would have to go to City Hall
+[00:23:59] GM: and pull up the records for
+[00:24:01] GM: your estate to evaluate
+[00:24:03] GM: and confirm the value.
+[00:24:05] Whitaker "Witty" Whitman VI: yeah it's going to take too long 1500 1100 how about how about just a water can i can i just get
+[00:24:10] GM: Uh, one thousand.
+[00:24:16] Berridin: That's my boy.
+[00:24:20] GM: Um, so it will be starting
+[00:24:22] GM: in a month's time. Um, it will be
+[00:24:24] GM: a hundred gold monthly payment.
+[00:24:26] GM: Um,
+[00:24:27] Nyx: in blood and the bank tellers are fae
+[00:24:30] Whitaker "Witty" Whitman VI: a water and parched all right you got this done oh dad um walk away did you get the gold dad perfect
+[00:24:33] GM: yes, there is a glass of water.
+[00:24:35] GM: Uh, there is a self-serve,
+[00:24:37] GM: like, little fountain with, like,
+[00:24:39] GM: it's magically iced, like, cold
+[00:24:41] GM: water, little paper cups.
+[00:24:44] GM: Um,
+[00:24:44] GM: yeah,
+[00:24:49] Berridin: I mean, surely
+[00:24:51] GM: and she's like, so, yes, it will
+[00:24:53] GM: be starting in a month. It will be a hundred
+[00:24:55] GM: gold a month repayment in a ten-month
+[00:24:57] GM: repayment for a thousand gold
+[00:24:59] GM: loan. Uh,
+[00:25:01] GM: failure, uh, in the
+[00:25:03] GM: first month, if you do not pay it, you will owe
+[00:25:05] GM: the total immediately.
+[00:25:08] GM: Unable to pay that total,
+[00:25:09] GM: you will then, we will then,
+[00:25:11] GM: um, take possession of the estate.
+[00:25:15] Berridin: my meager property
+[00:25:18] Berridin: here in the city
+[00:25:20] Berridin: is worth significantly more than
+[00:25:22] Berridin: 1,000 gold.
+[00:25:24] GM: Oh, this is,
+[00:25:26] GM: um, as I told your son, um,
+[00:25:28] GM: apologies if you did
+[00:25:30] GM: not hear, um, the thousand is
+[00:25:32] GM: just a default kind of loan we
+[00:25:34] GM: do give against any
+[00:25:35] GM: nobility estate. If you would want a
+[00:25:37] GM: larger loan, we will have to, um,
+[00:25:40] GM: work with the city records, um,
+[00:25:42] GM: and look at the evaluation of the
+[00:25:43] GM: estate and fully evaluate it to understand
+[00:25:45] GM: its full value. We cannot
+[00:25:47] GM: guarantee any amount, um,
+[00:25:50] GM: given in that process. It will be,
+[00:25:51] GM: um, determined by, um, our
+[00:25:53] GM: team. Excellent. Um,
+[00:25:53] Berridin: Okay.
+[00:26:00] Berridin: This should be enough for now.
+[00:26:02] Berridin: We'll get the rest of it handled
+[00:26:03] Berridin: in the future.
+[00:26:06] GM: now, just sign these documents.
+[00:26:09] GM: It's like a big pile of documents.
+[00:26:11] Berridin: Okay, I start signing them
+[00:26:14] Berridin: in very bad
+[00:26:16] Berridin: handwriting.
+[00:26:18] GM: Uh,
+[00:26:21] Nyx: what are these mushrooms all around me what's going on
+[00:26:21] GM: imagine.
+[00:26:27] GM: Um,
+[00:26:28] Nyx: rusty rucksack
+[00:26:28] Berridin: I pocket the gold.
+[00:26:29] GM: as you
+[00:26:29] GM: finish, it goes, most excellent.
+[00:26:32] GM: Um, here is,
+[00:26:33] GM: um, you know, and she kind of, while you're
+[00:26:35] GM: doing that, here is your thousand
+[00:26:37] GM: gold pieces. Um, don't spend
+[00:26:39] GM: it all at once. And, um,
+[00:26:41] GM: we will, yeah, please
+[00:26:43] GM: make your payments. It's like a
+[00:26:51] GM: big bag. Like, you cannot pocket
+[00:26:53] GM: it. Um, yeah,
+[00:26:54] Berridin: Okay, I put it in my
+[00:26:55] Berridin: in my bag.
+[00:26:59] Berridin: Amazing.
+[00:27:02] GM: so, yeah, she's
+[00:27:04] GM: got a thousand
+[00:27:07] GM: gold.
+[00:27:11] Berridin: Good day.
+[00:27:12] Berridin: Come along, Witty.
+[00:27:14] GM: Oh my god. You know
+[00:27:16] Berridin: I have the gold, and we shall
+[00:27:18] Berridin: distribute it later.
+[00:27:21] Whitaker "Witty" Whitman VI: perfect oh yeah well yeah we'll pick we'll pay it back don't worry the the they're my dad's good for
+[00:27:25] Nyx: this is like villain origin story
+[00:27:26] Berridin: Okay, are we out of the bank?
+[00:27:27] GM: I will.
+[00:27:29] GM: Yes.
+[00:27:29] Berridin: Yeah.
+[00:27:35] Berridin: Alright, Witty,
+[00:27:36] Berridin: like, uh,
+[00:27:38] Berridin: there's probably something we should put a pin in
+[00:27:39] Berridin: to figure out how, or else you're gonna lose your house.
+[00:27:47] Whitaker "Witty" Whitman VI: good for it uh yeah i'll just write him a letter yeah well i don't i don't really understand the
+[00:27:51] Berridin: How would your dad
+[00:27:53] Berridin: know about this situation?
+[00:27:55] Berridin: Can you contact him at some point?
+[00:28:00] Berridin: Sure, okay, yeah.
+[00:28:01] Berridin: Okay, okay.
+[00:28:02] Nyx: it's very concerning that barrett is more concerned about this than witty
+[00:28:08] Nyx: yeah yeah beyond you and figure that out can't be me go kill the button
+[00:28:08] Berridin: That's alright.
+[00:28:09] GM: I can be a big shrug.
+[00:28:11] Whitaker "Witty" Whitman VI: idea of like yeah like the concept of mortgages loans rent none of it uh it's it's all you know
+[00:28:19] GM: Oh, yeah.
+[00:28:19] Whitaker "Witty" Whitman VI: cerebral or it's all yeah there for me yeah that sounds good to me no i mean you're the one
+[00:28:22] GM: All the
+[00:28:22] Berridin: That's okay. Why don't I hold on to this
+[00:28:23] GM: money. So,
+[00:28:24] Berridin: gold, um, for the
+[00:28:26] Berridin: foreseeable future, um,
+[00:28:28] Berridin: and then, um, we'll
+[00:28:30] Berridin: try to figure out what we need to do with it later.
+[00:28:35] Berridin: I love it.
+[00:28:38] Nyx: oh my god oh my god yeah yeah in three different places
+[00:28:39] Berridin: It's kind of like, you're my
+[00:28:41] Berridin: servant, in a way.
+[00:28:45] Whitaker "Witty" Whitman VI: carrying the gold that sounds like a lot of weight you know uh my you know i like to be light on my
+[00:28:48] GM: um,
+[00:28:50] Whitaker "Witty" Whitman VI: feet makes me feel more springy yeah yeah yeah uh i don't really let everyone know you know
+[00:28:52] Berridin: Damn it, that's true. Okay.
+[00:28:57] Berridin: Okay.
+[00:28:58] Berridin: Let's go. I'm Mr. Moneybags now.
+[00:29:02] GM: uh, and we're back
+[00:29:03] GM: to the evening at the Whittier State.
+[00:29:06] GM: Din has, um,
+[00:29:08] GM: quite the amount on him.
+[00:29:10] GM: Legit, put a thousand gold
+[00:29:12] GM: pieces in your inventory, Din.
+[00:29:14] GM: Um, yeah.
+[00:29:14] Berridin: Oh, we should have,
+[00:29:16] Berridin: we should have placed an order for the Zeppelin.
+[00:29:18] Berridin: I totally forgot. Okay, we'll do that when we come back.
+[00:29:20] Berridin: When we get back.
+[00:29:21] GM: I feel like I'm going to have to
+[00:29:30] GM: ride a whole, like, you gotta
+[00:29:32] GM: rest it for fraud.
+[00:29:36] Berridin: Financial crimes unit.
+[00:29:37] Nyx: on the same day.
+[00:29:43] Ysidor: we call our call our own bank be like so if we loaned out a thousand dollars
+[00:29:43] GM: Yeah.
+[00:29:43] Ellara: fraud and lara just asked why do we even need money aren't we just on the road for the next
+[00:29:46] Nyx: Bobby's like, I went to law school
+[00:29:46] GM: Merly,
+[00:29:46] GM: Merly.
+[00:29:47] Nyx: for D&D.
+[00:29:49] GM: No, I'd be like,
+[00:29:50] GM: Mark, Mark, what, what are fraud
+[00:29:53] GM: laws in Quebec?
+[00:29:54] Nyx: How do liens work?
+[00:29:58] GM: You're still a lawyer,
+[00:29:59] GM: Mark.
+[00:30:01] GM: He's so concerned.
+[00:30:01] Berridin: We have, we have, uh, we have enough.
+[00:30:05] Ysidor: it's so we already know that's a lie
+[00:30:10] GM: Um, yeah, so we are in the
+[00:30:12] GM: evening. Um, you know,
+[00:30:13] Nyx: Do you tell us,
+[00:30:14] GM: Din's a thousand dollars richer.
+[00:30:17] GM: Um,
+[00:30:18] GM: I don't think that's appropriate.
+[00:30:19] Nyx: Jen?
+[00:30:20] GM: Um,
+[00:30:21] GM: I mean, Whitty, do you mention that you go
+[00:30:22] Nyx: Does anybody...
+[00:30:23] Nyx: Yeah, do you say?
+[00:30:24] GM: to the bank?
+[00:30:25] Nyx: How much money did you pull out?
+[00:30:29] Whitaker "Witty" Whitman VI: i have uh din has our money whatever you need just let him just let him know he's got us covered
+[00:30:36] Whitaker "Witty" Whitman VI: me i have i have about 25 gold me i'm not sure i was i was getting some water uh didn't didn't
+[00:30:39] Nyx: That is Nick's asking.
+[00:30:41] Nyx: No, no. What's the number?
+[00:30:44] Berridin: We have enough.
+[00:30:45] Berridin: I don't answer to you.
+[00:30:49] Nyx: What's the number?
+[00:30:49] Nyx: I want to know what we're dealing with.
+[00:30:51] Nyx: What do we have?
+[00:30:53] Nyx: It's very important.
+[00:30:54] Berridin: We have a pool,
+[00:30:55] Berridin: uh, we have, like, we have pretty much
+[00:30:57] Berridin: the most gold I've ever seen in my entire
+[00:30:59] Berridin: life. What? What?
+[00:31:00] Nyx: Baradun.
+[00:31:02] Nyx: I'm not going to ask again.
+[00:31:03] Berridin: I don't have to answer to you anymore, okay? I'm, I'm a, I'm a,
+[00:31:05] Berridin: I'm my own man.
+[00:31:07] Nyx: Witty, how much money do you have?
+[00:31:11] Nyx: How much did you...
+[00:31:12] Nyx: How much did you...
+[00:31:13] Nyx: I...
+[00:31:15] Nyx: Okay.
+[00:31:17] Nyx: All right.
+[00:31:18] Nyx: How much did you withdraw from the bank?
+[00:31:21] Nyx: Just so that we...
+[00:31:25] Whitaker "Witty" Whitman VI: withdraw the money 19 i did ask at one point for 2 000 gold
+[00:31:27] Berridin: We withdrew, uh,
+[00:31:28] Nyx: Baradun.
+[00:31:29] Berridin: a sizable portion, and we could
+[00:31:31] Berridin: use some help in paying off the loan.
+[00:31:33] Berridin: We withdrew about 2,000 gold,
+[00:31:35] Berridin: so, um,
+[00:31:37] Berridin: it's, it's a little, it's a little tough out there.
+[00:31:39] GM: Exactly.
+[00:31:41] Nyx: Baradun.
+[00:31:41] GM: Yeah.
+[00:31:43] Nyx: My default is not to believe your numbers.
+[00:31:43] Berridin: But,
+[00:31:43] Berridin: you should believe it, because I've, I've
+[00:31:46] Nyx: I believe you, but I don't believe your numbers.
+[00:31:49] Nyx: So I'm going to try it again.
+[00:31:51] Nyx: Please be reasonable.
+[00:31:52] Nyx: How much did you actually...
+[00:31:55] Berridin: never told a lie to you in my entire,
+[00:31:57] Berridin: in my entire relationship.
+[00:32:02] Nyx: Yeah, yeah.
+[00:32:03] Nyx: This is...
+[00:32:03] Berridin: Damn it.
+[00:32:04] GM: Yes, it's not going great.
+[00:32:08] Nyx: Yeah, no, no, no.
+[00:32:10] Nyx: Just look.
+[00:32:10] Ysidor: young one it's not good to lie can you lie yes it is a deception of
+[00:32:10] GM: Um,
+[00:32:13] Nyx: Yeah.
+[00:32:14] Nyx: Look, I don't actually...
+[00:32:16] Nyx: I'm not trying to find out
+[00:32:19] Nyx: how much, how richer you are.
+[00:32:21] Nyx: I just want to know,
+[00:32:23] Nyx: moving forward,
+[00:32:25] Nyx: what are our funds?
+[00:32:27] Nyx: Because we make decisions off that.
+[00:32:27] GM: um,
+[00:32:35] Whitaker "Witty" Whitman VI: you
+[00:32:36] Whitaker "Witty" Whitman VI: yeah i you know i could yeah i could use a renew hat witty on the other side just like starts
+[00:32:38] Nyx: All right.
+[00:32:38] Nyx: I'll go under that assumption.
+[00:32:38] GM: I will,
+[00:32:39] GM: okay, you could roll
+[00:32:42] GM: an insight next if you
+[00:32:44] GM: want it to.
+[00:32:45] Nyx: I will, but yeah.
+[00:32:46] GM: You have to beat a 19.
+[00:32:49] Nyx: That's fine.
+[00:32:50] Nyx: I got a plus four,
+[00:32:51] Nyx: and I got a 19.
+[00:32:53] Nyx: Beat it, meet it.
+[00:32:54] Nyx: Meet it, beat it.
+[00:32:57] GM: It is true
+[00:32:58] GM: because he's like,
+[00:33:00] GM: because he's second to it.
+[00:33:02] GM: Does it?
+[00:33:02] GM: Um, yeah.
+[00:33:04] GM: You, for a second, I'll say
+[00:33:06] GM: this next. When Whit says it,
+[00:33:08] GM: you're like, like, when Whitty
+[00:33:10] GM: says it, you're like, you really,
+[00:33:12] GM: you almost want to believe it.
+[00:33:14] GM: Like, almost had you
+[00:33:15] Nyx: Yeah.
+[00:33:16] GM: convinced. And then you,
+[00:33:17] Nyx: Yeah.
+[00:33:18] GM: then you just think about Whitty's and
+[00:33:20] GM: Din's relationship up till now.
+[00:33:21] Nyx: Yeah.
+[00:33:22] Nyx: Because 2,000 would be such a fucking good number.
+[00:33:26] Nyx: Such a good number.
+[00:33:27] Nyx: Yeah.
+[00:33:28] Berridin: You caught me.
+[00:33:29] Nyx: Can you do that?
+[00:33:29] Berridin: You caught me, bro.
+[00:33:31] Berridin: It's 3,000.
+[00:33:37] Ysidor: disadvantage we have healers who's guiding the carriage well I'll I'll do
+[00:33:39] Nyx: Yeah, you can't just keep doing that.
+[00:33:42] Nyx: What are the rules?
+[00:33:46] Nyx: Because now I don't trust him at all.
+[00:33:51] Nyx: How do we go about...
+[00:33:53] Nyx: What do I roll?
+[00:33:57] Nyx: Don't make me do a sleight of hand.
+[00:33:58] GM: What is
+[00:34:01] GM: Barrett enrolling?
+[00:34:04] Berridin: Hold on, I'm trying to switch my, uh,
+[00:34:05] GM: A deception with disadvantage, 17.
+[00:34:07] Nyx: So what do I have to roll?
+[00:34:09] GM: Insight,
+[00:34:12] GM: I will say with advantage,
+[00:34:14] GM: just at this point,
+[00:34:15] Nyx: Okay, yeah.
+[00:34:15] Nyx: I got a 16.
+[00:34:16] Nyx: Let me roll again.
+[00:34:18] GM: at this point,
+[00:34:20] GM: like, you know
+[00:34:22] Nyx: And then a six.
+[00:34:24] GM: what? Yeah, so,
+[00:34:24] Berridin: nailed it.
+[00:34:25] Berridin: Are you, are you saying, Nix, that you can
+[00:34:26] GM: you're like, you can't quite believe
+[00:34:28] GM: it, but then you're like, at this
+[00:34:30] GM: point, like, who knows
+[00:34:32] GM: between what you have
+[00:34:34] GM: seen in their short relationship between
+[00:34:36] GM: Whitty and Din?
+[00:34:38] GM: Like, would it really surprise you if it was
+[00:34:40] GM: $3,000 at the end of the day?
+[00:34:42] GM: 3,000 gold at the end of the day?
+[00:34:44] Nyx: Right.
+[00:34:45] Nyx: Can I ask one more question to Baradun?
+[00:34:48] Nyx: Yeah, I'm just going to say,
+[00:34:48] GM: I mean, I'm not, I don't
+[00:34:49] GM: truly hate this.
+[00:34:50] Nyx: okay, I get that you're...
+[00:34:52] Nyx: Okay, work with me here.
+[00:34:54] Nyx: I get that you don't want to tell me the number.
+[00:34:57] Nyx: I've conceded that.
+[00:34:59] Nyx: Fine.
+[00:35:00] Nyx: Is it over a thousand?
+[00:35:03] Nyx: I just want to know what the minimum is.
+[00:35:08] Nyx: Okay.
+[00:35:09] Nyx: Because that can hurt us as a team if we don't know what the minimum is.
+[00:35:13] Nyx: I don't care about how...
+[00:35:16] Berridin: match the funds that we have?
+[00:35:19] Nyx: No, I just want to know what the amount is.
+[00:35:22] Nyx: So just give me the minimum.
+[00:35:22] Berridin: I saw you,
+[00:35:23] Berridin: I saw you a few days ago reach,
+[00:35:25] Nyx: Minimum.
+[00:35:26] Berridin: I reached into your
+[00:35:28] Berridin: vault, randomly,
+[00:35:30] Berridin: and pulled out 80 gold, okay?
+[00:35:34] Berridin: Hey, I think,
+[00:35:35] Nyx: Yeah.
+[00:35:38] Berridin: why am I the one on trial here?
+[00:35:40] Berridin: And I feel like you're, you've been holding out on us
+[00:35:42] Berridin: this entire time.
+[00:35:43] Nyx: I've been paying for shit.
+[00:35:45] Berridin: Okay, that, that
+[00:35:47] Nyx: I've been doing that hard work for everything.
+[00:35:48] Berridin: dynamic shouldn't change.
+[00:35:50] Berridin: This is, this is emergency
+[00:35:52] Berridin: funds for
+[00:35:54] Berridin: Witty and
+[00:35:56] Berridin: I to live off of.
+[00:35:58] Berridin: Very meager funds, okay?
+[00:35:59] Berridin: We're gonna, we're gonna, we might, we might start
+[00:36:02] Berridin: a Zeppelin business
+[00:36:03] Berridin: in the future, so we're gonna need this, alright?
+[00:36:09] Nyx: You win.
+[00:36:10] Berridin: Yeah, that's right.
+[00:36:11] Nyx: I'll drop it.
+[00:36:12] Berridin: Yeah, that's right.
+[00:36:13] Berridin: All right.
+[00:36:20] Ellara: weeks and they're just kind of like tilts her head because i i suppose i thought we would just
+[00:36:22] Nyx: I mean, we need money for...
+[00:36:24] Nyx: That's two weeks.
+[00:36:25] Nyx: However long we're going to be out there, right?
+[00:36:27] Nyx: We need to buy supplies.
+[00:36:30] Nyx: We need to buy...
+[00:36:31] Nyx: We might need passage.
+[00:36:33] Nyx: Pay for passage.
+[00:36:34] Nyx: We might need who knows what.
+[00:36:36] Nyx: And these things can become expensive
+[00:36:40] Nyx: when you're out on the road.
+[00:36:41] Nyx: Especially with a party of this many people.
+[00:36:45] Nyx: That's all.
+[00:36:53] Ellara: live off the land
+[00:36:54] Ellara: like anyone does when they're traveling he's the uh what's he what is he the the dean dean
+[00:36:59] Nyx: I mean, we will
+[00:36:59] Nyx: to the best of our ability that we can.
+[00:37:03] Nyx: But there are other things.
+[00:37:04] Nyx: Let's say
+[00:37:05] Nyx: we need passage.
+[00:37:08] Nyx: That's really the big one that comes to mind.
+[00:37:10] Nyx: To get places, you need to spend money.
+[00:37:14] Nyx: And that can become expensive.
+[00:37:16] Nyx: And it's not five gold here,
+[00:37:18] Nyx: five gold there
+[00:37:19] Nyx: that's going to make things happen.
+[00:37:21] Nyx: Anyways, I'm speaking in...
+[00:37:24] Nyx: Yeah, I'm just making stuff up at this point.
+[00:37:29] Nyx: We have not left yet.
+[00:37:30] Nyx: So let's just drop it
+[00:37:32] Nyx: and we'll take it as it comes.
+[00:37:39] Nyx: We'll be fine.
+[00:37:40] Berridin: Let's do it.
+[00:37:41] Berridin: We have, we have too much healing.
+[00:37:43] GM: Anything else for
+[00:37:44] GM: the evening?
+[00:37:44] GM: I mean, we,
+[00:37:48] GM: we talked money,
+[00:37:49] GM: people got ready
+[00:37:52] GM: to travel.
+[00:37:54] Nyx: Do we have potions?
+[00:37:54] GM: Anything else?
+[00:37:55] Nyx: Do we have...
+[00:37:56] Nyx: Well, no, we actually have spells we don't need.
+[00:37:59] Nyx: This time around, we actually have...
+[00:38:00] Nyx: I've got cure wounds.
+[00:38:01] GM: Yes.
+[00:38:02] Nyx: Wow.
+[00:38:04] GM: Wow.
+[00:38:05] GM: For once, some people
+[00:38:07] Nyx: We can heal.
+[00:38:09] GM: prepared.
+[00:38:11] Nyx: Yeah, we learned...
+[00:38:13] Berridin: Yeah, I'm not an animal person.
+[00:38:14] Nyx: We overcompensated.
+[00:38:16] GM: I mean,
+[00:38:17] GM: will you?
+[00:38:19] Nyx: Yeah, it's true.
+[00:38:20] GM: Yeah, so,
+[00:38:21] Nyx: I think we're good to go.
+[00:38:23] Nyx: So, like, what, like, a rest?
+[00:38:24] Nyx: Do we think we should just go to bed?
+[00:38:25] Nyx: Early.
+[00:38:25] GM: it's a long rest.
+[00:38:28] GM: Yeah, you
+[00:38:29] GM: have all a nice sleep
+[00:38:31] GM: in the Whittaker estate.
+[00:38:33] GM: It's bright and early
+[00:38:37] GM: in the morning. I assume you guys
+[00:38:39] GM: kind of get up early to get a good head
+[00:38:41] GM: start of your day.
+[00:38:42] Nyx: Yeah, I'm on the horse.
+[00:38:44] GM: The horses,
+[00:38:46] GM: you know, I'll say there is,
+[00:38:47] GM: there was some old feed
+[00:38:49] GM: in the stables
+[00:38:50] GM: that were empty, but, like, where the
+[00:38:53] GM: chariot was, there was some feed there. You're
+[00:38:55] GM: able to, like, feed the horses, take care of
+[00:38:57] GM: them. Anything
+[00:38:59] GM: before
+[00:39:01] GM: you depart, anything?
+[00:39:03] GM: Okay, so, two horses
+[00:39:05] Nyx: I'm not in the carriage.
+[00:39:09] GM: pulling the carriage.
+[00:39:10] GM: Nyx is riding a horse. Who
+[00:39:13] GM: is guiding the carriage?
+[00:39:18] Nyx: It's up to all y'all.
+[00:39:19] Nyx: Yeah.
+[00:39:19] GM: Yeah, who's the driver?
+[00:39:20] Nyx: Who's the driver?
+[00:39:22] Nyx: One of you.
+[00:39:23] Ysidor: it I don't trust the city folks what oh I actually do have a bonus
+[00:39:25] Nyx: Perfect.
+[00:39:26] Nyx: I'm cool with it.
+[00:39:27] GM: Nyx
+[00:39:27] GM: and Ysidor, animal handling.
+[00:39:30] Nyx: Oh, goddammit.
+[00:39:32] Nyx: I'm actually...
+[00:39:35] Nyx: I got a bonus, too.
+[00:39:35] Ysidor: uh yeah 15 shocking another lie the shade when a liar is done when she's
+[00:39:37] Nyx: What'd I get?
+[00:39:38] Nyx: I got a 12.
+[00:39:39] Berridin: Oh!
+[00:39:40] GM: Yeah, you always
+[00:39:42] GM: see, I'll say, for
+[00:39:44] GM: Ysidor, you see him, like, go on
+[00:39:46] GM: and, like, I feel like, Ysidor,
+[00:39:48] GM: from your, like, growing, like, you've
+[00:39:50] GM: done farm work and that, and, like,
+[00:39:52] GM: this is the same, like, very
+[00:39:54] GM: much comfortable, natural,
+[00:39:56] GM: kind of, just getting the horses
+[00:39:57] GM: ready to go. Nyx,
+[00:40:02] GM: the mare's a little bit
+[00:40:03] GM: temperamental. You know, you have to,
+[00:40:04] Nyx: Yeah.
+[00:40:05] Nyx: I gotta put the work in.
+[00:40:06] GM: like,
+[00:40:07] GM: going fine, but you just kind of have
+[00:40:09] GM: to sometimes persuade
+[00:40:11] GM: her a little to listen fully,
+[00:40:13] GM: but, like, yeah,
+[00:40:15] GM: you've got to put a little bit, not a lot,
+[00:40:17] Nyx: Yeah, just a little work.
+[00:40:18] Nyx: Yeah, I get it.
+[00:40:19] GM: a little work.
+[00:40:20] Nyx: All right.
+[00:40:20] GM: Yeah, maybe it's been
+[00:40:21] GM: a while since you,
+[00:40:22] GM: but, yeah, you just see Ysidor,
+[00:40:25] GM: like, with,
+[00:40:27] GM: the reins, the horses,
+[00:40:29] GM: giddy up. You're able,
+[00:40:31] GM: as you kind of go across the
+[00:40:33] GM: bridge,
+[00:40:34] GM: you kind of enter the
+[00:40:37] GM: east side of Bastion City. You're
+[00:40:39] GM: following the roads. Remember, there's
+[00:40:41] GM: the light crystal lanterns all
+[00:40:43] GM: on the main road. You
+[00:40:45] GM: go to the guard gates. They're
+[00:40:47] GM: really there more for people coming in than
+[00:40:49] GM: going out. And
+[00:40:51] GM: you see, like, the sleeping,
+[00:40:54] GM: what do you call it,
+[00:40:55] GM: war forges on the
+[00:40:57] GM: side.
+[00:40:57] GM: I deactivate it.
+[00:40:59] GM: And soon out that, you're
+[00:41:01] GM: on the main road.
+[00:41:04] GM: As you kind of
+[00:41:05] GM: are outside the walls of
+[00:41:07] GM: Bastion City, there's still, like, houses
+[00:41:09] GM: and farmlands and that. It's not completely
+[00:41:11] GM: desolate. Like, there is a
+[00:41:13] GM: whole kind of economy outside the city
+[00:41:15] GM: that sustains the city, as this is
+[00:41:17] GM: the capital and that. So, obviously, within
+[00:41:19] GM: city walls, you're not going to have farms.
+[00:41:21] GM: So, I would say,
+[00:41:22] GM: yeah, as you're
+[00:41:25] GM: going,
+[00:41:26] GM: um,
+[00:41:27] GM: you're making good time.
+[00:41:29] GM: Uh, there are, as you go further
+[00:41:31] GM: and further, less people on the road.
+[00:41:34] GM: Um, as the sun goes down
+[00:41:36] GM: and that, uh, there's some obvious
+[00:41:38] GM: spots to make camp. Um,
+[00:41:42] GM: yeah. Um, so,
+[00:41:42] Berridin: Can I talk with, um, at some point
+[00:41:44] Berridin: during the day, can I have a conversation
+[00:41:46] Berridin: with Alara? Oh.
+[00:41:49] GM: I would say, in the back of the
+[00:41:51] GM: wagon, uh, in the chariot, wait,
+[00:41:53] GM: this is a proper chariot, isn't it?
+[00:41:56] GM: Um, this, yeah, so,
+[00:41:58] GM: I don't know how you're configured, but you would be enclosed.
+[00:42:01] GM: Nice and padded. Um, you, Alara, and Witty
+[00:42:05] GM: in the back. I, I don't know, um, how private of a conversation you'd be able to have,
+[00:42:11] GM: or, um, you could choose to have it when you camp,
+[00:42:14] GM: if you want it to be private.
+[00:42:15] GM: Well, he's the dean, dean of the seminary. He's in charge of the whole seminary.
+[00:42:16] Berridin: Oh, no, I can, um, I don't mind
+[00:42:18] Berridin: if everyone overhears.
+[00:42:21] Berridin: Um,
+[00:42:22] Berridin: so,
+[00:42:24] Berridin: I'm writing with Alara.
+[00:42:26] Berridin: Um, okay.
+[00:42:28] Berridin: Um,
+[00:42:30] Berridin: Alara, um,
+[00:42:32] Berridin: what, what, what do you know,
+[00:42:34] Berridin: or can you explain your relationship with
+[00:42:36] Berridin: Proctor Edward?
+[00:42:46] Ellara: is that yeah like he's the dean of the seminary he's one of the most respected eulogians in the
+[00:42:51] GM: Hold to assume.
+[00:42:55] Ellara: city well he has been quite trustworthy and has helped us so many times already and is looking
+[00:42:56] Berridin: But, what, what do you think of him?
+[00:42:59] Berridin: Do you like him?
+[00:43:06] Ellara: into it at the looking into the situation at the highest levels of government he just takes time
+[00:43:12] Ellara: he just grabs your
+[00:43:14] Berridin: Um, I'm, I go into
+[00:43:16] Berridin: my most, uh,
+[00:43:19] Berridin: cherub-looking, like,
+[00:43:20] Berridin: halfling state that I could
+[00:43:22] Berridin: muster, and
+[00:43:24] Berridin: I, I walk over
+[00:43:26] Berridin: the shortnesses and sit
+[00:43:28] Berridin: beside her, and I put my
+[00:43:30] Berridin: hand on
+[00:43:32] Berridin: Alara, uh, Alara's
+[00:43:34] Ellara: hand and moves it out away and now she just like grabs it more forcefully and
+[00:43:34] Berridin: head. Okay.
+[00:43:36] Berridin: I put it, I try to put it on
+[00:43:38] Berridin: her, uh,
+[00:43:40] Berridin: um, her knee.
+[00:43:41] Berridin: Okay.
+[00:43:46] Ellara: lambs it away he just kind of goes i know that you have asked me to question her multiple times but
+[00:43:48] Berridin: Look, Alara,
+[00:43:50] Berridin: there comes a time when
+[00:43:52] Berridin: we have to face some hard truths
+[00:43:54] Berridin: in life, and
+[00:43:56] Berridin: I just need you to be prepared,
+[00:43:59] Berridin: and I know that we haven't
+[00:44:00] Berridin: gotten along swimmingly
+[00:44:04] Berridin: so far, but,
+[00:44:06] Berridin: um, I overheard
+[00:44:08] Berridin: something that
+[00:44:10] Berridin: Proctor Edward said during
+[00:44:12] Berridin: the party, and
+[00:44:14] Berridin: I need you to hear it, I need
+[00:44:16] Berridin: you to trust me, and then
+[00:44:18] Berridin: I need you to
+[00:44:20] Berridin: understand what I'm,
+[00:44:22] Berridin: what I'm, what I'm experiencing.
+[00:44:25] Berridin: Um, and so,
+[00:44:26] Berridin: during the party,
+[00:44:28] Berridin: uh, I stealthily
+[00:44:30] Berridin: overheard some
+[00:44:32] Berridin: of the bigwigs
+[00:44:34] Berridin: at the party, uh,
+[00:44:36] Berridin: um, it was the
+[00:44:38] Berridin: Duke and the
+[00:44:40] Berridin: the Princess
+[00:44:42] Berridin: and, um,
+[00:44:44] Berridin: Proctor Edward and
+[00:44:45] Berridin: Donathan Reeves, um,
+[00:44:48] Berridin: and they were
+[00:44:50] Berridin: kind of nefariously
+[00:44:51] Berridin: talking about,
+[00:44:53] Berridin: um, the
+[00:44:56] Berridin: the light crystal
+[00:44:58] Berridin: shenanigans that we've been
+[00:45:00] Berridin: dealing with. Um,
+[00:45:02] Berridin: Proctor Edward is,
+[00:45:04] Berridin: seems to be intimately aware,
+[00:45:06] Berridin: and I know that
+[00:45:08] Berridin: you might, um,
+[00:45:10] Berridin: I know that you trust him,
+[00:45:12] Berridin: but he seemed to have been in
+[00:45:14] Berridin: cahoots with Donathan
+[00:45:16] Berridin: Reeves and the Duke,
+[00:45:18] Berridin: and, um,
+[00:45:21] Berridin: yeah, yeah, I know I
+[00:45:29] Ellara: it is it is not good to lie master burden you're telling me that you snuck up to the
+[00:45:35] Ellara: four most powerful people in the party and they did not notice you that seems you know quite
+[00:45:44] Berridin: haven't really established
+[00:45:45] Berridin: an, uh, an aura of, uh,
+[00:45:48] Berridin: trust in the things that I've done
+[00:45:49] Berridin: so far,
+[00:45:50] Berridin: but,
+[00:45:52] Berridin: going through, Baradun's going through a lot of trouble,
+[00:45:53] Nyx: Understatement of the campaign.
+[00:45:57] Ellara: i know i have cried i know i have cried wolf many a time but what
+[00:45:57] Berridin: his head's like,
+[00:46:01] Nyx: Oh, you can't hear me.
+[00:46:01] Berridin: okay,
+[00:46:04] Berridin: um, I also,
+[00:46:06] Berridin: I, you know, I, I, I, I
+[00:46:08] Berridin: relayed this conversation to
+[00:46:10] Berridin: Nyx, and,
+[00:46:11] Berridin: um,
+[00:46:14] Berridin: who else was there? Was Isidore,
+[00:46:15] Berridin: Isidore was there, too, right after the
+[00:46:17] Berridin: party. Um,
+[00:46:19] Berridin: I didn't know how to use the record
+[00:46:21] Berridin: function on the sending stones, but
+[00:46:24] Berridin: just, just
+[00:46:25] Ellara: she just kind of nods at you very like yeah oh he did he just kind of laughs a little
+[00:46:25] Berridin: know this,
+[00:46:26] Berridin: that,
+[00:46:27] Berridin: that,
+[00:46:27] Berridin: that,
+[00:46:28] GM: I will, so, my thing right now to adjudicate, I'm just folding laundry and paying attention,
+[00:46:29] Berridin: that.
+[00:46:35] Berridin: Alari,
+[00:46:38] Berridin: there's one more thing that I, I, I think
+[00:46:40] Berridin: you should know, and I know, I know
+[00:46:42] Berridin: that you don't trust me or anything, but
+[00:46:44] Berridin: he specifically, Edward
+[00:46:46] Berridin: specifically mentioned
+[00:46:48] Berridin: you in this conversation,
+[00:46:50] Berridin: and he,
+[00:46:52] Berridin: he said that
+[00:46:54] Berridin: he had, um,
+[00:46:56] Berridin: he had you wrapped around
+[00:46:58] Berridin: his finger,
+[00:47:00] Berridin: um,
+[00:47:00] Berridin: okay, I'm just,
+[00:47:02] Ellara: i'm sure thank thank you so much for telling me about this i understand you want to make me wary
+[00:47:07] Berridin: oh,
+[00:47:07] Berridin: oh,
+[00:47:08] Berridin: I feel like I haven't done a good job
+[00:47:10] Berridin: of explaining the gravity of the situation to you.
+[00:47:18] Ellara: but next time maybe try something more believable but i i am careful i'm not going to lie to you
+[00:47:25] Ellara: don't worry but come on master baradun you have you have done many more believable things than
+[00:47:34] Ellara: this perhaps if you um did not lie so much i would be more likely to believe you switches
+[00:47:36] Berridin: This is, you know, I'm taking that to heart,
+[00:47:37] Ysidor: like okay this is enough that's what you are
+[00:47:52] Berridin: kind of reevaluating my whole MO here.
+[00:47:57] Berridin: All I need to do,
+[00:47:58] Berridin: I attempt to take her hand one last time.
+[00:48:02] Ellara: sides to the other side of the carriage yeah no no you weren't there yeah you were you were out
+[00:48:08] Berridin: As one last plea,
+[00:48:10] Berridin: I'm going to cast my Disguise Self again.
+[00:48:17] Berridin: And in the manner,
+[00:48:22] Berridin: I'm going to disguise myself as Proctor Edward,
+[00:48:25] Berridin: and I'm going to repeat the words that I had heard
+[00:48:29] Berridin: and I had relayed to her.
+[00:48:31] Berridin: And I would like to roll a performance check
+[00:48:35] Berridin: to see how well I do.
+[00:48:38] Berridin: Is that fair?
+[00:48:47] GM: uh, to adjudicate this, is.
+[00:48:47] Berridin: Yeah.
+[00:48:52] GM: I will say, you can perform, you can roll your performance check flat- your performance flat,
+[00:48:58] GM: I will allow Alara to determine however she feels about it, it won't be contested for her to believe it.
+[00:49:03] Berridin: Yeah.
+[00:49:06] GM: Or not, it's a character.
+[00:49:06] Berridin: Yeah, yeah, yeah, yeah.
+[00:49:07] Berridin: I agree with it.
+[00:49:08] Berridin: Okay, that's fine.
+[00:49:09] GM: Yep.
+[00:49:09] Berridin: So do I just roll a d20,
+[00:49:12] Berridin: or can I roll my ability?
+[00:49:13] GM: Yeah, your performance. Your actual performance. Whatever it is.
+[00:49:15] Berridin: Okay, okay, okay.
+[00:49:16] Berridin: I thought you said flat,
+[00:49:17] Berridin: so I was just kind of confused.
+[00:49:18] GM: Oh yeah, uh, flat means without advantage or disadvantage.
+[00:49:22] GM: ten
+[00:49:22] Berridin: Okay, I mean, it is flat.
+[00:49:24] GM: the most middle of the road
+[00:49:24] Berridin: It's 10.
+[00:49:28] GM: of anything
+[00:49:28] Berridin: Middle of the road.
+[00:49:29] GM: in the middle of the road
+[00:49:30] Berridin: Middle of the road performance here.
+[00:49:33] GM: well you and
+[00:49:34] Berridin: Okay.
+[00:49:35] Berridin: And I wrap up,
+[00:49:37] Berridin: and I think like,
+[00:49:38] Berridin: okay, that's going to do it.
+[00:49:39] Berridin: That's going to convince her.
+[00:49:44] Ysidor: a lot of cocks a gun
+[00:49:44] Whitaker "Witty" Whitman VI: clapping because i'm just i'm i'm shocked listening to to all this because i don't i
+[00:49:46] Berridin: You are done.
+[00:49:51] Whitaker "Witty" Whitman VI: don't remember anything i didn't know anything about it yeah yeah i don't know anything about
+[00:49:54] GM: Justin
+[00:49:54] GM: when you said the lines are going to catch up
+[00:49:56] Ellara: she she just kind of nods and says i do hope you were being honest when you said you are reflecting
+[00:49:57] Whitaker "Witty" Whitman VI: it so so what's your name and is that a mrs samantha or
+[00:50:05] Ellara: about
+[00:50:05] Ellara: the way you act but i suppose that was a okay impression of him i i don't really understand
+[00:50:16] Ellara: what you were trying to do but who knows she's just kind of like i i think the one that needs
+[00:50:23] Berridin: Just, just,
+[00:50:24] Berridin: just,
+[00:50:25] Berridin: careful.
+[00:50:25] Berridin: You, you, you,
+[00:50:26] Berridin: you understand that I,
+[00:50:27] Berridin: I,
+[00:50:28] Berridin: I,
+[00:50:29] Berridin: I just want you to be careful.
+[00:50:33] Berridin: You know that,
+[00:50:33] Berridin: that,
+[00:50:34] Berridin: that is true, right?
+[00:50:39] Ellara: to be careful is you one of these days your lies will catch up to you and you know just kind of
+[00:50:46] Ellara: nods is that the estate or what
+[00:50:50] Berridin: I think that's successful.
+[00:50:57] Berridin: That was a,
+[00:51:02] Ellara: oh well she maybe she's during the road she'll be reading the book that the guy gave her um but
+[00:51:04] Berridin: that was a,
+[00:51:04] Berridin: yeah.
+[00:51:07] GM: I feel like y'all are going to forget
+[00:51:08] Ysidor: Oh
+[00:51:09] Berridin: It's perfect.
+[00:51:11] GM: about it
+[00:51:11] GM: you come back
+[00:51:13] Berridin: It's a,
+[00:51:13] Berridin: I think I nailed it.
+[00:51:14] Ysidor: I'm sorry I mean you is she coming
+[00:51:15] GM: very sweet
+[00:51:18] GM: moment really appreciate
+[00:51:20] GM: that like no like seriously
+[00:51:22] GM: it was
+[00:51:23] GM: you just want to call that out yeah so
+[00:51:26] GM: I guess there's probably an awkward silence
+[00:51:28] GM: in the carriage right now
+[00:51:30] GM: at least between Din and
+[00:51:32] GM: Alara
+[00:51:32] GM: but yeah
+[00:51:36] GM: I'd say your day
+[00:51:38] GM: goes on pretty without events
+[00:51:40] GM: outside of that like really
+[00:51:42] GM: is there
+[00:51:45] GM: while we're running this because a few days are going
+[00:51:48] GM: to go by is there any other conversations people
+[00:51:50] GM: want to have I know
+[00:51:52] GM: Ysidor is going Nick's kind of on
+[00:51:54] GM: their own Ysidor
+[00:51:55] GM: is the one controlling
+[00:51:58] GM: it there is a seat beside Ysidor
+[00:52:00] GM: if anyone want to have a conversation
+[00:52:02] GM: otherwise how are you
+[00:52:03] GM: is there anything particular either
+[00:52:06] GM: when you stop in the evenings or anything
+[00:52:08] GM: you all wanted to do
+[00:52:09] GM: if not it's okay to say no
+[00:52:17] GM: I just didn't want to like railroad
+[00:52:17] Berridin: Yeah, I don't have anything.
+[00:52:21] GM: I just didn't want to like railroad
+[00:52:23] GM: anything yeah so yeah
+[00:52:29] Ellara: quietly oh lara last and lara's gonna ask oh do you need some food we have some some extra rations
+[00:52:30] GM: yeah
+[00:52:32] GM: yeah so
+[00:52:34] GM: yeah I would say about a week has passed
+[00:52:38] GM: as you have kind of gone
+[00:52:41] GM: mountains are coming more and more into
+[00:52:43] GM: sight houses are further and further
+[00:52:45] GM: apart they're still occasionally houses
+[00:52:48] GM: and such
+[00:52:51] GM: I don't say this trip will take two weeks
+[00:52:53] GM: it was there is kind of short cuts you
+[00:52:55] GM: can take by slip that carriage goes to
+[00:52:57] GM: carriage doesn't allow for but like there are the roads kind of getting a little bit worse as you
+[00:53:01] GM: have to turn off i'll say yesor kind of remembers where he went in that um it's getting more wood
+[00:53:08] GM: these uh trees there's more and more trees less farmhouses but you still see occasionally in the
+[00:53:14] GM: distance um you'll see some worn paths from smaller trails and lights in the distance than
+[00:53:20] GM: that as you camp and you're camping one evening you've settled in um probably by now it's that
+[00:53:27] GM: you all have like kind of a ritual kind of you all do right like setting up everything and that
+[00:53:32] GM: um and as you finish eating your evening meals you see uh from just from the shadows you kind
+[00:53:40] GM: of hear like branches breaking and a young lady um comes into kind of the light of your campfire
+[00:53:47] GM: um with a baby
+[00:53:50] GM: on
+[00:53:50] GM: her like as she comes in you see she has kind of that satchel i don't know what the terms are
+[00:53:55] GM: with a baby on her back and goes um hello i saw your fire in the distance i was hoping i could
+[00:54:06] GM: share uh safety and numbers uh i'm i'm sorry uh just i i've been walking the road trying to get
+[00:54:20] GM: home from bastion city and i saw i saw the
+[00:54:26] GM: campfire
+[00:54:26] GM: and it's kind of scary here the sky's so dark and and i was just my baby and everything and
+[00:54:36] GM: having some company would just be really nice at night if you didn't mind just no she's he's kind
+[00:54:44] Ysidor: home from Bastion City or is she going home or is Bastion City her oh well yes
+[00:54:51] GM: of a traveler leaving from bastion city yeah and she comes just down beside you and like
+[00:54:56] Ysidor: it was a fucker so you guys of course come sit down yeah yes sir approaches
+[00:55:05] GM: she's holding her baby um kind of um the baby has started getting a little upset but she's
+[00:55:10] GM: holding is going there there's my heart uh yes um no uh she's holding it's like oh no i i'm just
+[00:55:15] Ysidor: can I see the baby it's about to roll
+[00:55:26] Ysidor: I don't just yank the baby I'm character just just certain take the baby he
+[00:55:27] GM: trying to get him to settle um it's just he cries when other people hold him and like i i we've been
+[00:55:33] GM: walking a lot i i really just want him to sleep and he'll sleep in my arms and and she's just like
+[00:55:44] Ysidor: wouldn't but
+[00:55:46] Ysidor: okay oh okay it if I could see him before he falls with me that would be
+[00:55:49] Berridin: Wait.
+[00:55:53] Ysidor: great but but no pressure no pressure do whatever you have to do it is there just
+[00:55:57] Ysidor: sits like close and like keeps looking over his shoulder to like look at the
+[00:56:01] Ysidor: baby and I guess or a tag was yes he would want us to to share the love of
+[00:56:04] GM: you know and the baby kind of after a while is gonna fall asleep in that but like she's just
+[00:56:10] GM: kind of like kind of just humming to herself in that thank you very much i've been traveling for
+[00:56:21] Ellara: and how long have you been traveling and lara will just say well you would not be imposing
+[00:56:25] GM: a few weeks now um and no i couldn't impose on you for food and you kind of hear her stomach growl
+[00:56:32] GM: as she says that well well thank you so much i really don't want to be a hassle but thank you
+[00:56:40] Ellara: it is the duty of those in the light to provide for those that seek it and she just kind of grabs
+[00:56:51] Ellara: some extra food or whatever you know lr is just gonna ask can you can you let us know who this man
+[00:57:00] Ysidor: everyone around the campfire
+[00:57:03] Ysidor: just back that back like adding on to the light basically just the baby yesador is crying
+[00:57:14] GM: and she starts eating it um with one hand kind of eating a portion um with like kind of balancing
+[00:57:20] GM: on her lap while holding the baby um um this is me hesitating not her um um wrote all the notes but
+[00:57:37] GM: the name uh samantha pardon me sir oh um yeah the father um well it would seem i'm i come from
+[00:57:56] Whitaker "Witty" Whitman VI: you know uh samantha jr here uh is is is her dad around is his dad around
+[00:58:06] Whitaker "Witty" Whitman VI: oh we can't hear you nix in which direction are you heading so would you like to travel
+[00:58:19] GM: the world and he promised me the world and once little julia here was born he just threw me aside
+[00:58:28] GM: i'm going returning to my family's farm up in towards near the mountains
+[00:58:33] GM: he couldn't he would deny it i think his family has too much money to actually i think face any
+[00:58:38] Ysidor: just fully crying like that's you're just such a strong mom you're just doing the best you can in
+[00:58:47] Ysidor: this world what was dupree again like the name is very like we met a dupree now okay we didn't do
+[00:59:00] Ellara: was i i wish to report him once we return to the city no no no no i don't think so i think she's
+[00:59:14] GM: consequences um i i should have known better he would have been a little bit more of a
+[00:59:19] GM: he would have been a little bit more of a
+[00:59:20] GM: he would have been a little bit more of a
+[00:59:20] GM: he always gave me those gifts i think his name was something dupree yeah it's like um she was
+[00:59:39] Nyx: Sorry, I was double muted.
+[00:59:41] Nyx: No, Nyx is by the fire.
+[00:59:43] Nyx: Like, just hasn't said anything.
+[00:59:45] Nyx: He's just, like, you know, watching.
+[00:59:47] Nyx: And then as she says the name, he just leans in.
+[00:59:51] Nyx: Leans in to hear the name.
+[00:59:54] Nyx: Yeah, it's like...
+[00:59:57] GM: like yeah it was he was from the dupree family brenton this is some random person
+[01:00:05] Nyx: Would I have known who this is?
+[01:00:07] Nyx: Would Nyx have known?
+[01:00:10] Nyx: Okay, okay.
+[01:00:10] GM: i think in reality in the real world there's something about dupree's i'm literally just
+[01:00:11] Ysidor: dupree okay i thought we did okay oh it's our steam cleaner that's that's why it's familiar
+[01:00:18] GM: pulling names out of my ass oh yeah
+[01:00:19] Nyx: Okay, okay.
+[01:00:24] GM: yeah uh we we don't use that anymore anyway uh
+[01:00:27] Ysidor: yesor looks at him like you can okay don't call me that i'm waiting for her to like
+[01:00:28] Nyx: Well, I'm sorry to hear that.
+[01:00:34] GM: yeah um brenton of the dupree's uh it's not it's not that much further now i'm following the road
+[01:00:59] GM: for a few more days and i should and then there should be a split off the main road to my parents
+[01:01:05] GM: place i i couldn't i couldn't i couldn't do that i it's no it's too much you've already been too
+[01:01:10] Whitaker "Witty" Whitman VI: with us for a few days for safety in numbers i insist you can have my spot in the carriage i
+[01:01:24] GM: um yeah so she's well if you insist if you don't mind what what kind of sicko do you think i am
+[01:01:27] Nyx: Come along.
+[01:01:35] Whitaker "Witty" Whitman VI: can ride next to yes door yeah you see we're gonna be great friends i'm like oh
+[01:01:42] Nyx: Yeah.
+[01:01:52] Berridin: Is it a,
+[01:01:53] Nyx: A little...
+[01:02:03] Ysidor: pull off her face at this point and be like i tricked you
+[01:02:06] Ysidor: well i live with you oh my god okay what's my next question
+[01:02:09] Ellara: just a nice normal person exactly lara lara would not yeah i'm an artificer of the highest
+[01:02:16] GM: wow oh wow abuse in my own household um a baby like an infant like full-on like swaddled in her
+[01:02:24] Berridin: is it a baby,
+[01:02:25] Berridin: or a toddler?
+[01:02:27] Berridin: It's a baby.
+[01:02:31] GM: arms yeah oh no like six six six on the forehead as you as you approach the door you're like oh my
+[01:02:32] Berridin: Okay.
+[01:02:33] Nyx: It's not from Demon Child.
+[01:02:37] Berridin: I want to play with the baby.
+[01:02:39] Nyx: It's the big bad.
+[01:02:41] Nyx: Like, we...
+[01:02:42] Nyx: The origin.
+[01:02:43] Nyx: The origin.
+[01:02:45] Nyx: Yeah.
+[01:02:47] GM: god she's like no no i i just got him to settle please yeah yeah like you you can see the face
+[01:02:53] Berridin: Oh, is he sleeping right now?
+[01:02:54] Berridin: Sorry about that.
+[01:02:57] Nyx: Have we seen the face of the baby?
+[01:02:57] Berridin: I, I have,
+[01:02:58] Berridin: yeah.
+[01:03:00] Nyx: Has any...
+[01:03:02] GM: of the baby it's swaddled but like it's swaddled but the little okay so here's the thing what are
+[01:03:03] Nyx: Okay, because I was...
+[01:03:03] Ysidor: it's the woman he murdered imagine this
+[01:03:05] Nyx: I was...
+[01:03:07] Berridin: Do you want to,
+[01:03:08] Nyx: Yeah.
+[01:03:08] Berridin: like,
+[01:03:09] Berridin: yeah.
+[01:03:09] Berridin: Do you want to approach this
+[01:03:10] Berridin: from a out-of-character perspective?
+[01:03:13] Berridin: Do you want to,
+[01:03:13] Berridin: do you guys,
+[01:03:14] Berridin: do you,
+[01:03:14] Berridin: do you guys want to typically approach this
+[01:03:15] Berridin: like we're interrogating this person,
+[01:03:17] Berridin: or do we want to,
+[01:03:18] Berridin: do we want to accept it?
+[01:03:21] Berridin: Because we can do like the,
+[01:03:22] Berridin: the insight and,
+[01:03:23] Berridin: you know,
+[01:03:23] Berridin: the,
+[01:03:23] Berridin: the,
+[01:03:23] Berridin: the,
+[01:03:23] Berridin: the,
+[01:03:23] Berridin: the,
+[01:03:23] Berridin: the,
+[01:03:23] Berridin: the arcana check and everything
+[01:03:25] Berridin: if you want to go through it.
+[01:03:26] Nyx: I mean, I...
+[01:03:27] Nyx: Nyx would passively be trying to see what he can about them without bothering her.
+[01:03:35] Nyx: So I'm happy to roll whatever, Bobby, to be passive on this and not draw attention.
+[01:03:36] Berridin: Okay.
+[01:03:36] Berridin: Yeah.
+[01:03:44] Nyx: What do you want me to roll?
+[01:03:45] Nyx: I want to know if the story she's telling...
+[01:03:46] Berridin: Passive perception.
+[01:03:50] GM: you trying what are you focusing on so you want to know the truth of her story okay and you and
+[01:03:57] Nyx: makes sense.
+[01:04:00] Nyx: I just want to figure out anything.
+[01:04:02] Nyx: Any information about where she's from.
+[01:04:06] Nyx: Like, truth.
+[01:04:15] Nyx: Yeah.
+[01:04:16] Nyx: To the best.
+[01:04:16] Nyx: I know it's impossible without asking to get a real, real answer.
+[01:04:21] Nyx: You know, actually, no.
+[01:04:22] Nyx: I take that back.
+[01:04:23] Nyx: Sorry, I'm thinking this through.
+[01:04:25] Nyx: Nyx would want to know if she's a threat or not.
+[01:04:29] Nyx: I think that's the most important thing.
+[01:04:32] Nyx: Not her soul.
+[01:04:32] Berridin: Yeah, I like that.
+[01:04:33] Nyx: Yeah.
+[01:04:33] Berridin: Everyone else is oblivious.
+[01:04:34] GM: so you're looking at her um
+[01:04:36] Nyx: Yeah.
+[01:04:44] GM: roll roll roll an investigation at 14 that was what you needed at 14
+[01:04:46] Nyx: Everyone else is, like, being nice to her.
+[01:04:47] Nyx: I'm like, is she gonna...
+[01:04:49] Nyx: All right.
+[01:04:51] Berridin: Oh,
+[01:04:52] Berridin: I like that.
+[01:04:53] Nyx: I'm a minus one investigation.
+[01:04:56] Nyx: It's not too bad.
+[01:04:57] Berridin: Oh,
+[01:04:58] Nyx: 14.
+[01:04:58] Berridin: good roll.
+[01:04:59] Nyx: 14.
+[01:05:06] Berridin: Shit.
+[01:05:07] Berridin: Oh,
+[01:05:07] Berridin: shit.
+[01:05:08] GM: you realize because you've seen this before this is not her disguise like this is not
+[01:05:19] GM: this is a disguise this is um this is a spell this is
+[01:05:25] GM: this guy's self and for a moment you see just beyond it you see something familiar
+[01:05:36] GM: so and it's interesting that nicks of all people did this someone same industry same kind of worker
+[01:05:47] GM: no it's not michelle faberge it is not michelle faberge she's not i should bring her back as like
+[01:05:47] Berridin: Wait.
+[01:05:49] Nyx: No.
+[01:05:50] Nyx: Thank you.
+[01:05:51] Nyx: No.
+[01:05:51] Ysidor: no you should be like you didn't kill me you killed my twin rochelle faberge
+[01:05:54] GM: a linch
+[01:05:55] Nyx: Yeah.
+[01:05:58] GM: she was faking to be me the whole time
+[01:06:00] Ysidor: oh my god i'd love that i'd love that um so i'm like i'm i'm very close to her i would say like
+[01:06:01] Berridin: Oh my God.
+[01:06:02] Berridin: That's genius.
+[01:06:04] Nyx: Yeah, yeah, yeah.
+[01:06:05] Berridin: That's hilarious.
+[01:06:06] GM: yeah um honestly she could probably do it um yeah so so a few things before we take the next step
+[01:06:06] Ellara: renown i created a fake body immediately before you're killing blow i think lara would have been
+[01:06:16] Nyx: Okay.
+[01:06:23] Nyx: Uh-huh.
+[01:06:23] GM: um this person's beside yesador um you're all around the campfire
+[01:06:26] Nyx: Mm-hmm.
+[01:06:31] GM: um pretending you don't know um what you don't suspect what's happening in the campfire
+[01:06:36] GM: you don't suspect what's about to happen who's near who right now
+[01:06:40] GM: and like let's be honest you're not like all ganging around the woman
+[01:06:45] GM: yeah yeah yeah yeah yeah well that would have been a lara a lara called at first so
+[01:06:46] Nyx: No, of course.
+[01:06:49] Ysidor: like uh arm distance from her maybe maybe
+[01:06:53] Ellara: on the other side
+[01:06:54] Ellara: because she wants to make sure she's not crowded by all these men no no no no no i'm next to her
+[01:06:56] Nyx: I'm on the other side.
+[01:06:58] Nyx: If we're imagining...
+[01:07:00] Nyx: I'm imagining a campfire with, like, everybody around the campfire on, like, logs or whatever.
+[01:07:03] Ysidor: no
+[01:07:03] Ysidor: how are you doing this gently
+[01:07:07] Nyx: I'm on the opposite side of the woman.
+[01:07:10] Nyx: I would have...
+[01:07:11] Nyx: So that I could see...
+[01:07:12] Nyx: Oh, but...
+[01:07:14] GM: oh next to her okay okay yeah okay nix is up okay and barrett and witty where would you be
+[01:07:14] Berridin: Well,
+[01:07:14] Berridin: I mean,
+[01:07:15] Nyx: Oh.
+[01:07:15] Berridin: on the other side.
+[01:07:16] Nyx: Yeah.
+[01:07:16] Nyx: Yeah.
+[01:07:16] Ellara: like isadora's like i'm saying like she would have been next so that there's not like all these guys
+[01:07:21] Ellara: crowding this poor lady yeah i have advantage on wisdom saving throws because of my race
+[01:07:23] Nyx: Yeah.
+[01:07:25] Nyx: Okay.
+[01:07:26] GM: so um either side of her is yisador and alara okay and din where would you be uh there's you
+[01:07:32] Whitaker "Witty" Whitman VI: yeah so i'm i'm in between uh yizador and i'm sorry alara and nix and i'm kind of like
+[01:07:41] Whitaker "Witty" Whitman VI: crouching next to the campfire with like a little notebook and i'm like taking notes on the way that
+[01:07:47] Whitaker "Witty" Whitman VI: like the smoke comes off and blows off the fire i'm taking some like gas observations
+[01:07:53] Whitaker "Witty" Whitman VI: okay okay yeah yeah no worries so um
+[01:07:57] Berridin: Yeah.
+[01:07:58] GM: could kind of squeeze in beside witty and nix or there's a lot of space between yisador and nix
+[01:07:58] Berridin: I'll,
+[01:07:58] Berridin: I'll,
+[01:08:04] GM: okay okay so nix with this realization what do you do a disguise
+[01:08:05] Berridin: I'll try to be like,
+[01:08:06] Berridin: I'm kind of peeking around.
+[01:08:08] Berridin: I'm really interested in the baby because the din loves babies loves children.
+[01:08:15] Berridin: So I'm trying to get it like a closer look.
+[01:08:17] Berridin: I'm kind of like peeking over Isidore's,
+[01:08:19] Berridin: but I'm like sitting on his side,
+[01:08:21] Berridin: I guess.
+[01:08:24] Berridin: Yeah.
+[01:08:37] Nyx: So just to be...
+[01:08:39] Nyx: I just want to make sure that I...
+[01:08:40] Nyx: Repeating what you said before.
+[01:08:42] Nyx: So I have realized that this is...
+[01:08:47] Nyx: Can you just repeat what I...
+[01:08:48] Nyx: What did I identify?
+[01:08:48] GM: you you realize what you're seeing this young mother woman wearing plain clothes what you
+[01:08:48] Berridin: This guy,
+[01:08:49] Nyx: Mm-hmm.
+[01:08:56] GM: actually see is um the color the color of the clothes are actually you realize your reality
+[01:09:04] GM: was distorted by magic um they weren't wearing the shape all the clothes are kind of the same
+[01:09:10] GM: shape but it's a very different outfit and what you see is behind all of that disguise self
+[01:09:18] GM: is another kind of hit person in the same line of view doing a job they're disguised they're not
+[01:09:23] Nyx: Okay.
+[01:09:24] Nyx: I understand.
+[01:09:25] Nyx: Yep.
+[01:09:26] Nyx: So I take out very slowly, gently.
+[01:09:27] GM: posing any threat at the moment but they have hidden who they are oh so okay click on the link
+[01:09:37] Nyx: I take out my crossbow.
+[01:09:39] Berridin: Jesus.
+[01:09:42] Nyx: Very gently.
+[01:09:43] Nyx: I'll put it on my lap.
+[01:09:44] Nyx: I don't point it.
+[01:09:46] Nyx: And I put a bow.
+[01:09:48] Nyx: I'm just, like, playing around with it a little bit.
+[01:09:51] Nyx: Just kind of, like, looking at it.
+[01:09:52] Nyx: It's, you know...
+[01:09:53] Nyx: I'm maintaining it.
+[01:09:54] Nyx: And I put a bolt on.
+[01:09:56] Nyx: And I slowly...
+[01:09:58] Nyx: I'm just...
+[01:09:58] Ysidor: oh yeah for sure gently
+[01:09:59] Nyx: No, like, you take it and you're just, like, you know, I'm pulling it out, right?
+[01:10:02] Berridin: Casual,
+[01:10:03] Nyx: I'm casual.
+[01:10:03] Berridin: casual.
+[01:10:04] Nyx: I'm very casual.
+[01:10:05] Nyx: I'm pretending I'm, like, maintaining it.
+[01:10:07] Nyx: Yeah?
+[01:10:08] Nyx: Right?
+[01:10:08] Nyx: A little bit.
+[01:10:09] Nyx: And then I point it at the woman gently.
+[01:10:13] Nyx: And I say...
+[01:10:14] Ysidor: all right
+[01:10:15] Nyx: Very slowly, I point it.
+[01:10:16] Ysidor: you need to start the session you're fucked up dirty funny oh wow what if we don't want to
+[01:10:17] Nyx: And I rest it on my lap.
+[01:10:18] Nyx: But it's, like, on them.
+[01:10:21] Nyx: And before anyone says anything, I go...
+[01:10:24] Nyx: You are in disguise.
+[01:10:26] Nyx: And you are lying.
+[01:10:28] Nyx: To us.
+[01:10:29] Nyx: And I know that you are like me.
+[01:10:34] Nyx: Okay?
+[01:10:34] Nyx: You're a bounty hunter just like me.
+[01:10:37] Nyx: So how about we drop the act?
+[01:10:40] Nyx: And you show us who you really are.
+[01:10:49] Berridin: So tense.
+[01:10:52] Nyx: Yeah, click on the...
+[01:10:53] Nyx: So, Matt, like, yeah, click on the link.
+[01:10:55] GM: everyone click on the link uh initiative was auto rolled um we have stopped initiative
+[01:11:02] Berridin: Oh my God.
+[01:11:04] GM: oh yeah i'm waiting is everyone here
+[01:11:08] Nyx: Yeah, yeah.
+[01:11:09] Berridin: Oh my God.
+[01:11:15] GM: yeah
+[01:11:15] Berridin: I hope the baby is also an enemy.
+[01:11:20] GM: uh start session so here's the thing nix you had the chance to get a surprise round
+[01:11:21] Nyx: That's the concern that I have is that it's real.
+[01:11:21] Berridin: The demon,
+[01:11:26] Nyx: I'm...
+[01:11:26] Nyx: Yeah.
+[01:11:26] Berridin: demon baby.
+[01:11:27] Nyx: No, I'm sure that it's real.
+[01:11:29] Nyx: Right.
+[01:11:34] GM: however you did um if you didn't if you guys didn't they would have gotten um top of combat
+[01:11:37] Nyx: Yeah.
+[01:11:45] GM: as you
+[01:11:45] GM: say that they they got 16 initiative like they throw the baby and as they throw the illusion
+[01:11:53] GM: breaks away there wasn't a baby there she goes ah you know i wasn't going to hurt you much
+[01:11:54] Nyx: Okay.
+[01:11:55] Nyx: All of us?
+[01:11:56] Berridin: Oh my God.
+[01:12:05] GM: you know maybe steal a little bit you know i i figured this was slim picking some easy pickings
+[01:12:11] GM: on the way to a job
+[01:12:14] GM: huh
+[01:12:15] GM: But I guess it's got to work.
+[01:12:20] GM: And hold on.
+[01:12:22] GM: Hey, buddy, don't do that.
+[01:12:24] GM: And she looks at Nyx, Ysidor, and Alara.
+[01:12:32] GM: She casts hold person, fourth level.
+[01:12:38] GM: No.
+[01:12:38] Berridin: Fourth level.
+[01:12:41] GM: So this is a wisdom saving throw for Nyx, Alara, and Ysidor.
+[01:12:49] GM: Wisdom saving throw.
+[01:12:52] Nyx: I got a 14.
+[01:12:53] Ellara: which is a modified human thing no no but that's ability checks i think it's rare for them to need
+[01:12:57] Nyx: Ooh!
+[01:12:58] Nyx: Dirty 20.
+[01:12:59] Nyx: 21.
+[01:13:03] GM: You all save.
+[01:13:04] GM: 14 was the save.
+[01:13:06] Nyx: Ooh!
+[01:13:06] Berridin: Wow.
+[01:13:11] GM: Yeah, so wait.
+[01:13:11] GM: Going back to the battle, like, well, that didn't work.
+[01:13:18] GM: That's their action.
+[01:13:20] GM: They don't have any other action there.
+[01:13:24] GM: So Nyx, it's your turn.
+[01:13:28] Nyx: Ongoing...
+[01:13:28] Nyx: Wow, it's been a while.
+[01:13:31] GM: I know.
+[01:13:33] Nyx: Let's do...
+[01:13:37] Nyx: Yeah.
+[01:13:37] Nyx: So I'm going to attack...
+[01:13:40] Nyx: I'm going to do a dreadful...
+[01:13:43] Nyx: I'm going to attack with my crossbow.
+[01:13:44] Nyx: And I'm going to do a dreadful strike.
+[01:13:46] Nyx: And that is once per turn.
+[01:13:48] Nyx: When you attack...
+[01:13:49] Nyx: I can do this twice.
+[01:13:50] Nyx: But when you attack a creature and hit it with your weapon,
+[01:13:53] Nyx: you deal an extra 2d6 psychic damage.
+[01:13:57] Nyx: And you can do it two times per long rest.
+[01:13:59] Nyx: So I'm going to do that once.
+[01:14:00] Nyx: And I also have Vex.
+[01:14:00] GM: Yeah.
+[01:14:03] GM: Well, you have to attack first.
+[01:14:04] Nyx: Yeah.
+[01:14:05] Nyx: I'm just saying...
+[01:14:06] Nyx: Because I'm weird.
+[01:14:07] Nyx: And if I hit a creature with my hand crossbow,
+[01:14:10] Nyx: which is what I'm using,
+[01:14:12] Nyx: and you deal damage to it,
+[01:14:13] Nyx: you have advantage to your next attack roll
+[01:14:15] Nyx: against the creature before the end of your next turn.
+[01:14:18] Nyx: So now I'm just going to attack.
+[01:14:20] Nyx: I think that's all I can do.
+[01:14:22] GM: And then you can use your Dreadful Strike.
+[01:14:25] Nyx: Okay.
+[01:14:25] Nyx: Yeah.
+[01:14:25] GM: 13 does not hit.
+[01:14:26] Nyx: Okay.
+[01:14:27] Nyx: So we're going to go with...
+[01:14:28] Nyx: I do hit.
+[01:14:31] Nyx: I got a 13.
+[01:14:34] Nyx: Oh, it does not.
+[01:14:35] GM: No.
+[01:14:37] Nyx: Ooh.
+[01:14:38] Nyx: Okay.
+[01:14:41] GM: Bonus action and movement.
+[01:14:44] Nyx: Anything I can hide behind near me?
+[01:14:44] GM: You could run into the woods.
+[01:14:46] Nyx: Let me just see.
+[01:14:47] Nyx: Let me look at the map.
+[01:14:49] GM: I will say the map is fairly accurate.
+[01:14:51] GM: You could get partial cover in the woods.
+[01:14:54] Nyx: I'll do it.
+[01:14:55] GM: Move your character.
+[01:14:56] GM: You guys can move your own tokens.
+[01:14:58] Nyx: Okay.
+[01:14:59] Nyx: Yeah.
+[01:14:59] Nyx: Let me go back to...
+[01:14:59] GM: Oh, Matt, for your reference, the square is five feet.
+[01:15:00] Ysidor: augie looks like he has initiative
+[01:15:03] GM: And you can move your own tokens.
+[01:15:05] GM: Okay.
+[01:15:06] GM: And so to move one square, you move five feet.
+[01:15:09] GM: How far you can move is in your character sheet.
+[01:15:11] GM: So you're 30 feet.
+[01:15:13] GM: Yeah.
+[01:15:14] Nyx: I'm going to go over here.
+[01:15:18] GM: Okay.
+[01:15:20] GM: Cool.
+[01:15:21] GM: Next turn.
+[01:15:22] GM: Baradun, your turn.
+[01:15:23] GM: Yeah.
+[01:15:25] Berridin: Okay.
+[01:15:25] Berridin: We,
+[01:15:26] Berridin: we only see this bandit receiver,
+[01:15:28] Berridin: right?
+[01:15:28] Berridin: Bandit deceiver.
+[01:15:29] Berridin: Sorry.
+[01:15:29] Berridin: Right.
+[01:15:30] GM: Only person.
+[01:15:30] Berridin: That's the only.
+[01:15:31] Berridin: Okay.
+[01:15:32] GM: Yeah.
+[01:15:33] Berridin: Okay.
+[01:15:34] Berridin: I'm going to whip out my,
+[01:15:36] Berridin: my double scimitars.
+[01:15:39] GM: Mm-hmm.
+[01:15:41] Berridin: I cast my phantom hex on her.
+[01:15:48] Berridin: Um,
+[01:15:49] GM: What kind of, what do I have to roll?
+[01:15:51] GM: Wait.
+[01:15:51] Berridin: this is just,
+[01:15:53] Berridin: this is just a bonus.
+[01:15:54] Berridin: This is like,
+[01:15:54] Berridin: uh,
+[01:15:55] Berridin: this is like hex except my own version.
+[01:15:57] Berridin: It's uh,
+[01:15:59] Berridin: um,
+[01:15:59] Berridin: she just has disadvantage on ability checks.
+[01:16:03] GM: There's a save.
+[01:16:03] Berridin: Um,
+[01:16:04] GM: There should be a save for that.
+[01:16:06] GM: There's not a save?
+[01:16:08] Berridin: no,
+[01:16:08] Berridin: no,
+[01:16:08] Berridin: this is,
+[01:16:09] Berridin: this is like,
+[01:16:09] Berridin: um,
+[01:16:10] Berridin: this is like hex.
+[01:16:10] Berridin: This is like the hex cast.
+[01:16:12] Berridin: Um,
+[01:16:12] Berridin: it's a,
+[01:16:12] Berridin: it's a,
+[01:16:13] Berridin: it's a bonus action and it every time until the spell ends.
+[01:16:18] Berridin: Um,
+[01:16:19] Berridin: I deal extra one D six psychic damage on the target whenever I hit it with an attack.
+[01:16:26] GM: Brock.
+[01:16:27] Nyx: Brutal.
+[01:16:27] GM: No.
+[01:16:28] Berridin: Yeah,
+[01:16:28] Berridin: I can,
+[01:16:29] Berridin: I can,
+[01:16:29] Berridin: I can combo this with other people.
+[01:16:31] Berridin: I just don't know what you guys are.
+[01:16:33] Berridin: If you could,
+[01:16:34] Berridin: if you guys have any like,
+[01:16:35] Berridin: um,
+[01:16:36] Berridin: ability checks that you use with your spells,
+[01:16:38] Berridin: just let me know.
+[01:16:38] Berridin: Cause I can make her have a disadvantage on it.
+[01:16:40] Nyx: Ooh.
+[01:16:41] Nyx: That's cool.
+[01:16:45] Ellara: an ability check mid-fight right like they're not doing like a performance mid-fight or something
+[01:16:45] Berridin: Yeah.
+[01:16:47] Berridin: I,
+[01:16:47] Berridin: yeah.
+[01:16:49] Ellara: all right or is ability
+[01:16:50] GM: So it's one ability.
+[01:16:50] Berridin: Yeah.
+[01:16:50] Berridin: I think like,
+[01:16:51] Berridin: yeah.
+[01:16:52] Berridin: So I'll go ahead.
+[01:16:53] Berridin: What were you gonna say?
+[01:16:56] GM: So that means you pick one ability.
+[01:17:00] GM: Hold on.
+[01:17:03] GM: I need to.
+[01:17:04] GM: I think ability is the stat block.
+[01:17:04] Ellara: something else uh how often do they do ability checks i guess if a save is an ability that's
+[01:17:14] Berridin: I think it's like,
+[01:17:15] GM: Ability has to, yeah.
+[01:17:16] Berridin: yeah.
+[01:17:17] GM: So this is like strength saves and all that.
+[01:17:19] GM: Yeah.
+[01:17:19] Berridin: Yeah.
+[01:17:19] Berridin: Yeah.
+[01:17:19] Berridin: Yeah.
+[01:17:20] GM: So you pick one of the main stats.
+[01:17:21] Ellara: insane so like when you do like do a raw intelligence check that kind of thing that's
+[01:17:21] Berridin: Yeah.
+[01:17:21] Berridin: Yeah.
+[01:17:22] GM: No.
+[01:17:22] Berridin: Yeah.
+[01:17:22] Berridin: Yeah.
+[01:17:24] GM: So skill is when you do deception.
+[01:17:26] GM: Ability is technically like when,
+[01:17:29] GM: when you do like, for example,
+[01:17:32] GM: it refers to your scores.
+[01:17:38] Berridin: Yeah.
+[01:17:38] Berridin: Yeah.
+[01:17:38] Berridin: Yeah.
+[01:17:38] Berridin: Yeah.
+[01:17:38] Berridin: Yeah.
+[01:17:38] Berridin: Yeah.
+[01:17:38] Berridin: Yeah.
+[01:17:38] Berridin: Yeah.
+[01:17:38] Berridin: Yeah.
+[01:17:41] GM: Or.
+[01:17:41] Berridin: I know you're supposed to like,
+[01:17:42] Berridin: like when,
+[01:17:42] Berridin: whenever they ask for like a save or something,
+[01:17:44] Berridin: that's when usually we can,
+[01:17:45] GM: Yeah.
+[01:17:46] GM: It's one of those.
+[01:17:46] Berridin: we can use it.
+[01:17:47] GM: Yeah.
+[01:17:48] GM: So you have to pick one of the stats
+[01:17:49] GM: to have a disadvantage in.
+[01:17:50] Berridin: Yeah.
+[01:17:51] Berridin: So I don't know.
+[01:17:52] Berridin: Usually it's like wisdom or something or things that could happen.
+[01:17:55] Berridin: So I'm,
+[01:17:56] Ellara: insane how do you my mind is broken it seems insane you can't save
+[01:17:56] Berridin: I'm just gonna,
+[01:17:56] Berridin: it's just a disadvantage.
+[01:18:01] Ellara: huh okay that's that's a busted ass skill
+[01:18:02] GM: Well, it's just, yeah.
+[01:18:04] GM: But even normal hex like that.
+[01:18:06] GM: Yeah.
+[01:18:07] GM: But it's concentration.
+[01:18:07] Berridin: Yeah.
+[01:18:08] GM: So I can break concentration.
+[01:18:10] GM: Yeah.
+[01:18:10] Berridin: He can,
+[01:18:10] Berridin: he can,
+[01:18:11] Berridin: she can break concentration.
+[01:18:12] Nyx: Yeah.
+[01:18:12] Berridin: Yeah.
+[01:18:13] Nyx: Yeah.
+[01:18:15] GM: Yeah.
+[01:18:17] Ellara: you're on fire you you strike through the fire so your limiter lights up so i'm next to him so
+[01:18:19] Berridin: Um,
+[01:18:20] Berridin: anyway.
+[01:18:20] Berridin: Uh,
+[01:18:21] Berridin: okay.
+[01:18:21] Berridin: Yeah.
+[01:18:21] Berridin: I'll,
+[01:18:21] Berridin: I'll just choose wisdom,
+[01:18:22] Berridin: I guess.
+[01:18:23] GM: Okay.
+[01:18:23] Berridin: Um,
+[01:18:23] Berridin: and then I'm gonna,
+[01:18:24] Berridin: I'm gonna,
+[01:18:25] Berridin: I'm gonna do my attack with the scimitars.
+[01:18:28] GM: You have to move into range, but.
+[01:18:29] Berridin: Um,
+[01:18:29] Berridin: yeah,
+[01:18:31] Berridin: let me move into range.
+[01:18:32] Berridin: Sorry.
+[01:18:33] Berridin: Uh,
+[01:18:33] Berridin: let me go to the screen.
+[01:18:36] Berridin: Can I,
+[01:18:36] Berridin: can I stand right here?
+[01:18:45] Berridin: Bonus fire damage.
+[01:18:47] GM: Yeah.
+[01:18:48] GM: Imagine.
+[01:18:49] Berridin: Okay.
+[01:18:50] Berridin: Um,
+[01:18:51] Berridin: I've never,
+[01:18:51] Berridin: I've never,
+[01:18:52] Berridin: I've never gone through this before with you,
+[01:18:55] Berridin: Bobby,
+[01:18:55] Berridin: but,
+[01:18:56] Berridin: um,
+[01:18:56] Berridin: this is,
+[01:18:57] Berridin: this is the process through,
+[01:18:58] Berridin: which I have my attacks.
+[01:19:01] Berridin: Um,
+[01:19:01] Berridin: I have,
+[01:19:03] Berridin: um,
+[01:19:05] Berridin: I,
+[01:19:05] Berridin: these are both light weapons.
+[01:19:07] GM: Mm-hmm.
+[01:19:07] Berridin: Um,
+[01:19:08] Berridin: so I,
+[01:19:08] Berridin: I'm double,
+[01:19:09] Berridin: double wielding,
+[01:19:09] Berridin: uh,
+[01:19:10] Berridin: two scimitars.
+[01:19:11] GM: Mm-hmm.
+[01:19:11] Berridin: Um,
+[01:19:11] Berridin: they're both light weapons.
+[01:19:12] Berridin: So that means I can attack,
+[01:19:13] Berridin: uh,
+[01:19:15] Berridin: once with,
+[01:19:15] Berridin: uh,
+[01:19:16] Berridin: my regular attack and then once with my bonus attack,
+[01:19:18] Berridin: but I just use my bonus attack with,
+[01:19:20] Berridin: for hex.
+[01:19:21] Berridin: So I can't do that this turn.
+[01:19:22] GM: Yeah.
+[01:19:23] Berridin: Um,
+[01:19:23] Berridin: but I have the,
+[01:19:25] Berridin: I have the weapon mastery with scimitar,
+[01:19:28] Berridin: from my barred subclass.
+[01:19:29] GM: Mm-hmm.
+[01:19:30] Berridin: That means I have the weapon mastery of Nick,
+[01:19:33] Berridin: and that allows me to essentially turn that extra attack into like a,
+[01:19:40] Berridin: into like a regular attack.
+[01:19:41] Berridin: So I have,
+[01:19:42] GM: So you can add the damage.
+[01:19:44] GM: Because normally you couldn't add.
+[01:19:45] Berridin: I,
+[01:19:45] Berridin: I,
+[01:19:46] GM: Yeah.
+[01:19:47] Berridin: yeah,
+[01:19:47] Berridin: yeah.
+[01:19:47] Berridin: And I,
+[01:19:48] Berridin: it's,
+[01:19:48] Berridin: since it's,
+[01:19:48] Berridin: uh,
+[01:19:49] Berridin: since it's,
+[01:19:49] Berridin: uh,
+[01:19:50] Berridin: uh,
+[01:19:50] Berridin: okay.
+[01:19:51] Berridin: I'm just trying to double check out and make sure I know that working
+[01:19:53] Berridin: Nick's Nick says,
+[01:19:54] Berridin: when you make the extra attack of the light property,
+[01:19:57] Berridin: you can make it as part of the attack action instead of as a bonus.
+[01:20:01] Berridin: Action.
+[01:20:02] Berridin: So typically,
+[01:20:03] Berridin: um,
+[01:20:03] Berridin: if I didn't cast my hex,
+[01:20:05] Berridin: I would have three attacks with my scimitar.
+[01:20:08] Berridin: Um,
+[01:20:09] Berridin: since I casted my hex,
+[01:20:11] Berridin: I only have two attacks with my scimitar.
+[01:20:13] Berridin: Does that make sense?
+[01:20:14] GM: Where is, I don't see your mastery though.
+[01:20:19] Berridin: Yeah,
+[01:20:19] Berridin: I know.
+[01:20:19] Berridin: It's like,
+[01:20:20] Berridin: it's not showing up.
+[01:20:21] Berridin: It's supposed to show up when you hop,
+[01:20:23] Berridin: when you hover over the weapon in my character sheet.
+[01:20:26] Berridin: Um,
+[01:20:27] Berridin: but right now the only thing you can see is this little red,
+[01:20:30] GM: Red star.
+[01:20:30] Berridin: this red star.
+[01:20:31] GM: Yeah.
+[01:20:31] Berridin: Yeah.
+[01:20:32] GM: Oh, Nick on your, oh, okay.
+[01:20:32] Berridin: And then you'll see in the note.
+[01:20:34] GM: Yeah.
+[01:20:34] Berridin: Yeah.
+[01:20:34] Berridin: So there's,
+[01:20:35] GM: There.
+[01:20:35] Berridin: there's a few different properties that are intersecting here.
+[01:20:36] GM: Yeah.
+[01:20:38] Berridin: Sorry.
+[01:20:38] Berridin: I'm just doing this all in my turn,
+[01:20:40] GM: Yeah.
+[01:20:40] Berridin: by the way,
+[01:20:40] Berridin: but,
+[01:20:40] Berridin: um,
+[01:20:41] GM: No, it's fine.
+[01:20:41] Berridin: it's,
+[01:20:41] Berridin: it's a light attack property that is always exists for when you're
+[01:20:46] Berridin: doing two handed.
+[01:20:46] Berridin: So I'm doing a two,
+[01:20:47] GM: Yeah, yeah.
+[01:20:47] Berridin: two weapon,
+[01:20:48] Berridin: two weapon fighting.
+[01:20:49] Berridin: I have two weapon,
+[01:20:50] Berridin: um,
+[01:20:51] Berridin: fighting style.
+[01:20:52] Berridin: So that,
+[01:20:52] Berridin: that lets me add my,
+[01:20:54] Berridin: uh,
+[01:20:55] Berridin: my proficiency to my damage roles,
+[01:20:57] Berridin: I think.
+[01:20:58] Berridin: And then the Nick property is the mastery that lets me attack again,
+[01:20:59] GM: It's only like property.
+[01:21:03] Berridin: basically.
+[01:21:03] Berridin: So when I'm,
+[01:21:04] Berridin: when I'm maxed out as this character,
+[01:21:07] Berridin: I should have like four,
+[01:21:08] Berridin: four attacks.
+[01:21:13] GM: You can make it as part of the attack instead of bonus.
+[01:21:16] GM: Only once per turn.
+[01:21:20] Berridin: Yeah.
+[01:21:20] Berridin: So that's,
+[01:21:21] GM: Okay.
+[01:21:21] Berridin: that's traditionally.
+[01:21:22] Berridin: So traditionally you would only have three,
+[01:21:24] Berridin: like one,
+[01:21:25] Berridin: once you,
+[01:21:25] Berridin: you would have essentially like another attack.
+[01:21:27] Berridin: Like you,
+[01:21:27] Berridin: you attack once with your main hand and then once with your bonus
+[01:21:30] Berridin: attack,
+[01:21:31] GM: Well, it's like when melee characters get that,
+[01:21:31] Berridin: the Nick,
+[01:21:32] Berridin: the Nick prop mastery moves that bonus attack to like a weird,
+[01:21:36] Berridin: like non bonus attack.
+[01:21:41] GM: at level five or whatever.
+[01:21:42] Berridin: Yeah.
+[01:21:43] GM: Oh, okay, okay, okay.
+[01:21:44] Berridin: Yeah.
+[01:21:45] Berridin: Yeah.
+[01:21:46] GM: So yeah, you can, that means with Nick,
+[01:21:49] GM: do two attack rolls.
+[01:21:51] Berridin: Two attacks.
+[01:21:51] Berridin: Yeah.
+[01:21:52] Berridin: This essentially it's it's it's I think it's there was a way to make two
+[01:21:55] Berridin: weapon fighting a little bit better in the new edition.
+[01:21:59] Berridin: So it's a little bit,
+[01:22:00] Berridin: it's a little bit catch up cause I it's low damage,
+[01:22:02] Berridin: but it can do it.
+[01:22:03] Berridin: So what I'm,
+[01:22:04] Berridin: what essentially I'm trying to do is I'm trying to stack the hex damage
+[01:22:07] Berridin: with as many weapon attacks as I can muster in a single turn.
+[01:22:12] GM: Yeah, cool, cool.
+[01:22:12] Berridin: Um,
+[01:22:13] GM: Yeah, so roll to attack.
+[01:22:13] Berridin: okay.
+[01:22:15] Berridin: Okay.
+[01:22:15] Berridin: Perfect.
+[01:22:16] Berridin: And then the last thing I apologize for so many things,
+[01:22:19] GM: That's fine.
+[01:22:19] Berridin: if I make a successful attack,
+[01:22:21] Berridin: then I can use my bard,
+[01:22:23] Berridin: my sword barred like spells.
+[01:22:25] Berridin: I can use my bardic inspiration to add whatever flourish that I want.
+[01:22:32] Berridin: Like I have the defensive flourish,
+[01:22:33] GM: Yeah.
+[01:22:33] Berridin: mobile portion sounds.
+[01:22:34] Berridin: Okay.
+[01:22:34] Berridin: Thank you.
+[01:22:35] GM: Yeah.
+[01:22:35] Berridin: Thanks.
+[01:22:35] Berridin: Sorry.
+[01:22:35] Berridin: Sorry.
+[01:22:36] GM: And I mean, you're just consuming your bardic
+[01:22:36] Berridin: I know there's a lot.
+[01:22:40] GM: inspiration for that.
+[01:22:41] GM: So just make sure you keep track of them,
+[01:22:44] Berridin: Yes.
+[01:22:44] Berridin: Yeah.
+[01:22:45] Berridin: I'm keeping track of everything.
+[01:22:46] GM: because you only have three.
+[01:22:46] Berridin: Okay.
+[01:22:48] GM: Yeah.
+[01:22:49] Berridin: Perfect.
+[01:22:49] Berridin: Okay.
+[01:22:50] Berridin: So I have similar to,
+[01:22:51] Berridin: I'll do my first attack for the seminar.
+[01:22:55] GM: Oh, OK.
+[01:22:57] Berridin: It's a 14.
+[01:22:59] GM: 14 does not hit.
+[01:23:00] Berridin: Shit.
+[01:23:01] Nyx: That's what I got, too.
+[01:23:01] Berridin: Okay.
+[01:23:02] Nyx: I also got a 14.
+[01:23:03] Berridin: Then,
+[01:23:04] Berridin: uh,
+[01:23:08] Berridin: Oh,
+[01:23:08] Berridin: my flourishes doesn't matter.
+[01:23:09] Berridin: I don't have to hit them.
+[01:23:10] Berridin: Right.
+[01:23:11] Berridin: I can still,
+[01:23:12] GM: Hold on.
+[01:23:13] Berridin: Oh no,
+[01:23:14] Berridin: I have to,
+[01:23:15] GM: Yeah, usually Flourish has to hit.
+[01:23:15] Berridin: I have to hit them.
+[01:23:16] Berridin: Nevermind.
+[01:23:17] Berridin: I have to hit.
+[01:23:17] Berridin: Nevermind.
+[01:23:18] Berridin: Nevermind.
+[01:23:19] Berridin: It might,
+[01:23:19] Berridin: my walking speed increases no matter what,
+[01:23:21] Berridin: but,
+[01:23:22] GM: Hm.
+[01:23:22] Berridin: um,
+[01:23:22] Berridin: I have to hit them.
+[01:23:23] Berridin: Okay.
+[01:23:23] Berridin: I'll,
+[01:23:24] Berridin: I'm going to go for the second stack here.
+[01:23:26] GM: Yeah.
+[01:23:28] Berridin: I got a 14 again.
+[01:23:29] GM: Yeah, does not hit.
+[01:23:31] GM: Cool, cool, cool.
+[01:23:31] Berridin: Cool.
+[01:23:34] GM: Cool, so Alara's turn?
+[01:23:36] Berridin: Yep.
+[01:23:37] GM: Alara.
+[01:23:37] Berridin: I'm putting this here.
+[01:23:41] GM: Yeah.
+[01:23:41] Ellara: disadvantage right for rain like a spell would be ranged though oh um wait what is this and a failed
+[01:23:45] GM: For any range?
+[01:23:50] GM: Well, not really, if you do touch.
+[01:23:52] GM: Some spells are touch.
+[01:23:54] GM: If it's a pew, pew, pew spell, yeah.
+[01:23:58] GM: It depends on if it's a range.
+[01:24:00] GM: Because some spells are like a touch spell,
+[01:24:02] GM: like Chilling Touch or Chilling Grasp or whatever.
+[01:24:04] GM: It's touch, right?
+[01:24:05] GM: So you have to be in melee range.
+[01:24:14] GM: It really depends on what spell you're using.
+[01:24:20] Ysidor: yay
+[01:24:23] GM: Oh.
+[01:24:27] GM: Yeah.
+[01:24:30] Ellara: save and on yeah yeah yeah or guiding bolt or something okay so then i will
+[01:24:32] GM: And obviously, like, something that stuff like Fireball
+[01:24:37] GM: or like Aerial Effects don't really apply,
+[01:24:40] GM: it's really single target range spells.
+[01:24:43] GM: So like if you're doing Scorching Ray.
+[01:24:47] GM: Yeah.
+[01:24:50] Ellara: just here's the size how do i draw the circles here it's five foot if it says area five feet
+[01:25:05] Ellara: that's the diameter or the radius a moon beam okay it didn't finish me okay so she'll just
+[01:25:07] GM: What spell?
+[01:25:08] GM: It's usually Radius, I believe.
+[01:25:12] GM: Oh, Moonbeam, yeah, that's 5 feet.
+[01:25:16] GM: Yeah, Area is, well, it will say to Cylinder,
+[01:25:19] GM: drops down 5 foot radius.
+[01:25:20] GM: Yeah, it's a 5 foot radius.
+[01:25:22] GM: The description says the radius.
+[01:25:26] Ellara: drop a moon beam here uh constitution yes so 2d 10 2d 10 uh i guess i could i should roll that
+[01:25:32] GM: And what is the save for Moonbeam?
+[01:25:37] GM: Con save, cool, cool, cool, cool.
+[01:25:42] GM: Hey, OK.
+[01:25:44] GM: Con save, saving throw, Constitution, just roll.
+[01:25:52] GM: I got an 8.
+[01:25:53] GM: I probably take full damage.
+[01:25:57] Nyx: Moonbeam.
+[01:25:59] GM: How much damage?
+[01:26:02] GM: Oh, yeah, yeah.
+[01:26:04] GM: You roll your damage.
+[01:26:04] Ellara: yeah nine nine and just in case they were polymorphed or something they lose that but
+[01:26:07] GM: I'm not going to roll it.
+[01:26:08] GM: Can't accuse me of anything.
+[01:26:10] GM: 9.
+[01:26:16] GM: Oh, yeah, no, all of that was gone.
+[01:26:16] Ellara: i don't think that matters um yeah bonus action no i don't have anything to do with for bonus action
+[01:26:20] GM: They drop that in a ..
+[01:26:24] Berridin: The battlefield is very symmetrical right now.
+[01:26:26] Berridin: I kind of like it.
+[01:26:29] GM: So you have bonus action and movement.
+[01:26:47] Ellara: no because i'll trigger an attack good wait no no no no like he has two he has two divine smites
+[01:26:48] GM: Will you move?
+[01:26:53] GM: Oh, you don't want an opportunity attack from me?
+[01:26:59] GM: Witty, it's your turn.
+[01:27:02] GM: Feel free to ask all the questions you want.
+[01:27:05] GM: I realize it's the first time.
+[01:27:10] Whitaker "Witty" Whitman VI: i don't know if we've really even talked about this either but like um you know my my spells are
+[01:27:15] Whitaker "Witty" Whitman VI: kind of like i have little like uh tiny like grenades right that kind of have like gases in
+[01:27:21] Whitaker "Witty" Whitman VI: them or something um so like for like if i wanted to you know cast grease for instance like i could
+[01:27:28] Whitaker "Witty" Whitman VI: throw a little like grenade there that explodes and then like the gas spreads out and then like
+[01:27:33] Whitaker "Witty" Whitman VI: turns into grease falling to the ground something like that can i describe my my spells like that
+[01:27:40] Whitaker "Witty" Whitman VI: if it works yeah yeah yeah i'm using exactly the same yeah i'm just saying this is how i would
+[01:27:44] GM: This is based off of.
+[01:27:47] Berridin: It's just like a flavor.
+[01:27:48] Berridin: Thing,
+[01:27:48] Berridin: Matt.
+[01:27:49] Berridin: Like,
+[01:27:49] Berridin: um,
+[01:27:50] Berridin: so it's like,
+[01:27:51] Berridin: you're still using spell slots,
+[01:27:52] Berridin: but you're saying that it's yeah.
+[01:27:55] GM: Oh, oh, yeah, OK, thank you for the clarity.
+[01:27:55] Whitaker "Witty" Whitman VI: describe how i would cast something yeah yeah oh yeah yeah yeah yeah yeah yeah yeah i was just
+[01:27:57] Berridin: Yeah.
+[01:28:00] GM: Yes, sorry, I thought it was like an art,
+[01:28:03] GM: because you're an artifice or two.
+[01:28:04] GM: I was like, wait, is this like magical items?
+[01:28:08] GM: Because, like, that's.
+[01:28:10] GM: Oh, yeah, the 2025, 2024 artificers
+[01:28:15] GM: can make common magical items.
+[01:28:17] GM: Anyways, point being, yeah, you can use it.
+[01:28:22] GM: Same rules apply.
+[01:28:23] GM: 10-foot squared centered on a point within range.
+[01:28:28] Whitaker "Witty" Whitman VI: using that as an example um okay cool because uh i think what i want to do though is like since i'm
+[01:28:29] GM: Yeah, OK, so you will have to roll an attack roll.
+[01:28:36] Whitaker "Witty" Whitman VI: like kneeling by the fire and kind of like catching all this happening out of the side of my eye i'm
+[01:28:42] Whitaker "Witty" Whitman VI: just going to like pull it off and just like kind of like um i'm just going to turn it into my uh it's like a green ball that i have hanging on my uh hip and i pull it off and i'm gonna uh roll it at to the feet of the um bandit deceiver um and it's gonna uh you know explode and put them in a in a a cloud of green dust for ray of sickness
+[01:29:11] GM: If you click on the plus 5, yeah, so in your character sheet,
+[01:29:11] Whitaker "Witty" Whitman VI: mm-hmm it says arrange spell attack
+[01:29:14] Whitaker "Witty" Whitman VI: where do i do i what do i do i like to do that
+[01:29:17] Whitaker "Witty" Whitman VI: i click on uh-huh yep uh-huh oh cool so 13 yeah okay um and so now i can do movement
+[01:29:19] GM: you see.
+[01:29:20] GM: Yeah.
+[01:29:20] GM: Ray of sickness.
+[01:29:21] GM: You can do cast to use it.
+[01:29:23] GM: You see the plus 5.
+[01:29:24] GM: If you click on the plus 5, it'll auto-roll the attack for you.
+[01:29:28] Berridin: Yeah.
+[01:29:30] GM: 13 misses.
+[01:29:32] GM: You'll still consume the spell slot,
+[01:29:34] GM: so you have to check off the spell slot on the top.
+[01:29:37] GM: It misses.
+[01:29:38] GM: Yes, you can move, and you're outside of 5 feet,
+[01:29:45] Whitaker "Witty" Whitman VI: okay okay um i don't think i have really a bonus action that'll work right now
+[01:29:49] GM: so you don't do opportunity attack,
+[01:29:51] GM: and you still have a bonus action.
+[01:29:57] GM: Yeah, probably not.
+[01:29:58] Whitaker "Witty" Whitman VI: yeah so i'm just like witty witty is uh witty's gonna like do like this really very awkward
+[01:30:05] Whitaker "Witty" Whitman VI: barrel roll to the side and then kind of like high step away to try to you know doesn't want
+[01:30:12] Whitaker "Witty" Whitman VI: to get like you know dirty or anything um and it's nice clothes so you kind of like high steps
+[01:30:18] Whitaker "Witty" Whitman VI: away into the woods um okay how do i oh there's a ruler yeah
+[01:30:19] GM: Yeah, so you can move 30 feet.
+[01:30:22] GM: You can also use a ruler if you want
+[01:30:24] GM: to double-check the distance.
+[01:30:27] GM: So on the side, there's a rule.
+[01:30:29] GM: Yeah, click on this middle yourself,
+[01:30:31] GM: and I'll give you a little line.
+[01:30:32] Whitaker "Witty" Whitman VI: yeah
+[01:30:33] GM: Whee!
+[01:30:33] Whitaker "Witty" Whitman VI: um i'm yeah i'm definitely gonna go hide right behind nix i'm gonna use nix's as as as a body
+[01:30:39] Whitaker "Witty" Whitman VI: shield so oops okay so how do i get rid of the ruler okay there we go so i'm gonna go like
+[01:30:45] Whitaker "Witty" Whitman VI: right here behind the tree behind him
+[01:30:47] Whitaker "Witty" Whitman VI: oh nice oh wow i have 24 yeah so i'm oh go ahead um so i'm gonna take a different like a black
+[01:30:48] GM: Awesome.
+[01:30:50] GM: Isidore, your turn.
+[01:30:52] Ysidor: um well first i'm going to um it's not an action it's just like a b like um my channel divinity
+[01:30:52] GM: I don't have any.
+[01:31:03] Ysidor: um not i don't think so i try it's it's i don't think i think it's just like i activate it
+[01:31:06] GM: Doesn't it consume an action?
+[01:31:12] GM: Let me double.
+[01:31:16] Ysidor: let me see yeah i'd google the same thing it's not it's not clear um well i i as their actions
+[01:31:30] Berridin: I'm also reading all of your guys's like spell sheets.
+[01:31:34] GM: Yeah, that's fair.
+[01:31:35] GM: I do it all the time.
+[01:31:36] GM: You take the oath of the game the following to loving embrace.
+[01:31:38] GM: You take the oath of the game the following to loving embrace.
+[01:31:39] GM: You take the oath of the game the following to loving embrace.
+[01:31:40] GM: You take the oath of the game the following to loving embrace.
+[01:31:41] GM: You take the oath of the game the following to loving embrace.
+[01:31:45] GM: You take the oath of the game the following to loving embrace.
+[01:31:46] GM: Channel , action?
+[01:31:55] GM: Oh, it's the abilities themselves.
+[01:31:59] GM: It depends on what the ability is.
+[01:32:02] GM: Yeah, so loving embraces as an action,
+[01:32:04] GM: and then galvanize affection is an action.
+[01:32:05] Ysidor: yeah
+[01:32:08] GM: So it's what, in their description.
+[01:32:10] GM: And it consumes the, yeah.
+[01:32:11] Ysidor: i thought i thought it was like a bonus action or something at most okay never mind scratch by just
+[01:32:14] GM: Now they're both actions.
+[01:32:17] Ysidor: what i was about to do no it's not a bonus it's not a bonus action it's an action yeah there was
+[01:32:18] Berridin: That's good though.
+[01:32:19] Berridin: Isn't that,
+[01:32:20] Berridin: doesn't it make it easier for you?
+[01:32:21] Berridin: Cause you don't have to waste action on it.
+[01:32:28] Berridin: Oh,
+[01:32:28] Berridin: Oh,
+[01:32:29] Ysidor: action so like before a fight would be great but not during um so we'll do a good old just a regular
+[01:32:29] Berridin: it's actually okay.
+[01:32:30] GM: Yeah.
+[01:32:30] Berridin: Sorry.
+[01:32:30] Berridin: Sorry.
+[01:32:30] Berridin: Okay.
+[01:32:30] Berridin: Okay.
+[01:32:31] GM: yeah 24 does hit um one if it's a thrown weapon um so if you throw uh where sorry i
+[01:32:31] Berridin: My,
+[01:32:38] Ysidor: attack uh does a 24 hit and what am i sorry what i have two
+[01:32:47] Berridin: my holy shit.
+[01:32:53] Ysidor: here one second
+[01:32:56] Ysidor: i like two different roles for some reason
+[01:33:04] Ysidor: the one what
+[01:33:06] Ysidor: okay
+[01:33:09] GM: know but for damage he has two different damage rolls um the second damage roll uh
+[01:33:11] Ellara: oh you do no no
+[01:33:13] Ysidor: yeah but the hindsight
+[01:33:14] Ysidor: was
+[01:33:19] GM: wait wait hold on thrown versus oh it's because it's versatile once two-handed versus one-handed
+[01:33:21] Ysidor: the debate higher if i threw it that doesn't make sense to me
+[01:33:30] GM: so if it's two-handed you don't have a shield right yeah so one-handed so you do slightly
+[01:33:34] Ysidor: oh wait i think i do have it wait one second i do not remember if i have a shield equipped
+[01:33:38] Ysidor: give me one second
+[01:33:38] Berridin: I see.
+[01:33:39] Berridin: And you do have a shield.
+[01:33:40] Ysidor: that makes sense yeah i do never mind okay so
+[01:33:44] GM: less damage that's the difference you're doing a trident or your war pick yeah so it's 1d10
+[01:33:47] Ysidor: okay
+[01:33:48] Ysidor: no no my war pick
+[01:33:51] GM: two-handed 1d8 uh one-handed okay so roll your damage
+[01:33:55] Ysidor: okay i'm gonna do that and plus with the the bad attack i'm adding a divine smite
+[01:34:05] GM: oh damn just one attack roll what's the duration okay so just one of the attack rolls cool
+[01:34:06] Ysidor: and then i will divine smite so 19 points of damage
+[01:34:17] Berridin: Dang.
+[01:34:17] Berridin: He also has SAP on that war pick.
+[01:34:20] Ysidor: yeah so uh next role uh will be a disadvantage uh wait it's that yeah the next uh the bandits
+[01:34:20] Berridin: Yes.
+[01:34:20] Berridin: That there's that mastery before.
+[01:34:29] Ysidor: next attack role will be in disadvantage uh on eighth next attack roll yeah
+[01:34:37] Berridin: Yeah.
+[01:34:40] Ysidor: yeah it hurts
+[01:34:41] GM: bandit's turn a little tougher than you thought than i thought um oh this is interesting uh
+[01:34:53] GM: you gotta look to lara uh no it's like uh the hair is kind of the same so she didn't
+[01:34:57] Berridin: Bobby does,
+[01:34:57] Berridin: does she,
+[01:34:57] Berridin: does she still look like she does to us at the start?
+[01:35:00] Berridin: Or is she completely different?
+[01:35:03] Ellara: is she a woman check no no yeah well i am down you probably should have used hunter's mark as a
+[01:35:05] GM: do like it was very like in the sense of like she didn't completely change what she looked
+[01:35:11] GM: like right like she just made herself look like a common i'm a young woman
+[01:35:12] Berridin: Yeah.
+[01:35:16] GM: now she's kind of her her clothing a bit more skin tight you can see weapons um the face is
+[01:35:23] GM: pretty much the same i don't know that that's your question okay so the first attack roll
+[01:35:25] Berridin: Is,
+[01:35:25] Berridin: is witty and didn't like still sexually attracted to her.
+[01:35:37] Nyx: That's bad.
+[01:35:42] GM: will be with disadvantage um a 12 does a 12 hit a lara um i have three attacks uh so it's just
+[01:35:52] GM: attack roll right i have three attack rolls okay well this is gonna roll flat
+[01:35:57] Berridin: I think it's just one from what it says.
+[01:35:58] Berridin: It says if you hit a creature with a war pick that creature has
+[01:36:01] Berridin: disadvantage on its next attack role before the start of your next turn.
+[01:36:09] GM: does a nine hit no does a 16 hit uh seven points of damage plus uh wait oh um 24 points of damage
+[01:36:27] GM: seven points of piercing uh 17 points of poison damage um concentrations broke so moonbeam's gone
+[01:36:34] Nyx: Shit.
+[01:36:37] GM: gotta love that moonbeam's good uh it hurts um she goes ah yeah take out the scrawny one first
+[01:36:40] Berridin: What does Moomdean do again?
+[01:36:44] Nyx: Kill everything.
+[01:36:47] Ysidor: i think you should
+[01:36:54] GM: before i deal with tin can over there um cool
+[01:36:59] GM: cool um she's not gonna move because well um yeah because attacks of opportunity
+[01:37:11] GM: um let me double check she doesn't have bonus actions at all
+[01:37:16] GM: um
+[01:37:26] GM: Okay.
+[01:37:35] Nyx: I'm here.
+[01:37:35] GM: She wanted to get rid of that.
+[01:37:36] GM: Okay, end of her turn. She's not moving.
+[01:37:39] GM: Nyx, your turn.
+[01:37:41] Nyx: I've been here the whole time.
+[01:37:43] GM: No, you haven't been. Don't lie to me.
+[01:37:44] Nyx: Right.
+[01:37:45] Nyx: Right out of range.
+[01:37:47] Nyx: Right out of range of the camera.
+[01:37:48] Nyx: All right.
+[01:37:49] Nyx: So I am going to do what I tried to do last time.
+[01:37:52] Nyx: Okay.
+[01:37:52] Nyx: So let me just...
+[01:37:54] Nyx: I'm going to attack with my crossbow.
+[01:37:56] Nyx: I've got 30 feet of range, and I'm 15 feet away from her.
+[01:37:59] Nyx: I did the thing already.
+[01:38:00] GM: Yeah.
+[01:38:01] GM: I trust you.
+[01:38:02] Nyx: Yeah.
+[01:38:03] Nyx: I'm going to...
+[01:38:03] Nyx: Let's do that, and then I'll...
+[01:38:05] Nyx: Let me hit...
+[01:38:06] Nyx: See if I hit.
+[01:38:08] Nyx: Does a 25 hit?
+[01:38:11] GM: A 25 does hit.
+[01:38:13] Nyx: Oh, yeah.
+[01:38:14] Nyx: All right.
+[01:38:15] Nyx: Revenge.
+[01:38:16] Nyx: So I'm going to do that dreadful...
+[01:38:18] Nyx: Dreadful strike, and then...
+[01:38:22] Nyx: And vex, but vex is automatic.
+[01:38:27] Nyx: So what do I do?
+[01:38:29] Nyx: How do I do this?
+[01:38:30] Nyx: It's an extra 2d psychic.
+[01:38:31] GM: Your character should.
+[01:38:32] Nyx: So let me...
+[01:38:34] Nyx: Does it do it automatically?
+[01:38:36] Nyx: Did it add...
+[01:38:38] Nyx: I don't know if it added it.
+[01:38:39] Nyx: I don't think so.
+[01:38:40] Nyx: Oh, I have to do dreadful strike separately.
+[01:38:42] Nyx: Okay.
+[01:38:43] Nyx: I see.
+[01:38:43] Nyx: Okay.
+[01:38:44] Nyx: So I'm going for damage for the crossbow.
+[01:38:46] Nyx: Sorry.
+[01:38:47] Nyx: This is the first time I've done this.
+[01:38:48] Nyx: It's been a while.
+[01:38:48] GM: Yeah, it's okay.
+[01:38:50] Berridin: It's really interesting.
+[01:38:51] Berridin: Interesting.
+[01:38:52] Nyx: God damn it.
+[01:38:54] Nyx: Four points of damage.
+[01:38:55] Nyx: Okay.
+[01:38:56] Nyx: And then dreadful strike.
+[01:38:56] GM: Loving it.
+[01:39:00] Nyx: Seven points of damage.
+[01:39:02] GM: You rolled a...
+[01:39:03] GM: Oh yeah, you rolled horribly.
+[01:39:05] GM: So that's 11 points of damage.
+[01:39:08] Nyx: Yeah.
+[01:39:11] GM: Anything else?
+[01:39:12] Nyx: That was really bad.
+[01:39:15] Nyx: And I...
+[01:39:17] Nyx: But I...
+[01:39:18] Nyx: Yeah, and I have advantage on my next attack roll against a creature before the end of my next turn.
+[01:39:24] Nyx: Okay.
+[01:39:24] Berridin: But does that,
+[01:39:25] Berridin: does that work?
+[01:39:26] Berridin: Like if you,
+[01:39:27] Berridin: if you only attack once during your turn?
+[01:39:30] Nyx: It's if I hit the creature.
+[01:39:30] GM: Yeah.
+[01:39:31] Nyx: If I hit the creature.
+[01:39:31] GM: It works because the end of his turn...
+[01:39:35] GM: So he...
+[01:39:36] GM: At the beginning of his next turn, he can do an attack, right?
+[01:39:40] GM: So it will be
+[01:39:41] GM: still in effect
+[01:39:42] GM: when his turn comes up next.
+[01:39:44] Nyx: Yeah.
+[01:39:44] Berridin: Oh,
+[01:39:45] GM: It's after his turn.
+[01:39:45] Berridin: okay.
+[01:39:45] Berridin: Can you,
+[01:39:46] Berridin: can you like,
+[01:39:47] Nyx: Yeah.
+[01:39:47] Berridin: can you,
+[01:39:48] Berridin: can you dual wield hand crossbows?
+[01:39:50] Nyx: You...
+[01:39:50] Berridin: Okay.
+[01:39:51] Nyx: I think I can.
+[01:39:52] GM: You can, but
+[01:39:53] GM: you wouldn't add your bonus
+[01:39:55] GM: to the damage on the second one
+[01:39:57] GM: if they're both light.
+[01:39:58] GM: Unless you have, like,
+[01:39:59] GM: Mastery and all that, right?
+[01:40:01] GM: That's kind of like...
+[01:40:01] Berridin: Okay.
+[01:40:01] Berridin: Okay.
+[01:40:02] Nyx: Which is where I'm going, but...
+[01:40:02] Berridin: Good.
+[01:40:02] Berridin: Yeah.
+[01:40:04] Nyx: Not...
+[01:40:04] Berridin: No.
+[01:40:04] Berridin: Yeah.
+[01:40:04] Berridin: That seems really useful.
+[01:40:05] Nyx: I forgot.
+[01:40:06] GM: Yeah.
+[01:40:06] Berridin: Cause if you do have dual then,
+[01:40:10] Ellara: bonus action yes yeah and there's some advantage stuff but like if they try to hide that one's
+[01:40:12] Nyx: Can I cast it even though I've already attacked?
+[01:40:13] Berridin: Oh yeah.
+[01:40:15] Nyx: Can I do bonus...
+[01:40:16] Nyx: Is it a bonus action?
+[01:40:18] GM: Yeah.
+[01:40:18] Berridin: It's a bonus action.
+[01:40:19] Nyx: I can, actually.
+[01:40:19] GM: Yeah.
+[01:40:21] Nyx: All right.
+[01:40:21] Nyx: I will cast Hunter's Mark.
+[01:40:21] GM: Yeah.
+[01:40:21] Berridin: Yeah.
+[01:40:23] Nyx: I know, but I've already...
+[01:40:25] Nyx: Be fair.
+[01:40:26] Nyx: I already attacked.
+[01:40:27] Nyx: But I will throw Caster's Mark on top of that.
+[01:40:30] Nyx: And I do...
+[01:40:30] GM: Undersmark.
+[01:40:31] GM: Okay, and what's...
+[01:40:32] GM: I have to look that up again.
+[01:40:35] Nyx: I do have that under bonus action.
+[01:40:36] Berridin: It's a damage one D six,
+[01:40:38] Berridin: right?
+[01:40:39] Nyx: No.
+[01:40:40] Nyx: Is it actually damage?
+[01:40:42] Nyx: Oh, it is damage.
+[01:40:42] Berridin: Yeah.
+[01:40:42] Berridin: That's,
+[01:40:43] Nyx: Yeah.
+[01:40:43] Berridin: that's the only like good thing about Rangers.
+[01:40:45] Berridin: I thought.
+[01:40:46] Nyx: Yeah.
+[01:40:47] Nyx: And it's a bonus action.
+[01:40:51] GM: Yeah, there's, like,
+[01:40:51] GM: yeah, wisdom stuff.
+[01:40:51] Berridin: Yeah.
+[01:40:54] Nyx: Okay.
+[01:40:54] GM: Yeah, you'll have.
+[01:40:55] Nyx: So I will all roll, I guess, for Hunter's Mark.
+[01:40:58] Nyx: Thank you.
+[01:40:59] GM: I mean, technically,
+[01:41:01] GM: you did it in the wrong order,
+[01:41:02] GM: but I'm not going to be an asshole.
+[01:41:03] Nyx: Oh, thank you.
+[01:41:05] Nyx: Thank you.
+[01:41:06] Nyx: That's a three.
+[01:41:06] Berridin: Rules as written rules as written.
+[01:41:08] GM: Rules as written.
+[01:41:10] Ysidor: what do you
+[01:41:11] GM: Yeah, okay.
+[01:41:13] Nyx: So an extra three.
+[01:41:13] GM: I'll put green.
+[01:41:15] GM: Yeah.
+[01:41:15] GM: Yeah.
+[01:41:16] GM: Yeah.
+[01:41:17] GM: Um, any, uh, movement.
+[01:41:19] Nyx: I stay hidden at this point.
+[01:41:21] Nyx: I duck back down.
+[01:41:21] GM: Yep.
+[01:41:22] GM: Uh,
+[01:41:23] GM: do-do-do-do-do.
+[01:41:24] GM: And, Matt, just for your reference,
+[01:41:26] GM: yeah, combat gets long.
+[01:41:27] GM: I help facilitate it,
+[01:41:29] GM: so I'll be like,
+[01:41:29] GM: your action, your bonus action.
+[01:41:31] Nyx: You did this wrong.
+[01:41:31] GM: Uh, if I'm smart,
+[01:41:32] GM: I tell you when your turn's
+[01:41:34] GM: going to be next.
+[01:41:35] GM: So Baradun's,
+[01:41:36] GM: Din's next with
+[01:41:37] GM: Alar doing a death save after.
+[01:41:39] GM: Uh, Din.
+[01:41:40] GM: Well, it's because you're casting,
+[01:41:41] Berridin: We,
+[01:41:41] Berridin: we used to be so much slower and like,
+[01:41:44] Berridin: now we're like marginally a bit faster now.
+[01:41:46] Nyx: Wait.
+[01:41:46] Ysidor: oh yeah there's like yeah
+[01:41:47] Nyx: Hang on.
+[01:41:48] GM: you're casting less spells,
+[01:41:50] Nyx: We are...
+[01:41:50] Nyx: We are...
+[01:41:50] Nyx: We're also level, what, three?
+[01:41:50] GM: mostly.
+[01:41:53] Nyx: Like, we...
+[01:41:53] GM: Yeah.
+[01:41:54] Nyx: Yeah.
+[01:41:54] Nyx: I had, like, 25 spells to pick from each time.
+[01:41:54] Berridin: Yeah.
+[01:41:58] Nyx: Like, at the end.
+[01:41:59] Nyx: Last campaign.
+[01:42:00] Nyx: Yeah.
+[01:42:00] Nyx: Bobby's right.
+[01:42:00] Berridin: I,
+[01:42:01] Berridin: I think Mark's turns were the funniest last campaign.
+[01:42:04] Berridin: Cause I,
+[01:42:04] Berridin: we would have to roll 20 different things to get his little bonus.
+[01:42:07] GM: And then Mark's like,
+[01:42:08] GM: I shoot,
+[01:42:09] GM: but when Mark went
+[01:42:09] Berridin: That was crazy.
+[01:42:11] Nyx: Yeah.
+[01:42:12] GM: on top of the turn,
+[01:42:14] GM: he had assassinate.
+[01:42:15] Ysidor: yeah well the the fight with the dragon where we had a surprise round and all my all my hits were
+[01:42:15] GM: Fucking wrecked.
+[01:42:17] GM: When Mark hit,
+[01:42:17] GM: he wrecked shit.
+[01:42:18] GM: It's just,
+[01:42:19] GM: when he didn't,
+[01:42:20] GM: he was like,
+[01:42:20] GM: I'm going to roll my attack.
+[01:42:29] Ysidor: critical so it was like four quick dice that did like a hundred points of damage was like ridiculous
+[01:42:32] Nyx: Yep.
+[01:42:36] Nyx: Yep.
+[01:42:36] GM: So, uh,
+[01:42:37] GM: Matt, for context,
+[01:42:38] GM: when you roll a nat 20
+[01:42:40] GM: on an attack,
+[01:42:41] GM: hit all your dice rolls
+[01:42:42] GM: for damage
+[01:42:43] GM: or you rolled twice
+[01:42:44] GM: the amount of dice.
+[01:42:46] GM: The modifiers are the same,
+[01:42:47] GM: so if it's plus three,
+[01:42:48] GM: it's still plus three.
+[01:42:48] GM: But if it's 2d6,
+[01:42:50] GM: that becomes,
+[01:42:50] GM: that's 4d6.
+[01:42:52] GM: And because he had,
+[01:42:54] GM: um,
+[01:42:55] GM: what it was called,
+[01:42:56] GM: uh,
+[01:42:57] GM: stealth attack,
+[01:42:58] GM: that's like 4d6 on its own
+[01:42:59] Ysidor: yeah oh i'm sure she'll be like okay
+[01:43:00] GM: on top of everything.
+[01:43:01] GM: So, yeah,
+[01:43:01] GM: it was ridiculous.
+[01:43:02] GM: Um,
+[01:43:03] GM: but Din,
+[01:43:03] GM: it's your turn.
+[01:43:04] Berridin: Okay.
+[01:43:05] Berridin: Um,
+[01:43:06] Berridin: I will,
+[01:43:07] Ellara: yeah wait does it show you as me having 30 for 24 it shows 13 for me that's weird
+[01:43:07] Berridin: as my bonus action,
+[01:43:08] Berridin: I will cast healing word on my dear friend,
+[01:43:12] Berridin: Alara and the healing word is like,
+[01:43:13] GM: Okay.
+[01:43:14] GM: Roll the heal.
+[01:43:16] Berridin: uh,
+[01:43:17] Berridin: I literally want to say to her while I'm healing her,
+[01:43:20] Berridin: I was like,
+[01:43:20] Berridin: you please trust me about Edward.
+[01:43:27] GM: Roll your heal.
+[01:43:27] Berridin: Okay.
+[01:43:29] GM: So,
+[01:43:29] Berridin: Okay.
+[01:43:30] Berridin: I did a second level,
+[01:43:35] Ysidor: boy
+[01:43:39] Berridin: but I guess that's fine.
+[01:43:39] Berridin: Yeah.
+[01:43:40] Berridin: I'll just do a second level.
+[01:43:42] GM: 13,
+[01:43:43] GM: you got 13 HP,
+[01:43:45] GM: Alara.
+[01:43:45] GM: You're up on your feet.
+[01:43:47] GM: Um,
+[01:43:47] GM: action and movement for Din.
+[01:43:49] Berridin: Yeah.
+[01:43:50] Berridin: And she has a renewed level of trust in Baradun also from.
+[01:43:54] GM: Sure.
+[01:43:55] Nyx: I love...
+[01:43:55] GM: Sure.
+[01:43:56] Nyx: I love how you decided that for her.
+[01:43:57] GM: Yeah.
+[01:43:59] GM: Yeah.
+[01:44:01] Nyx: Before she's...
+[01:44:01] Berridin: Okay.
+[01:44:02] Nyx: Yeah.
+[01:44:04] Nyx: Oh, goddammit.
+[01:44:04] GM: Yeah.
+[01:44:05] Berridin: I'm going to do my,
+[01:44:07] Berridin: my double a similar attack now.
+[01:44:10] GM: Roll to attack.
+[01:44:12] GM: Roll to attack.
+[01:44:13] Berridin: Okay.
+[01:44:13] Berridin: I'm only getting four teens now.
+[01:44:15] GM: 14 does not hit.
+[01:44:15] Berridin: So apparently that 16,
+[01:44:18] Nyx: Goddammit.
+[01:44:18] Nyx: Oh, goddammit.
+[01:44:19] GM: 16 meets it,
+[01:44:20] GM: beats it.
+[01:44:21] GM: 16 hits.
+[01:44:21] Berridin: thank God.
+[01:44:22] GM: Oh, yeah.
+[01:44:22] Berridin: Okay.
+[01:44:22] Berridin: I'm going to,
+[01:44:23] Berridin: I'm going to also cast my flourish.
+[01:44:25] Berridin: So I'm going to,
+[01:44:27] Berridin: uh,
+[01:44:28] GM: It's not a cast.
+[01:44:28] GM: You got me for a second.
+[01:44:29] GM: I was like,
+[01:44:30] GM: what the fuck
+[01:44:30] GM: are you talking about, boy?
+[01:44:32] GM: Um,
+[01:44:33] Ysidor: i realized lara was that far that's she okay um how's she how's this person looking
+[01:44:33] Berridin: ideal extra damage with my bardic inspiration.
+[01:44:35] Berridin: And I add that to my AC.
+[01:44:39] GM: oh,
+[01:44:39] GM: defensive flourish.
+[01:44:39] Berridin: Um,
+[01:44:40] Berridin: yeah,
+[01:44:41] Berridin: yeah,
+[01:44:42] Berridin: yeah.
+[01:44:43] Berridin: One D six.
+[01:44:45] GM: Uh,
+[01:44:45] Berridin: Um,
+[01:44:45] Berridin: I don't know the order.
+[01:44:46] Berridin: Should I do this?
+[01:44:47] GM: I don't care.
+[01:44:47] Berridin: Like I got a five there.
+[01:44:49] GM: Um,
+[01:44:49] GM: five.
+[01:44:49] Berridin: Um,
+[01:44:50] Berridin: so five damage and then I'm rolling my scimitar damage here.
+[01:44:54] GM: Mm-hmm.
+[01:44:56] GM: Seven.
+[01:44:56] Berridin: So seven plus five,
+[01:44:58] GM: Yeah.
+[01:44:58] Berridin: 12.
+[01:44:58] Berridin: Okay.
+[01:44:58] Berridin: Okay.
+[01:44:58] Berridin: Okay.
+[01:44:58] Berridin: Okay.
+[01:44:58] Berridin: Okay.
+[01:44:58] Berridin: Okay.
+[01:44:59] Berridin: Okay.
+[01:44:59] Berridin: Okay.
+[01:44:59] Berridin: Okay.
+[01:44:59] Berridin: Okay.
+[01:44:59] Berridin: Okay.
+[01:44:59] Berridin: Okay.
+[01:44:59] Berridin: Okay.
+[01:44:59] Berridin: Okay.
+[01:44:59] Berridin: Okay.
+[01:45:00] GM: Yep.
+[01:45:00] Berridin: Okay.
+[01:45:00] Berridin: Okay.
+[01:45:00] Berridin: Okay.
+[01:45:00] Berridin: Okay.
+[01:45:00] Berridin: Okay.
+[01:45:01] Berridin: Perfect.
+[01:45:02] GM: Nice.
+[01:45:03] GM: Uh,
+[01:45:03] GM: movement.
+[01:45:04] Berridin: Uh,
+[01:45:04] Berridin: I'm standing right in front of her.
+[01:45:07] GM: Yeah.
+[01:45:07] GM: Okay.
+[01:45:08] GM: Cool, cool, cool.
+[01:45:08] GM: Alara,
+[01:45:08] Berridin: It was,
+[01:45:09] GM: you just heard,
+[01:45:11] GM: you heard kind of
+[01:45:12] GM: as your unconscious
+[01:45:13] GM: Din saying,
+[01:45:14] GM: just trust me,
+[01:45:15] GM: and you come back up
+[01:45:16] GM: with 13,
+[01:45:18] GM: 13 HP.
+[01:45:20] GM: I don't know where
+[01:45:21] GM: you got 24.
+[01:45:21] GM: I don't know where you got 24.
+[01:45:22] GM: I see 24 on mine.
+[01:45:28] Nyx: Obvious turning into barony.
+[01:45:28] Berridin: it was the trust.
+[01:45:29] Berridin: It was,
+[01:45:30] Berridin: it was the trust instilled in her that boosted it up to 24.
+[01:45:38] Berridin: It might have to upgrade like the,
+[01:45:39] Ellara: yeah it shows me that's weird
+[01:45:40] Berridin: uh,
+[01:45:40] Berridin: your,
+[01:45:40] Berridin: your page.
+[01:45:41] Ellara: um i'm trying to think i might have to go help bring in some groceries soon but i will
+[01:45:42] GM: Okay.
+[01:45:43] GM: I'll trust you.
+[01:45:47] Berridin: It shows,
+[01:45:48] Nyx: Hang on.
+[01:45:49] Nyx: Let me see on my end.
+[01:45:50] Nyx: What do I...
+[01:45:51] Berridin: it shows 13.
+[01:45:51] Berridin: I had to,
+[01:45:52] Berridin: I had to update.
+[01:45:52] Berridin: I had to update the webpage,
+[01:45:53] GM: Okay.
+[01:45:54] Berridin: reload the webpage.
+[01:45:55] GM: Okay.
+[01:45:55] Berridin: I mean,
+[01:45:59] Nyx: I don't actually see...
+[01:46:01] Nyx: Oh, I do see 13 to heal.
+[01:46:02] Nyx: Yeah.
+[01:46:03] Nyx: I see 13.
+[01:46:11] GM: Oh,
+[01:46:11] GM: it still shows 24 for me.
+[01:46:13] GM: Weird.
+[01:46:21] Berridin: I'm so sorry,
+[01:46:22] Berridin: uh,
+[01:46:23] Berridin: Bobby,
+[01:46:23] Berridin: I,
+[01:46:23] Berridin: I totally forgot about the hex that's still on her.
+[01:46:26] GM: Oh, yeah.
+[01:46:26] Berridin: So,
+[01:46:26] Berridin: uh,
+[01:46:26] Berridin: let me just roll it real quick.
+[01:46:27] GM: What's that?
+[01:46:30] Berridin: It's two,
+[01:46:31] Berridin: two damage of psychic.
+[01:46:33] Berridin: So funny.
+[01:46:34] GM: Okay.
+[01:46:35] Nyx: Yep.
+[01:46:35] Ellara: do my turn first um i just just have 13 hp but she does insane amounts of damage
+[01:46:44] Ellara: so i can't move unless it's with disadvantage yeah she's just gonna
+[01:46:51] GM: Well,
+[01:46:51] GM: you could use an action
+[01:46:52] GM: to take
+[01:46:53] GM: and move,
+[01:46:55] GM: and then you have
+[01:46:56] GM: your bonus action.
+[01:47:10] Ellara: i'm just gonna
+[01:47:11] Ellara: i'm just gonna
+[01:47:11] Ellara: i'm just gonna
+[01:47:16] Ellara: wait spell i can't do a spell as a bonus action if i do a spell as a non-bonus action
+[01:47:25] Ellara: yeah what about spells that are not slotted but are due to a feature like star map lets me cast
+[01:47:29] GM: Well, yeah,
+[01:47:30] GM: if it's slotted,
+[01:47:30] GM: right?
+[01:47:31] GM: Yeah.
+[01:47:31] GM: You could only do it
+[01:47:32] GM: if you can trip.
+[01:47:33] GM: Hmm.
+[01:47:44] GM: Wait,
+[01:47:46] Ellara: guiding bolt as an example three times per long rest yeah like star map lets me cast
+[01:47:50] GM: feature.
+[01:47:51] GM: Wait,
+[01:47:56] GM: wait,
+[01:47:57] GM: wait,
+[01:47:58] GM: features.
+[01:47:59] GM: It's class features,
+[01:48:00] GM: right?
+[01:48:02] Ellara: guiding bolt three three times per long rest without expending a spell slot okay okay okay
+[01:48:06] GM: Yeah.
+[01:48:07] GM: But it's still a first level.
+[01:48:08] GM: It's a first level spell.
+[01:48:09] GM: Yeah.
+[01:48:10] GM: It's easier just to describe it as spell slots.
+[01:48:10] Ellara: that's what you meant all right um yeah she's just going to disengage then yeah um and then
+[01:48:11] GM: But,
+[01:48:14] GM: okay.
+[01:48:15] GM: Use your action to disengage.
+[01:48:16] GM: You can do your movement and whatever bonus action you want.
+[01:48:17] GM: Y'all up there.
+[01:48:18] GM: Hey,
+[01:48:19] GM: I'm up there.
+[01:48:23] GM: Hey,
+[01:48:24] GM: I'm up there.
+[01:48:25] GM: Hey,
+[01:48:26] GM: I'm up there.
+[01:48:27] GM: Hey,
+[01:48:28] GM: I'm up there.
+[01:48:35] GM: Hey,
+[01:48:36] GM: I'm up there.
+[01:48:40] Ellara: for bonus action i can just do healing spirit i guess
+[01:48:43] GM: Hey,
+[01:48:44] GM: sweetheart.
+[01:48:50] Ellara: five foot cube
+[01:48:54] Ellara: anything that enters or ends their turn restores can heal a number of one plus minimum of twice
+[01:49:03] Ellara: my spell casting modifier is plus three right yeah so four total times okay so i'm just gonna do that
+[01:49:13] Ellara: cast it for five foot square five foot square this and then heal myself with it
+[01:49:18] GM: Yeah,
+[01:49:19] GM: put it on the,
+[01:49:22] GM: yeah,
+[01:49:23] GM: it should be the size of a tile.
+[01:49:34] Ellara: spell spell spell spell healing spirit
+[01:49:40] Ellara: feels three i go wait at the door but i can listen for wait why did oh yeah yeah yeah yeah
+[01:49:41] GM: Nice.
+[01:49:42] GM: So,
+[01:49:43] GM: you're up to 16.
+[01:49:44] GM: Witty,
+[01:49:45] GM: it is your turn.
+[01:49:46] GM: Yeah.
+[01:49:49] GM: So,
+[01:49:50] GM: no,
+[01:49:51] GM: I was just saying,
+[01:49:52] GM: it's your turn.
+[01:49:53] GM: Okay.
+[01:49:54] GM: 60 feet.
+[01:49:55] GM: Yeah,
+[01:50:02] Whitaker "Witty" Whitman VI: uh like a sphere
+[01:50:04] Whitaker "Witty" Whitman VI: with like this black swirling gas inside of it off my uh hip and i'm gonna throw it to
+[01:50:11] Whitaker "Witty" Whitman VI: cast grease and i have to like draw like where i want to when i want to how do i draw it though
+[01:50:15] GM: you'll have to,
+[01:50:16] GM: you,
+[01:50:17] GM: there is a little shape overlays.
+[01:50:18] GM: It's,
+[01:50:19] GM: oh,
+[01:50:20] GM: and then,
+[01:50:20] Whitaker "Witty" Whitman VI: mm-hmm a square um how do i draw the square though okay i can move it now
+[01:50:21] GM: oh,
+[01:50:22] GM: oh,
+[01:50:23] GM: oh,
+[01:50:24] GM: oh,
+[01:50:25] GM: and then,
+[01:50:26] GM: what,
+[01:50:27] GM: what is the shape?
+[01:50:28] GM: It tells you the shape.
+[01:50:29] GM: It's 10 foot,
+[01:50:30] GM: 10 foot square.
+[01:50:31] GM: So,
+[01:50:37] GM: yeah.
+[01:50:38] GM: So,
+[01:50:39] GM: this would be 10 feet.
+[01:50:40] GM: I can move it for you.
+[01:50:41] GM: All right,
+[01:50:41] Whitaker "Witty" Whitman VI: just want to cast it right there
+[01:50:42] GM: you move it.
+[01:50:43] GM: Nice.
+[01:50:44] GM: Yeah.
+[01:50:45] GM: So,
+[01:50:46] GM: basically,
+[01:50:46] Whitaker "Witty" Whitman VI: mm-hmm all right
+[01:50:47] GM: yeah,
+[01:50:49] Whitaker "Witty" Whitman VI: so I cast Grease.
+[01:50:50] GM: you want to,
+[01:50:53] GM: like,
+[01:50:54] GM: throw it on.
+[01:50:57] Whitaker "Witty" Whitman VI: Yeah.
+[01:50:59] Whitaker "Witty" Whitman VI: When the Grease appears,
+[01:51:00] Whitaker "Witty" Whitman VI: each creature standing in the area
+[01:51:01] Whitaker "Witty" Whitman VI: must succeed on a deck-saving throw
+[01:51:03] Whitaker "Witty" Whitman VI: or have the prone condition.
+[01:51:08] GM: Oh,
+[01:51:09] GM: yeah,
+[01:51:10] GM: yeah.
+[01:51:11] GM: So,
+[01:51:12] GM: it's difficult terrain.
+[01:51:12] Whitaker "Witty" Whitman VI: Yeah.
+[01:51:13] GM: And you did it just so they are,
+[01:51:14] GM: they're like that,
+[01:51:15] GM: right?
+[01:51:16] GM: Yeah.
+[01:51:17] GM: Cool.
+[01:51:18] GM: They got a dirty 20.
+[01:51:19] GM: They're on their feet.
+[01:51:20] GM: Not full health yet.
+[01:51:21] GM: No,
+[01:51:24] Whitaker "Witty" Whitman VI: Great.
+[01:51:25] GM: because it's a spell slot.
+[01:51:27] Whitaker "Witty" Whitman VI: And then, is Alara behind me?
+[01:51:29] Whitaker "Witty" Whitman VI: Is she full health or not yet?
+[01:51:31] GM: Grease is a spell slot.
+[01:51:32] GM: And healing words is a spell slot.
+[01:51:34] Whitaker "Witty" Whitman VI: Okay.
+[01:51:35] Whitaker "Witty" Whitman VI: So I could do a healing word as well?
+[01:51:39] GM: Can't.
+[01:51:40] GM: So,
+[01:51:41] GM: you could only do,
+[01:51:41] Whitaker "Witty" Whitman VI: Oh.
+[01:51:42] GM: well,
+[01:51:43] GM: they're all actions.
+[01:51:44] GM: Only a cantrip after,
+[01:51:44] Whitaker "Witty" Whitman VI: Oh, I see what you mean.
+[01:51:45] GM: if,
+[01:51:45] Whitaker "Witty" Whitman VI: I see what you mean.
+[01:51:46] GM: only a cantrip level after that.
+[01:51:47] GM: Or a level zero is also a cantrip.
+[01:51:48] GM: Yeah.
+[01:51:49] GM: No,
+[01:51:49] Whitaker "Witty" Whitman VI: Yeah, yeah, yeah.
+[01:51:50] GM: no worries.
+[01:51:51] GM: Yes,
+[01:51:52] GM: yes,
+[01:51:53] GM: yes,
+[01:51:54] GM: yes,
+[01:51:55] GM: yes,
+[01:51:56] GM: yes,
+[01:51:56] Whitaker "Witty" Whitman VI: Okay.
+[01:51:57] Whitaker "Witty" Whitman VI: And then I am going to stay where I'm at
+[01:52:02] Whitaker "Witty" Whitman VI: because I'm a coward.
+[01:52:04] GM: yes,
+[01:52:04] Whitaker "Witty" Whitman VI: Yeah.
+[01:52:05] GM: yes,
+[01:52:06] GM: yes,
+[01:52:07] GM: yes,
+[01:52:08] GM: yes,
+[01:52:11] GM: you don't trust any of these.
+[01:52:18] GM: Isidor,
+[01:52:19] GM: your turn.
+[01:52:20] GM: Yeah.
+[01:52:29] GM: She's skedaddled.
+[01:52:30] GM: they look fairly healthy.
+[01:52:33] Ysidor: interesting um one second i'm just saying if i did do a bonus action or not
+[01:52:48] Ysidor: okay i'm gonna do um i'm gonna cast divine favor on myself
+[01:52:53] GM: Yes vice.
+[01:52:54] GM: Okay.
+[01:52:55] GM: Um,
+[01:52:57] Ysidor: uh which gives me an extra
+[01:52:59] Ysidor: and one of the biggest challenges that i'm going to have is to hit them okay
+[01:53:07] Ysidor: i'm gonna um i'm gonna do a extra 1d4 of radiant damage on hits
+[01:53:10] Ysidor: how long does it last one minute okay perfect and then i'm going to again attack with my warm pick
+[01:53:15] GM: uh,
+[01:53:16] GM: divine pop arch,
+[01:53:17] GM: oh,
+[01:53:18] GM: okay,
+[01:53:21] GM: yeah,
+[01:53:22] GM: bonus action.
+[01:53:25] Ysidor: 22 so i do this
+[01:53:31] Ysidor: stick i will obviously do a divine smite as well uh this one doesn't use a spell slot perfect so do this and then gimme one second do this as well
+[01:53:37] Ysidor: perfect so do this and then gimme one second do this as well
+[01:53:38] Ysidor: perfect so do this and then give me one second do this as well
+[01:53:38] Ysidor: do this as well roll no but the mine favorite did it roll no it adds a 1d4 okay 4 so it's
+[01:53:43] GM: 22 hits.
+[01:53:44] GM: Yeah,
+[01:53:50] GM: you got your dom,
+[01:53:51] GM: it's 11.
+[01:53:52] GM: No,
+[01:53:53] GM: I don't see a divine favorite.
+[01:53:54] GM: What does?
+[01:53:59] Ysidor: 15. make sense no it's like no uh oh okay okay no i'm good another whole person i'm
+[01:54:03] GM: I didn't pal.
+[01:54:04] GM: Yeah.
+[01:54:05] GM: I've been doing it for her thing.
+[01:54:06] GM: So,
+[01:54:07] GM: Don't worry.
+[01:54:09] GM: Yeah, do you want to move?
+[01:54:13] GM: OK, so they look at all of you.
+[01:54:17] GM: They're kind of, hmm, I guess we're going to, let's see,
+[01:54:24] GM: circle, wait, how big, 10 feet?
+[01:54:33] GM: Yeah, can they, let's, yeah, so Din's the only one not
+[01:54:41] GM: getting hit by this.
+[01:54:45] GM: Witty, Nyx, Isidore, Alara, all roll a constitution saving
+[01:54:53] GM: throw, DC 14.
+[01:54:58] Ysidor: assuming oh no it's like it's uh not of course nat 20 on this one can i head back
+[01:54:59] Whitaker "Witty" Whitman VI: At 23?
+[01:55:02] GM: OK, 23.
+[01:55:05] Nyx: Oh, my god.
+[01:55:07] Nyx: I got a five.
+[01:55:08] Nyx: What the fuck?
+[01:55:12] Ysidor: if you like i am okay just this one oh one second did you roll was it an attack roll
+[01:55:15] GM: On Nyx and Alara, 11 points of damage.
+[01:55:19] GM: You're both blinded until the start of the next bandits turn.
+[01:55:27] GM: And for the rest of you, that's 5 points
+[01:55:30] GM: of damage.
+[01:55:31] GM: So Witty, 5 points of damage.
+[01:55:34] GM: Isidore, 5 points of damage.
+[01:55:36] Nyx: What...
+[01:55:36] Nyx: What does blind do again?
+[01:55:39] Nyx: Mechanical.
+[01:55:39] GM: Blinded means you can't see.
+[01:55:41] GM: So anything that requires sight, you failed.
+[01:55:44] GM: Attacks against you have advantage.
+[01:55:46] GM: You have disadvantage on attacks.
+[01:55:50] Nyx: Okay.
+[01:55:51] Nyx: But I can still attack.
+[01:55:53] GM: You can still attack, but just think
+[01:55:56] GM: attacking with a blindfold.
+[01:56:00] Nyx: I'm just saying, is it an auto fail or is it disadvantage?
+[01:56:03] GM: No, no, you can still attack.
+[01:56:04] Nyx: Got it.
+[01:56:05] GM: You're just disadvantage.
+[01:56:07] Nyx: With my advantage.
+[01:56:08] GM: OK.
+[01:56:09] Nyx: So it just cancels out.
+[01:56:11] GM: Oh, you have advantage?
+[01:56:14] GM: I got rid of my circle.
+[01:56:15] GM: I was just seeing.
+[01:56:16] Nyx: No, I have advantage in my next turn because...
+[01:56:21] Nyx: It's a flashbang.
+[01:56:21] Ysidor: by the way okay no i'm just asking yeah it doesn't just say i was yeah
+[01:56:23] GM: No.
+[01:56:30] GM: Basically, she, basically, it doesn't even say what it,
+[01:56:38] GM: do you see it's using?
+[01:56:39] GM: I guess it's like, it's some kind of like spell thing.
+[01:56:42] GM: Anyway, it's kind of like a fireball,
+[01:56:43] GM: but it's blinding flash.
+[01:56:45] GM: It's basically, what you saw is they threw something up
+[01:56:49] GM: in the air.
+[01:56:49] GM: It exploded.
+[01:56:50] GM: It exploded.
+[01:56:50] GM: It's blinding two of you.
+[01:56:53] Nyx: Okay.
+[01:56:54] GM: Yeah.
+[01:56:56] GM: Yeah, so that's their turn.
+[01:56:56] Berridin: Nice.
+[01:56:57] Berridin: Okay.
+[01:57:01] GM: They're kind of stuck between Isidore and Din,
+[01:57:03] GM: so they're not going to move.
+[01:57:09] GM: Nyx, it's your turn.
+[01:57:10] Nyx: Yeah.
+[01:57:11] Nyx: So as I was saying before, when I cast Hunter's Mark...
+[01:57:17] Nyx: No, not Hunter's Mark.
+[01:57:19] Nyx: It was Vex.
+[01:57:21] Nyx: So I'm going to read Vex again.
+[01:57:23] Nyx: If you hit...
+[01:57:24] Nyx: It's from last turn.
+[01:57:25] Nyx: If you hit a creature with a hand...
+[01:57:27] Nyx: Hand crossbow and deal damage to it, which I did, you have advantage on your next attack
+[01:57:33] Nyx: roll against the creature before the end of your next turn.
+[01:57:37] Nyx: So according to what you said, correct me if I'm wrong, so I have advantage right now
+[01:57:42] Nyx: for my attack.
+[01:57:43] GM: Yeah.
+[01:57:44] Nyx: And I also have disadvantage.
+[01:57:46] Nyx: So what happens?
+[01:57:46] GM: Yeah, so you roll flat.
+[01:57:47] Nyx: Flat.
+[01:57:48] Nyx: Okay.
+[01:57:48] Nyx: Cool.
+[01:57:49] Nyx: All right.
+[01:57:49] Nyx: I'm going to do that.
+[01:57:50] Nyx: I'm going to attack with my crossbow.
+[01:57:54] Nyx: Um...
+[01:57:54] Nyx: And...
+[01:57:56] Nyx: I'm going...
+[01:57:57] Nyx: I'm going to...
+[01:57:57] Nyx: Uh...
+[01:57:58] Nyx: Yeah.
+[01:57:59] Nyx: I'm just going to roll flat.
+[01:57:59] Berridin: Sorry.
+[01:58:00] Nyx: I'm not going to...
+[01:58:00] Nyx: What?
+[01:58:00] GM: Where did the second Nyx come from?
+[01:58:01] Berridin: Sorry.
+[01:58:04] GM: Also, there's a Nyx.
+[01:58:04] Berridin: I'm sorry.
+[01:58:05] Berridin: That was me.
+[01:58:06] Berridin: It was my fault.
+[01:58:07] Berridin: My fault.
+[01:58:07] Berridin: I'm sorry.
+[01:58:09] Berridin: Sorry.
+[01:58:10] Nyx: Oh my god.
+[01:58:11] Nyx: Wait.
+[01:58:12] Nyx: Let me look at the map.
+[01:58:12] GM: Nyx's twin Twix.
+[01:58:12] Berridin: Sorry.
+[01:58:12] Berridin: Sorry.
+[01:58:14] Nyx: There you go.
+[01:58:16] Nyx: Um...
+[01:58:16] Nyx: I don't have that skill yet.
+[01:58:18] Nyx: I can't...
+[01:58:18] Nyx: I don't have doppelganger or whatever.
+[01:58:20] Nyx: It's...
+[01:58:21] Nyx: I don't even think I can do that.
+[01:58:22] Nyx: But anyways.
+[01:58:23] Nyx: Um...
+[01:58:23] Nyx: Let me roll.
+[01:58:29] Nyx: There's a 26 hit.
+[01:58:31] GM: A 26 hits.
+[01:58:33] Berridin: Nice.
+[01:58:39] Nyx: Nine points of damage.
+[01:58:39] Ellara: are you using your other thing no casting it as a bonus oh yeah what's the what do i need to roll
+[01:58:47] Nyx: Well, so...
+[01:58:48] Nyx: So...
+[01:58:49] Nyx: Pause.
+[01:58:49] Nyx: One second.
+[01:58:50] Nyx: So I want to be fair.
+[01:58:52] Nyx: Like...
+[01:58:52] Nyx: I could use Hunter's Mark as a bonus action.
+[01:58:57] Nyx: Um...
+[01:58:57] GM: No, it automatically, you cast it.
+[01:58:59] GM: It's a con, wait, question.
+[01:59:02] Nyx: It's a bonus action.
+[01:59:03] Nyx: It's a bonus action.
+[01:59:04] Nyx: So I can do it afterwards, right?
+[01:59:04] Berridin: I thought it's a,
+[01:59:05] Berridin: it's a concentration.
+[01:59:06] Berridin: I thought it's not a concentration.
+[01:59:07] GM: Yeah, once you cast it.
+[01:59:10] GM: Yeah, it stays.
+[01:59:11] GM: It stays.
+[01:59:13] Berridin: Well,
+[01:59:14] Berridin: unless you,
+[01:59:15] Nyx: Favored enemy Hunter's Mark.
+[01:59:15] Berridin: yeah,
+[01:59:17] Nyx: It's under bonus action.
+[01:59:20] Nyx: Uh...
+[01:59:21] Nyx: You...
+[01:59:21] Nyx: Oh!
+[01:59:22] Nyx: You always...
+[01:59:22] Nyx: Let me read it.
+[01:59:23] Nyx: You always have...
+[01:59:23] GM: Yeah, it's a concentration.
+[01:59:23] Berridin: it's like,
+[01:59:25] Nyx: Okay.
+[01:59:25] Berridin: yeah,
+[01:59:26] Ysidor: hit her with uh my war pick for the 19 hit god he's sort of a simple man you see something
+[01:59:26] GM: But you and Alara both took damage.
+[01:59:26] Berridin: I think it's 10.
+[01:59:28] GM: damage alara is your con you both need a con save 10 uh wait uh wait fuck yeah it's or half damage
+[01:59:39] Nyx: Okay.
+[01:59:41] GM: yeah whatever uh yeah so it's 10 uh it's minimum of 10 so both roll a con save you both need to
+[01:59:42] Berridin: Yeah.
+[01:59:42] Berridin: Yeah.
+[01:59:43] Berridin: Let's go.
+[01:59:48] GM: beat 10 to keep your concentration up yeah you you held on to your hunter's mark alara has dropped
+[01:59:50] Nyx: Okay.
+[01:59:51] Nyx: Okay.
+[01:59:54] Nyx: Got a 10.
+[01:59:55] Nyx: Me to beat it.
+[01:59:56] Nyx: Okay.
+[01:59:57] Berridin: Nice.
+[02:00:00] Nyx: So I just roll for it.
+[02:00:00] Ellara: i did not that's unfortunate
+[02:00:04] Nyx: Oof.
+[02:00:04] GM: uh their healing thing yeah so you can roll the extra damage whatever it was isn't it when you
+[02:00:05] Nyx: That's...
+[02:00:07] Berridin: Okay.
+[02:00:08] Nyx: Six points of damage.
+[02:00:08] Ellara: what about the the other one the the no the dreadful strike what you have twice i think
+[02:00:15] Nyx: And that's out of a d6.
+[02:00:17] Nyx: So...
+[02:00:22] Nyx: The Vex?
+[02:00:22] Nyx: The Vex is automatic.
+[02:00:27] Nyx: Um...
+[02:00:28] Nyx: It's an actual...
+[02:00:29] Nyx: It's an actual...
+[02:00:31] Nyx: Wait.
+[02:00:31] Berridin: That one has like a count.
+[02:00:33] GM: attack yeah you have a good you only used one of them so you can use one more on your attack
+[02:00:35] Nyx: Can I...
+[02:00:35] Berridin: You have two of them.
+[02:00:36] Nyx: I think I can do it.
+[02:00:37] Nyx: You have mastered the art of fearsome ambushes.
+[02:00:40] Nyx: Oh, I see.
+[02:00:43] GM: and add the damage no it's twice that's fine that's fine yeah okie dokie din it's your turn
+[02:00:45] Nyx: Okay.
+[02:00:46] Nyx: So let me just read it.
+[02:00:46] Nyx: When you attack a creature and hit it with a weapon,
+[02:00:50] Nyx: you can deal an extra 2d6 psychic damage.
+[02:00:53] Nyx: You can use this benefit...
+[02:00:54] Nyx: Only once per turn.
+[02:00:56] Nyx: And you can use it a number of times.
+[02:00:58] Nyx: Equal the wisdom modifier.
+[02:01:00] Nyx: Um...
+[02:01:01] Nyx: And regain all expended uses when you finish a long rest.
+[02:01:06] Nyx: I think I can only do it...
+[02:01:08] Nyx: Uh...
+[02:01:09] Nyx: No, actually.
+[02:01:10] Berridin: Twice.
+[02:01:12] Nyx: I have no limit on it.
+[02:01:13] Berridin: No,
+[02:01:14] Berridin: you can only twice per long rest.
+[02:01:16] Nyx: Yeah.
+[02:01:17] Nyx: Okay.
+[02:01:17] Nyx: Twice per...
+[02:01:18] Nyx: Dread VA.
+[02:01:19] Nyx: You're right.
+[02:01:19] Nyx: You're right.
+[02:01:20] Nyx: And I've already used it once.
+[02:01:20] Nyx: All right.
+[02:01:21] Nyx: I'll use it one more time.
+[02:01:22] Nyx: And then I'm done.
+[02:01:24] Nyx: Okay.
+[02:01:24] Nyx: So let me just roll.
+[02:01:26] Nyx: Not bad.
+[02:01:28] Nyx: Not bad.
+[02:01:29] Nyx: Seven.
+[02:01:34] Nyx: Sorry, guys.
+[02:01:34] Nyx: Just getting used to this.
+[02:01:35] Nyx: So thank you.
+[02:01:38] Berridin: There's a tracker on your character sheet for dreadful strike.
+[02:01:42] Nyx: I maxed it out.
+[02:01:43] Nyx: I clicked both.
+[02:01:43] Berridin: Okay.
+[02:01:44] Nyx: Yep.
+[02:01:44] Berridin: Yeah.
+[02:01:47] Nyx: And I stay hidden.
+[02:01:48] GM: okay
+[02:01:49] Berridin: All right.
+[02:01:50] Berridin: We're going,
+[02:01:51] Berridin: uh,
+[02:01:51] Berridin: I'm twirling up my,
+[02:01:52] Berridin: my blades again.
+[02:01:54] Berridin: Um,
+[02:01:54] Berridin: I don't have to heal anyone.
+[02:01:56] Berridin: So I'm going to go straight up into three attacks.
+[02:02:00] GM: uh two hits
+[02:02:00] Berridin: On,
+[02:02:00] Berridin: on her.
+[02:02:01] Berridin: Uh,
+[02:02:02] Berridin: okay.
+[02:02:02] Berridin: So I'm just going to do it.
+[02:02:05] Berridin: Uh,
+[02:02:08] Berridin: can I just like hit this three times?
+[02:02:10] Berridin: Like 15,
+[02:02:13] Nyx: Fifteen.
+[02:02:15] Berridin: 18 and 16.
+[02:02:21] GM: mm-hmm
+[02:02:23] Berridin: Okay.
+[02:02:24] Berridin: Um,
+[02:02:29] Berridin: uh,
+[02:02:29] Berridin: I'm going to use another,
+[02:02:30] Berridin: uh,
+[02:02:31] Berridin: defensive flourish for one of them.
+[02:02:34] GM: mm-hmm
+[02:02:35] Berridin: Um,
+[02:02:35] Berridin: okay.
+[02:02:35] Berridin: Let me,
+[02:02:36] Berridin: let me do the attacks first.
+[02:02:37] Berridin: Uh,
+[02:02:37] Berridin: okay.
+[02:02:38] Berridin: Attack damage is nine.
+[02:02:41] Berridin: And then the defensive hit,
+[02:02:44] Berridin: uh,
+[02:02:44] Berridin: flourish is one D six.
+[02:02:46] Berridin: So that's two,
+[02:02:49] Berridin: uh,
+[02:02:50] Berridin: 11 damage for one of the attacks.
+[02:02:53] Berridin: And,
+[02:02:54] Berridin: um,
+[02:02:55] Berridin: uh,
+[02:02:57] Berridin: and sorry,
+[02:02:58] Berridin: phantom hex too.
+[02:02:58] Berridin: Sorry.
+[02:02:59] Berridin: I have to do that one.
+[02:03:00] Berridin: Okay.
+[02:03:02] Berridin: Okay.
+[02:03:03] Berridin: Uh,
+[02:03:03] Berridin: 13 damage for attack one.
+[02:03:05] Berridin: And then I will do a second attack.
+[02:03:10] Berridin: It's four plus phantom hex.
+[02:03:13] Berridin: Again,
+[02:03:13] Berridin: seven damage for the second attack.
+[02:03:24] GM: all right seven damage for your next attack or ten in total
+[02:03:26] Berridin: Yeah.
+[02:03:27] Berridin: Seven for the,
+[02:03:28] GM: big
+[02:03:28] Berridin: uh,
+[02:03:32] Berridin: what did I say?
+[02:03:32] Berridin: The first one was 13 and seven.
+[02:03:33] GM: well
+[02:03:35] GM: okay yeah because i see another hex that's why i saw a second hex that's why
+[02:03:39] Berridin: Oh yeah.
+[02:03:40] Berridin: I'm sorry.
+[02:03:41] Berridin: I I'm,
+[02:03:41] Berridin: I'm looking at the dice and I'm not looking.
+[02:03:42] Berridin: Okay.
+[02:03:43] Berridin: You're right.
+[02:03:43] Berridin: It is 10 for the second attack.
+[02:03:44] GM: that's fine
+[02:03:45] Berridin: Yeah.
+[02:03:46] GM: okay and so you can inc so um your defensive flourish only lost in the beginning of your next turn so i guess you're renewing that so you have a higher ac
+[02:03:54] Berridin: Yeah.
+[02:03:55] Berridin: Yeah.
+[02:03:56] Berridin: I have 16 now.
+[02:03:57] Berridin: Yeah.
+[02:03:58] GM: okay and nice
+[02:04:02] GM: cool cool cool um any you movement that's fine no uh if you move out yeah as long as you don't leave the her reach which is five nice alara it is your turn uh uh wait no it's uh until the start of the bandits next turn yeah so you're still blind it they do nothing
+[02:04:08] Berridin: Um,
+[02:04:08] Berridin: no,
+[02:04:09] Berridin: I'll,
+[02:04:09] Berridin: I'll stick.
+[02:04:10] Berridin: I'll,
+[02:04:10] Berridin: I'll,
+[02:04:10] Berridin: I'll,
+[02:04:11] Berridin: I'll,
+[02:04:11] Berridin: I'll move.
+[02:04:12] Berridin: If I,
+[02:04:12] Berridin: if I move slightly like South of her,
+[02:04:14] Berridin: will that trigger an attack?
+[02:04:16] Berridin: Okay.
+[02:04:16] Berridin: Okay.
+[02:04:17] Berridin: As long as I don't,
+[02:04:17] Berridin: I'll leave.
+[02:04:19] Berridin: Okay.
+[02:04:22] Berridin: Okay.
+[02:04:23] Berridin: I'll try to move it a little bit.
+[02:04:24] Berridin: So,
+[02:04:24] Berridin: okay.
+[02:04:25] Berridin: That's perfect.
+[02:04:29] Nyx: Bobby, are we still...
+[02:04:30] Nyx: Is Alara, Witty, and I...
+[02:04:32] Nyx: Are we still blinded?
+[02:04:36] Whitaker "Witty" Whitman VI: I'm not blinded.
+[02:04:38] Ellara: i think you aren't anymore you said it was one turn or was it forever okay so then yes um she
+[02:04:41] Nyx: Yeah, it was one or two turns.
+[02:04:48] Nyx: Uh, she hasn't gone yet.
+[02:04:49] Nyx: We're still blinded.
+[02:04:50] Nyx: Okay.
+[02:04:51] Berridin: What if you are already a blind character?
+[02:04:54] Berridin: Like what would,
+[02:04:56] Berridin: like a,
+[02:04:57] Ellara: and hopefully you have solutions for that she will i guess heal herself probably
+[02:04:58] GM: true sight
+[02:05:00] GM: you'd probably have like true sight or something
+[02:05:01] Berridin: like a daredevil character?
+[02:05:04] Nyx: Yeah.
+[02:05:05] GM: yeah you're touching yourself
+[02:05:13] Ellara: It's a touch spell, so I don't think there's any disadvantages.
+[02:05:18] GM: mm-hmm
+[02:05:20] Berridin: Yeah,
+[02:05:22] Ellara: Heal for 10, and I'll move right here.
+[02:05:23] GM: yeah
+[02:05:30] GM: don't like that last time
+[02:05:32] GM: mm-hmm
+[02:05:34] GM: mm-hmm
+[02:05:35] Ellara: Presumably now the bandit can't see me at all, right?
+[02:05:36] GM: well they could still do an aoe
+[02:05:44] GM: uh
+[02:05:45] Ellara: Sure, but they wouldn't know where I am, in theory.
+[02:05:54] GM: you would have to do a hide action
+[02:05:56] GM: we're also seeing the tops of the trees the tops can be like fairly like
+[02:05:59] Ellara: Okay. I mean, sure, I'll just stay where I am.
+[02:06:07] Ellara: Yeah, that's fair. I'm good.
+[02:06:10] GM: um okay so
+[02:06:11] Ellara: I knew all my geometry studies would pay off.
+[02:06:12] GM: witty it is your turn
+[02:06:15] Whitaker "Witty" Whitman VI: As a question,
+[02:06:16] Whitaker "Witty" Whitman VI: so I can only cast three spells
+[02:06:19] Whitaker "Witty" Whitman VI: and then I have to rest again, right?
+[02:06:21] GM: yeah yeah
+[02:06:21] Whitaker "Witty" Whitman VI: Or like, wait, can I like...
+[02:06:22] Whitaker "Witty" Whitman VI: Okay, so I can only cast one more spell
+[02:06:25] Whitaker "Witty" Whitman VI: in this entire encounter.
+[02:06:27] Berridin: it sucks.
+[02:06:28] GM: uh
+[02:06:28] Whitaker "Witty" Whitman VI: Okay.
+[02:06:30] GM: well
+[02:06:32] GM: you're level three eventually you'll have like a bunch of level one slots and then like you build up
+[02:06:35] Whitaker "Witty" Whitman VI: Yeah, yeah.
+[02:06:36] GM: yeah it sucks but you can uh do pro spellcasters can do probably the most damn it sometimes like yeah i mean that's a whole warlock thing
+[02:06:37] Whitaker "Witty" Whitman VI: Okay.
+[02:06:37] Whitaker "Witty" Whitman VI: Yeah.
+[02:06:42] Berridin: You can,
+[02:06:43] Whitaker "Witty" Whitman VI: Mm-hmm.
+[02:06:43] Berridin: you,
+[02:06:43] Berridin: you can also like,
+[02:06:44] Berridin: uh,
+[02:06:45] Berridin: add cantrips that are damaged cantrips.
+[02:06:47] Berridin: Um,
+[02:06:48] Whitaker "Witty" Whitman VI: Okay.
+[02:06:48] Berridin: and that will,
+[02:06:49] Whitaker "Witty" Whitman VI: Okay.
+[02:06:50] Whitaker "Witty" Whitman VI: Can I...
+[02:06:51] Berridin: yeah.
+[02:06:52] Whitaker "Witty" Whitman VI: Mm-hmm.
+[02:06:54] Whitaker "Witty" Whitman VI: Am I...
+[02:06:54] Berridin: And you can like,
+[02:06:55] Whitaker "Witty" Whitman VI: Yeah, yeah, yeah.
+[02:06:55] Berridin: you can attack,
+[02:06:56] Berridin: you can throw your dagger too,
+[02:06:57] Berridin: or something like,
+[02:06:59] GM: yeah
+[02:06:59] Whitaker "Witty" Whitman VI: Am I able to move then cast?
+[02:07:01] GM: yeah i don't care what order
+[02:07:06] GM: oh okay um so we're just gonna have to go through that so we're just gonna have to go through that
+[02:07:07] GM: Oh, OK.
+[02:07:07] Whitaker "Witty" Whitman VI: Okay, cool.
+[02:07:08] Whitaker "Witty" Whitman VI: So I'm going to like,
+[02:07:09] Whitaker "Witty" Whitman VI: kind of like sneak through the trees here
+[02:07:11] Whitaker "Witty" Whitman VI: a little bit
+[02:07:12] Whitaker "Witty" Whitman VI: to like get a nice little like angle.
+[02:07:16] Whitaker "Witty" Whitman VI: And then I'm going to...
+[02:07:20] Whitaker "Witty" Whitman VI: Um...
+[02:07:21] Whitaker "Witty" Whitman VI: Cast Tasha's Caustic Brew.
+[02:07:30] Whitaker "Witty" Whitman VI: Um...
+[02:07:31] Whitaker "Witty" Whitman VI: Which...
+[02:07:32] Whitaker "Witty" Whitman VI: So like a stream of acid emanates from me
+[02:07:35] Whitaker "Witty" Whitman VI: in a line 30 feet long and 5 feet wide.
+[02:07:40] Whitaker "Witty" Whitman VI: Um...
+[02:07:42] GM: OK, you're going to aim the line.
+[02:07:44] GM: Ah, nice.
+[02:07:44] Whitaker "Witty" Whitman VI: Yeah.
+[02:07:45] Whitaker "Witty" Whitman VI: But I don't...
+[02:07:45] Berridin: okay,
+[02:07:46] Berridin: good.
+[02:07:47] Berridin: I like it.
+[02:07:48] Whitaker "Witty" Whitman VI: How do I do this?
+[02:07:50] Whitaker "Witty" Whitman VI: Oh, there you go.
+[02:07:50] Berridin: Try to look for the cone overlay.
+[02:07:52] Berridin: If that exists.
+[02:07:53] GM: No, there's a line overlay.
+[02:07:54] Berridin: Oh,
+[02:07:55] Berridin: line overlay.
+[02:07:55] Berridin: Sorry.
+[02:07:57] GM: It's 30 feet long, 5 feet wide.
+[02:08:00] GM: I think it automatically does 5 feet.
+[02:08:00] Whitaker "Witty" Whitman VI: Yep.
+[02:08:03] GM: So this is, yeah, you could, oh, you would be very close.
+[02:08:03] Whitaker "Witty" Whitman VI: Perfect.
+[02:08:07] GM: So basically, right in front of Yesenor and Dan,
+[02:08:10] GM: you just see like acid.
+[02:08:12] Whitaker "Witty" Whitman VI: Yep.
+[02:08:13] Whitaker "Witty" Whitman VI: Yep.
+[02:08:14] GM: And a deck save.
+[02:08:14] Whitaker "Witty" Whitman VI: Yeah.
+[02:08:14] Berridin: Acid.
+[02:08:15] Whitaker "Witty" Whitman VI: It's like a green bubbling gas
+[02:08:17] Whitaker "Witty" Whitman VI: that is very, very caustic.
+[02:08:24] Whitaker "Witty" Whitman VI: Yeah, it's like a bubbling,
+[02:08:26] Whitaker "Witty" Whitman VI: popping, sizzling
+[02:08:28] Whitaker "Witty" Whitman VI: green gas.
+[02:08:31] GM: OK, they have to do a deck save.
+[02:08:33] GM: Cool, cool, cool, cool.
+[02:08:35] GM: Where is my battle map?
+[02:08:36] GM: Sorry, I really should put it on a separate thing.
+[02:08:40] GM: Deck save, they have, they get a 16.
+[02:08:44] GM: So I believe they save because your DC is a 13.
+[02:08:48] GM: Cool, they'll still probably take some damage.
+[02:08:52] Whitaker "Witty" Whitman VI: No, nothing.
+[02:08:53] Ellara: No. Unfortunately.
+[02:08:57] GM: Oh, they take none.
+[02:08:59] GM: Oh, it's not one of those.
+[02:09:00] GM: Oh, I'm sorry.
+[02:09:01] Ellara: This one is, if it hits, then it's really annoying,
+[02:09:01] Whitaker "Witty" Whitman VI: Yeah.
+[02:09:04] Ellara: because they have to waste an action to get it off.
+[02:09:05] Whitaker "Witty" Whitman VI: Yeah.
+[02:09:06] Whitaker "Witty" Whitman VI: I missed all three of my spells.
+[02:09:06] Berridin: I should have chosen.
+[02:09:07] GM: OK.
+[02:09:11] Ellara: Oh, I've been there. I've been there.
+[02:09:11] Berridin: Okay.
+[02:09:12] GM: No, Greece, they're still in Greece.
+[02:09:12] Berridin: It's okay.
+[02:09:14] Berridin: Yeah.
+[02:09:16] GM: They just haven't moved.
+[02:09:16] Whitaker "Witty" Whitman VI: Oh, yeah, yeah.
+[02:09:16] Whitaker "Witty" Whitman VI: It's still difficult terrain.
+[02:09:18] Whitaker "Witty" Whitman VI: Okay.
+[02:09:19] GM: Yeah.
+[02:09:20] Whitaker "Witty" Whitman VI: Um...
+[02:09:21] Whitaker "Witty" Whitman VI: Okay.
+[02:09:21] Whitaker "Witty" Whitman VI: Okay, that's it.
+[02:09:22] GM: And by the way, movement, you have 30 feet in your turn.
+[02:09:25] GM: So you can like move, do an attack, move.
+[02:09:28] GM: Like, I don't care.
+[02:09:29] GM: Like, they would do that before, where it's like,
+[02:09:29] Whitaker "Witty" Whitman VI: Okay, yeah.
+[02:09:31] GM: I'm hiding behind a tree that gives me cover.
+[02:09:34] GM: They move out of the way, poom, move back in.
+[02:09:37] GM: That was a classic, classic spell.
+[02:09:40] GM: Spell caster, they're like, oh, I'm going to lean out the door.
+[02:09:44] GM: Cast, go back in.
+[02:09:45] Nyx: Yeah.
+[02:09:46] GM: I have a wall.
+[02:09:46] Berridin: Yeah.
+[02:09:48] GM: So you can be annoying about it.
+[02:09:49] Whitaker "Witty" Whitman VI: Yeah, so I'll...
+[02:09:50] Whitaker "Witty" Whitman VI: Oops.
+[02:09:52] Whitaker "Witty" Whitman VI: I have the wrong one.
+[02:09:53] Whitaker "Witty" Whitman VI: Sorry.
+[02:09:54] GM: No, it's fine.
+[02:09:54] GM: Eh.
+[02:09:54] Whitaker "Witty" Whitman VI: Um...
+[02:09:54] Whitaker "Witty" Whitman VI: So yeah, then I'm going to...
+[02:09:56] Whitaker "Witty" Whitman VI: Let's see.
+[02:09:57] Whitaker "Witty" Whitman VI: So I was here.
+[02:09:58] Whitaker "Witty" Whitman VI: So I went from here to here.
+[02:10:00] GM: I think I'm like 10 feet.
+[02:10:00] Whitaker "Witty" Whitman VI: And now, uh...
+[02:10:02] Whitaker "Witty" Whitman VI: Yeah, everything...
+[02:10:03] Whitaker "Witty" Whitman VI: Everything's really, really falling apart for me.
+[02:10:05] Whitaker "Witty" Whitman VI: So I am...
+[02:10:06] Whitaker "Witty" Whitman VI: I am running away.
+[02:10:08] Whitaker "Witty" Whitman VI: I don't think so.
+[02:10:10] GM: Fair, fair, fair.
+[02:10:11] GM: Isidore, your turn.
+[02:10:18] GM: OK, go for it.
+[02:10:23] GM: 19 hits.
+[02:10:29] Ysidor: he needs to hit he hits it uh nine then i'm gonna do my last divine smite 15 and i still
+[02:10:41] Ysidor: have my divine favor so you can't say that oh and then she has this advantage on her
+[02:10:48] GM: Oh, I just did it as we went.
+[02:10:50] GM: It's.
+[02:10:50] GM: It's.
+[02:10:51] GM: It's.
+[02:10:51] GM: It's.
+[02:10:52] GM: It was like 26 points of damage.
+[02:10:55] GM: But yeah.
+[02:10:57] GM: Yeah.
+[02:10:59] GM: What?
+[02:11:01] Ysidor: next attack
+[02:11:02] Ysidor: roll yeah no not the little guy yeah was it a crit what was it let's see no i got it
+[02:11:03] GM: Yeah, on the first one, right?
+[02:11:06] GM: Cool, it's her turn.
+[02:11:09] GM: She's getting a little annoyed, but she's
+[02:11:10] GM: going to go for the little guy.
+[02:11:16] GM: Disadvantage on the first one, right?
+[02:11:27] GM: Double crit.
+[02:11:27] Ellara: Don't like this. Oh god.
+[02:11:32] Berridin: On me,
+[02:11:33] Berridin: on me.
+[02:11:34] GM: Unferited.
+[02:11:36] GM: Do you have a spell slot?
+[02:11:36] Berridin: Uh,
+[02:11:37] Berridin: can I,
+[02:11:37] Berridin: can I,
+[02:11:37] Berridin: um,
+[02:11:38] Berridin: can I cast a silvery,
+[02:11:40] Ysidor: right away oh my god it was a double crit that's crazy
+[02:11:40] Berridin: silvery barbs?
+[02:11:41] Berridin: To,
+[02:11:42] Berridin: uh,
+[02:11:43] Berridin: to reroll one of them?
+[02:11:44] Berridin: Yeah.
+[02:11:46] GM: That is wild.
+[02:11:46] Berridin: Yeah.
+[02:11:47] Berridin: I have,
+[02:11:48] Berridin: I have,
+[02:11:49] Berridin: I have one spell slot.
+[02:11:54] GM: Yes, you can cast silver.
+[02:11:55] Ysidor: it makes sense like you like a chemist wouldn't be like
+[02:11:55] GM: You know some DMs ban silvery bar.
+[02:11:58] GM: Oops.
+[02:11:58] GM: I turned .
+[02:11:58] Berridin: I have two spell slots left.
+[02:11:59] Berridin: It's probably too OP,
+[02:12:00] Berridin: but yeah,
+[02:12:01] Berridin: I'm only using it for this situation.
+[02:12:02] Berridin: Well,
+[02:12:09] Berridin: I mean,
+[02:12:10] Berridin: actually,
+[02:12:11] GM: Wait, no, it's fine.
+[02:12:11] Berridin: what's what,
+[02:12:12] Berridin: what's up to you,
+[02:12:13] GM: Oh, yeah.
+[02:12:13] Berridin: Bobby?
+[02:12:14] GM: I'm fine with it.
+[02:12:16] GM: I just wanted to know what it did.
+[02:12:17] GM: I was going to take it away.
+[02:12:18] GM: I wouldn't.
+[02:12:18] Berridin: Do you,
+[02:12:19] GM: If I were to take it away, it wouldn't be now.
+[02:12:21] GM: It'd be later.
+[02:12:22] GM: But I'm not going to.
+[02:12:23] GM: I would never fuck you over in the moment.
+[02:12:26] Berridin: do you want to,
+[02:12:27] Berridin: do you want to play with silvery bomb?
+[02:12:28] Berridin: Okay.
+[02:12:29] Berridin: No,
+[02:12:30] GM: to see on the social change casting,
+[02:12:32] GM: which you take when a creature you see with.
+[02:12:35] GM: OK, yeah.
+[02:12:36] GM: You magically distract the character and turn over.
+[02:12:41] GM: Okay, so they would
+[02:12:42] GM: and use the lower roll. So they just roll
+[02:12:45] GM: one more d20. If they get another
+[02:12:46] Berridin: no,
+[02:12:47] GM: nat 20, that would be hilarious.
+[02:12:47] Berridin: whatever,
+[02:12:48] Berridin: whatever,
+[02:12:49] Berridin: whatever makes sense in your head in terms of balance.
+[02:12:50] GM: This was a good chance.
+[02:12:50] Berridin: Yeah.
+[02:12:51] Berridin: Okay.
+[02:12:52] Berridin: Now I would,
+[02:12:55] GM: Okay.
+[02:12:57] GM: Okay, okay, okay.
+[02:12:58] GM: So let's go back to the map.
+[02:13:00] GM: Yeah, silvery barbs is
+[02:13:02] GM: legit. I need to
+[02:13:04] GM: I'm just going to roll the attack roll
+[02:13:06] GM: again, just like flat.
+[02:13:11] GM: 13
+[02:13:11] GM: does not hit.
+[02:13:15] GM: Okay. Yeah, so
+[02:13:15] Berridin: that doesn't hit,
+[02:13:16] GM: you can wait.
+[02:13:16] Berridin: but the other one hit,
+[02:13:17] Berridin: right?
+[02:13:18] GM: No, this is the first attack.
+[02:13:20] GM: She just had disadvantage on her first attack.
+[02:13:22] GM: I have two more hits.
+[02:13:23] Berridin: Okay.
+[02:13:24] Berridin: Okay.
+[02:13:25] GM: And you have no more
+[02:13:25] Berridin: Okay.
+[02:13:26] GM: reactions.
+[02:13:28] Berridin: I have no more reactions.
+[02:13:29] GM: Yeah, because it's only one reaction.
+[02:13:31] Berridin: Yeah.
+[02:13:32] GM: Okay.
+[02:13:32] Berridin: Yeah.
+[02:13:34] GM: So
+[02:13:34] GM: decide who you're going to give advantage
+[02:13:37] GM: to. You can give
+[02:13:39] GM: it to yourself, too. Yeah.
+[02:13:39] Berridin: Uh,
+[02:13:40] Berridin: myself,
+[02:13:41] GM: Seven does not
+[02:13:41] Berridin: I'll give it to myself.
+[02:13:42] GM: hit.
+[02:13:43] GM: And 12
+[02:13:44] Berridin: Yeah.
+[02:13:45] GM: doesn't hit.
+[02:13:46] GM: I lost all my luck with that.
+[02:13:47] Berridin: No hit,
+[02:13:48] Berridin: no hit.
+[02:13:49] GM: That was a
+[02:13:49] Berridin: Okay.
+[02:13:50] GM: You realize I would
+[02:13:50] Berridin: Yeah.
+[02:13:51] Berridin: I think that would have been a permadeath too.
+[02:13:52] Berridin: Holy shit.
+[02:13:53] GM: have killed you like 10
+[02:13:55] GM: times over.
+[02:13:56] GM: I think.
+[02:13:57] Nyx: Damn.
+[02:13:57] Berridin: You should roll it anyways.
+[02:13:58] Berridin: Just want to see what,
+[02:13:59] GM: No,
+[02:13:59] Berridin: let's see what it is.
+[02:14:00] Berridin: Okay.
+[02:14:01] GM: like, just the poison
+[02:14:01] Berridin: Okay.
+[02:14:02] Berridin: Okay.
+[02:14:03] GM: alone would have been
+[02:14:04] GM: 6d6 of poison damage.
+[02:14:08] Berridin: Okay.
+[02:14:09] Ellara: Mamma mia. Wait, did I not go?
+[02:14:09] Berridin: Okay.
+[02:14:10] Berridin: Okay.
+[02:14:11] Berridin: Okay.
+[02:14:12] Berridin: Okay.
+[02:14:13] GM: Oh, yeah, like, let's
+[02:14:14] GM: see. It would have been
+[02:14:16] GM: 30 points just
+[02:14:16] Berridin: Okay.
+[02:14:17] GM: on the poison.
+[02:14:17] Berridin: That's a,
+[02:14:21] Berridin: that's a lot of,
+[02:14:22] GM: 11 on that plus two more
+[02:14:22] Berridin: that's a lot of fives.
+[02:14:23] Berridin: Damn
+[02:14:24] GM: d4s. So, like, that would average
+[02:14:26] GM: out to four more points. So, it would
+[02:14:28] GM: have been, like, 45 points of damage
+[02:14:30] GM: ish in the ballpark.
+[02:14:35] Nyx: Damn.
+[02:14:35] Berridin: these bees of sweat going down Baradun's.
+[02:14:38] GM: I think I shat myself.
+[02:14:44] GM: By the way, I forgot to
+[02:14:46] GM: roll one thing. I just need to roll
+[02:14:48] GM: a d6.
+[02:14:51] GM: Oh, okay. I don't get that back.
+[02:14:53] GM: Cool.
+[02:14:56] GM: D6. It is your turn.
+[02:14:57] Nyx: Yeah.
+[02:14:58] Nyx: My turn.
+[02:14:59] Nyx: So, I'm no longer blinded.
+[02:14:59] GM: You're no longer blinded.
+[02:15:02] Nyx: Fantastic.
+[02:15:03] Nyx: And you might be happy to hear I'm not, though.
+[02:15:07] Nyx: I no longer have Dreadful Strike.
+[02:15:09] GM: You're
+[02:15:10] Nyx: So, I do have one more Hunter's Mark, but I...
+[02:15:10] GM: No, no.
+[02:15:15] Nyx: And I won't use it.
+[02:15:16] Nyx: I will use my Hunter's Mark.
+[02:15:17] Nyx: But first, I need a roll.
+[02:15:18] GM: It's a concentration. So, you
+[02:15:20] GM: hold the spell. The spell's still in effect.
+[02:15:23] GM: And you can't hold two
+[02:15:24] GM: concentrations. Yeah.
+[02:15:25] Nyx: And I can use it twice without expending a spell slot.
+[02:15:29] Nyx: I get it.
+[02:15:30] Nyx: Okay.
+[02:15:31] Nyx: Good.
+[02:15:31] GM: So, if you had to recast it.
+[02:15:32] Nyx: Got it.
+[02:15:33] Nyx: That's a whole different story.
+[02:15:34] Nyx: That's a whole different story.
+[02:15:35] Nyx: Okay.
+[02:15:35] Nyx: Cool.
+[02:15:38] Nyx: I'm going to attack with my crossbow.
+[02:15:43] GM: Go for it.
+[02:15:45] Nyx: Eighteen.
+[02:15:46] Nyx: Hit.
+[02:15:46] GM: 18 hits.
+[02:15:52] Nyx: Four points of damage.
+[02:15:53] GM: You really roll shit on damage.
+[02:15:55] Nyx: I know.
+[02:15:56] Nyx: Now I'm going to do the Hunter's Mark.
+[02:16:00] Nyx: And four points of damage on the Hunter's Mark.
+[02:16:03] Nyx: I do well on Hunter's Mark.
+[02:16:05] Nyx: Everything but my attack.
+[02:16:07] GM: Yeah.
+[02:16:07] GM: I'm gonna move.
+[02:16:09] Nyx: No, I'm going to stay hidden.
+[02:16:12] GM: Excuse me.
+[02:16:13] GM: Din, your turn.
+[02:16:16] Berridin: all right.
+[02:16:17] Berridin: Um,
+[02:16:18] Berridin: I somehow still have my Phantom hex up,
+[02:16:20] Berridin: so I'm going to go for the attack.
+[02:16:22] Berridin: My triple attack 11 dirty 20,
+[02:16:23] GM: I can't believe I rolled two nat 20s.
+[02:16:28] GM: That was crazy.
+[02:16:29] GM: Just imagine.
+[02:16:33] Nyx: Yeah.
+[02:16:33] GM: You're after Din.
+[02:16:38] Berridin: and then eight.
+[02:16:39] Ellara: Hold on.
+[02:16:39] Berridin: Yeah.
+[02:16:44] GM: Wait.
+[02:16:44] Berridin: So I think only,
+[02:16:46] GM: Did we skip you
+[02:16:46] Berridin: Did we skip someone?
+[02:16:47] Nyx: Did we skip?
+[02:16:47] Berridin: Sorry.
+[02:16:48] Berridin: no no no you already went because uh that was the healing yourself touching yourself thing
+[02:16:49] Nyx: Wait, if we look...
+[02:16:49] Nyx: What?
+[02:16:50] GM: earlier, Alara?
+[02:16:53] GM: Okay.
+[02:16:53] Ellara: Yeah. No, I didn't go last round.
+[02:16:53] Whitaker "Witty" Whitman VI: Um, all right.
+[02:16:55] GM: Okay.
+[02:16:58] Berridin: yeah you touch yourself remember okay cool uh i'm gonna cast my last bardic inspiration
+[02:16:59] Ellara: Oh, I did heal. Sorry, I didn't write it down.
+[02:17:00] GM: Yeah.
+[02:17:01] Ellara: Yeah, yeah, yeah. Sorry.
+[02:17:02] GM: Hi, Alastair.
+[02:17:03] GM: Yeah.
+[02:17:04] GM: Only the dirty 20 hits.
+[02:17:07] Nyx: Did I leave my...
+[02:17:09] GM: What are you doing?
+[02:17:10] GM: Oh, he's proud.
+[02:17:12] Nyx: Oh, I see.
+[02:17:12] Berridin: and three yeah 16 damage yeah and i'll stay i'll stay um i'll stay where i am rhythm game
+[02:17:13] Nyx: Okay.
+[02:17:20] Nyx: Oh, mon petit chou.
+[02:17:21] Nyx: Oh, mon petit chou.
+[02:17:21] Ellara: So, that is...
+[02:17:23] Nyx: Mon petit chou-fleur.
+[02:17:27] Nyx: My little cauliflower.
+[02:17:32] GM: So, that's
+[02:17:33] GM: eight and five damage.
+[02:17:39] GM: Okay, another eight. I didn't get the other one.
+[02:17:40] GM: So, 16. Cool.
+[02:17:43] GM: Yeah.
+[02:17:45] GM: Anything else?
+[02:17:49] GM: Nice.
+[02:17:50] GM: Yeah.
+[02:17:51] GM: Looking a bit fucked up.
+[02:17:53] GM: Um, Alara, it is...
+[02:17:57] GM: What is he?
+[02:17:59] GM: Oh.
+[02:17:59] Ellara: Hmm?
+[02:18:01] GM: It's a dryer ball.
+[02:18:02] GM: Um, Alara, it's your turn.
+[02:18:06] Ellara: Do Guiding Bolt.
+[02:18:08] Ellara: Let's attack roll. Oh my god.
+[02:18:10] GM: Yeah.
+[02:18:11] Ellara: 13.
+[02:18:13] GM: Does not hit.
+[02:18:15] Ellara: And...
+[02:18:18] GM: As you level up, it's easier to hit, but this also has high AC.
+[02:18:22] GM: I see.
+[02:18:23] GM: Um, okay, Witty, it is your turn.
+[02:18:23] Ellara: Yeah, that's it. I'll just move a little further here.
+[02:18:26] Ellara: Oops.
+[02:18:33] Whitaker "Witty" Whitman VI: So...
+[02:18:34] Whitaker "Witty" Whitman VI: Uh...
+[02:18:34] Whitaker "Witty" Whitman VI: I'm just going to...
+[02:18:38] Whitaker "Witty" Whitman VI: I'm just going to...
+[02:18:39] Whitaker "Witty" Whitman VI: I'm kind of...
+[02:18:40] Whitaker "Witty" Whitman VI: I'm kind of getting a little bored here.
+[02:18:43] Whitaker "Witty" Whitman VI: Uh...
+[02:18:44] Whitaker "Witty" Whitman VI: Like, I'm just not helping.
+[02:18:45] Whitaker "Witty" Whitman VI: I need to spice things up a little bit.
+[02:18:47] Whitaker "Witty" Whitman VI: So I'm just going to cast, like,
+[02:18:48] Whitaker "Witty" Whitman VI: Minor Illusion.
+[02:18:51] Whitaker "Witty" Whitman VI: Because that's really all I can do at the moment.
+[02:18:55] Whitaker "Witty" Whitman VI: And I'm going to get some, like...
+[02:18:58] Whitaker "Witty" Whitman VI: Like, you know in, uh...
+[02:19:00] Whitaker "Witty" Whitman VI: In Mad Max Fury Road,
+[02:19:01] Whitaker "Witty" Whitman VI: how that guitarist was just kind of, like,
+[02:19:03] Whitaker "Witty" Whitman VI: just playing some rock music during the chase.
+[02:19:06] Whitaker "Witty" Whitman VI: I'm just going to get some drums going.
+[02:19:08] Whitaker "Witty" Whitman VI: Uh...
+[02:19:09] Whitaker "Witty" Whitman VI: Above the fire pit.
+[02:19:12] Whitaker "Witty" Whitman VI: Just get some...
+[02:19:13] Whitaker "Witty" Whitman VI: Some nice fighting music.
+[02:19:16] Whitaker "Witty" Whitman VI: Uh...
+[02:19:16] Whitaker "Witty" Whitman VI: Mortal Kombat-style music going.
+[02:19:20] Berridin: no go ahead sorry yeah yeah yeah i don't know if you wanted to use like your other stuff that you
+[02:19:21] Whitaker "Witty" Whitman VI: Yeah.
+[02:19:21] Whitaker "Witty" Whitman VI: And then I'm just going to...
+[02:19:22] Whitaker "Witty" Whitman VI: I'm also, like...
+[02:19:24] Whitaker "Witty" Whitman VI: I'm just going to kind of inch a little bit closer.
+[02:19:27] GM: Okay.
+[02:19:27] Whitaker "Witty" Whitman VI: Because I'm going to get re...
+[02:19:28] Whitaker "Witty" Whitman VI: I'm going to get...
+[02:19:28] Whitaker "Witty" Whitman VI: I'm going to get ready to maybe...
+[02:19:30] Whitaker "Witty" Whitman VI: Maybe do something.
+[02:19:32] GM: Okay.
+[02:19:32] Whitaker "Witty" Whitman VI: So I'm going to get right in the tree line there.
+[02:19:33] GM: Um, no worries.
+[02:19:39] GM: Also, I would say...
+[02:19:41] GM: What?
+[02:19:44] GM: Oh, I would say, like, whatever it was your flask you have ready, you probably have that on you as well.
+[02:19:50] Whitaker "Witty" Whitman VI: Oh, I have to make...
+[02:19:50] Whitaker "Witty" Whitman VI: I didn't...
+[02:19:51] Whitaker "Witty" Whitman VI: I didn't roll one.
+[02:19:52] Whitaker "Witty" Whitman VI: I didn't roll one earlier.
+[02:19:53] GM: Yeah, just roll one.
+[02:19:54] Whitaker "Witty" Whitman VI: Okay.
+[02:20:02] Whitaker "Witty" Whitman VI: Now I'm going to use the ones that they have on there.
+[02:20:02] Berridin: have matt you can yeah uh i was gonna say um just for matt's edification it's you don't only have
+[02:20:05] Whitaker "Witty" Whitman VI: I just have to find them.
+[02:20:08] Whitaker "Witty" Whitman VI: Like, which ones I have to roll and stuff.
+[02:20:11] GM: It's, uh, and it's, we're using the 20-24 rule, so it's better than the, for that.
+[02:20:12] Whitaker "Witty" Whitman VI: Oops.
+[02:20:19] GM: I...
+[02:20:20] GM: We...
+[02:20:21] GM: What is...
+[02:20:26] Berridin: to think of your turn as um in the action economy there's a lot of other things you can do like you
+[02:20:33] Berridin: can also use some of your you can give the help action yeah you can there's other actions you can
+[02:20:35] GM: You can give help.
+[02:20:40] Berridin: take you know you can also do like skill checks if there's some things like you can you can ask
+[02:20:42] Whitaker "Witty" Whitman VI: Oh, I see.
+[02:20:45] Berridin: bobby like do you notice anything
+[02:20:47] Berridin: do i notice anything and then he'll have you roll like a perception check and something
+[02:20:50] Nyx: Yep.
+[02:20:50] Ellara: Yeah.
+[02:20:50] Ellara: Yeah, I mean, it also looks like you can infuse items and use Artificer infusions,
+[02:20:51] Berridin: sometimes they can help like if you want to identify like their weakness or something or
+[02:20:56] Nyx: Right.
+[02:20:56] Berridin: if you want to learn something about them um yeah some interesting things and i i think we're gonna
+[02:20:58] Whitaker "Witty" Whitman VI: Okay.
+[02:21:01] Whitaker "Witty" Whitman VI: Um...
+[02:21:02] Whitaker "Witty" Whitman VI: Okay.
+[02:21:03] Berridin: we're gonna have to like maybe we'll have to change up some of your cantrips so that you
+[02:21:09] Berridin: have some sort of damaging option at your i do yeah yeah
+[02:21:18] Ellara: but those probably need to be prepped in advance.
+[02:21:21] Ellara: Wait, so what is that? What did you put?
+[02:21:22] Berridin: what if there's like a crazy like prep guy there's so many things that when you wake up you have to go
+[02:21:24] Nyx: Yeah.
+[02:21:28] Berridin: and do all these things but yeah yeah yeah the elixir right experimental yeah got someone yeah
+[02:21:34] Ysidor: ready to be like go like without any prep sorry does anyone need like is it is baron still like
+[02:21:38] Nyx: But it would make sense for Witty because it's like...
+[02:21:41] Nyx: Maybe that's like why he doesn't care about money or any of that stuff.
+[02:21:44] Nyx: Because your brain literally can't...
+[02:21:47] Nyx: You can't have that in your brain.
+[02:21:49] Nyx: It's so full of all this other stuff.
+[02:21:51] Nyx: Dun-dun-dun-dun-dun-dun-dun-dun-dun-dun-dun-dun-dun.
+[02:21:52] Whitaker "Witty" Whitman VI: Yes, yes, exactly.
+[02:21:58] Whitaker "Witty" Whitman VI: Okay, I don't...
+[02:21:59] Whitaker "Witty" Whitman VI: I can't figure out where to get...
+[02:22:00] Whitaker "Witty" Whitman VI: Find that list that we found earlier.
+[02:22:02] Whitaker "Witty" Whitman VI: With all the things I can...
+[02:22:04] Whitaker "Witty" Whitman VI: That I have to roll for.
+[02:22:05] GM: Wait, I'll get it for you.
+[02:22:07] GM: Um, I know it's...
+[02:22:09] GM: I'll get you the rules.
+[02:22:12] GM: Class.
+[02:22:14] GM: I think it's a 1d6, but I'll double check.
+[02:22:18] GM: Where is Artificer?
+[02:22:18] Whitaker "Witty" Whitman VI: Yeah, it should be.
+[02:22:21] GM: Uh, oh yeah, this is...
+[02:22:22] GM: This Artificer just came out, too.
+[02:22:24] GM: That's why.
+[02:22:26] GM: Uh, it's...
+[02:22:27] GM: The Eberron for to the Artificer.
+[02:22:31] GM: Uh, Alchemist.
+[02:22:34] GM: Yeah, it's a...
+[02:22:36] GM: I got it.
+[02:22:37] GM: Uh, it's a 1d6, uh, I mean, I'm just gonna put it in OC chat.
+[02:22:37] Berridin: go ahead sorry i'm fine i haven't gotten hit somehow no i uh dnd shenaniganed it away
+[02:22:45] GM: This is the table.
+[02:22:46] Whitaker "Witty" Whitman VI: And I got...
+[02:22:47] Whitaker "Witty" Whitman VI: A four.
+[02:22:50] Whitaker "Witty" Whitman VI: So...
+[02:22:50] Whitaker "Witty" Whitman VI: It's a boldness elixir.
+[02:22:51] GM: Boldness.
+[02:22:54] Whitaker "Witty" Whitman VI: Cool.
+[02:22:55] Whitaker "Witty" Whitman VI: So I have that...
+[02:22:55] Whitaker "Witty" Whitman VI: I have that just in...
+[02:22:57] Whitaker "Witty" Whitman VI: In my pocket.
+[02:22:59] GM: Yeah.
+[02:23:02] Whitaker "Witty" Whitman VI: Cool.
+[02:23:02] Whitaker "Witty" Whitman VI: I think I already used an action.
+[02:23:04] Whitaker "Witty" Whitman VI: So it's cool.
+[02:23:05] Whitaker "Witty" Whitman VI: I want the music still going.
+[02:23:09] GM: Okay.
+[02:23:09] Whitaker "Witty" Whitman VI: It's important.
+[02:23:10] Whitaker "Witty" Whitman VI: It's important, yeah.
+[02:23:11] Nyx: Modo.
+[02:23:12] GM: We're setting mood.
+[02:23:14] GM: Um, which would put it into a Isidore's turn.
+[02:23:25] Ysidor: not doing well you're fine well you didn't get hit like it cut out when i was bringing
+[02:23:33] Ysidor: arthur out you didn't get hit like that okay oh yeah it's true amazing okay
+[02:23:39] GM: Silvery Barbs.
+[02:23:40] GM: May him re-roll one of the...
+[02:23:41] Nyx: You barbed it away.
+[02:23:44] GM: Yeah.
+[02:23:48] Ysidor: so i know my spell salts as it is so let me just do war pick i know if 14 doesn't hit
+[02:24:01] Ysidor: do you have any bonus action i can do
+[02:24:03] GM: Doesn't hit.
+[02:24:08] Ysidor: let's see
+[02:24:10] Ysidor: i don't think so
+[02:24:13] Ysidor: i don't think so just see um um no i don't have an aura it's level five no pretty sure
+[02:24:21] Berridin: we do that thing where you're like you you buff people with that like the attack roll bonus or
+[02:24:26] Berridin: whatever from your subclass oh it's aura okay okay yeah that thing is wild stab me stab me
+[02:24:29] GM: Yeah, don't you have an aura?
+[02:24:30] Nyx: Here you are.
+[02:24:34] GM: Oh, you don't.
+[02:24:34] GM: Oh, okay.
+[02:24:38] GM: That's why.
+[02:24:39] Ysidor: no no then that gets crazy yeah when i get my aura that's wild let me just double check
+[02:24:45] Ysidor: but i'm like eight like i'm almost sure
+[02:24:47] Ysidor: no sorry level six yeah
+[02:24:53] Ysidor: and then that gets really good also all right that's all i can do for now um
+[02:25:02] Ysidor: trying to think we're not any bonus actions either okay i'm going to stay as is as a blocker
+[02:25:10] Ysidor: between the thief and the others no not anymore no oh my god thank god
+[02:25:19] GM: They, um...
+[02:25:21] GM: Uh, no.
+[02:25:22] GM: I was just seeing if I could do my thing.
+[02:25:24] Ellara: Oh. Okay. No, not this time, unfortunately.
+[02:25:26] GM: Um...
+[02:25:26] GM: Let's see.
+[02:25:27] GM: Because I got it back.
+[02:25:31] GM: It's like, do I stab Baradun, or do I throw this?
+[02:25:38] Berridin: asking for it he's just leering at her the entire time
+[02:25:41] GM: Um...
+[02:25:42] GM: Actually...
+[02:25:45] Berridin: i have i have a night i have a 19 ac from the defensive flourish because it's plus five
+[02:25:49] GM: I am going to stab you.
+[02:25:51] GM: Um...
+[02:25:52] GM: Let's see.
+[02:25:54] GM: I don't have any disadvantage shenanigans on me, right?
+[02:25:58] GM: No.
+[02:26:02] GM: Uh, a 7.
+[02:26:03] GM: Roll the fucking 1.
+[02:26:07] GM: 17 on Baradun.
+[02:26:09] GM: Um, okay.
+[02:26:10] GM: So, let's roll the damage.
+[02:26:11] GM: 10 plus...
+[02:26:13] GM: Oh, you have a 19?
+[02:26:18] GM: Oh, it was still showing 16.
+[02:26:20] Berridin: yeah i'm updating it every time but it's it was a lot of fun so i'm gonna do that next time
+[02:26:21] GM: Okay, let's...
+[02:26:23] Berridin: 22 points of damage okay uh do i need to roll an 11 a con save for the okay oh i did um it doesn't
+[02:26:25] GM: Okay, because it's showing 16 on my side.
+[02:26:27] GM: Ah, fuck.
+[02:26:28] GM: Okay, let's attack one time.
+[02:26:31] GM: Well...
+[02:26:32] GM: 23.
+[02:26:32] GM: 23.
+[02:26:33] GM: What's the damage roll from before?
+[02:26:34] GM: 22 points of damage.
+[02:26:44] GM: Yeah.
+[02:26:45] GM: You need to roll a con save.
+[02:26:47] GM: Uh, yeah, because it's half.
+[02:26:49] GM: And 11.
+[02:26:53] Berridin: matter i did yeah i did con it is a plus two anyways but okay i'll do it i i didn't get it
+[02:26:54] GM: No, that's a con check.
+[02:26:55] GM: I'll let you roll a con save.
+[02:26:57] GM: I'm being nice.
+[02:26:58] GM: Just hit the save.
+[02:27:01] GM: Okay.
+[02:27:02] GM: Well.
+[02:27:03] Berridin: i didn't get it i know the hex oh shit killer i'm struggling
+[02:27:04] GM: Okay.
+[02:27:05] GM: I low-key gave you advantage, but...
+[02:27:08] GM: Um, yeah.
+[02:27:10] GM: So, I lose, um...
+[02:27:12] GM: Whatever that was.
+[02:27:14] GM: I forgot.
+[02:27:14] GM: I forgot.
+[02:27:14] GM: But, yeah.
+[02:27:17] GM: I lose your hex.
+[02:27:19] GM: Um, I have my little flask,
+[02:27:21] GM: but I'm not gonna do
+[02:27:22] GM: anything else.
+[02:27:27] GM: Nick, your turn.
+[02:27:28] Nyx: Yay.
+[02:27:29] Nyx: All right.
+[02:27:31] Nyx: Uh, same deal.
+[02:27:32] Nyx: I'm gonna...
+[02:27:34] Nyx: Let me just double check that lovely map.
+[02:27:37] Nyx: Okay.
+[02:27:38] Nyx: Good.
+[02:27:39] Nyx: Same positioning.
+[02:27:41] Nyx: Um, I'm going to hit her with...
+[02:27:44] Nyx: All right.
+[02:27:46] Nyx: All right.
+[02:27:46] Nyx: We're going to do that.
+[02:27:47] Nyx: Lovely.
+[02:27:48] Nyx: Crossbow.
+[02:27:49] Nyx: So we're going to start with this. Nat fucking 20. Let's fucking go, baby. Okay. And then I'm going to, I got 11 points of damage plus, oh man, one. So 12 points of damage.
+[02:27:57] GM: Let's go!
+[02:27:58] GM: I think...
+[02:28:02] Berridin: one shot one shot let's go god damn it nixon oh that's nice i'm still standing
+[02:28:17] Nyx: Is that automatic? Is that my, yeah. And I got a six. Can I throw a rock at her? For that half point of damage. Yeah, exactly. Okay, perfect. Yeah, no, that's it. That's all I do.
+[02:28:22] GM: I think Hunter's Mark should be doubled.
+[02:28:25] GM: So, roll another 1d6.
+[02:28:28] GM: I'm being...
+[02:28:32] GM: 18 points of damage.
+[02:28:34] GM: Um, she's on death's door,
+[02:28:37] GM: but, uh, still standing.
+[02:28:38] GM: Um, anything else?
+[02:28:41] Berridin: we we don't all right she's looking pretty fucked up right how fucked up is she looking like she's
+[02:28:44] GM: No.
+[02:28:58] Ysidor: watch us miss every every attack until her next turn
+[02:29:08] Nyx: Let's go.
+[02:29:12] GM: Din, your turn.
+[02:29:16] GM: Yeah.
+[02:29:18] Berridin: like a few feet away okay okay i'm gonna do uh two attacks first
+[02:29:19] GM: Very fucked up.
+[02:29:27] Berridin: i'm gonna hold my bonus action depending on what happens in these two attacks
+[02:29:30] Berridin: oh i got a net 20 all right let's do this one i can't add anything to this um
+[02:29:36] Ysidor: oh wow
+[02:29:37] Ysidor: yes there's like you're gonna hit little long
+[02:29:37] GM: Roll damage.
+[02:29:43] Berridin: oh that's a really good roll 13 oh my god yes okay um i flip up i i uh i'm tossing up my
+[02:29:49] GM: How do you do this?
+[02:29:52] Nyx: You're treating us like you just dunked.
+[02:29:59] Berridin: the dagger in my hand and i as it's as it's like um as i toss it up
+[02:30:04] Berridin: i kind of jump up at the same time like an alley oop and i slam it into her eye
+[02:30:10] Berridin: right at the top and i'm kind of hanging like a halfling kind of like
+[02:30:14] Berridin: was one-handed from the eye socket and then i i slowly drop down
+[02:30:19] Berridin: did you guys see that
+[02:30:25] GM: I wanna see this after Trust Me.
+[02:30:28] GM: Yeah, combat is over.
+[02:30:29] Ellara: Ah. Yeah. That's literally...
+[02:30:31] Berridin: yeah exactly i just passed it to myself and then ducked
+[02:30:40] Nyx: Yeah. Yeah. She's very dead.
+[02:30:46] Berridin: oh yeah wait we have an option oh i didn't even cross my mind so it's definitely lethal
+[02:30:48] GM: Um, I assume you killed her.
+[02:30:50] GM: Um, well,
+[02:30:52] Nyx: Can we search? Nick's searching. Nick's definitely searches the body. Loot that body. Sorry, baby. Good. Now I've got duplicates.
+[02:30:54] GM: he could have done non-lethal.
+[02:31:00] Ysidor: it doesn't it never crosses our mind lovely my village it's true
+[02:31:00] Berridin: oh oh amazing oh amazing what was it oh
+[02:31:02] Ellara: Yeah, I snapped her in the eye, hung off her non-lethally.
+[02:31:06] GM: Oh, sweet boy.
+[02:31:15] Whitaker "Witty" Whitman VI: What do you like?
+[02:31:16] Whitaker "Witty" Whitman VI: Peaks?
+[02:31:17] Whitaker "Witty" Whitman VI: His way around...
+[02:31:18] Whitaker "Witty" Whitman VI: Oh, go ahead.
+[02:31:26] GM: Yeah, so when you search the body,
+[02:31:28] GM: uh, you find
+[02:31:29] GM: kind of all the tools.
+[02:31:30] GM: I like to use the tools of the trade.
+[02:31:35] GM: Um,
+[02:31:37] GM: this, like,
+[02:31:38] GM: and you find, um,
+[02:31:41] GM: uh, and you find like a note saying,
+[02:31:43] GM: um,
+[02:31:46] GM: like,
+[02:31:46] GM: Hie-uh,
+[02:31:47] GM: Hirda,
+[02:31:50] Nyx: Wait, say that again? Not anymore.
+[02:31:50] GM: where you're going.
+[02:31:51] GM: Uh, the name of the place where,
+[02:31:53] GM: uh, Hirda.
+[02:31:53] Berridin: here oh okay okay amazing she's not a very good bounty hunter she didn't get rid of this note
+[02:32:00] GM: It looks like she was also
+[02:32:02] GM: going to go after Mary.
+[02:32:11] Nyx: Yeah. So I tell, I tell everybody.
+[02:32:13] Nyx: Okay.
+[02:32:13] Nyx: Who I found. I say, I tell everyone, hey, looks like she was, I mean, I think she thought we were easy marks. That's her last mistake. And she looks like she was also on her way to go after Mary.
+[02:32:13] Berridin: oh okay uh i just want to say thanks you know nix i think we were all kind of beguiled by
+[02:32:15] GM: It doesn't even say the mark,
+[02:32:16] GM: it's just the city, town.
+[02:32:18] GM: This started after, um,
+[02:32:36] Nyx: So, as I said before, you know, just because, you know, I saw that contract on that bulletin means other people saw it too.
+[02:32:44] Nyx: So this may not be the.
+[02:32:46] Nyx: This won't, probably won't be the first. It was the first, but probably not the last time that we're going to have this situation. Just a heads up.
+[02:33:01] Berridin: by her and i'm glad you have a very distrustful approach to everyone
+[02:33:08] Berridin: it's gonna keep us alive compliment sandwich
+[02:33:11] Nyx: Nick's just, Nick's looks at you and it's like, was that a compliment? Or was it an insult?
+[02:33:20] Nyx: Yeah, definitely. I'll take it.
+[02:33:20] Berridin: yeah humans kind of suck
+[02:33:24] Nyx: I just nod.
+[02:33:25] Ysidor: yes the door is looking around yes they're looking around and then panics to the group
+[02:33:29] Ysidor: like turns panicky the grouping okay but
+[02:33:32] Ysidor: where is the baby and he starts looking okay but everyone
+[02:33:40] Ysidor: sat around the baby has to be here somewhere well not right now but when we find the baby
+[02:33:45] Nyx: Sidor, there is no baby.
+[02:33:51] Ysidor: there will be a baby you know i'm starting to think i shouldn't trust city folks anymore
+[02:33:52] Nyx: No.
+[02:33:52] Nyx: There, there, the baby was in.
+[02:33:56] Nyx: Illusion.
+[02:33:58] Nyx: It was magic.
+[02:33:59] Nyx: There was no act. There's no actual baby.
+[02:34:03] Nyx: It's a spell used to trick people on unsuspecting marks, which this.
+[02:34:11] Nyx: Bound this killer thought that they'd be able to get us and treat us as marks.
+[02:34:16] Nyx: Um, yeah, they just used that magic to deceive us so that they can get close to us and then steal our stuff and probably kill us.
+[02:34:25] Nyx: And I think there is a risk for us, uh, because we're all we're willing to.
+[02:34:33] Nyx: I mean, I mean, I can't at this.
+[02:34:34] Nyx: I can't, I can't catch up, but I can't move forward.
+[02:34:34] Nyx: But you're jumping on something.
+[02:34:35] Nyx: I can't, I can't catch up.
+[02:34:36] Nyx: I can't understand.
+[02:34:36] Nyx: There ishigh you're holding back.
+[02:34:39] Nyx: Yeah.
+[02:34:39] Nyx: If there's no walkie talkie, I'm really tired of being a num for the week doing memorandum calls.
+[02:34:40] Ysidor: this would never happen in my village i didn't have a squibble yes they're just like but she had a
+[02:34:41] Nyx: I have information.
+[02:34:42] Nyx: Like, you know.
+[02:34:43] Nyx: The covid.
+[02:34:43] Berridin: okay admit that um we were taken in by this weary traveler
+[02:34:44] Nyx: Why?
+[02:34:44] Nyx: And it's not more information than you instantly get into a conversation by working on a Youtube.
+[02:34:46] Nyx: Oh.
+[02:34:46] Nyx: We being pulled on by the tech guy.
+[02:34:48] Nyx: No background on the internet.
+[02:34:48] Nyx: Oh my God.
+[02:34:49] Nyx: It's the 300th time the world has chanted colorful.
+[02:34:51] Nyx: Now you're dating another.
+[02:34:52] Nyx: we are dealing with people um yeah you know we're this is dangerous what we're doing we're going to
+[02:35:03] Nyx: find mary we're probably going to have to fight when we get there and we're going to have to
+[02:35:10] Nyx: fight on the way there and we've already kicked that off who knows how many bounty hunters are
+[02:35:15] Nyx: after mary right so let's be on our guard head on a swivel moving forward
+[02:35:23] Nyx: i'm just i'm just got my i kind of i got like the face palm where i'm just like
+[02:35:32] Berridin: let our guard down maybe you should give like a like a protocol here or something
+[02:35:38] Berridin: the baby the baby got me too i mean it looked pretty real
+[02:35:41] Ysidor: baby
+[02:35:46] Berridin: yeah that's true that's true yep yeah din din nods in agreement and also
+[02:35:49] Whitaker "Witty" Whitman VI: I would rather be stabbed in the middle of the night a million times than let one baby go cold.
+[02:36:02] Nyx: we're all gonna fucking die
+[02:36:03] Nyx: i just look at everybody and i go look let's keep it simple
+[02:36:10] Nyx: okay do not trust anyone
+[02:36:14] Nyx: you
+[02:36:14] Nyx: that we meet until we've verified okay i'm not saying look i let her sit
+[02:36:14] Ysidor: well you would know something about burying bodies it's not yasir they're saying that
+[02:36:21] Nyx: right i didn't push her away but i checked that is what i ask for all of us
+[02:36:30] Nyx: all right you don't need to be a month i'm not asking you to be a monster i'm asking you
+[02:36:36] Nyx: to just verify assume they're trying to trick you until you verified it that's all
+[02:36:44] Nyx: i what time is it bobby by the way right now
+[02:36:47] Berridin: pointedly looks like he's not a good bounty hunter he's not a good bounty hunter he's not a good
+[02:36:47] Berridin: vampire he's not a good player he's not a good
+[02:37:02] Ellara: You can tell she's on the verge of tears, and she just...
+[02:37:04] Ellara: She just kind of goes and, like, kind of, almost like fetal position next to the fire.
+[02:37:18] Nyx: okay okay it's night okay i walk over to alara and i i gently put a hand on her shoulder and i
+[02:37:21] GM: you had five rounds of combat
+[02:37:23] GM: which was like literally this was 30
+[02:37:25] GM: seconds after
+[02:37:27] GM: you guys finished
+[02:37:28] GM: your lunch like your supper
+[02:37:31] GM: like it's night
+[02:37:33] GM: you just finished eating
+[02:37:35] GM: so Matt for a reference Alex's character
+[02:37:41] Nyx: just kind of look to the group and i say i i think we're done for the day uh let's just rest
+[02:37:50] Nyx: tonight and just camp here um we'll all all
+[02:37:56] Nyx: bury the body in the forest and um yeah so and then uh for some unknown reason i just say
+[02:37:59] Ellara: You hear a small thank you.
+[02:38:12] Nyx: randomly and i'll go make my tentacle hut and then i just look around and i just go
+[02:38:19] Nyx: what why did i say that my patron was cthulhu ish and so it was all eldritch all my shit was
+[02:38:19] Ellara: Why did I say that?
+[02:38:25] GM: had Lehman's tiny hut
+[02:38:27] GM: as a spell in the previous campaign
+[02:38:29] GM: and it was flavored to look
+[02:38:31] GM: made of like tentacles because
+[02:38:32] GM: that was his aesthetic
+[02:38:33] Ellara: It was Cthulhu's one.
+[02:38:34] GM: that was like the creepiest
+[02:38:36] GM: you only got it at like level 5 or something
+[02:38:42] Nyx: eldritch and so i had a guy who was like i'm gonna go make my tentacle hut and i'm gonna go make my
+[02:38:42] Whitaker "Witty" Whitman VI: That's fair.
+[02:38:43] Nyx: tentacles and it was luxurious inside but the walls were made out of tentacles and the second
+[02:38:51] Nyx: that you got comfortable they would make a creepy sucking nasty noise and then you'd be reminded that
+[02:38:51] Whitaker "Witty" Whitman VI: Slimy.
+[02:38:52] Whitaker "Witty" Whitman VI: Do you meditate?
+[02:38:56] Nyx: you were in a hut full of tentacles it was fantastic five years of that i was i was committed
+[02:38:57] Ysidor: oh my god
+[02:39:05] GM: yeah so that was
+[02:39:06] Nyx: to the bit you're great man yeah and i would use i do sound effects like when we have a little
+[02:39:10] Berridin: it was very comfortable it was nice it was nice it was nice it was good
+[02:39:11] GM: how they used to camp great times
+[02:39:12] GM: great times
+[02:39:13] GM: some of the players would refuse to sleep
+[02:39:18] GM: at it
+[02:39:18] GM: do I sleep?
+[02:39:22] Nyx: porthole that opened up and i would just like i would just like i would just like i would just
+[02:39:23] Nyx: up to see who's there
+[02:39:24] Nyx: it was great anyway i digress um now you got a little bit of lore yeah go ahead um that's right
+[02:39:27] Berridin: just just for sleeping arrangements here
+[02:39:36] Berridin: so we are in the perquè
+[02:39:37] Berridin: um nicks uh do you like do you like sleep like like we do how does how does this work
+[02:39:45] Berridin: yeah do we need someone to like to keep watch over us or can you just
+[02:39:47] Nyx: actually because i am a shido gar elf forget the name can i just keep watch bobby do i sleep
+[02:39:55] Berridin: yeah like how does that work
+[02:39:58] Nyx: or do i how does my guy work it would be under features and
+[02:40:01] Ellara: Did I sleep?
+[02:40:03] Berridin: is he is he like conscious is he conscious when he's like doing his oh so does that does that
+[02:40:05] GM: yeah like that's what I was trying to remember
+[02:40:07] GM: because elves typically meditate
+[02:40:10] GM: and it's only like four hours
+[02:40:11] GM: species trait
+[02:40:13] Nyx: let me see
+[02:40:15] GM: oh you trance
+[02:40:15] Whitaker "Witty" Whitman VI: Do you hang upside down from a tree?
+[02:40:19] Nyx: on your lookout then okay yeah that works for me yeah i will by default be the lookout unless
+[02:40:20] GM: you don't need to sleep and magic can't put you to sleep
+[02:40:23] GM: you can finish a long rest in four hours
+[02:40:25] GM: if those hours are spent in a trance like meditation
+[02:40:27] GM: in which you remain conscious
+[02:40:28] GM: yeah
+[02:40:31] Berridin: serve as as our lookout like going forward so that does that work okay so we don't have to say
+[02:40:37] GM: all I will say
+[02:40:38] Berridin: like okay this guy's gonna keep keep watching oh okay okay he has a 14 passive perception okay
+[02:40:43] Nyx: we decide for whatever reason somebody else does it i'm cool with that yes yeah got it
+[02:40:49] GM: regarding this is
+[02:40:50] GM: if something were to happen
+[02:40:52] GM: I would assume
+[02:40:54] GM: Nyx's passive stat
+[02:40:56] GM: as something I would have to be
+[02:40:58] GM: yeah so like for example
+[02:41:04] Berridin: oh okay no that's perfect so then i don't we don't i don't have to worry about it we can just
+[02:41:05] GM: if I was trying to like have someone sneak
+[02:41:07] GM: around and Nyx was on guard
+[02:41:08] GM: I would have to be the 14th stealth
+[02:41:11] GM: that's all I'm saying
+[02:41:12] Nyx: that's fair that's very fair awesome can i say something to wit before you you conk off
+[02:41:12] Ysidor: oh
+[02:41:13] Ysidor: okay oh my god oh
+[02:41:13] GM: that's all
+[02:41:15] GM: that's all I will say about that
+[02:41:17] GM: you guys can decide that
+[02:41:19] GM: I will
+[02:41:19] GM: but I will use his passives as like
+[02:41:22] GM: the
+[02:41:22] GM: if I ever want to do anything
+[02:41:25] GM: I love that that's how it's done
+[02:41:29] Berridin: conk off whenever we go to sleep nicks is nicks is on it yeah okay
+[02:41:34] GM: like
+[02:41:34] GM: thanks
+[02:41:35] GM: cool
+[02:41:36] GM: you also have the carriage too
+[02:41:38] Berridin: uh oh yeah
+[02:41:40] GM: right
+[02:41:40] GM: people can sleep in the carriage
+[02:41:42] Berridin: okay i called dibs on the carriage
+[02:41:44] GM: yeah
+[02:41:46] Berridin: i'm a very small person so i don't i i can take up a little thing um yeah i think you can keep
+[02:41:56] Whitaker "Witty" Whitman VI: We're about to go to sleep, right?
+[02:41:58] GM: yeah
+[02:41:58] Whitaker "Witty" Whitman VI: Yeah, I like...
+[02:41:59] Whitaker "Witty" Whitman VI: I like crack...
+[02:42:00] Whitaker "Witty" Whitman VI: Crack my neck and, like, you know, stretch out.
+[02:42:02] Whitaker "Witty" Whitman VI: And I was just like, wow.
+[02:42:03] Whitaker "Witty" Whitman VI: You guys are really lucky I was there today.
+[02:42:07] Whitaker "Witty" Whitman VI: And then, uh...
+[02:42:09] Whitaker "Witty" Whitman VI: I just...
+[02:42:11] Whitaker "Witty" Whitman VI: I'm gonna...
+[02:42:11] Whitaker "Witty" Whitman VI: I'm gonna also, uh...
+[02:42:14] Whitaker "Witty" Whitman VI: Sleep in the carriage as well.
+[02:42:20] Whitaker "Witty" Whitman VI: Sure.
+[02:42:21] Nyx: yeah uh so i i go i look at you and i'm like oh my god i'm so sorry i'm so sorry i'm so sorry i'm so
+[02:42:23] Nyx: and i go hey um could you if you don't mind assume we're going to have another one of these sort of
+[02:42:31] Nyx: events they go like events can you like prep some stuff
+[02:42:38] Nyx: like you make things right like i've seen your classes and if you that would be very helpful
+[02:42:42] Whitaker "Witty" Whitman VI: Yeah.
+[02:42:43] Whitaker "Witty" Whitman VI: Yeah.
+[02:42:45] Whitaker "Witty" Whitman VI: Yeah.
+[02:42:47] Nyx: offensively do you have anything or deep all right
+[02:42:50] Whitaker "Witty" Whitman VI: Yeah.
+[02:42:51] Whitaker "Witty" Whitman VI: Yeah, tomorrow morning I can make another...
+[02:42:57] Whitaker "Witty" Whitman VI: I can imbue or infuse another item.
+[02:43:02] Whitaker "Witty" Whitman VI: So I think I can have two at once.
+[02:43:06] Nyx: this is that would be fantastic so just in character i'm talking about like nicks nicks
+[02:43:06] Berridin: making elixirs like as long as you have the the mats you can yeah you can just start building it
+[02:43:07] Whitaker "Witty" Whitman VI: Oh, I can make two...
+[02:43:12] Whitaker "Witty" Whitman VI: Two every...
+[02:43:14] Whitaker "Witty" Whitman VI: Three rest.
+[02:43:14] Whitaker "Witty" Whitman VI: So, like, I can build them up.
+[02:43:18] Berridin: up oh that's so annoying um is that a permanent like creation what does that mean oh so like
+[02:43:19] GM: no
+[02:43:19] Whitaker "Witty" Whitman VI: Okay.
+[02:43:20] GM: they vanish after a long rest
+[02:43:22] GM: they only last
+[02:43:23] GM: they only last between
+[02:43:25] GM: yeah
+[02:43:25] GM: oh yeah
+[02:43:27] Whitaker "Witty" Whitman VI: Um, no, it says it vanishes after three days.
+[02:43:30] Whitaker "Witty" Whitman VI: Oh, that's after I die.
+[02:43:32] GM: no but like between long rest
+[02:43:35] GM: like so
+[02:43:35] GM: whatever elixir you had now
+[02:43:37] GM: if you didn't consume it
+[02:43:38] GM: when you do long rest
+[02:43:39] GM: it goes away
+[02:43:40] GM: and you pick your new ones
+[02:43:41] GM: but as you level up
+[02:43:41] Whitaker "Witty" Whitman VI: Oh, okay.
+[02:43:43] GM: you get more elixirs
+[02:43:45] GM: that's how you get more
+[02:43:46] GM: oh also you can use spell slots
+[02:43:47] Whitaker "Witty" Whitman VI: Okay.
+[02:43:51] GM: to make more too
+[02:43:52] GM: so I'm just gonna
+[02:43:57] Nyx: doesn't know all these little details i don't know i just this is just what i've seen so i'm
+[02:44:02] Nyx: when i'm talking to you i'm not like telling you to do specific things i'm just like reminding you
+[02:44:06] Whitaker "Witty" Whitman VI: Mm-hmm.
+[02:44:08] Nyx: like hey man i know a bit about i must this i probably know a little bit about artificers and
+[02:44:16] Nyx: i'm probably putting two and two together a little bit and so it's like you gotta prep right
+[02:44:18] Whitaker "Witty" Whitman VI: Mm-hmm.
+[02:44:21] Nyx: and maybe i need to tell you to prep but if you just go do your thing but assume this will happen
+[02:44:26] Nyx: again and that might be helpful that's all awesome whoa whoa that's cool that's awesome
+[02:44:27] Whitaker "Witty" Whitman VI: Mm-hmm.
+[02:44:30] Whitaker "Witty" Whitman VI: Sounds good.
+[02:44:35] GM: one of the things that I'm going to do is
+[02:44:38] GM: things you can do
+[02:44:39] GM: I think this is part of the new rules
+[02:44:40] GM: is you at level two
+[02:44:42] GM: you have replicate magic item
+[02:44:43] GM: for witty
+[02:44:48] GM: so
+[02:44:50] GM: if you know plans
+[02:44:52] GM: and so you can like
+[02:44:53] GM: make a bag of holding and stuff
+[02:44:54] GM: magic isn't permanent
+[02:44:55] Whitaker "Witty" Whitman VI: Okay.
+[02:45:05] GM: when he dies
+[02:45:06] GM: it's 1d4
+[02:45:07] GM: like as long as he's living
+[02:45:11] GM: it exists
+[02:45:12] GM: yeah one or two
+[02:45:14] Nyx: wow yeah right oh nice yeah that's cool yeah
+[02:45:14] Berridin: any number of these magic items exist like that wow there's no there's so much potential here it's
+[02:45:18] GM: if he has tinkering tools in hands
+[02:45:20] GM: it's true
+[02:45:24] GM: yeah
+[02:45:25] GM: yeah
+[02:45:27] Berridin: kind of crazy yeah oh god okay that's awesome and i i do believe one of the changes they made
+[02:45:29] GM: yeah
+[02:45:29] GM: and like as he levels up
+[02:45:30] GM: he can create more
+[02:45:31] GM: yeah so like
+[02:45:36] GM: yeah so from level two up
+[02:45:38] GM: it's alchemy jug
+[02:45:40] GM: bag of holding
+[02:45:40] GM: cap of water breathing
+[02:45:41] GM: common magic items
+[02:45:43] GM: that isn't a potion
+[02:45:44] GM: scroll or cursed
+[02:45:45] GM: goggles of night
+[02:45:46] GM: manifold tool
+[02:45:47] GM: blah blah blah
+[02:45:47] GM: at level six
+[02:45:48] GM: there's more
+[02:45:50] GM: at level 10
+[02:45:50] GM: there's more
+[02:45:51] GM: 14 there's more
+[02:45:52] GM: bonus action
+[02:45:58] Berridin: in artifice or for the new version is that or for alchemists i don't know if it's artifice or
+[02:46:03] Berridin: alchemist but it's no it's no longer a an action to consume one of these elixirs it's a bonus
+[02:46:08] GM: bonus action
+[02:46:09] GM: yeah
+[02:46:09] Berridin: action yeah that makes it a lot easier to use because i know that was a big pain point before
+[02:46:14] GM: and at a six
+[02:46:15] GM: he can pick which one he wants
+[02:46:16] GM: if he rolls a six
+[02:46:17] GM: oh if they're gas
+[02:46:18] Berridin: um would it be fair i mean again this is more of a flavor thing and this might change the balance a
+[02:46:24] Berridin: little bit but would it be fair like to say that he could like like instead of instead of these
+[02:46:29] Berridin: instead of these are drinks these are kind of gaseous concoctions could he like kind of yeah yeah
+[02:46:34] GM: yeah he can hop them
+[02:46:35] GM: if you want them to be poppers
+[02:46:37] GM: go for it
+[02:46:38] Whitaker "Witty" Whitman VI: They're definitely poppers.
+[02:46:39] GM: i just hear
+[02:46:39] Berridin: could he could he like theoretically could he theoretically throw throw one of these like at at us
+[02:46:40] Whitaker "Witty" Whitman VI: Yeah.
+[02:46:43] GM: no
+[02:46:46] Whitaker "Witty" Whitman VI: Well, I figure I...
+[02:46:46] Berridin: like oh my god okay
+[02:46:47] GM: you can hand them off
+[02:46:48] Whitaker "Witty" Whitman VI: Oh.
+[02:46:48] Whitaker "Witty" Whitman VI: I can't, like, hand them off?
+[02:46:50] Whitaker "Witty" Whitman VI: Because I...
+[02:46:50] Whitaker "Witty" Whitman VI: I don't...
+[02:46:51] GM: you can hand them off
+[02:46:51] Whitaker "Witty" Whitman VI: Okay.
+[02:46:52] GM: you can hand them off
+[02:46:52] Whitaker "Witty" Whitman VI: Okay.
+[02:46:53] Whitaker "Witty" Whitman VI: Is there a range?
+[02:46:53] Berridin: yeah uh yeah yeah yeah that makes sense okay that's cool okay awesome
+[02:46:54] GM: five feet
+[02:46:55] GM: let's reach
+[02:46:56] GM: yeah
+[02:46:56] Whitaker "Witty" Whitman VI: Five feet?
+[02:46:57] GM: so like
+[02:46:57] Whitaker "Witty" Whitman VI: Okay.
+[02:46:58] GM: you could give them for the day
+[02:47:00] GM: when you take the long rest
+[02:47:01] GM: i would say your canisters
+[02:47:02] GM: would just be
+[02:47:03] GM: so like
+[02:47:06] GM: i say you gave one
+[02:47:07] GM: to din
+[02:47:07] GM: um it was like
+[02:47:09] GM: uh whatever
+[02:47:10] GM: din didn't use it
+[02:47:11] GM: you long rest
+[02:47:12] GM: din when din goes
+[02:47:14] GM: the next morning
+[02:47:14] GM: it's just empty
+[02:47:15] GM: and the
+[02:47:16] Whitaker "Witty" Whitman VI: Okay.
+[02:47:17] GM: the logic would be
+[02:47:18] GM: oh it's unstable
+[02:47:19] GM: so i fall apart
+[02:47:20] Whitaker "Witty" Whitman VI: Sounds good.
+[02:47:21] GM: yeah
+[02:47:22] GM: but like
+[02:47:24] GM: yeah you can make them
+[02:47:25] GM: and hand them out
+[02:47:26] GM: or in combat
+[02:47:27] GM: if they're in
+[02:47:28] GM: uh physical
+[02:47:28] GM: and uh
+[02:47:29] GM: melee range
+[02:47:30] GM: you can give them to it
+[02:47:31] GM: which is five feet
+[02:47:32] GM: i
+[02:47:33] Whitaker "Witty" Whitman VI: Okay.
+[02:47:33] Whitaker "Witty" Whitman VI: And I can attune, like, party members' items too, right?
+[02:47:36] GM: yeah i ignore
+[02:47:39] GM: the attunement rules
+[02:47:40] GM: so don't worry
+[02:47:40] Whitaker "Witty" Whitman VI: Oh, okay.
+[02:47:41] GM: um
+[02:47:42] GM: it
+[02:47:43] GM: that just seems like
+[02:47:44] GM: too much hassle
+[02:47:45] GM: they're like
+[02:47:46] GM: have you been spending
+[02:47:47] GM: special time
+[02:47:48] GM: with your items
+[02:47:49] GM: to become friends
+[02:47:50] GM: with it
+[02:47:56] GM: yeah
+[02:47:59] Berridin: um did uh did the loot produce any gold from the dead body
+[02:48:05] Ellara: Did the body produce gold?
+[02:48:07] Ellara: When the body disappeared, as dead bodies do,
+[02:48:10] GM: um
+[02:48:11] GM: roll a d8
+[02:48:12] GM: two pieces of gold
+[02:48:13] GM: um
+[02:48:14] Berridin: yeah I never roll a d8 that's crazy
+[02:48:20] Berridin: I got a two you son of a bitch
+[02:48:21] GM: yeah
+[02:48:24] Ysidor: does that pay the against on the one you check out or
+[02:48:26] Berridin: we have to bury
+[02:48:29] GM: so uh
+[02:48:30] GM: alara's in fetal position
+[02:48:31] GM: by the fire
+[02:48:32] GM: um
+[02:48:33] GM: din and witty
+[02:48:34] Nyx: let me just do it now i want to get it out of eyesight um yeah i'm nicks is a little is
+[02:48:34] GM: are inside the carriage
+[02:48:35] GM: uh
+[02:48:36] GM: what is everyone else doing
+[02:48:37] GM: as we
+[02:48:38] GM: wrap up
+[02:48:39] GM: um
+[02:48:40] GM: um
+[02:48:41] GM: wrap up the night
+[02:48:42] GM: are
+[02:48:43] GM: were you burying the body
+[02:48:44] GM: in the morning
+[02:48:50] Berridin: oh okay okay okay that's that's a good point that's a good point
+[02:48:53] GM: or that night
+[02:48:54] GM: i mean
+[02:48:55] GM: nick's offered
+[02:48:56] GM: um
+[02:48:57] Nyx: concerned about alara this is a lot i let you come i'm just like okay cool thanks oh right that's
+[02:49:03] Ysidor: yasir goes at next during the body because he doesn't believe nixon the upper body's trying to
+[02:49:08] Ysidor: actually they go crazy
+[02:49:14] Ysidor: or Michelle
+[02:49:17] GM: yeah
+[02:49:18] GM: uh
+[02:49:19] GM: how
+[02:49:20] GM: so going to sleep
+[02:49:21] GM: alara
+[02:49:22] GM: is
+[02:49:23] GM: in her field
+[02:49:24] GM: um
+[02:49:25] GM: i mean
+[02:49:26] GM: valid
+[02:49:27] GM: very valid
+[02:49:27] Ellara: if the truth is accurate, I'll get back to you.
+[02:49:28] GM: is this the first time
+[02:49:29] GM: alara
+[02:49:30] GM: seen someone
+[02:49:30] Berridin: that's fair what was that uh nope so eloquent yeah nice uh Matt by the way if you uh when you
+[02:49:31] GM: get
+[02:49:32] GM: killed
+[02:49:33] GM: in front of her
+[02:49:34] GM: like killed
+[02:49:35] GM: not die
+[02:49:36] GM: fair
+[02:49:37] GM: uh
+[02:49:43] Ellara: Because last time we thought it was just the robots,
+[02:49:44] GM: uh
+[02:49:45] Ellara: because there wasn't a human involved.
+[02:49:50] GM: yeah
+[02:49:51] GM: no one saw
+[02:49:52] GM: what happened
+[02:49:52] Ellara: Oh, yeah. Probably never seen someone get killed.
+[02:49:53] GM: to michelle
+[02:49:55] Ellara: I don't think so.
+[02:49:56] GM: fabergé
+[02:49:57] Ysidor: what do you think we're doing out there
+[02:49:57] Ellara: Definitely seen people die, but not get killed.
+[02:50:01] GM: hmm
+[02:50:02] GM: witty still
+[02:50:05] GM: doesn't
+[02:50:06] GM: want to meet
+[02:50:07] GM: michelle
+[02:50:08] GM: witty wants
+[02:50:09] GM: to meet
+[02:50:10] GM: michelle
+[02:50:11] GM: and doesn't
+[02:50:12] GM: know she
+[02:50:13] GM: well doesn't
+[02:50:14] Nyx: right no i'm just i'm i'm i'm posted up by the fire um i've got my crossbow ready to rock and
+[02:50:14] GM: know that
+[02:50:15] GM: nick's
+[02:50:16] GM: murdered
+[02:50:17] GM: her
+[02:50:18] GM: um
+[02:50:19] GM: uh
+[02:50:20] GM: yeah
+[02:50:21] GM: so
+[02:50:22] GM: burial
+[02:50:23] GM: happens
+[02:50:24] GM: i think
+[02:50:25] GM: anything
+[02:50:26] GM: before you all
+[02:50:27] GM: do a long
+[02:50:38] Nyx: roll just watching i guess i just i tell you you don't you wouldn't know where it is because like
+[02:50:42] GM: rest
+[02:50:43] GM: so
+[02:50:44] GM: uh
+[02:50:45] GM: yeah
+[02:50:46] GM: the night
+[02:50:47] GM: happens
+[02:50:48] GM: long rest
+[02:50:48] Ellara: She wakes up very early and goes to do a prayer over the body.
+[02:50:49] GM: you're able
+[02:50:51] GM: in the morning
+[02:50:53] Ellara: Like, at dawn.
+[02:50:55] GM: to
+[02:50:56] GM: um
+[02:50:57] GM: unless
+[02:51:00] Ellara: I assume she saw where...
+[02:51:02] Ellara: Oh, okay. Well, then I asked.
+[02:51:04] GM: okay
+[02:51:04] Ellara: Yeah.
+[02:51:04] Ellara: Here lies the bandit.
+[02:51:05] GM: yeah
+[02:51:06] GM: so
+[02:51:07] GM: yeah
+[02:51:08] Nyx: yeah and i will i'll go with you i'll go with you and i show you i go so
+[02:51:17] Nyx: here it is and it's so you know you have the classic it's i made it i had a cedar helping
+[02:51:23] Nyx: so like it's pretty deep right it's not like just on top with mound of dirt right
+[02:51:29] Nyx: flat covering and there's a crude tombstone you're you're cut you're cutting out i i didn't hear what
+[02:51:36] Ysidor: we don't know the woman's name
+[02:51:43] Nyx: you said yeah well i just i just said here lies you know i i don't know what i
+[02:51:45] Ysidor: a body
+[02:51:51] Nyx: i'm making out
+[02:51:52] Ysidor: yeah
+[02:51:53] GM: because
+[02:51:54] Ysidor: that's true
+[02:51:54] GM: also
+[02:51:55] GM: only needs
+[02:51:56] GM: four hours
+[02:51:58] Ysidor: that's true
+[02:52:00] Ysidor: it was like a guilty conscience
+[02:52:01] Nyx: yeah and i just look at her and i go um i say i'm not
+[02:52:02] Ysidor: I don't know
+[02:52:03] Ysidor: did you take nerve
+[02:52:04] GM: anyways
+[02:52:05] GM: more than
+[02:52:06] GM: it's more
+[02:52:07] GM: than michelle
+[02:52:07] Ellara: She does the prayer, and then she just tells Nyx,
+[02:52:08] GM: got
+[02:52:10] Ellara: Thank you for coming.
+[02:52:11] Ellara: I know that it probably had to be done, but I had...
+[02:52:17] Ellara: And then she just trails off.
+[02:52:29] Nyx: i do i do bad things but i'm not a monster and then i just kind of turn back because i don't
+[02:52:36] Nyx: know what to say yeah exactly that's it's like i don't know how to get this across
+[02:52:37] Ysidor: I hate bad things
+[02:52:38] GM: uh
+[02:52:39] GM: not
+[02:52:40] GM: this
+[02:52:41] GM: is
+[02:52:42] Ysidor: it's so funny
+[02:52:42] GM: a
+[02:52:43] GM: good
+[02:52:45] Nyx: because i've never had to and it's like but i feel there's a bit of emotion in the moment
+[02:52:48] Ysidor: oh my god
+[02:52:51] Nyx: and it's like i'm trying it's my way of doing a terrible job of making her feel better
+[02:52:59] GM: thing
+[02:52:59] Ellara: Ellara smiles slightly.
+[02:53:01] Ellara: Just doesn't say anything.
+[02:53:02] GM: but
+[02:53:03] GM: i
+[02:53:04] GM: can't
+[02:53:05] GM: wait
+[02:53:06] GM: to
+[02:53:07] GM: die
+[02:53:08] GM: so
+[02:53:09] GM: you
+[02:53:10] GM: can
+[02:53:11] Ysidor: yeah pretty much
+[02:53:11] GM: um
+[02:53:12] GM: you
+[02:53:13] GM: can
+[02:53:14] Nyx: trust me why is both of us being like please trust me i'm terrible one of us lies one of us
+[02:53:14] GM: die
+[02:53:15] GM: i
+[02:53:16] GM: can
+[02:53:17] GM: die
+[02:53:20] GM: i
+[02:53:22] Nyx: kills but trust us it's not complete garbage what do you say hang on oh i think we're good
+[02:53:22] GM: can
+[02:53:23] GM: die
+[02:53:24] GM: i
+[02:53:25] GM: can
+[02:53:26] GM: die
+[02:53:27] GM: i
+[02:53:28] GM: can
+[02:53:29] GM: uh yeah i'm a complete garbage uh yeah so anything anyone wants to do in the morning
+[02:53:30] Ellara: No, I'm an assassin, but my heart is not complete garbage.
+[02:53:35] Ellara: That's...
+[02:53:36] Ysidor: except for Baradun
+[02:53:42] GM: um before you head off yeah yeah and i will allow like because you're traveling like passively
+[02:53:43] Whitaker "Witty" Whitman VI: Well, before...
+[02:53:44] Whitaker "Witty" Whitman VI: Okay.
+[02:53:45] Whitaker "Witty" Whitman VI: I don't know if I can retcon this a little bit,
+[02:53:47] Whitaker "Witty" Whitman VI: but I can...
+[02:53:48] Whitaker "Witty" Whitman VI: I have, like, the right tool for the job, right?
+[02:53:51] Whitaker "Witty" Whitman VI: And I need Tinker's tools to craft one of these items.
+[02:53:55] Whitaker "Witty" Whitman VI: So, like, just coinciding with my rest,
+[02:53:58] Whitaker "Witty" Whitman VI: I want to, like, create a set...
+[02:54:01] Whitaker "Witty" Whitman VI: of Tinker's tools.
+[02:54:03] Whitaker "Witty" Whitman VI: So I'll have them in the morning
+[02:54:04] Whitaker "Witty" Whitman VI: to make a magic item.
+[02:54:12] GM: um you can like tinker while you're in the cart so that's basically
+[02:54:15] Whitaker "Witty" Whitman VI: Oh, cool.
+[02:54:16] GM: witty side of the cart just like nice yeah and um yeah so you don't have to like undo it
+[02:54:19] Whitaker "Witty" Whitman VI: Yeah.
+[02:54:20] Whitaker "Witty" Whitman VI: And then, yeah, in the morning,
+[02:54:22] Whitaker "Witty" Whitman VI: before we do anything,
+[02:54:23] Whitaker "Witty" Whitman VI: I'm going to make another elixir or whatever.
+[02:54:29] Whitaker "Witty" Whitman VI: A one.
+[02:54:31] Whitaker "Witty" Whitman VI: And it is a three.
+[02:54:39] Whitaker "Witty" Whitman VI: Resilience.
+[02:54:40] Whitaker "Witty" Whitman VI: So I have a resilience and a boldness.
+[02:54:42] Whitaker "Witty" Whitman VI: I'll add those.
+[02:54:48] Berridin: click on that long rest button that's how you that's how you actually reset everything on the
+[02:54:53] Berridin: character sheet do you see it yeah that will
+[02:54:54] Whitaker "Witty" Whitman VI: Oh, I see.
+[02:54:56] GM: and it heals you all all your long rest check boxes will get reset um uh there's not they don't
+[02:54:58] Berridin: yeah I'll heal you to Max and it'll also reset your spell slots
+[02:55:03] Whitaker "Witty" Whitman VI: Okay, cool.
+[02:55:07] Whitaker "Witty" Whitman VI: Cool.
+[02:55:07] Berridin: yeah yeah this is gonna I think you're gonna have to like I what I would do is I would add like all
+[02:55:08] Whitaker "Witty" Whitman VI: And how do I add something to my inventory
+[02:55:09] Whitaker "Witty" Whitman VI: so that I know I have these infused items?
+[02:55:19] Berridin: the different types of elixirs as temporary inventory items and then just change the the
+[02:55:22] Whitaker "Witty" Whitman VI: Mm-hmm.
+[02:55:26] Berridin: number of that during the day to help you keep track like so if you know that you have this many
+[02:55:32] Berridin: boldness or this many Resiliences or this many pots
+[02:55:36] Berridin: um
+[02:55:37] Whitaker "Witty" Whitman VI: Mm-hmm.
+[02:55:38] Whitaker "Witty" Whitman VI: So I can make them...
+[02:55:38] Berridin: and then that way at least you can like see it I don't know if there's an easier way to handle that
+[02:55:42] Berridin: in this thing yeah yeah you can you can use either like your your own notes or you can use something
+[02:55:44] GM: it's weird because for some features they don't build anything in it's like companions right
+[02:55:48] GM: like if you have like a familiar or a companion
+[02:55:52] GM: there's no way to build anything in it's like companions right like if you have like a familiar
+[02:55:53] GM: you just have to track it it's supposed to be a digital sheet but like yeah yeah
+[02:56:03] Berridin: in D&D Beyond like there's a there's a whole notes tab there that you can add um you can also use it
+[02:56:06] Ellara: Yeah.
+[02:56:09] Whitaker "Witty" Whitman VI: I can make custom items
+[02:56:09] Berridin: right yeah and sometimes that's nice because like some of the items you can you can like they
+[02:56:11] Ellara: Yeah, I think that's probably the easiest.
+[02:56:11] Whitaker "Witty" Whitman VI: and then just add that to my inventory.
+[02:56:12] GM: yeah yeah yeah and uh one of the things you'll probably have to just not during the session but
+[02:56:13] Ellara: Yeah.
+[02:56:14] Whitaker "Witty" Whitman VI: So that's what I just did for...
+[02:56:15] Whitaker "Witty" Whitman VI: Okay.
+[02:56:21] Berridin: actually impact your stats if you if you needed to um so it's kind of interesting
+[02:56:26] Berridin: um yeah I want to level up DM
+[02:56:30] GM: uh edit your character sheet and then in the builder you can select the everon um
+[02:56:35] GM: artificer and they'll update all your stats but like that that's another thing but anyways we're
+[02:56:42] GM: back to the show
+[02:56:43] GM: back to the morning you've made your things tinkering tools uh you're ready to go anything
+[02:56:47] GM: else was actually i forgot and i was gonna allow you guys to level up but because you said that
+[02:56:57] Berridin: I shut up I was not
+[02:57:01] GM: i'm not i'm a spiteful little bitch
+[02:57:08] GM: i want to level up nah um uh yeah so um anything else before you get on
+[02:57:18] Berridin: that was meta commentary that was not in character yeah you're welcome everyone that was me
+[02:57:31] GM: yeah so you continue your journey um alara din and witty are in the carriage um witty is tinkering
+[02:57:42] GM: away din alara probably an awkward silence yeah a lot yeah dan you're just you have two people who
+[02:57:46] Ellara: She's reading her book.
+[02:57:47] Ellara: She's just reading her book very intently.
+[02:57:54] GM: are fully concentrated on something else um in the carriage anything if not i'll tell you i'll tell you
+[02:58:01] GM: you just say the next few days go over without incident you're getting closer and closer
+[02:58:08] GM: he is the door you know um i assume you get a little excited as everything's getting more and
+[02:58:14] GM: more familiar um and on the seventh day um we'll say a late morning your crest coming up to the top
+[02:58:26] GM: of the hill um and you know as soon as you hit the top of the hill you know what you're doing you're
+[02:58:30] GM: just going to keep going you're going to keep going uh we're going to keep going and you're
+[02:58:31] GM: going to keep going if you fall you're going to keep going if you fall you're going to keep going
+[02:58:31] GM: you'll see you'll be able to see your village in the distance as you get to
+[02:58:36] GM: the top what you see is kind of a little ways off from your village a small
+[02:58:37] Nyx: except for meredith
+[02:58:42] GM: encampment camp still smoke kind of rising from it you see you see the
+[02:58:49] GM: library of the Grand Duke as a small little military base it's kind of
+[02:58:55] GM: impromptu create it there with a bunch of just a few tents there's only 20
+[02:58:59] GM: or so soldiers right and you know not too far off you see also your village
+[02:59:05] GM: ended in the end of today's session you're on the outskirts of here but and
+[02:59:13] Whitaker "Witty" Whitman VI: Nice.
+[02:59:22] GM: actually you all level up so
+`;export{e as default};
