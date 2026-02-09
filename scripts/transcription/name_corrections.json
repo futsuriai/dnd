@@ -1,0 +1,28 @@
+{
+  "_comment": "Maps common ASR mis-transcriptions to canonical spellings from ENTITY_LIST.md",
+  "text_fixes": {
+    "Mary": "Meri",
+    "Merry": "Meri",
+    "Isidore": "Ysidor",
+    "Isidor": "Ysidor",
+    "Yesodor": "Ysidor",
+    "Yasura": "Ysidor",
+    "Ysidore": "Ysidor",
+    "Yisidor": "Ysidor",
+    "Alara": "Ellara",
+    "Eleah": "Ellara",
+    "Elara": "Ellara",
+    "Beridin": "Berridin",
+    "Beriden": "Berridin",
+    "Nix": "Nyx",
+    "Nixon": "Nyx",
+    "Nicks": "Nyx",
+    "Hyuba": "Hýrda",
+    "Luxemburg": "Luxembough",
+    "Luxembourg": "Luxembough"
+  },
+  "speaker_label_fixes": {
+    "Witty": "Whitaker",
+    "Beridin": "Berridin"
+  }
+}

@@ -6,10 +6,47 @@ from faster_whisper import WhisperModel
 # Supported audio extensions
 AUDIO_EXTENSIONS = {'.flac', '.mp3', '.wav', '.m4a', '.ogg'}
 
-def transcribe_file(model, audio_path, output_path):
+def load_entity_names(entity_list_path):
+    if not os.path.isfile(entity_list_path):
+        print(f"Entity list not found: {entity_list_path}")
+        return []
+
+    names = []
+    seen = set()
+    try:
+        with open(entity_list_path, "r", encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if not line.startswith("- `") or "`:" not in line:
+                    continue
+                _, rest = line.split("`:", 1)
+                name = rest.strip().rstrip("\\").strip()
+                if name and name not in seen:
+                    names.append(name)
+                    seen.add(name)
+    except Exception as e:
+        print(f"Error reading entity list {entity_list_path}: {e}")
+        return []
+
+    if not names:
+        print(f"No entity names found in {entity_list_path}")
+    else:
+        print(f"Loaded {len(names)} entity names from {entity_list_path}")
+    return names
+
+def build_initial_prompt(entity_names):
+    if not entity_names:
+        return None
+    return f"Use these proper nouns and spellings: {', '.join(entity_names)}."
+
+def transcribe_file(model, audio_path, output_path, initial_prompt=None):
     print(f"Transcribing {audio_path}...")
     try:
-        segments, info = model.transcribe(audio_path, beam_size=5, vad_filter=True)
+        transcribe_kwargs = {"beam_size": 5, "vad_filter": True}
+        if initial_prompt:
+            transcribe_kwargs["initial_prompt"] = initial_prompt
+
+        segments, info = model.transcribe(audio_path, **transcribe_kwargs)
         
         print(f"Detected language '{info.language}' with probability {info.language_probability}")
 
@@ -70,6 +107,15 @@ def main():
         print("No audio files found to process.")
         sys.exit(0)
 
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    entity_list_path = os.path.normpath(os.path.join(script_dir, "..", "..", "ENTITY_LIST.md"))
+    entity_names = load_entity_names(entity_list_path)
+    initial_prompt = build_initial_prompt(entity_names)
+    if initial_prompt:
+        print(f"Using entity prompt with {len(entity_names)} names.")
+    else:
+        print("No entity prompt loaded; continuing without it.")
+
     # Load model once
     model = load_model()
     if not model:
@@ -85,7 +131,7 @@ def main():
             # Default to <filename>.txt in the same directory
             output_file = f"{audio_file}.txt"
         
-        transcribe_file(model, audio_file, output_file)
+        transcribe_file(model, audio_file, output_file, initial_prompt=initial_prompt)
 
 if __name__ == "__main__":
     main()
