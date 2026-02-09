@@ -40,6 +40,7 @@ This file is auto-generated. Do not edit manually.
 - `hariolar-empire`: The Hariolar Empire
 - `hieroterra`: Hieroterra
 - `hyrta`: Hýrda
+- `hyrta-ducal-encampment`: Hýrda Ducal Encampment
 - `lady-jacintas-estate`: Lady Jacinta\
 - `lighthouse-arcana-floor`: High Arcana Floor (Wizard Scriptorium)
 - `lighthouse-deep-basement`: Deep Underground Complex
@@ -65,6 +66,7 @@ This file is auto-generated. Do not edit manually.
 ## NPCs
 
 - `aaron`: Aaron
+- `ardwin`: Ardwin
 - `beth`: Beth
 - `cooper`: Cooper
 - `darius`: Darius

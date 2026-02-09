@@ -357,16 +357,35 @@ export const locations = [
     id: 'hyrta',
     name: 'Hýrda',
     type: 'village',
-    description: 'A goliath village in the mountains, home to Meri and Ysidor. Currently threatened by imperial mining interests with soldiers encamped nearby under a ducal decree.',
+    description: 'A communal stone-goliath village in the mountains, home to Meri and Ysidor. The party arrived in Session 14 to find Hýrda preparing for a ducal attempt to seize the mines and displace its people.',
     tags: ['village', 'goliath', 'mountains'],
     history: [
       { session: 1, note: 'Ysidor\'s home village.' },
       { session: 7, note: 'Meri is heading home as it is facing mining disputes' },
       { session: 12, note: '~20 soldiers encamped nearby under ducal decree; party en route by carriage' },
-      { session: 13, note: 'Party sighted a Grand Duke encampment of ~20 soldiers near the village.' }
+      { session: 13, note: 'Party sighted a Grand Duke encampment of ~20 soldiers near the village.' },
+      { session: 14, note: 'Party reached the village; Meri and Ardwin began coordinating mine-defense sabotage plans.' }
     ],
     connections: [
-      { type: 'location', id: 'hieroterra', reason: 'Village within the province' }
+      { type: 'location', id: 'hieroterra', reason: 'Village within the province' },
+      { type: 'location', id: 'hyrta-ducal-encampment', reason: 'Ducal forces staged near the mines' },
+      { type: 'npc', id: 'ardwin', reason: 'Village blacksmith helping lead defenses' }
+    ]
+  },
+  {
+    id: 'hyrta-ducal-encampment',
+    name: 'Hýrda Ducal Encampment',
+    type: 'poi',
+    description: 'A forward military camp east of Hýrda near the mines, currently holding roughly twenty ducal soldiers and waiting for reinforcements before a larger push.',
+    tags: ['military', 'hyrda', 'mines'],
+    history: [
+      { session: 13, note: 'First sighted as a Grand Duke encampment near Hýrda.' },
+      { session: 14, note: 'Confirmed as the ducal staging force; party plans to steal powder and sabotage operations.' }
+    ],
+    connections: [
+      { type: 'location', id: 'hyrta', reason: 'Positioned beside village mining approaches' },
+      { type: 'npc', id: 'duke-valerian-oliander', reason: 'Acts under ducal authority in the mining dispute' },
+      { type: 'lore', id: 'warforged', reason: 'Potential rendezvous point for planned warforged reinforcements' }
     ]
   },
   {

@@ -1,12 +1,32 @@
 export const sessions = [
   {
+    id: 'session-15',
+    title: 'Session 15',
+    subtitle: 'Powder in the Hills',
+    date: 'February 9, 2026',
+    upcoming: true,
+    description: 'The party prepares sabotage operations around Hýrda to blunt the ducal and warforged threat.',
+    highlights: [],
+  },
+  {
     id: 'session-14',
     title: 'Session 14',
-    subtitle: 'Smoke on the Horizon',
+    subtitle: 'Stone and Steel',
     date: 'February 8, 2026',
-    upcoming: true,
-    description: 'The party closes in on Hýrda and the Grand Duke\'s encampment.',
-    highlights: [],
+    upcoming: false,
+    summaryFile: 'session-14.md',
+    description: 'The party reaches Hýrda, warns Meri and Ardwin about looming warforged deployments, and helps design a high-risk plan to use the mines against the ducal invasion force.',
+    highlights: [
+      'The party arrives at Hýrda and confirms a nearby ducal encampment of roughly twenty soldiers awaiting reinforcements.',
+      'Meri briefs the group on the Duke\'s intent to seize local mines and displace the village.',
+      'At Ysidor\'s home, Meri\'s "massage" knocks Whitaker unconscious before Ysidor revives him with Lay on Hands.',
+      'Nyx warns Meri that dozens of warforged are stored at the Lighthouse and could be deployed against Hýrda.',
+      'Ellara and Berridin confide in each other about their first kill, while Nyx reassures Ellara she is not broken.',
+      'At dawn, Meri spars Ysidor and confirms he has grown stronger since leaving the village.',
+      'Meri and the blacksmith Ardwin convene a war council; Berridin presents the warforged threat with illusions.',
+      'The group confirms the latest warforged are powered by crystals synthesized from Shadowed goliaths.',
+      'A mine-collapse plan is adopted: steal powder, evacuate supplies, plant charges, lure enemy forces deep, and trigger the collapse.'
+    ],
   },
   {
     id: 'session-13',

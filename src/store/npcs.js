@@ -21,9 +21,9 @@ export const npcs = [
     {
         id: 'meri',
         name: 'Meri',
-        role: 'Goliath Mentor',
-    location: 'Heading to Hýrda',
-        description: 'Mentor to Ysidor. Arrested in Bastion City after speaking against the Lighthouse; later found captive beneath the Lighthouse and rescued. Is now heading to her home village with Ysidor\'s sending stone.',
+        role: 'Goliath Chieftess and Mentor',
+        location: 'Hýrda',
+        description: 'Mentor to Ysidor and acting chieftess of Hýrda. Arrested in Bastion City after speaking against the Lighthouse, later found captive beneath the Lighthouse and rescued, she is now organizing village defenses against a ducal mine-seizure campaign.',
         fullText: 'A towering goliath of granite-gray skin and lilac-silver hair, Meri served as Ysidor\'s mentor, drilling him in blessing and stance with her characteristic phrase: "Hold your guard higher, little hill." After being reported as violent and dangerous following an altercation near the Lighthouse, she was transferred under Proctor Eduard\'s custody and ultimately subjected to horrific basement experiments involving crystal synthesis. She was rescued partway through the process and is now recovering from her ordeal.',
         history: [
             { session: 1, note: 'Established as Ysidor\'s missing mentor.' },
@@ -33,13 +33,32 @@ export const npcs = [
             { session: 7, note: 'Rescued and freed; departed for Hýrda' },
             { session: 11, note: 'Target of a "Black Swan" commission: a 250g bounty on her head.' },
             { session: 12, note: 'Reported ~20 soldiers encamped near Hýrda under ducal decree; party contacted via sending stone' },
-            { session: 13, note: 'A bounty hunter sent after her was killed on the road; a note read "Hyrda".' }
+            { session: 13, note: 'A bounty hunter sent after her was killed on the road; a note read "Hyrda".' },
+            { session: 14, note: 'Briefed the party on ducal pressure and led planning for mine-defense sabotage in Hýrda.' }
         ],
         connections: [
             { type: 'character', id: 'ysidor', reason: 'Mentor and guardian' },
             { type: 'location', id: 'duskbreaker-lighthouse', reason: 'Held captive beneath the Lighthouse' },
             { type: 'location', id: 'hyrta', reason: 'Home village' },
-            { type: 'lore', id: 'light-crystals', reason: 'Subject of crystal synthesis process' }
+            { type: 'lore', id: 'light-crystals', reason: 'Subject of crystal synthesis process' },
+            { type: 'npc', id: 'ardwin', reason: 'Coordinates village defense strategy with him' },
+            { type: 'location', id: 'hyrta-ducal-encampment', reason: 'Leading resistance against nearby ducal forces' }
+        ]
+    },
+    {
+        id: 'ardwin',
+        name: 'Ardwin',
+        role: 'Village Blacksmith',
+        location: 'Hýrda',
+        description: 'A towering blacksmith of Hýrda who is helping Meri convert available metal into defensive tools and shape the village\'s war plan.',
+        history: [
+            { session: 14, note: 'Met the party, received warforged intelligence, and joined planning for mine sabotage and defense.' }
+        ],
+        connections: [
+            { type: 'location', id: 'hyrta', reason: 'Lives and forges in the village' },
+            { type: 'location', id: 'hyrta-ducal-encampment', reason: 'Planning operations against this force' },
+            { type: 'npc', id: 'meri', reason: 'Coordinates village defense with her' },
+            { type: 'lore', id: 'warforged', reason: 'Strategizing against expected warforged deployment' }
         ]
     },
     {
