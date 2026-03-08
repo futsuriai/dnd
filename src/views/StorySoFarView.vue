@@ -2,7 +2,7 @@
   <div class="content-section story-page">
     <h1>The Story So Far</h1>
     <p class="section-intro">
-      A narrator's account stitched from the full session records.
+      A back-of-the-book style summary for readers jumping in now.
     </p>
     <p v-if="isLoading" class="loading-message">Gathering the chronicle...</p>
     <p v-else-if="coverageText" class="coverage-text">{{ coverageText }}</p>
@@ -23,23 +23,40 @@ const sessionMarkdownModules = import.meta.glob('@/assets/sessions/session-*.md'
   import: 'default'
 });
 
-const SESSION_CHRONICLE = {
-  1: 'Bastion City introduced itself in bright lamps and quiet prejudice, and five strangers met on an alms-day crossing where missing people were already the common language.',
-  2: 'Dreams and rumors pulled them west into noble stone and prison ledgers, where they learned Meri had not simply vanished - she had been transferred into Proctor Eduard\'s hands.',
-  3: 'When direct questioning failed to settle truth, the road answered with crystal-driven warforged, and the hunt for one mentor became a war against a system.',
-  4: 'At the ambush site they found no Meri, only Lighthouse signatures burned into the evidence, and the party turned back toward Bastion with suspicion now pointed at institutions, not bandits.',
-  5: 'False names, stolen passes, and improvised infiltration opened doors that official channels never would, revealing that the Duskbreaker Lighthouse hid an industrial program behind civic light.',
-  6: 'In the basement labs they found Meri alive inside synthesis machinery; alarms rose, an extraction barely held, and the party escaped with living proof of the atrocity.',
-  7: 'Outside the city, Meri named Eduard directly and exposed the motive beneath the doctrine: displace the Shadowed, seize Hyrda, and feed empire through crystal hunger.',
-  8: 'Ellara\'s vision of a screaming lamp made the cost impossible to spiritualize away, and a failed return to the Lighthouse burned cover so badly that trust and timing both began to fray.',
-  9: 'They adapted by splitting roles in West Bastion\'s courts and archives, trading lies for intelligence on Donnathan Reeves and on the noble machinery protecting him.',
-  10: 'Witty entered the campaign as volatile nobility in human form, and with him came the Whitaker masquerade plan to breach the Grand Duke\'s social perimeter.',
-  11: 'At the Soiree, dance and espionage became one discipline; they confirmed the Duke-Reeves alliance and learned their borrowed identities were already cracking.',
-  12: 'Then the Black Swan contract named Meri for removal, proving politics had turned into paid pursuit, and the party abandoned Bastion plans for the road to Hyrda.',
-  13: 'Debt bought distance but not safety: a bounty hunter approached as a mother with a swaddled lie, and the campfire ended in blood and a note pointing to Hyrda.',
-  14: 'In Hyrda, Meri and Ardwin stood against a ducal encampment while the party helped shape a mine-collapse defense that could break an invasion before it formed.',
-  15: 'The poison gamble struck only part of the camp, the counterattack landed in full, and by Session 15 the party chose surrender over executions, ending disarmed and caged behind enemy lines.'
-};
+const BACK_OF_BOOK_STAGES = [
+  {
+    minSession: 1,
+    text: 'In Bastion City, crystal lamps burn so bright they throw crueler shadows. Progress is preached as holy, order is sold as mercy, and the people least protected by either are the first to disappear.'
+  },
+  {
+    minSession: 1,
+    text: 'Into that fracture step five unlikely allies: Ellara, a faithful acolyte-druid torn between doctrine and conscience; Nyx, a shadowed hunter who trusts little and misses less; Berridin, a silver-tongued halfling survivor; Ysidor, a mountain paladin searching for his mentor Meri; and Witty, a volatile noble artificer whose absurdity often hides real nerve.'
+  },
+  {
+    minSession: 2,
+    text: 'What begins as a search for one missing mentor becomes a descent through prisons, church offices, and aristocratic courtyards, each door opening onto a larger lie. Every answer points to institutions that call themselves guardians while treating living people as acceptable cost.'
+  },
+  {
+    minSession: 5,
+    text: 'Their trail leads to the Duskbreaker Lighthouse, the empire\'s proud monument to light and invention. Behind secured halls and official smiles, the party uncovers a machine economy where warforged ambition, political influence, and sanctioned cruelty feed one another.'
+  },
+  {
+    minSession: 6,
+    text: 'When they break into the depths and pull Meri out of an active synthesis line, the worst truth is no longer rumor: Shadowed bodies are being consumed to power the very crystal light used to civilize the city. Rescue buys breath, not safety, and the circle of enemies widens.'
+  },
+  {
+    minSession: 8,
+    text: 'From there the campaign hardens into espionage and open defiance: false names at noble balls, fragile alliances, quiet betrayals, and a bounty order that turns Meri into sanctioned prey. The party keeps winning fragments of truth while losing the safety of anonymity.'
+  },
+  {
+    minSession: 12,
+    text: 'The road carries them from Bastion to Hyrda, where ducal pressure threatens to become conquest and village defense becomes a race against reinforcements. Strategy shifts from investigation to resistance, and every plan is measured in lives, not glory.'
+  },
+  {
+    minSession: 15,
+    text: 'Their latest gamble - poison, sabotage, and a collapsing timetable - fails to break the encampment before the counterstrike lands. Rather than watch captors begin executions, the party yields, stripped of gear and locked in cages inside enemy lines, with the next move likely deciding not only their fate but Hyrda\'s.'
+  }
+];
 
 function extractSessionNumber(filePath) {
   const match = filePath.match(/session-(\d+)\.md$/i);
@@ -57,20 +74,7 @@ function stripMarkdown(text) {
     .trim();
 }
 
-function extractTitle(markdown, sessionNumber) {
-  const heading = markdown
-    .split('\n')
-    .map(line => line.trim())
-    .find(line => /^#{1,3}\s*session\s+\d+/i.test(line));
-
-  if (!heading) {
-    return `Session ${sessionNumber}`;
-  }
-
-  return heading.replace(/^#+\s*/, '').replace(/[*_~`]/g, '').trim();
-}
-
-function extractFallbackLine(markdown, sessionNumber, title) {
+function extractFirstNarrativeSentence(markdown) {
   const proseBlock = markdown
     .split(/\n\s*\n/)
     .map(block => block.trim())
@@ -80,21 +84,30 @@ function extractFallbackLine(markdown, sessionNumber, title) {
       return stripMarkdown(block).length > 100;
     });
 
-  if (!proseBlock) {
-    return `${title} (Session ${sessionNumber}) is recorded in the archive, though this chapter still awaits a fully written retelling.`;
-  }
+  if (!proseBlock) return '';
 
   const sentenceMatch = stripMarkdown(proseBlock).match(/[^.!?]+[.!?]/);
-  const sentence = sentenceMatch ? sentenceMatch[0].trim() : stripMarkdown(proseBlock);
-  return `${title}: ${sentence}`;
+  return sentenceMatch ? sentenceMatch[0].trim() : stripMarkdown(proseBlock);
 }
 
-function groupLinesIntoParagraphs(lines, chunkSize = 3) {
-  const grouped = [];
-  for (let index = 0; index < lines.length; index += chunkSize) {
-    grouped.push(lines.slice(index, index + chunkSize).join(' '));
+function lowerFirst(text) {
+  if (!text) return text;
+  return text.charAt(0).toLowerCase() + text.slice(1);
+}
+
+function buildStoryParagraphs(latestSessionNumber, latestSessionContent) {
+  const staged = BACK_OF_BOOK_STAGES
+    .filter(stage => latestSessionNumber >= stage.minSession)
+    .map(stage => stage.text);
+
+  if (latestSessionNumber > 15) {
+    const continuation = extractFirstNarrativeSentence(latestSessionContent);
+    if (continuation) {
+      staged.push(`Beyond that turning point, the tale keeps moving: ${lowerFirst(continuation)}`);
+    }
   }
-  return grouped;
+
+  return staged;
 }
 
 export default {
@@ -118,13 +131,7 @@ export default {
             if (number === null) return null;
 
             const content = await loadContent();
-            const title = extractTitle(content, number);
-
-            return {
-              number,
-              title,
-              content
-            };
+            return { number, content };
           })
         )
       )
@@ -138,15 +145,9 @@ export default {
         return;
       }
 
-      const chapterLines = sessions.map(session => {
-        if (SESSION_CHRONICLE[session.number]) {
-          return SESSION_CHRONICLE[session.number];
-        }
-        return extractFallbackLine(session.content, session.number, session.title);
-      });
-
-      this.storyParagraphs = groupLinesIntoParagraphs(chapterLines, 3);
-      this.coverageText = `Chronicling ${sessions.length} sessions (Session ${sessions[0].number} through Session ${sessions[sessions.length - 1].number}).`;
+      const latest = sessions[sessions.length - 1];
+      this.storyParagraphs = buildStoryParagraphs(latest.number, latest.content);
+      this.coverageText = 'Updated through the latest recorded chapter.';
       this.isLoading = false;
     }
   }
