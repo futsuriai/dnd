@@ -43,6 +43,102 @@ Once all `.txt` files are generated, merge them into a single sorted dialogue:
 python3 scripts/transcription/combine_transcripts.py "/path/to/audio" "session_XX_transcript.txt"
 ```
 
+### 5. One-Command Session Pipeline (Recommended)
+To run the full Session pipeline (entity refresh, transcription retries, combine, name fixes, final copies, OOC split, raw-note chunk prep, optional raw-note agents, optional polished-session generation, manifest):
+```bash
+python3 scripts/transcription/run_transcript_pipeline.py \
+  --session 15 \
+  --audio-dir "/path/to/session-audio"
+```
+
+### 5a. Full End-to-End Checklist: Raw Audio -> Raw Session MD
+
+If you want the full path spelled out from Craig-style speaker audio streams to a completed `Raw Session XX.md`, this is the sequence:
+
+1. Put all speaker-isolated audio files for the session in one directory.
+2. Make sure `scripts/transcription/speaker_map.json` is current.
+3. Run the one-command pipeline once to generate:
+   - per-speaker transcripts
+   - combined normalized transcript
+   - OOC-filtered transcript variants
+   - raw-note chunk files and `chunks_manifest.json`
+4. Run a provider over every raw-note chunk so each `chunk_XXX.txt` gets a matching `chunk_XXX_notes.txt`.
+5. Finalize the raw notes by concatenating the chunk outputs into `Raw Session XX.md`.
+6. If needed, rerun the raw-note chunk stage with `--raw-notes-force` and re-finalize; seam cleanup now happens automatically during `concat`.
+
+Concrete commands:
+```bash
+# 1) Build transcript artifacts and raw-note chunks
+python3 scripts/transcription/run_transcript_pipeline.py \
+  --session 15 \
+  --audio-dir "/path/to/session-audio"
+
+# 2) Run the raw-note agent loop
+python3 scripts/transcription/run_raw_notes_subagents.py \
+  "/home/babu/source/ellara/Session Notes/Raw Session 15 Chunks/chunks_manifest.json" \
+  --provider codex \
+  --finalize
+
+# 3) The completed raw notes land here
+/home/babu/source/ellara/Session Notes/Raw Session 15.md
+```
+
+If you already have the per-speaker `.txt` files and only want to rebuild the downstream artifacts:
+```bash
+python3 scripts/transcription/run_transcript_pipeline.py \
+  --session 15 \
+  --audio-dir "/path/to/session-audio" \
+  --skip-transcribe
+```
+
+Useful flags:
+```bash
+# Reuse existing per-speaker transcripts and only rebuild final artifacts
+python3 scripts/transcription/run_transcript_pipeline.py \
+  --session 15 \
+  --audio-dir "/path/to/session-audio" \
+  --skip-transcribe
+
+# Force fresh per-speaker transcript generation
+python3 scripts/transcription/run_transcript_pipeline.py \
+  --session 15 \
+  --audio-dir "/path/to/session-audio" \
+  --clean
+
+# Skip raw-note chunk preparation if you only want transcript artifacts
+python3 scripts/transcription/run_transcript_pipeline.py \
+  --session 15 \
+  --audio-dir "/path/to/session-audio" \
+  --skip-raw-notes-prep
+
+# Prepare chunk files and dispatch them through Codex
+python3 scripts/transcription/run_transcript_pipeline.py \
+  --session 15 \
+  --audio-dir "/path/to/session-audio" \
+  --skip-transcribe \
+  --run-raw-notes-provider codex \
+  --raw-notes-finalize
+
+# Rebuild raw notes, clean seam artifacts during concat, and generate polished Session 15 notes
+python3 scripts/transcription/run_transcript_pipeline.py \
+  --session 15 \
+  --audio-dir "/path/to/session-audio" \
+  --skip-transcribe \
+  --run-raw-notes-provider codex \
+  --raw-notes-force \
+  --raw-notes-finalize \
+  --run-session-notes-provider codex \
+  --session-notes-force
+
+# Show planned raw-note dispatches without running the model
+python3 scripts/transcription/run_transcript_pipeline.py \
+  --session 15 \
+  --audio-dir "/path/to/session-audio" \
+  --skip-transcribe \
+  --run-raw-notes-provider codex \
+  --raw-notes-dry-run
+```
+
 ---
 
 ## 🔀 Transcript Reconciliation Workflow
@@ -163,20 +259,25 @@ python3 scripts/transcription/filter_ooc.py concat ./ooc_chunks session-XX-ingam
 
 ### Stage 5: Raw Session Notes Generation
 
-The in-game transcript is converted into condensed prose-style session notes matching the format of Raw Sessions 1–4 in the campaign wiki.
+The in-game transcript is converted into condensed prose-style session notes matching the format used in existing `Raw Session XX.md` files. The chunk preparation step now produces non-overlapping primary ranges with overlapping context before/after each chunk so subagents can work independently without duplicating scenes.
 
 ```bash
-# Split into narrative chunks
-python3 scripts/transcription/generate_raw_notes.py prepare session-XX-ingame.txt ./notes_chunks
+# Split into subagent-ready chunks
+python3 scripts/transcription/generate_raw_notes.py prepare session-XX-ingame.txt ./notes_chunks \
+    --chunk-size 20 \
+    --overlap 5
 
 # View the prompt template
 python3 scripts/transcription/generate_raw_notes.py prompt
 
 # (Process each chunk through LLM — see prompt template)
-# Save results as notes_chunks/chunk_N_notes.txt
+# Save results as notes_chunks/chunk_XXX_notes.txt
 
-# Concatenate and apply name corrections
+# Concatenate, apply name corrections, and clean seam artifacts
 python3 scripts/transcription/generate_raw_notes.py concat ./notes_chunks "Raw Session XX.md"
+
+# Clean an existing raw-session file in place
+python3 scripts/transcription/generate_raw_notes.py clean "Raw Session XX.md"
 ```
 
 **Notes format:**
@@ -185,9 +286,33 @@ python3 scripts/transcription/generate_raw_notes.py concat ./notes_chunks "Raw S
 - GM narration condensed into descriptions
 - Dice rolls/checks noted inline
 - No timestamps in output
-- ~120 entries per chunk (larger chunks = more narrative continuity)
+- Each chunk file contains:
+  - `CONTEXT BEFORE`
+  - `PRIMARY RANGE`
+  - `CONTEXT AFTER`
+- Subagents should write notes only for `PRIMARY RANGE`
+- Remaining player chatter/meta should still be omitted even if it survives the OOC filter
 
-The concat step applies canonical name corrections (e.g., `here's embrace` → `hýrda's embrace`, `heroterra` → `hieroterra`, `nites` → `nýtes`) automatically.
+The concat step applies canonical name corrections (e.g., `here's embrace` → `hýrda's embrace`, `heroterra` → `hieroterra`, `nites` → `nýtes`) and removes obvious seam artifacts automatically.
+
+### Stage 6: Polished Session Notes Generation
+
+Once `Raw Session XX.md` exists, a second LLM pass can generate a polished `Session XX.md` in the style of the existing campaign notes.
+
+```bash
+python3 scripts/transcription/run_session_notes_agent.py \
+    XX \
+    "Raw Session XX.md" \
+    "Session XX.md" \
+    --provider codex
+```
+
+This stage is intended to match the existing `Session 11.md` through `Session 14.md` format:
+- markdown title with a session subtitle
+- `Locales` and `Time`
+- numbered sections
+- cleaner narrative prose than the raw notes
+- use the existing `Session 11.md` through `Session 14.md` files as the style guide for tone, structure, and level of detail
 
 ### Quick Reference: Full Pipeline
 

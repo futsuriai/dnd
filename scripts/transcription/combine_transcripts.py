@@ -5,6 +5,7 @@ import json
 
 # Path to speaker map
 SPEAKER_MAP_FILE = os.path.join(os.path.dirname(__file__), 'speaker_map.json')
+AUDIO_EXTENSIONS = {'.flac', '.mp3', '.wav', '.m4a', '.ogg', '.aac'}
 
 def load_speaker_map():
     if os.path.exists(SPEAKER_MAP_FILE):
@@ -29,8 +30,24 @@ def identify_speaker(filename, speaker_map):
         if key.lower() in base_name:
             return name
     name_part = os.path.splitext(base_name)[0]
-    name_part = name_part.replace('.flac', '').replace('.mp3', '').replace('.wav', '')
+    for ext in AUDIO_EXTENSIONS:
+        name_part = name_part.replace(ext, '')
     return name_part.title()
+
+
+def is_per_speaker_transcript(input_dir, file_name):
+    if not file_name.endswith('.txt'):
+        return False
+
+    # Typical case: "<audiofile>.<ext>.txt"
+    stem = file_name[:-4]
+    lower_stem = stem.lower()
+    if any(lower_stem.endswith(ext) for ext in AUDIO_EXTENSIONS):
+        return True
+
+    # Fallback: transcript has a matching sibling audio file.
+    audio_path = os.path.join(input_dir, stem)
+    return os.path.isfile(audio_path)
 
 def process_file(filepath, speaker_name):
     entries = []
@@ -78,14 +95,30 @@ def main():
         sys.exit(1)
 
     output_path = os.path.abspath(output_file)
+    ignored_files = {
+        os.path.basename(output_path),
+        "transcribe.log",
+        "info.txt",
+    }
 
-    for file in os.listdir(input_dir):
-        if file.endswith('.txt') and file != os.path.basename(output_path) and file != "transcribe.log" and file != "info.txt":
-            filepath = os.path.join(input_dir, file)
-            speaker = identify_speaker(file, speaker_map)
-            print(f"Processing {file} (Speaker: {speaker})")
-            entries = process_file(filepath, speaker)
-            all_entries.extend(entries)
+    candidates = sorted(
+        file for file in os.listdir(input_dir)
+        if file not in ignored_files and is_per_speaker_transcript(input_dir, file)
+    )
+
+    if not candidates:
+        print("Warning: no per-speaker transcript files were detected; falling back to legacy *.txt scan.")
+        candidates = sorted(
+            file for file in os.listdir(input_dir)
+            if file.endswith('.txt') and file not in ignored_files
+        )
+
+    for file in candidates:
+        filepath = os.path.join(input_dir, file)
+        speaker = identify_speaker(file, speaker_map)
+        print(f"Processing {file} (Speaker: {speaker})")
+        entries = process_file(filepath, speaker)
+        all_entries.extend(entries)
 
     if not all_entries:
         print("No entries found to combine!")

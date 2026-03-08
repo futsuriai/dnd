@@ -4,7 +4,7 @@ import torch
 from faster_whisper import WhisperModel
 
 # Supported audio extensions
-AUDIO_EXTENSIONS = {'.flac', '.mp3', '.wav', '.m4a', '.ogg'}
+AUDIO_EXTENSIONS = {'.flac', '.mp3', '.wav', '.m4a', '.ogg', '.aac'}
 
 def load_entity_names(entity_list_path):
     if not os.path.isfile(entity_list_path):
@@ -42,7 +42,8 @@ def build_initial_prompt(entity_names):
 def transcribe_file(model, audio_path, output_path, initial_prompt=None):
     print(f"Transcribing {audio_path}...")
     try:
-        transcribe_kwargs = {"beam_size": 5, "vad_filter": True}
+        beam_size = int(os.getenv("WHISPER_BEAM_SIZE", "5"))
+        transcribe_kwargs = {"beam_size": beam_size, "vad_filter": True}
         if initial_prompt:
             transcribe_kwargs["initial_prompt"] = initial_prompt
 
@@ -75,6 +76,12 @@ def format_timestamp(seconds):
     return f"{hours:02}:{minutes:02}:{secs:02}"
 
 def load_model(model_size="large-v3", device="cuda", compute_type="float16"):
+    if device == "cuda" and not torch.cuda.is_available():
+        print("CUDA is not available; falling back to CPU with int8 compute.")
+        device = "cpu"
+        if compute_type == "float16":
+            compute_type = "int8"
+
     print(f"Loading model: {model_size} on {device} ({compute_type})...")
     try:
         return WhisperModel(model_size, device=device, compute_type=compute_type)
@@ -116,8 +123,12 @@ def main():
     else:
         print("No entity prompt loaded; continuing without it.")
 
+    model_size = os.getenv("WHISPER_MODEL_SIZE", "large-v3")
+    device = os.getenv("WHISPER_DEVICE", "cuda")
+    compute_type = os.getenv("WHISPER_COMPUTE_TYPE", "float16")
+
     # Load model once
-    model = load_model()
+    model = load_model(model_size=model_size, device=device, compute_type=compute_type)
     if not model:
         sys.exit(1)
 
