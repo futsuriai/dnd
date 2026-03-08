@@ -1,7 +1,37 @@
 // NPC data for the world
 
+const avatarModules = import.meta.glob('@/assets/avatars/avatar/*', { eager: true, import: 'default' });
+const portraitModules = import.meta.glob('@/assets/avatars/portrait/*', { eager: true, import: 'default' });
+
+function getImageUrl(modules, id, type) {
+    for (const path in modules) {
+        if (path.includes(`/${type}/${id}.`)) {
+            return modules[path];
+        }
+    }
+    return null;
+}
+
 export const npcs = [
     // Major NPCs (show like CharactersView with portraits/avatars)
+    {
+        id: 'tsinyra',
+        name: 'Tsi\'nyra',
+        role: 'Wanderer of the Mother Tree',
+        location: 'Bastion City and the surrounding roads',
+        status: 'ally',
+        description: 'A quiet traveler from the Mother Tree\'s line, seeking her missing siblings while learning the wider world beyond her forest roots.',
+        fullText: 'Child of the Mother Tree, Tsi\'nyra travels to witness the world and gather what it teaches. She arrived in Bastion City unsure of its rhythms but determined to find her missing siblings, carrying both her mother\'s token and a patient sense of purpose. Her calm demeanor and bond with her leopard companion make her seem reserved at first glance, yet she has repeatedly chosen to stand beside the party when danger rises.',
+        avatarUrl: getImageUrl(avatarModules, 'tsinyra', 'avatar'),
+        portraitUrl: getImageUrl(portraitModules, 'tsinyra', 'portrait'),
+        history: [
+            { session: 1, note: 'Introduced in Bastion City while searching for her missing siblings; began traveling with Nyx and the party.' }
+        ],
+        connections: [
+            { type: 'character', id: 'nyx', reason: 'Early travel companion and ally in Bastion' },
+            { type: 'location', id: 'bastion-city', reason: 'First major urban foothold during her search' }
+        ]
+    },
     {
         id: 'lady-ophelia-xanteres-oliander',
         name: 'Lady Ophelia Xanteres Oliander',

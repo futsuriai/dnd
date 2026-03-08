@@ -5,6 +5,7 @@ import CharactersView from '../views/CharactersView.vue';
 import HistoryView from '../views/HistoryView.vue';
 // import ItemsView from '../views/ItemsView.vue';
 import SessionsView from '../views/SessionsView.vue';
+import StorySoFarView from '../views/StorySoFarView.vue';
 import LocationsView from '../views/LocationsView.vue';
 import NpcsView from '../views/NpcsView.vue';
 import LoreView from '../views/LoreView.vue'; // Import LoreView
@@ -12,7 +13,6 @@ import BastionCityView from '../views/BastionCityView.vue'; // Import the new vi
 
 // Import character detail views
 import EllaraView from '../views/characters/EllaraView.vue';
-import TsinyraView from '../views/characters/TsinyraView.vue';
 import BerridinView from '../views/characters/BerridinView.vue';
 import NyxView from '../views/characters/NyxView.vue';
 import YsidorView from '../views/characters/YsidorView.vue';
@@ -54,6 +54,11 @@ const routes = [
     component: SessionsView,
   },
   {
+    path: '/sessions/story-so-far',
+    name: 'Story So Far',
+    component: StorySoFarView,
+  },
+  {
     path: '/locations',
     name: 'Locations',
     component: LocationsView,
@@ -73,11 +78,6 @@ const routes = [
     path: '/characters/ellara',
     name: 'Ellara',
     component: EllaraView
-  },
-  {
-    path: '/characters/tsinyra',
-    name: 'Tsi\'nyra',
-    component: TsinyraView
   },
   {
     path: '/characters/berridin',

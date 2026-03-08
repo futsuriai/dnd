@@ -20,20 +20,6 @@ function getImageUrl(modules, id, type) {
 
 export const characters = [
   {
-    id: 'tsinyra',
-    name: 'Tsi\'nyra',
-    race: 'Genasi',
-    class: 'Ranger/Beastmaster',
-    level: 3,
-    background: 'Forest Offspring',
-    bio: 'Child of the Mother Tree, her purpose is to experience and learn of the world. How much is imparted onto the world is the individual\'s choice, but the sentient Mother Tree encourages her children to learn and grow for the benefit of the whole. Not much is known of this sentient tree and her children by the outside world, but as their presence grows, they\'ve become hard to ignore. Tsi\'nyra, like many of her other siblings, travels with a companion animal and blessings from the Mother Tree herself.',
-    dndBeyondLink: 'https://www.dndbeyond.com/characters/145877243',
-    // Dynamically get the URL based on the id 'tsinyra'
-    avatarUrl: getImageUrl(avatarModules, 'tsinyra', 'avatar'),
-    portraitUrl: getImageUrl(portraitModules, 'tsinyra', 'portrait'),
-    connections: []
-  },
-  {
     id: 'berridin',
     name: 'Berridin',
     race: 'Halfling',

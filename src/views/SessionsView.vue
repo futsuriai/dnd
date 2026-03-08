@@ -2,6 +2,11 @@
   <div class="content-section">
     <h1>Campaign Sessions</h1>
     <p class="section-intro">Chronicles of our adventures and key events from each session.</p>
+    <p class="story-link-row">
+      <router-link to="/sessions/story-so-far" class="story-link">
+        Read The Story So Far
+      </router-link>
+    </p>
 
     <div v-if="sessions.length" class="sessions-container">
       <div v-for="session in sessions" :key="session.id" class="session-card" :id="session.id">
@@ -232,7 +237,23 @@ export default {
 .section-intro {
   text-align: center;
   max-width: 800px;
-  margin: 0 auto 2em;
+  margin: 0 auto 0.75em;
+}
+
+.story-link-row {
+  text-align: center;
+  margin: 0 auto 1.75rem;
+}
+
+.story-link {
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--color-highlight);
+}
+
+.story-link:hover {
+  color: var(--color-accent);
+  text-decoration: underline;
 }
 
 .sessions-container {
