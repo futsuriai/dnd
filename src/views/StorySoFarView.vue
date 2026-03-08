@@ -1,9 +1,6 @@
 <template>
   <div class="content-section story-page">
     <h1>The Story So Far</h1>
-    <p class="section-intro">
-      A back-of-the-book style summary for readers jumping in now.
-    </p>
     <p v-if="isLoading" class="loading-message">Gathering the chronicle...</p>
     <p v-else-if="coverageText" class="coverage-text">{{ coverageText }}</p>
 
@@ -147,7 +144,7 @@ export default {
 
       const latest = sessions[sessions.length - 1];
       this.storyParagraphs = buildStoryParagraphs(latest.number, latest.content);
-      this.coverageText = 'Updated through the latest recorded chapter.';
+      this.coverageText = 'An unlikely party, a darkness in the heart of the duchy, a light in the hearts of our heroes.';
       this.isLoading = false;
     }
   }
