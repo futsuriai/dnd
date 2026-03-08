@@ -1,12 +1,31 @@
 export const sessions = [
   {
+    id: 'session-16',
+    title: 'Session 16',
+    subtitle: 'Cages and Countermoves',
+    date: 'March 9, 2026',
+    upcoming: true,
+    description: 'The party must survive captivity inside the Hýrda ducal encampment and find a path to escape.',
+    highlights: [],
+  },
+  {
     id: 'session-15',
     title: 'Session 15',
-    subtitle: 'Powder in the Hills',
+    subtitle: 'Mushrooms, Moonlight, and Cages',
     date: 'February 9, 2026',
-    upcoming: true,
-    description: 'The party prepares sabotage operations around Hýrda to blunt the ducal and warforged threat.',
-    highlights: [],
+    upcoming: false,
+    summaryFile: 'session-15.md',
+    description: 'The party attempts a poison-and-sabotage operation against the Hýrda ducal encampment, but the assault fails and ends with everyone imprisoned in cages.',
+    highlights: [
+      'The group refines a mine-collapse strategy but pivots to neutralizing the camp force first.',
+      'Ellara and Ysidor gather local fungi and plant substitutes to build a nonlethal poison plan.',
+      'Nyx and Berridin recon the camp and confirm difficult sightlines, guarded approaches, and mess hall routines.',
+      'Berridin infiltrates under invisibility and poisons the banquet, but only about 40% of soldiers are affected.',
+      'The remaining defenders include high-durability archers and a dangerous guard captain who absorbs heavy pressure.',
+      'Witty lands an Acid Splash across four archers while Ellara controls space with Moonbeam and Nyx repositions for shots.',
+      'Berridin and Ellara are both dropped, and the enemy threatens executions if anyone keeps fighting.',
+      'Nyx reports mission failure to Meri over sending stone; the party surrenders and is stripped and caged.'
+    ],
   },
   {
     id: 'session-14',

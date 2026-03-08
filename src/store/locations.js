@@ -364,12 +364,28 @@ export const locations = [
       { session: 7, note: 'Meri is heading home as it is facing mining disputes' },
       { session: 12, note: '~20 soldiers encamped nearby under ducal decree; party en route by carriage' },
       { session: 13, note: 'Party sighted a Grand Duke encampment of ~20 soldiers near the village.' },
-      { session: 14, note: 'Party reached the village; Meri and Ardwin began coordinating mine-defense sabotage plans.' }
+      { session: 14, note: 'Party reached the village; Meri and Ardwin began coordinating mine-defense sabotage plans.' },
+      { session: 15, note: 'Operation launched from Hýrda failed at the encampment, leaving the party captured in cages.' }
     ],
     connections: [
       { type: 'location', id: 'hieroterra', reason: 'Village within the province' },
+      { type: 'location', id: 'hyrta-mines', reason: 'Village mining network and defensive choke point' },
       { type: 'location', id: 'hyrta-ducal-encampment', reason: 'Ducal forces staged near the mines' },
       { type: 'npc', id: 'ardwin', reason: 'Village blacksmith helping lead defenses' }
+    ]
+  },
+  {
+    id: 'hyrta-mines',
+    name: 'Hýrda Mines',
+    type: 'poi',
+    description: 'The cave-and-tunnel mining network near Hýrda. It is both a vital resource and the centerpiece of sabotage plans against incoming ducal reinforcements.',
+    tags: ['mines', 'caves', 'hyrda'],
+    history: [
+      { session: 15, note: 'Mine-cave collapse strategy remained the objective while the party attempted to disable the nearby camp first.' }
+    ],
+    connections: [
+      { type: 'location', id: 'hyrta', reason: 'Primary village mining site' },
+      { type: 'location', id: 'hyrta-ducal-encampment', reason: 'Encampment is positioned at the cave approach' }
     ]
   },
   {
@@ -380,10 +396,12 @@ export const locations = [
     tags: ['military', 'hyrda', 'mines'],
     history: [
       { session: 13, note: 'First sighted as a Grand Duke encampment near Hýrda.' },
-      { session: 14, note: 'Confirmed as the ducal staging force; party plans to steal powder and sabotage operations.' }
+      { session: 14, note: 'Confirmed as the ducal staging force; party plans to steal powder and sabotage operations.' },
+      { session: 15, note: 'Poison-assisted assault only partially disabled defenders; the party surrendered and was imprisoned in camp cages.' }
     ],
     connections: [
       { type: 'location', id: 'hyrta', reason: 'Positioned beside village mining approaches' },
+      { type: 'location', id: 'hyrta-mines', reason: 'Controls access near the cave mouth' },
       { type: 'npc', id: 'duke-valerian-oliander', reason: 'Acts under ducal authority in the mining dispute' },
       { type: 'lore', id: 'warforged', reason: 'Potential rendezvous point for planned warforged reinforcements' }
     ]

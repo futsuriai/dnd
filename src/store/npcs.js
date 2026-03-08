@@ -34,7 +34,8 @@ export const npcs = [
             { session: 11, note: 'Target of a "Black Swan" commission: a 250g bounty on her head.' },
             { session: 12, note: 'Reported ~20 soldiers encamped near Hýrda under ducal decree; party contacted via sending stone' },
             { session: 13, note: 'A bounty hunter sent after her was killed on the road; a note read "Hyrda".' },
-            { session: 14, note: 'Briefed the party on ducal pressure and led planning for mine-defense sabotage in Hýrda.' }
+            { session: 14, note: 'Briefed the party on ducal pressure and led planning for mine-defense sabotage in Hýrda.' },
+            { session: 15, note: 'Received Nyx\'s sending-stone report that the encampment operation failed and the party surrendered into cages.' }
         ],
         connections: [
             { type: 'character', id: 'ysidor', reason: 'Mentor and guardian' },
