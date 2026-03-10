@@ -65,7 +65,8 @@ export const npcs = [
             { session: 12, note: 'Reported ~20 soldiers encamped near Hýrda under ducal decree; party contacted via sending stone' },
             { session: 13, note: 'A bounty hunter sent after her was killed on the road; a note read "Hyrda".' },
             { session: 14, note: 'Briefed the party on ducal pressure and led planning for mine-defense sabotage in Hýrda.' },
-            { session: 15, note: 'Received Nyx\'s sending-stone report that the encampment operation failed and the party surrendered into cages.' }
+            { session: 15, note: 'Received Nyx\'s sending-stone report that the encampment operation failed and the party surrendered into cages.' },
+            { session: 16, note: 'Helped receive the escapees, arm the rescue attempt, and send the party back toward the camp before the ducal response could harden.' }
         ],
         connections: [
             { type: 'character', id: 'ysidor', reason: 'Mentor and guardian' },
@@ -83,7 +84,8 @@ export const npcs = [
         location: 'Hýrda',
         description: 'A towering blacksmith of Hýrda who is helping Meri convert available metal into defensive tools and shape the village\'s war plan.',
         history: [
-            { session: 14, note: 'Met the party, received warforged intelligence, and joined planning for mine sabotage and defense.' }
+            { session: 14, note: 'Met the party, received warforged intelligence, and joined planning for mine sabotage and defense.' },
+            { session: 16, note: 'Aided Meri in rearming the escapees for an immediate rescue and counter-raid into the encampment.' }
         ],
         connections: [
             { type: 'location', id: 'hyrta', reason: 'Lives and forges in the village' },

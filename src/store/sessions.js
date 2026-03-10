@@ -1,12 +1,33 @@
 export const sessions = [
   {
-    id: 'session-16',
-    title: 'Session 16',
-    subtitle: 'Cages and Countermoves',
+    id: 'session-17',
+    title: 'Session 17',
+    subtitle: 'Powder and Retaliation',
+    location: 'Hýrda · Ducal encampment · Hýrda Mines',
     date: 'March 9, 2026',
     upcoming: true,
-    description: 'The party must survive captivity inside the Hýrda ducal encampment and find a path to escape.',
+    description: 'With the rescue complete and stolen gunpowder finally in hand, the party must turn a desperate escape into a real defense of Hýrda before ducal retaliation and reinforcements arrive.',
     highlights: [],
+  },
+  {
+    id: 'session-16',
+    title: 'Session 16',
+    subtitle: 'Chains, Spiders, and Gunpowder',
+    location: 'Ducal encampment at the cave mouth · Woods west of camp · Hyrda',
+    date: 'March 9, 2026',
+    upcoming: false,
+    summaryFile: 'session-16.md',
+    description: 'Captured inside the ducal encampment, the party breaks out, rescues Berridin and Witty, reclaims their gear, and escapes with stolen gunpowder while the threat to Hyrda escalates.',
+    highlights: [
+      'The party begins Session 16 disarmed and split across three reinforced cages after the failed poison-and-sabotage assault.',
+      'Nyx spots a key ring on a guard, while Ellara is marched off to heal poisoned soldiers under close watch.',
+      'Ellara escapes by blinding her escort with Light and slipping away in spider form.',
+      'Witty and Berridin help create the opening for Ysidor to shatter his chain and break free on a natural 20.',
+      'Nyx later teleports out of restraint with the Blessing of the Raven Queen, leaving only Berridin and Witty imprisoned.',
+      'Ysidor, Nyx, and Ellara regroup in Hyrda with Meri and Ardwin, arm themselves, and immediately return for a rescue.',
+      'The trio sneaks back into camp, recovers the party’s gear, and rips Berridin and Witty free from the prisoner pole under fire.',
+      'The group escapes alive with their equipment and at least one barrel of gunpowder, but the captain still has their gold and reinforcements are still coming.'
+    ],
   },
   {
     id: 'session-15',

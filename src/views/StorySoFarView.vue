@@ -52,6 +52,10 @@ const BACK_OF_BOOK_STAGES = [
   {
     minSession: 15,
     text: 'Their latest gamble - poison, sabotage, and a collapsing timetable - fails to break the encampment before the counterstrike lands. Rather than watch captors begin executions, the party yields, stripped of gear and locked in cages inside enemy lines, with the next move likely deciding not only their fate but Hyrda\'s.'
+  },
+  {
+    minSession: 16,
+    text: 'Captivity does not hold for long. Ellara slips free in spider form, Nyx and Ysidor turn panic into momentum, and the party claws Berridin and Witty back out of the ducal camp while reclaiming their gear and stealing gunpowder. Survival becomes counterattack, but the rescue only sharpens the real problem: Hyrda still stands in the path of a larger force that has not yet arrived.'
   }
 ];
 
@@ -97,7 +101,7 @@ function buildStoryParagraphs(latestSessionNumber, latestSessionContent) {
     .filter(stage => latestSessionNumber >= stage.minSession)
     .map(stage => stage.text);
 
-  if (latestSessionNumber > 15) {
+  if (latestSessionNumber > 16) {
     const continuation = extractFirstNarrativeSentence(latestSessionContent);
     if (continuation) {
       staged.push(`Beyond that turning point, the tale keeps moving: ${lowerFirst(continuation)}`);

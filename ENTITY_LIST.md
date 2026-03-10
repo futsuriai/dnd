@@ -41,6 +41,7 @@ This file is auto-generated. Do not edit manually.
 - `hieroterra`: Hieroterra
 - `hyrta`: Hýrda
 - `hyrta-ducal-encampment`: Hýrda Ducal Encampment
+- `hyrta-mines`: Hýrda Mines
 - `lady-jacintas-estate`: Lady Jacinta\
 - `lighthouse-arcana-floor`: High Arcana Floor (Wizard Scriptorium)
 - `lighthouse-deep-basement`: Deep Underground Complex
@@ -86,13 +87,13 @@ This file is auto-generated. Do not edit manually.
 - `samantha`: Samantha
 - `stanley-guard`: Stanley
 - `tingle`: Tingle
+- `tsinyra`: Tsi\
 
 ## Characters
 
 - `berridin`: Berridin
 - `ellara`: Ellara
 - `nyx`: Nyx
-- `tsinyra`: Tsi\
 - `witty`: Whitaker 
 - `ysidor`: Ysidor
 

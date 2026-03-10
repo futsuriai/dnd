@@ -14,7 +14,7 @@
 
       <div class="info-card">
         <h3 class="fancy-title">Next Session</h3>
-        <p>{{ nextSessionDate }} at {{ nextSessionTime }}</p>
+        <p>{{ nextSessionLabel }}</p>
       </div>
     </div>
 
@@ -44,12 +44,22 @@ const sessionMarkdownModules = import.meta.glob('@/assets/sessions/session-*.md'
 });
 
 const HOME_RECAP_BY_SESSION = {
+  16: 'The party escaped the ducal cages, rescued Berridin and Witty, reclaimed their gear, and got out with at least one barrel of gunpowder, but the captain still has their gold and Hyrda is still on borrowed time.',
   15: 'The attempt to cripple the ducal encampment with poison and sabotage failed under concentrated resistance; the party surrendered to prevent executions and now sits caged inside enemy lines.',
   14: 'The party reached Hyrda, warned Meri and Ardwin about the warforged threat, and committed to a mine-collapse defense plan before ducal reinforcements could arrive.'
 };
 
+const HOME_NEXT_STEPS_BY_SESSION = {
+  16: 'With the rescue complete and powder finally in hand, the next question is no longer whether the party can escape the ducal camp. It is whether they can turn that stolen leverage into a real defense of Hyrda before reinforcements and retaliation close the window.',
+};
+
 function extractSessionNumberFromFile(filePath) {
   const match = filePath.match(/session-(\d+)\.md$/i);
+  return match ? Number.parseInt(match[1], 10) : null;
+}
+
+function extractSessionNumberFromId(id) {
+  const match = typeof id === 'string' && id.match(/^session-(\d+)$/i);
   return match ? Number.parseInt(match[1], 10) : null;
 }
 
@@ -109,22 +119,47 @@ function buildLatestSummary(markdown, sessionNumber) {
   return `Session ${sessionNumber} closed with consequences that are still unfolding.`;
 }
 
+function buildFallbackNextNarrative(session) {
+  if (!session) {
+    return 'No upcoming session is currently scheduled.';
+  }
+
+  if (HOME_NEXT_STEPS_BY_SESSION[session.idNumber]) {
+    return HOME_NEXT_STEPS_BY_SESSION[session.idNumber];
+  }
+
+  return `The fallout from Session ${session.idNumber} is still unfolding.`;
+}
+
+function getLatestCompletedSession(sessionList) {
+  return sessionList
+    .filter(session => session && session.upcoming === false)
+    .map(session => ({
+      ...session,
+      idNumber: extractSessionNumberFromId(session.id)
+    }))
+    .filter(session => Number.isFinite(session.idNumber))
+    .sort((a, b) => b.idNumber - a.idNumber)[0] || null;
+}
+
 export default {
   name: 'HomeView',
   data() {
     const upcomingSession = sessions.find(session => session.upcoming);
+    const latestCompletedSession = getLatestCompletedSession(sessions);
 
     return {
       campaignName: 'A Blinding Light',
       worldName: 'The Hariolar Empire',
-      currentLocation: upcomingSession?.location || 'TBD',
-      currentQuest: upcomingSession?.subtitle || 'TBD',
-      nextSessionDate: upcomingSession?.date || 'TBD',
-      nextSessionTime: upcomingSession?.time || 'TBD',
+      currentLocation: upcomingSession?.location || latestCompletedSession?.location || 'TBD',
+      currentQuest: upcomingSession?.subtitle || latestCompletedSession?.subtitle || 'TBD',
+      nextSessionLabel: upcomingSession
+        ? (upcomingSession.time ? `${upcomingSession.date} at ${upcomingSession.time}` : upcomingSession.date)
+        : 'No upcoming session scheduled',
       latestSessionSummary: '',
       nextSessionNarrative: upcomingSession
         ? `${upcomingSession.subtitle}: ${upcomingSession.description}`
-        : 'No upcoming session is currently scheduled.'
+        : buildFallbackNextNarrative(latestCompletedSession)
     };
   },
   async created() {

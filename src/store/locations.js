@@ -365,7 +365,8 @@ export const locations = [
       { session: 12, note: '~20 soldiers encamped nearby under ducal decree; party en route by carriage' },
       { session: 13, note: 'Party sighted a Grand Duke encampment of ~20 soldiers near the village.' },
       { session: 14, note: 'Party reached the village; Meri and Ardwin began coordinating mine-defense sabotage plans.' },
-      { session: 15, note: 'Operation launched from Hýrda failed at the encampment, leaving the party captured in cages.' }
+      { session: 15, note: 'Operation launched from Hýrda failed at the encampment, leaving the party captured in cages.' },
+      { session: 16, note: 'Ysidor, Nyx, and Ellara regrouped here, rearmed with Meri and Ardwin, and launched an immediate rescue back into the encampment.' }
     ],
     connections: [
       { type: 'location', id: 'hieroterra', reason: 'Village within the province' },
@@ -397,7 +398,8 @@ export const locations = [
     history: [
       { session: 13, note: 'First sighted as a Grand Duke encampment near Hýrda.' },
       { session: 14, note: 'Confirmed as the ducal staging force; party plans to steal powder and sabotage operations.' },
-      { session: 15, note: 'Poison-assisted assault only partially disabled defenders; the party surrendered and was imprisoned in camp cages.' }
+      { session: 15, note: 'Poison-assisted assault only partially disabled defenders; the party surrendered and was imprisoned in camp cages.' },
+      { session: 16, note: 'Party escaped captivity, rescued the remaining prisoners, recovered their gear, and stole at least one barrel of gunpowder from the camp.' }
     ],
     connections: [
       { type: 'location', id: 'hyrta', reason: 'Positioned beside village mining approaches' },
