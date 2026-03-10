@@ -40,6 +40,18 @@ skills/dnd-transcript-pipeline/scripts/run_pipeline.sh 15 /path/to/session-audio
 - `--session`: Session label/number used for output file names.
 - `--audio-dir`: Directory containing per-speaker audio files (`.aac`, `.flac`, `.mp3`, `.wav`, `.m4a`, `.ogg`).
 
+## Canonical Character Pronouns
+
+Apply this canon consistently in every note-generation pass: `chunk_XXX_notes.txt`, finalized `Raw Session <N>.md`, and polished `Session <N>.md`.
+
+- Nyx: male, `he/him`
+- Ellara: female, `she/her`
+- Ysidor: male, `he/him`
+- Berridin: male, `he/him`
+- Witty / `Whitaker "Witty" Whitman VI`: male, `he/him`
+
+If the transcript, voice, or an earlier draft uses the wrong pronoun for one of these characters, correct the notes to match the canon instead of carrying the mistake forward.
+
 ## Default Outputs
 
 - Per-speaker transcripts copied to:
@@ -127,6 +139,7 @@ For each chunk:
 - Read `chunk_XXX.txt`
 - Use context sections only for continuity
 - Write notes only for the `PRIMARY RANGE`
+- Normalize the listed character pronouns to the canon above even if the transcript gets them wrong
 - Save output as `chunk_XXX_notes.txt`
 
 When all chunks are done, finalize with:
@@ -146,6 +159,8 @@ For the raw -> polished pass, use the existing files
 through
 `../ellara/Session Notes/Session 15.md`
 as the style guide.
+
+During the raw -> polished pass, preserve the canonical pronouns above even if the raw notes contain an earlier mistake.
 
 ## Post-Session Repo Sync
 

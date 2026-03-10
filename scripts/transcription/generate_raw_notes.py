@@ -29,11 +29,13 @@ import sys
 import unicodedata
 from pathlib import Path
 
+from note_generation_guidance import CANONICAL_CAST_REFERENCE
+
 
 RECOMMENDED_MODEL = "gpt-5.2-codex"
 ENTRY_RE = re.compile(r"^\[\d{2}:\d{2}:\d{2}\] [^:]+: .+$")
 
-PROMPT_TEMPLATE = """\
+PROMPT_TEMPLATE = f"""\
 Convert this D&D transcript chunk into raw session notes.
 
 The chunk file contains three possible sections:
@@ -59,6 +61,8 @@ Rules:
 - Do not add commentary about what you removed
 - Do not restate the whole scene if the chunk starts in the middle of it
 
+{CANONICAL_CAST_REFERENCE}
+
 Example target style:
 ```
 nyx: "we have nothing else to go on, so let's go back to the city like ysidor suggested"
@@ -74,7 +78,7 @@ ellara: "exactly. who better to ask?"
 ```
 
 === CHUNK ===
-{chunk_text}
+{{chunk_text}}
 === END CHUNK ===
 
 Output only the raw session notes for the PRIMARY RANGE:"""

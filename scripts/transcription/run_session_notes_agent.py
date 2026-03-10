@@ -15,6 +15,8 @@ import subprocess
 import tempfile
 from pathlib import Path
 
+from note_generation_guidance import CANONICAL_CAST_REFERENCE
+
 
 def build_prompt(session: str, raw_text: str) -> str:
     return f"""Task:
@@ -38,6 +40,9 @@ Rules:
 - Do not mention transcript mechanics, chunking, or timestamps.
 - If the raw notes are uncertain, be modest and avoid false precision.
 - Output markdown only. No code fences. No commentary.
+- Preserve canonical character genders/pronouns consistently across the whole document.
+
+{CANONICAL_CAST_REFERENCE}
 
 Raw notes:
 {raw_text}

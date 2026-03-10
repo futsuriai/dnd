@@ -18,6 +18,9 @@ Requirements:
   ../ellara/Session Notes/Raw Session <SESSION> Chunks/chunks_manifest.json
 - Process each `chunk_XXX.txt` into `chunk_XXX_notes.txt`.
 - Use only the `PRIMARY RANGE` for output; use surrounding context only for continuity.
+- Normalize character pronouns to canon in both the raw and polished notes:
+  Nyx he/him, Ellara she/her, Ysidor he/him, Berridin he/him, Witty/Whitaker he/him.
+- If the transcript, voice, or a draft note conflicts with that canon, fix the pronouns in the notes instead of preserving the error.
 - When all chunks are complete, run:
   skills/dnd-transcript-pipeline/scripts/finalize_raw_notes.sh <SESSION>
 - If a raw-session file already exists but has seam artifacts, run:

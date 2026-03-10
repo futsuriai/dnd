@@ -20,6 +20,8 @@ import sys
 import tempfile
 from pathlib import Path
 
+from note_generation_guidance import CANONICAL_CAST_REFERENCE
+
 
 def log(msg: str) -> None:
     print(msg, flush=True)
@@ -41,6 +43,8 @@ def build_prompt(chunk_text: str) -> str:
 - Do not mention timestamps.
 - Do not include commentary, headings, code fences, or explanations.
 - Do not restate the whole scene if the chunk starts in the middle of it.
+
+{CANONICAL_CAST_REFERENCE}
 
 Chunk:
 {chunk_text}
