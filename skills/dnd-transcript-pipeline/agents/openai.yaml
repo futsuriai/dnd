@@ -1,0 +1,4 @@
+interface:
+  display_name: "DnD Transcript Pipeline"
+  short_description: "Run end-to-end DnD transcript artifact generation"
+  default_prompt: "Run the pipeline for this session using skills/dnd-transcript-pipeline/scripts/run_pipeline.sh, then process the raw-note chunks into chunk_XXX_notes.txt files and finalize Raw Session N with skills/dnd-transcript-pipeline/scripts/finalize_raw_notes.sh."
