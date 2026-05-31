@@ -6,6 +6,9 @@ This directory contains utility scripts for managing the D&D Campaign Wiki, spec
 
 The transcription system uses `faster-whisper` (AI-powered) to process multiple audio tracks (e.g., from Craig) and combine them into a single chronological script.
 
+For the complete agent-readable workflow from raw audio through website updates, use:
+`AGENT_SESSION_PIPELINE.md`.
+
 ### 1. Setup Environment
 Transcribing requires a Python environment with CUDA support. This is typically set up in `~/.gemini/tmp/transcribe_env`.
 
@@ -43,7 +46,37 @@ Once all `.txt` files are generated, merge them into a single sorted dialogue:
 python3 scripts/transcription/combine_transcripts.py "/path/to/audio" "session_XX_transcript.txt"
 ```
 
-### 5. One-Command Session Pipeline (Recommended)
+### 5. VAD Compaction for Cloud Transcription
+The local `faster-whisper` script already uses VAD and restores original timestamps before writing transcript lines. If a future transcription step sends audio to a cloud/serverless model, compact each speaker file first and keep the generated timeline manifest:
+
+```bash
+python3 scripts/transcription/vad_compact.py compact \
+  "/path/to/speaker.aac" \
+  "/path/to/speaker.vad.wav" \
+  "/path/to/speaker.vad.json"
+```
+
+Send only `speaker.vad.wav` to the cloud model. After receiving a transcript with timestamps relative to the compact audio, remap it back to the original recording timeline:
+
+```bash
+python3 scripts/transcription/vad_compact.py remap \
+  "/path/to/speaker.vad.json" \
+  "/path/to/speaker.vad.txt" \
+  "/path/to/speaker.aac.txt"
+```
+
+The compact audio keeps a short synthetic silence gap between retained VAD islands. This adds a small amount of billable audio, but prevents unrelated phrases from being smashed together in a way that can cause empty or over-merged cloud results. The remapped `speaker.aac.txt` is then safe to feed into `combine_transcripts.py`, because its timestamps are back in original session time.
+
+For local `faster-whisper` runs, VAD can be tuned without editing code:
+
+```bash
+WHISPER_VAD_THRESHOLD=0.5 \
+WHISPER_VAD_MIN_SILENCE_MS=2000 \
+WHISPER_VAD_SPEECH_PAD_MS=400 \
+python3 scripts/transcription/transcribe.py "/path/to/speaker.aac"
+```
+
+### 6. One-Command Session Pipeline (Recommended)
 To run the full Session pipeline (entity refresh, transcription retries, combine, name fixes, final copies, OOC split, raw-note chunk prep, optional raw-note agents, optional polished-session generation, manifest):
 ```bash
 python3 scripts/transcription/run_transcript_pipeline.py \
@@ -51,7 +84,24 @@ python3 scripts/transcription/run_transcript_pipeline.py \
   --audio-dir "/path/to/session-audio"
 ```
 
-### 5a. Full End-to-End Checklist: Raw Audio -> Raw Session MD
+To run the same pipeline with Gladia transcription, store the key in `.env.local`:
+
+```bash
+GLADIA_API_KEY=...
+```
+
+Then select the Gladia provider. Each speaker file is locally compacted with VAD before upload, transcribed with Gladia custom vocabulary, remapped back to original timestamps, and then passed through the same combine/normalize/OOC/raw-note pipeline. If Gladia returns no utterances for non-empty compact speech, the script retries once with a less aggressive compact file before writing the final transcript:
+
+```bash
+python3 scripts/transcription/run_transcript_pipeline.py \
+  --session 15 \
+  --audio-dir "/path/to/session-audio" \
+  --transcription-provider gladia
+```
+
+For a provider baseline comparison, run the pipeline twice with `--stop-after-transcript`: once with `--transcription-provider whisper --clean`, archive `Transcript Session XX.txt` as `Transcript Session XX - Whisper Baseline.txt`, then run with `--transcription-provider gladia --clean` and archive `Transcript Session XX.txt` as `Transcript Session XX - Gladia Baseline.txt`. Compare the two archived normalized transcripts by timestamp windows before choosing which one becomes the canonical review transcript.
+
+### 6a. Full End-to-End Checklist: Raw Audio -> Raw Session MD
 
 If you want the full path spelled out from Craig-style speaker audio streams to a completed `Raw Session XX.md`, this is the sequence:
 

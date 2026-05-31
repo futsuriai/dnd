@@ -5,7 +5,7 @@ description: Run the end-to-end DnD transcript pipeline from speaker-isolated au
 
 # Dnd Transcript Pipeline
 
-Use the pipeline script at `scripts/transcription/run_transcript_pipeline.py`.
+Use `AGENT_SESSION_PIPELINE.md` as the full runbook for agentic end-to-end runs. Use the pipeline script at `scripts/transcription/run_transcript_pipeline.py`.
 
 ## Repo Roots
 
@@ -26,7 +26,8 @@ From the DnD repo root:
 ```bash
 python3 scripts/transcription/run_transcript_pipeline.py \
   --session 15 \
-  --audio-dir /path/to/session-audio
+  --audio-dir /path/to/session-audio \
+  --stop-after-transcript
 ```
 
 Or use the repo-local wrapper:
@@ -79,6 +80,10 @@ If the transcript, voice, or an earlier draft uses the wrong pronoun for one of 
 
 - `--clean`: delete existing `*.ext.txt` per-speaker transcripts before transcribing.
 - `--skip-transcribe`: reuse existing per-speaker transcript files.
+- `--stop-after-transcript`: write normalized transcript artifacts and stop for manual review.
+- `--resume-after-transcript`: resume OOC filtering, raw notes, polished notes, and manifest generation from the reviewed Ellara transcript.
+- `--transcription-provider`: choose `whisper` or `gladia`.
+- `--gladia-artifact-dir`: directory for Gladia compact audio, manifests, and API JSON.
 - `--skip-ooc`: skip OOC/ambiguous output generation.
 - `--skip-raw-notes-prep`: skip preparing raw-note chunk files.
 - `--raw-notes-chunk-size`: primary transcript entries per raw-note chunk.
@@ -95,26 +100,42 @@ If the transcript, voice, or an earlier draft uses the wrong pronoun for one of 
 ## Workflow
 
 1. Run `node scripts/generate_entity_list.js`.
-2. Transcribe each speaker file with retry/fallback model sequence.
+2. Transcribe each speaker file with retry/fallback model sequence, or Gladia VAD-compaction upload when `--transcription-provider gladia` is selected. The Gladia path keeps small phrase-boundary gaps in compact audio, retries once on empty non-empty results, and remaps/splits word timestamps back onto the original session timeline.
 3. Combine transcripts in timestamp order.
 4. Apply `name_corrections.json` text and speaker fixes.
 5. Copy final artifacts into DnD and Ellara target locations.
-6. Run `filter_transcript_linewise.py` for OOC removed and ambiguous outputs.
-7. Run `generate_raw_notes.py prepare` to create chunk files with a primary range plus overlap context.
-8. Optionally run `run_raw_notes_subagents.py` through `codex` or `gemini`.
-9. `generate_raw_notes.py concat` performs seam cleanup automatically.
-10. Optionally run `run_session_notes_agent.py` through `codex` or `gemini`.
-11. Emit a manifest JSON with output paths and line counts.
-12. Copy or sync the final polished note into `src/assets/sessions/session-<N>.md`.
-13. Run the logic from `.copilot/prompts/process-latest-session.md` logically against the latest website session summary:
+6. If `--stop-after-transcript` is set, stop here for user transcript cleanup.
+7. On `--resume-after-transcript`, copy the reviewed Ellara transcript back to the DnD raw transcript asset and continue.
+8. Run `filter_transcript_linewise.py` for OOC removed and ambiguous outputs.
+9. Run `generate_raw_notes.py prepare` to create chunk files with a primary range plus overlap context.
+10. Optionally run `run_raw_notes_subagents.py` through `codex` or `gemini`.
+11. `generate_raw_notes.py concat` performs seam cleanup automatically.
+12. Optionally run `run_session_notes_agent.py` through `codex` or `gemini`.
+13. Emit a manifest JSON with output paths and line counts.
+14. Copy or sync the final polished note into `src/assets/sessions/session-<N>.md`.
+15. Run the logic from `.copilot/prompts/process-latest-session.md` logically against the latest website session summary:
     - treat `src/assets/sessions/session-<N>.md` as the source summary
     - review `src/store/sessions.js`, `src/store/locations.js`, `src/store/npcs.js`, `src/store/lore.js`, and `ENTITY_LIST.md`
     - update session metadata for session `N`
     - create or verify the session `N+1` upcoming stub
     - add only significant history, connection, and entity updates
-14. Refresh `src/views/StorySoFarView.vue` and `src/views/HomeView.vue`.
-15. If entity/store changes were made, rerun `node scripts/generate_entity_list.js`.
-16. Verify the site still builds with `npm run build`.
+16. Refresh `src/views/StorySoFarView.vue` and `src/views/HomeView.vue`.
+17. If entity/store changes were made, rerun `node scripts/generate_entity_list.js`.
+18. Verify the site still builds with `npm run build`.
+
+## Dual-Provider Baseline
+
+If the user asks to compare local Whisper and Gladia before choosing the review transcript:
+
+1. Run the pipeline with `--transcription-provider whisper --clean --stop-after-transcript`.
+2. Copy `../ellara/Session Notes/Transcripts/Transcript Session <N>.txt` to `Transcript Session <N> - Whisper Baseline.txt`.
+3. Run the pipeline with `--transcription-provider gladia --clean --stop-after-transcript`.
+4. Copy `../ellara/Session Notes/Transcripts/Transcript Session <N>.txt` to `Transcript Session <N> - Gladia Baseline.txt`.
+5. Compare both baselines directly by timestamp windows, not exact line numbers.
+6. Write `Transcript Session <N> - Provider Comparison.md` with recommendation, provider summary, interesting discrepancies, missed or one-sided lines, vocabulary/name findings, speaker attribution findings, and manual-review windows.
+7. Stop and ask the user which baseline should become the canonical `Transcript Session <N>.txt`.
+
+Do not create a separate prompt file for this. The comparison is part of the orchestration step before manual transcript cleanup.
 
 ## End-to-End Path
 

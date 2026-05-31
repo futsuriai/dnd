@@ -132,10 +132,44 @@ def transcribe_one(
     models: list[str],
     beam_size: int,
     min_lines: int,
+    provider: str,
+    gladia_artifact_dir: Path | None,
 ) -> Path:
     output_file = Path(f"{audio_file}.txt")
     tmp_output = Path(f"{audio_file}.txt.tmp")
     file_log = Path(f"{audio_file}.transcribe.log")
+
+    if provider == "gladia":
+        artifact_dir = gladia_artifact_dir or audio_file.parent / ".gladia"
+        log(f"{audio_file.name}: transcribing with Gladia after local VAD compaction")
+        with file_log.open("w", encoding="utf-8") as lf:
+            result = subprocess.run(
+                [
+                    str(py_bin),
+                    "-u",
+                    "scripts/transcription/transcribe_gladia.py",
+                    str(audio_file),
+                    str(tmp_output),
+                    "--dnd-dir",
+                    str(dnd_dir),
+                    "--artifact-dir",
+                    str(artifact_dir / audio_file.name),
+                ],
+                cwd=str(dnd_dir),
+                env=env_base,
+                stdout=lf,
+                stderr=subprocess.STDOUT,
+                check=False,
+            )
+
+        if result.returncode == 0 and is_good_transcript(tmp_output, min_lines):
+            tmp_output.replace(output_file)
+            log(f"{audio_file.name}: success ({count_lines(output_file)} lines)")
+            return output_file
+
+        if tmp_output.exists():
+            tmp_output.unlink()
+        raise RuntimeError(f"Gladia transcription failed for {audio_file}; see {file_log}")
 
     for attempt, model in enumerate(models, start=1):
         log(f"{audio_file.name}: attempt {attempt}/{len(models)} model={model}")
@@ -187,7 +221,11 @@ def main() -> int:
     )
     parser.add_argument("--beam-size", type=int, default=1, help="Whisper beam size")
     parser.add_argument("--min-lines", type=int, default=20, help="Minimum lines for a valid per-speaker transcript")
+    parser.add_argument("--transcription-provider", choices=["whisper", "gladia"], default="whisper", help="Speech-to-text provider")
+    parser.add_argument("--gladia-artifact-dir", help="Directory for Gladia compact audio, manifests, and API JSON")
     parser.add_argument("--skip-transcribe", action="store_true", help="Skip transcription and reuse existing *.ext.txt files")
+    parser.add_argument("--stop-after-transcript", action="store_true", help="Stop after writing normalized transcript artifacts for manual review")
+    parser.add_argument("--resume-after-transcript", action="store_true", help="Resume from an existing Ellara transcript without rebuilding per-speaker/combined transcripts")
     parser.add_argument("--clean", action="store_true", help="Delete existing per-speaker transcript files before transcribing")
     parser.add_argument("--skip-ooc", action="store_true", help="Skip OOC and ambiguous output generation")
     parser.add_argument("--skip-raw-notes-prep", action="store_true", help="Skip preparing raw-session-note chunks for subagents")
@@ -219,6 +257,7 @@ def main() -> int:
     ellara_dir = Path(args.ellara_dir).expanduser().resolve()
     venv_path = Path(args.venv_path).expanduser().resolve()
     py_bin = venv_path / "bin" / "python3"
+    gladia_artifact_dir = Path(args.gladia_artifact_dir).expanduser().resolve() if args.gladia_artifact_dir else None
 
     if not audio_dir.is_dir():
         raise FileNotFoundError(f"audio directory not found: {audio_dir}")
@@ -229,6 +268,11 @@ def main() -> int:
 
     ellara_dir.mkdir(parents=True, exist_ok=True)
     session_notes_dir = ellara_dir.parent
+    session_assets_dir = dnd_dir / "src" / "assets" / "sessions" / "transcripts" / f"Session {session}"
+    dnd_session_raw = dnd_dir / "src" / "assets" / "sessions" / "transcripts" / f"session_{session}_raw.txt"
+    ellara_transcript = ellara_dir / f"Transcript Session {session}.txt"
+    combined_tmp = audio_dir / f"session-{session}-combined.txt"
+    combined_final = audio_dir / f"session-{session}-combined-normalized.txt"
 
     audio_files = list_audio_files(audio_dir)
     if not audio_files:
@@ -251,62 +295,74 @@ def main() -> int:
     if ld_library_path:
         env_base["LD_LIBRARY_PATH"] = ld_library_path
 
-    # 1) Refresh entity list for Whisper initial prompt spellings.
-    run_cmd(["node", "scripts/generate_entity_list.js"], cwd=dnd_dir, env=env_base)
+    if args.resume_after_transcript:
+        if not ellara_transcript.exists():
+            raise FileNotFoundError(f"cannot resume; transcript not found: {ellara_transcript}")
+        log(f"Resuming from existing transcript: {ellara_transcript}")
+        dnd_session_raw.parent.mkdir(parents=True, exist_ok=True)
+        combined_final.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(ellara_transcript, combined_final)
+        shutil.copy2(ellara_transcript, dnd_session_raw)
+    else:
+        # 1) Refresh entity list for ASR prompts.
+        run_cmd(["node", "scripts/generate_entity_list.js"], cwd=dnd_dir, env=env_base)
 
-    # 2) Transcribe with retries.
-    if args.clean:
+        # 2) Transcribe with retries.
+        if args.clean:
+            for audio in audio_files:
+                transcript = Path(f"{audio}.txt")
+                if transcript.exists():
+                    transcript.unlink()
+
+        if not args.skip_transcribe:
+            for audio in audio_files:
+                transcribe_one(
+                    audio_file=audio,
+                    py_bin=py_bin,
+                    dnd_dir=dnd_dir,
+                    env_base=env_base,
+                    models=models,
+                    beam_size=args.beam_size,
+                    min_lines=args.min_lines,
+                    provider=args.transcription_provider,
+                    gladia_artifact_dir=gladia_artifact_dir,
+                )
+        else:
+            log("Skipping transcription step (--skip-transcribe)")
+
+        # 3) Combine transcripts.
+        run_cmd(
+            [str(py_bin), "scripts/transcription/combine_transcripts.py", str(audio_dir), str(combined_tmp)],
+            cwd=dnd_dir,
+            env=env_base,
+        )
+
+        # 4) Apply canonical corrections.
+        correction_file = dnd_dir / "scripts" / "transcription" / "name_corrections.json"
+        text_patterns, speaker_fixes = load_name_corrections(correction_file)
+        normalize_transcript(
+            source=combined_tmp,
+            dest=combined_final,
+            text_patterns=text_patterns,
+            speaker_fixes=speaker_fixes,
+            keep_full_whitaker_name=args.keep_full_whitaker_name,
+        )
+
+        # 5) Copy final files to expected destinations.
+        session_assets_dir.mkdir(parents=True, exist_ok=True)
         for audio in audio_files:
             transcript = Path(f"{audio}.txt")
             if transcript.exists():
-                transcript.unlink()
+                shutil.copy2(transcript, session_assets_dir / transcript.name)
 
-    if not args.skip_transcribe:
-        for audio in audio_files:
-            transcribe_one(
-                audio_file=audio,
-                py_bin=py_bin,
-                dnd_dir=dnd_dir,
-                env_base=env_base,
-                models=models,
-                beam_size=args.beam_size,
-                min_lines=args.min_lines,
-            )
-    else:
-        log("Skipping transcription step (--skip-transcribe)")
+        shutil.copy2(combined_final, dnd_session_raw)
+        shutil.copy2(combined_final, ellara_transcript)
 
-    # 3) Combine transcripts.
-    combined_tmp = audio_dir / f"session-{session}-combined.txt"
-    combined_final = audio_dir / f"session-{session}-combined-normalized.txt"
-    run_cmd(
-        [str(py_bin), "scripts/transcription/combine_transcripts.py", str(audio_dir), str(combined_tmp)],
-        cwd=dnd_dir,
-        env=env_base,
-    )
-
-    # 4) Apply canonical corrections.
-    correction_file = dnd_dir / "scripts" / "transcription" / "name_corrections.json"
-    text_patterns, speaker_fixes = load_name_corrections(correction_file)
-    normalize_transcript(
-        source=combined_tmp,
-        dest=combined_final,
-        text_patterns=text_patterns,
-        speaker_fixes=speaker_fixes,
-        keep_full_whitaker_name=args.keep_full_whitaker_name,
-    )
-
-    # 5) Copy final files to expected destinations.
-    session_assets_dir = dnd_dir / "src" / "assets" / "sessions" / "transcripts" / f"Session {session}"
-    session_assets_dir.mkdir(parents=True, exist_ok=True)
-    for audio in audio_files:
-        transcript = Path(f"{audio}.txt")
-        if transcript.exists():
-            shutil.copy2(transcript, session_assets_dir / transcript.name)
-
-    dnd_session_raw = dnd_dir / "src" / "assets" / "sessions" / "transcripts" / f"session_{session}_raw.txt"
-    ellara_transcript = ellara_dir / f"Transcript Session {session}.txt"
-    shutil.copy2(combined_final, dnd_session_raw)
-    shutil.copy2(combined_final, ellara_transcript)
+        if args.stop_after_transcript:
+            log("Stopping after normalized transcript generation (--stop-after-transcript).")
+            log(f"Review transcript: {ellara_transcript}")
+            log("Resume downstream steps with --resume-after-transcript.")
+            return 0
 
     ooc_removed = ellara_dir / f"Transcript Session {session} - OOC Removed.txt"
     ambiguous = ellara_dir / f"Transcript Session {session} - Ambiguous.txt"

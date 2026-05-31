@@ -31,10 +31,10 @@ This file is auto-generated. Do not edit manually.
 - `civic-hall-of-records`: Civic Hall of Records
 - `drunken-goose`: The Drunken Goose Tavern
 - `ducal-palace`: Ducal Palace
-- `dunston-and-kirks`: Dunston & Kirk\
+- `dunston-and-kirks`: Dunston & Kirk's
 - `duskbreaker-lighthouse`: Duskbreaker Lighthouse
 - `eulogian-seminary`: Eulogian Seminary
-- `faberge-workshop`: Faberge
+- `faberge-workshop`: Faberge's Workshop
 - `guard-bar-west`: Unnamed Guard Bar
 - `halfling-quarter`: Halfling Quarter
 - `hariolar-empire`: The Hariolar Empire
@@ -42,14 +42,14 @@ This file is auto-generated. Do not edit manually.
 - `hyrta`: Hýrda
 - `hyrta-ducal-encampment`: Hýrda Ducal Encampment
 - `hyrta-mines`: Hýrda Mines
-- `lady-jacintas-estate`: Lady Jacinta\
+- `lady-jacintas-estate`: Lady Jacinta's Estate
 - `lighthouse-arcana-floor`: High Arcana Floor (Wizard Scriptorium)
 - `lighthouse-deep-basement`: Deep Underground Complex
 - `lighthouse-engineering-floor`: Engineering Floor (Floor 10)
 - `lighthouse-med-bay`: Lighthouse Medical Bay
-- `lord-whitakers-estate`: Lord Whitaker\
+- `lord-whitakers-estate`: Lord Whitaker's Estate
 - `luxembough`: Luxembough
-- `nyxs-townhouse`: Nyx
+- `nyxs-townhouse`: Nyx's Townhouse
 - `old-growth-tree`: Old Growth Tree
 - `old-trade-road`: Old Trade Road
 - `ordonne`: Ordonne
@@ -87,13 +87,13 @@ This file is auto-generated. Do not edit manually.
 - `samantha`: Samantha
 - `stanley-guard`: Stanley
 - `tingle`: Tingle
-- `tsinyra`: Tsi\
+- `tsinyra`: Tsi'nyra
 
 ## Characters
 
 - `berridin`: Berridin
 - `ellara`: Ellara
 - `nyx`: Nyx
-- `witty`: Whitaker 
+- `witty`: Whitaker "Witty" Whitman VI
 - `ysidor`: Ysidor
 

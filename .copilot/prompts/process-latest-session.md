@@ -1,5 +1,11 @@
 You are processing the latest game session to update world data stores.
 
+Context
+- This prompt is the website/world-data sync step. It assumes transcript cleanup and session-note generation are already complete.
+- For the full raw-audio-to-website workflow, read `AGENT_SESSION_PIPELINE.md`.
+- Use the polished website session markdown as your primary narrative source, not the raw transcript, unless you need to verify ambiguity.
+- Do not update website stores from an unreviewed transcript.
+
 Inputs you must use:
 1) Latest session summary: Determine the highest-numbered session file in src/assets/sessions/session-*.md
 2) World data stores:
@@ -7,6 +13,7 @@ Inputs you must use:
    - Locations: src/store/locations.js
    - NPCs: src/store/npcs.js
    - Sessions index: src/store/sessions.js (for session metadata and numbering)
+3) Canonical entity list: ENTITY_LIST.md
 
 Mode
 - MODE: report (default) | autofix
@@ -94,11 +101,12 @@ Output
 Constraints
 - Non-destructive. Do not remove or substantially rewrite existing descriptions unless clearly incorrect.
 - Keep exports intact; preserve code style and array order where feasible.
-- Do not touch router/views/components.
+- Do not touch router/views/components from this prompt except when explicitly asked to refresh Story So Far or Home copy. If you do, keep those edits scoped to current-state/session-recap text.
 - When unsure (low confidence), report only — do not autofix.
 - Do not introduce new updatedInSessions values. Prefer history entries.
 - Focus on the latest session only - do not process historical sessions.
 - Session index updates: Only update session N if it has upcoming: true or empty highlights. If already processed (upcoming: false and populated highlights), skip session update.
+- Do not infer major canon changes from ASR noise or raw-note uncertainty. Prefer explicit events in the polished summary.
 
 Heuristics & Mapping
 - NPC cues: "met <Name>", "<Name>, the <role>", titles (Proctor, Captain, Smith), speech acts.

@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import vm from 'vm';
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -11,11 +12,37 @@ const outputFile = path.join(__dirname, '../ENTITY_LIST.md');
 
 // Files to process
 const files = [
-  { name: 'lore.js', type: 'Lore' },
-  { name: 'locations.js', type: 'Locations' },
-  { name: 'npcs.js', type: 'NPCs' },
-  { name: 'characters.js', type: 'Characters' }
+  { name: 'lore.js', type: 'Lore', exportName: 'lore' },
+  { name: 'locations.js', type: 'Locations', exportName: 'locations' },
+  { name: 'npcs.js', type: 'NPCs', exportName: 'npcs' },
+  { name: 'characters.js', type: 'Characters', exportName: 'characters' }
 ];
+
+function loadEntitiesFromStore(content, exportName) {
+  const transformed = content
+    .replace(/import\.meta\.glob\([^)]*\)/g, '({})')
+    .replace(new RegExp(`export\\s+const\\s+${exportName}\\s*=`), `const ${exportName} =`)
+    .replace(new RegExp(`export\\s+default\\s+${exportName}\\s*;?`, 'g'), '');
+
+  const context = {
+    __entities: [],
+    console: {
+      log: () => {},
+      warn: () => {},
+      error: (...args) => console.error(...args),
+    },
+  };
+
+  vm.createContext(context);
+  const script = new vm.Script(`
+${transformed}
+__entities = ${exportName}
+  .map((entity) => ({ id: entity.id, name: entity.name || entity.term }))
+  .filter((entity) => entity.id && entity.name);
+`);
+  script.runInContext(context);
+  return context.__entities;
+}
 
 let output = '# World Entity List\n\nThis file is auto-generated. Do not edit manually.\n\n';
 
@@ -25,24 +52,7 @@ files.forEach(file => {
     try {
       const content = fs.readFileSync(filePath, 'utf8');
       
-      const entities = [];
-      // Split by object start "{ id:" to find entries
-      const objectChunks = content.split(/\{\s*id:/);
-      
-      // Skip the first chunk (file header)
-      for (let i = 1; i < objectChunks.length; i++) {
-        const chunk = 'id:' + objectChunks[i];
-        
-        const idMatch = /id:\s*['"]([^'"]+)['"]/.exec(chunk);
-        const nameMatch = /(?:name|term):\s*['"]([^'"]+)['"]/.exec(chunk);
-        
-        if (idMatch && nameMatch) {
-            entities.push({
-                id: idMatch[1],
-                name: nameMatch[1]
-            });
-        }
-      }
+      const entities = loadEntitiesFromStore(content, file.exportName);
       
       output += '## ' + file.type + '\n\n';
       entities.sort((a, b) => a.id.localeCompare(b.id));

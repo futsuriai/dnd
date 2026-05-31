@@ -1,55 +1,282 @@
 import sys
 import os
+import inspect
+import re
+import unicodedata
 import torch
 from faster_whisper import WhisperModel
 
 # Supported audio extensions
 AUDIO_EXTENSIONS = {'.flac', '.mp3', '.wav', '.m4a', '.ogg', '.aac'}
 
-def load_entity_names(entity_list_path):
+SECTION_PRIORITY = {
+    "Characters": 0,
+    "Locations": 1,
+    "NPCs": 2,
+    "Lore": 3,
+}
+
+CAMPAIGN_TRANSCRIPTION_TERMS = [
+    "GM",
+    "DM",
+    "D&D",
+    "Dungeons & Dragons",
+    "d20",
+    "initiative",
+    "armor class",
+    "hit points",
+    "saving throw",
+    "perception check",
+    "investigation check",
+    "insight check",
+    "persuasion check",
+    "deception check",
+    "stealth check",
+    "spell slot",
+    "cantrip",
+    "wild shape",
+    "Lay on Hands",
+    "Divine Smite",
+    "Hunter's Mark",
+    "Dimension Door",
+    "sending stone",
+]
+
+ENTITY_RE = re.compile(r"^- `(?P<id>[^`]+)`: (?P<name>.+)$")
+
+
+def clean_term(value):
+    return re.sub(r"\s+", " ", value.strip().rstrip("\\").strip())
+
+
+def dedupe_terms(terms):
+    seen = set()
+    result = []
+    for term in terms:
+        term = clean_term(term)
+        if not term:
+            continue
+
+        key = term.casefold()
+        if key in seen:
+            continue
+
+        seen.add(key)
+        result.append(term)
+    return result
+
+
+def ascii_fallback(term):
+    normalized = unicodedata.normalize("NFKD", term)
+    fallback = "".join(char for char in normalized if not unicodedata.combining(char))
+    return fallback if fallback != term else None
+
+
+def expand_entity_terms(records):
+    terms = []
+
+    for record in records:
+        section = record["section"]
+        name = record["name"]
+        terms.append(name)
+
+        fallback = ascii_fallback(name)
+        if fallback:
+            terms.append(fallback)
+
+        if name.startswith("The "):
+            terms.append(name[4:])
+
+        for quoted in re.findall(r'"([^"]+)"|“([^”]+)”', name):
+            terms.extend(part for part in quoted if part)
+
+        for parenthetical in re.findall(r"\(([^)]+)\)", name):
+            terms.append(parenthetical)
+            terms.append(re.sub(r"\s*\([^)]*\)", "", name))
+
+        for suffix in ("'s", "’s"):
+            if name.endswith(suffix):
+                terms.append(name[: -len(suffix)])
+
+        if section in {"Characters", "NPCs"}:
+            person_name = re.sub(r'"[^"]+"|“[^”]+”', "", name)
+            for word in re.findall(r"[A-Z][A-Za-zÀ-ÖØ-öø-ÿ'-]+", person_name):
+                if word not in {"The", "Duke", "Lady", "Lord", "Proctor", "Empress", "Consort"}:
+                    terms.append(word)
+
+    return dedupe_terms(terms)
+
+
+def load_entity_terms(entity_list_path):
     if not os.path.isfile(entity_list_path):
         print(f"Entity list not found: {entity_list_path}")
         return []
 
-    names = []
-    seen = set()
+    records = []
+    section = ""
     try:
         with open(entity_list_path, "r", encoding="utf-8") as f:
             for line in f:
                 line = line.strip()
-                if not line.startswith("- `") or "`:" not in line:
+                if line.startswith("## "):
+                    section = line[3:].strip()
                     continue
-                _, rest = line.split("`:", 1)
-                name = rest.strip().rstrip("\\").strip()
-                if name and name not in seen:
-                    names.append(name)
-                    seen.add(name)
+
+                match = ENTITY_RE.match(line)
+                if not match:
+                    continue
+
+                records.append({
+                    "section": section,
+                    "id": match.group("id"),
+                    "name": clean_term(match.group("name")),
+                })
     except Exception as e:
         print(f"Error reading entity list {entity_list_path}: {e}")
         return []
 
-    if not names:
-        print(f"No entity names found in {entity_list_path}")
+    if not records:
+        print(f"No entity terms found in {entity_list_path}")
+        return []
+
+    records.sort(key=lambda record: (
+        SECTION_PRIORITY.get(record["section"], 99),
+        record["name"].casefold(),
+    ))
+    terms = dedupe_terms(expand_entity_terms(records) + CAMPAIGN_TRANSCRIPTION_TERMS)
+
+    if terms:
+        print(f"Loaded {len(records)} entities and expanded to {len(terms)} prompt terms from {entity_list_path}")
     else:
-        print(f"Loaded {len(names)} entity names from {entity_list_path}")
-    return names
+        print(f"No usable entity terms found in {entity_list_path}")
+    return terms
 
-def build_initial_prompt(entity_names):
-    if not entity_names:
+
+def build_initial_prompt(entity_terms):
+    configured = os.getenv("WHISPER_INITIAL_PROMPT")
+    if configured:
+        return configured.strip()
+
+    if not entity_terms:
+        return "English D&D campaign transcript. Preserve speaker names, fantasy proper nouns, and tabletop terms."
+
+    term_limit = optional_int_env("WHISPER_PROMPT_TERM_LIMIT") or 24
+    max_chars = optional_int_env("WHISPER_INITIAL_PROMPT_MAX_CHARS") or 600
+    sample_terms = join_terms_with_budget(entity_terms[:term_limit], max_chars=max_chars - 120, separator=", ")
+    return (
+        "English D&D campaign transcript. Preserve exact spellings for speaker names, "
+        f"fantasy proper nouns, and tabletop terms such as: {sample_terms}."
+    )
+
+
+def build_hotwords(entity_terms):
+    configured = os.getenv("WHISPER_HOTWORDS")
+    if configured:
+        return configured.strip()
+
+    if not entity_terms:
         return None
-    return f"Use these proper nouns and spellings: {', '.join(entity_names)}."
 
-def transcribe_file(model, audio_path, output_path, initial_prompt=None):
+    limit = get_hotword_limit()
+    if limit <= 0:
+        return None
+
+    max_chars = optional_int_env("WHISPER_HOTWORD_MAX_CHARS") or 900
+    return join_terms_with_budget(entity_terms[:limit], max_chars=max_chars, separator="; ")
+
+
+def get_hotword_limit():
+    raw_limit = os.getenv("WHISPER_HOTWORD_LIMIT", "80")
+    try:
+        return int(raw_limit)
+    except ValueError:
+        print(f"Invalid WHISPER_HOTWORD_LIMIT={raw_limit!r}; using 80.")
+        return 80
+
+
+def join_terms_with_budget(terms, max_chars, separator):
+    result = []
+    current_length = 0
+    for term in terms:
+        addition = len(term) if not result else len(separator) + len(term)
+        if current_length + addition > max_chars:
+            break
+        result.append(term)
+        current_length += addition
+    return separator.join(result)
+
+
+def optional_int_env(name):
+    value = os.getenv(name)
+    if value is None or not value.strip():
+        return None
+    try:
+        return int(value)
+    except ValueError:
+        print(f"Invalid {name}={value!r}; ignoring.")
+        return None
+
+
+def optional_float_env(name):
+    value = os.getenv(name)
+    if value is None or not value.strip():
+        return None
+    try:
+        return float(value)
+    except ValueError:
+        print(f"Invalid {name}={value!r}; ignoring.")
+        return None
+
+
+def build_vad_parameters():
+    options = {
+        "threshold": optional_float_env("WHISPER_VAD_THRESHOLD"),
+        "min_speech_duration_ms": optional_int_env("WHISPER_VAD_MIN_SPEECH_MS"),
+        "max_speech_duration_s": optional_float_env("WHISPER_VAD_MAX_SPEECH_S"),
+        "min_silence_duration_ms": optional_int_env("WHISPER_VAD_MIN_SILENCE_MS"),
+        "speech_pad_ms": optional_int_env("WHISPER_VAD_SPEECH_PAD_MS"),
+    }
+    return {key: value for key, value in options.items() if value is not None}
+
+
+def bool_env(name, default):
+    value = os.getenv(name)
+    if value is None:
+        return default
+    return value.strip().lower() in {"1", "true", "yes", "on"}
+
+
+def transcribe_file(model, audio_path, output_path, initial_prompt=None, hotwords=None):
     print(f"Transcribing {audio_path}...")
     try:
         beam_size = int(os.getenv("WHISPER_BEAM_SIZE", "5"))
-        transcribe_kwargs = {"beam_size": beam_size, "vad_filter": True}
+        transcribe_kwargs = {
+            "beam_size": beam_size,
+            "vad_filter": True,
+            "condition_on_previous_text": bool_env("WHISPER_CONDITION_ON_PREVIOUS_TEXT", True),
+        }
+        vad_parameters = build_vad_parameters()
+        if vad_parameters:
+            transcribe_kwargs["vad_parameters"] = vad_parameters
+        language = os.getenv("WHISPER_LANGUAGE")
+        if language:
+            transcribe_kwargs["language"] = language
         if initial_prompt:
             transcribe_kwargs["initial_prompt"] = initial_prompt
+        if hotwords and "hotwords" in inspect.signature(model.transcribe).parameters:
+            transcribe_kwargs["hotwords"] = hotwords
 
         segments, info = model.transcribe(audio_path, **transcribe_kwargs)
         
         print(f"Detected language '{info.language}' with probability {info.language_probability}")
+        if getattr(info, "duration_after_vad", None) is not None:
+            removed = info.duration - info.duration_after_vad
+            ratio = removed / info.duration if info.duration else 0
+            print(
+                "VAD kept "
+                f"{info.duration_after_vad:.1f}s / {info.duration:.1f}s "
+                f"and removed {removed:.1f}s ({ratio:.1%})."
+            )
 
         with open(output_path, "w", encoding="utf-8") as f:
             for segment in segments:
@@ -66,8 +293,10 @@ def transcribe_file(model, audio_path, output_path, initial_prompt=None):
                 f.flush() # Ensure it writes immediately
 
         print(f"Transcription saved to {output_path}")
+        return True
     except Exception as e:
         print(f"Error transcribing {audio_path}: {e}")
+        return False
 
 def format_timestamp(seconds):
     hours = int(seconds // 3600)
@@ -115,13 +344,22 @@ def main():
         sys.exit(0)
 
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    entity_list_path = os.path.normpath(os.path.join(script_dir, "..", "..", "ENTITY_LIST.md"))
-    entity_names = load_entity_names(entity_list_path)
-    initial_prompt = build_initial_prompt(entity_names)
+    entity_list_path = os.getenv(
+        "WHISPER_ENTITY_LIST",
+        os.path.normpath(os.path.join(script_dir, "..", "..", "ENTITY_LIST.md")),
+    )
+    entity_terms = load_entity_terms(entity_list_path)
+    initial_prompt = build_initial_prompt(entity_terms)
+    hotwords = build_hotwords(entity_terms)
     if initial_prompt:
-        print(f"Using entity prompt with {len(entity_names)} names.")
+        print(f"Using initial prompt ({len(initial_prompt)} chars).")
     else:
         print("No entity prompt loaded; continuing without it.")
+    if hotwords:
+        hotword_count = min(len(entity_terms), get_hotword_limit())
+        print(f"Using hotwords with {hotword_count} terms ({len(hotwords)} chars).")
+    else:
+        print("No hotwords loaded; continuing without hotword hints.")
 
     model_size = os.getenv("WHISPER_MODEL_SIZE", "large-v3")
     device = os.getenv("WHISPER_DEVICE", "cuda")
@@ -142,7 +380,8 @@ def main():
             # Default to <filename>.txt in the same directory
             output_file = f"{audio_file}.txt"
         
-        transcribe_file(model, audio_file, output_file, initial_prompt=initial_prompt)
+        if not transcribe_file(model, audio_file, output_file, initial_prompt=initial_prompt, hotwords=hotwords):
+            sys.exit(1)
 
 if __name__ == "__main__":
     main()
