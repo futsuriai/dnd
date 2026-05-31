@@ -4,6 +4,8 @@ import inspect
 import re
 import unicodedata
 import torch
+import json
+from pathlib import Path
 from faster_whisper import WhisperModel
 
 # Supported audio extensions
@@ -107,7 +109,94 @@ def expand_entity_terms(records):
     return dedupe_terms(terms)
 
 
+def get_session_weight(sessions, current_session):
+    if not sessions:
+        return 1.0
+    if not current_session:
+        return 10.0
+    try:
+        current_session = int(current_session)
+    except ValueError:
+        return 10.0
+    max_weight = 1.0
+    for s in sessions:
+        try:
+            s_val = int(s)
+            distance = current_session - s_val
+            if distance == 0:
+                weight = 100.0
+            elif distance == 1:
+                weight = 70.0
+            elif distance == 2:
+                weight = 40.0
+            elif distance > 0:
+                weight = 10.0 + max(0.0, 10.0 - distance)
+            else:
+                weight = 5.0
+            max_weight = max(max_weight, weight)
+        except ValueError:
+            continue
+    return max_weight
+
+
+def load_weighted_entities(dnd_dir, current_session, term_limit=24):
+    metadata_path = dnd_dir / "scripts" / "transcription" / "entity_metadata.json"
+    if not metadata_path.exists():
+        return None
+    try:
+        with open(metadata_path, "r", encoding="utf-8") as f:
+            entities = json.load(f)
+    except Exception as e:
+        print(f"Error loading entity metadata: {e}")
+        return None
+
+    # Compute weights and sort globally by:
+    # 1. Weight desc
+    # 2. Section priority asc (Characters = 0, Locations = 1, NPCs = 2, Lore = 3)
+    # 3. Name asc
+    weighted_entities = []
+    for entity in entities:
+        weight = get_session_weight(entity.get("updatedInSessions", []), current_session)
+        # Give Characters a strong base weight boost so party names are always included
+        if entity.get("type") == "Characters":
+            weight = max(weight, 100.0)
+        weighted_entities.append((weight, entity))
+
+    weighted_entities.sort(key=lambda x: (
+        -x[0],
+        SECTION_PRIORITY.get(x[1]["type"], 99),
+        x[1]["name"].casefold()
+    ))
+
+    # Take the top term_limit entities
+    selected = weighted_entities[:term_limit]
+
+    print(f"Priority-Weighted selection complete. Selected {len(selected)} terms:")
+    for w, ent in selected:
+        print(f"  [{ent['type']}] {ent['name']} (weight={w:.1f}, sessions={ent['updatedInSessions']})")
+
+    return [x[1] for x in selected]
+
+
 def load_entity_terms(entity_list_path):
+    dnd_dir = Path(entity_list_path).parent
+    current_session = os.getenv("WHISPER_SESSION_NUMBER")
+    term_limit = optional_int_env("WHISPER_PROMPT_TERM_LIMIT") or 24
+
+    # Try weighted proportional loading first
+    weighted_entities = load_weighted_entities(dnd_dir, current_session, term_limit)
+    if weighted_entities is not None:
+        records = []
+        for ent in weighted_entities:
+            records.append({
+                "section": ent["type"],
+                "id": ent["id"],
+                "name": clean_term(ent["name"]),
+            })
+        terms = dedupe_terms(expand_entity_terms(records) + CAMPAIGN_TRANSCRIPTION_TERMS)
+        return terms
+
+    # Fallback to standard parsing of ENTITY_LIST.md if metadata file is not available
     if not os.path.isfile(entity_list_path):
         print(f"Entity list not found: {entity_list_path}")
         return []

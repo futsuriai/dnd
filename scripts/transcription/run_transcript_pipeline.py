@@ -66,23 +66,53 @@ def build_whisper_attempt_plan(raw_models: str) -> list[str]:
     return models
 
 
-def load_name_corrections(path: Path) -> tuple[list[tuple[re.Pattern[str], str]], dict[str, str]]:
+def make_smart_replacement(wrong: str, right: str):
+    right_has_possessive = right.endswith("'s") or right.endswith("s'")
+
+    def replacer(match: re.Match[str]) -> str:
+        matched_base = match.group(1)
+        possessive = match.group(2)
+
+        # Preserve capitalization style
+        if matched_base.isupper():
+            res = right.upper()
+        elif matched_base[0].isupper() if matched_base else False:
+            if right:
+                res = right[0].upper() + right[1:]
+            else:
+                res = right
+        else:
+            res = right
+
+        if possessive:
+            if not right_has_possessive:
+                res = f"{res}{possessive}"
+        return res
+    return replacer
+
+
+def load_name_corrections(path: Path) -> tuple[list[tuple[re.Pattern[str], any]], dict[str, str]]:
     with path.open("r", encoding="utf-8") as f:
         data = json.load(f)
 
     text_fixes = data.get("text_fixes", {})
     speaker_fixes = data.get("speaker_label_fixes", {})
 
-    patterns: list[tuple[re.Pattern[str], str]] = []
+    patterns = []
     for wrong in sorted(text_fixes.keys(), key=len, reverse=True):
         right = text_fixes[wrong]
-        patterns.append((re.compile(rf"(?<!\w){re.escape(wrong)}(?!\w)"), right))
+        pattern = re.compile(
+            rf"(?<!\w)({re.escape(wrong)})((?:'s|s)?)(?!\w)",
+            re.IGNORECASE
+        )
+        replacer = make_smart_replacement(wrong, right)
+        patterns.append((pattern, replacer))
     return patterns, speaker_fixes
 
 
 def apply_line_corrections(
     line: str,
-    text_patterns: list[tuple[re.Pattern[str], str]],
+    text_patterns: list[tuple[re.Pattern[str], any]],
     speaker_fixes: dict[str, str],
     keep_full_whitaker_name: bool,
 ) -> str:
@@ -99,6 +129,7 @@ def apply_line_corrections(
         text = pat.sub(replacement, text)
 
     return f"{prefix}{speaker}{colon}{text}"
+
 
 
 def normalize_transcript(
@@ -292,6 +323,7 @@ def main() -> int:
         ld_library_path = f"{ld_library_path}:{os.environ['LD_LIBRARY_PATH']}" if ld_library_path else os.environ["LD_LIBRARY_PATH"]
 
     env_base = dict(os.environ)
+    env_base["WHISPER_SESSION_NUMBER"] = str(session)
     if ld_library_path:
         env_base["LD_LIBRARY_PATH"] = ld_library_path
 
@@ -315,18 +347,44 @@ def main() -> int:
                     transcript.unlink()
 
         if not args.skip_transcribe:
-            for audio in audio_files:
-                transcribe_one(
-                    audio_file=audio,
-                    py_bin=py_bin,
-                    dnd_dir=dnd_dir,
-                    env_base=env_base,
-                    models=models,
-                    beam_size=args.beam_size,
-                    min_lines=args.min_lines,
-                    provider=args.transcription_provider,
-                    gladia_artifact_dir=gladia_artifact_dir,
-                )
+            if args.transcription_provider == "gladia":
+                log("Gladia transcription provider selected. Running concurrent speaker transcription...")
+                from concurrent.futures import ThreadPoolExecutor
+
+                def run_parallel_transcribe(audio):
+                    try:
+                        return transcribe_one(
+                            audio_file=audio,
+                            py_bin=py_bin,
+                            dnd_dir=dnd_dir,
+                            env_base=env_base,
+                            models=models,
+                            beam_size=args.beam_size,
+                            min_lines=args.min_lines,
+                            provider=args.transcription_provider,
+                            gladia_artifact_dir=gladia_artifact_dir,
+                        )
+                    except Exception as e:
+                        log(f"ERROR transcribing {audio.name}: {e}")
+                        raise
+
+                max_workers = min(len(audio_files), int(os.getenv("GLADIA_MAX_WORKERS", "3")))
+                with ThreadPoolExecutor(max_workers=max_workers) as executor:
+                    list(executor.map(run_parallel_transcribe, audio_files))
+            else:
+                log("Whisper/local transcription provider selected. Running sequential speaker transcription...")
+                for audio in audio_files:
+                    transcribe_one(
+                        audio_file=audio,
+                        py_bin=py_bin,
+                        dnd_dir=dnd_dir,
+                        env_base=env_base,
+                        models=models,
+                        beam_size=args.beam_size,
+                        min_lines=args.min_lines,
+                        provider=args.transcription_provider,
+                        gladia_artifact_dir=gladia_artifact_dir,
+                    )
         else:
             log("Skipping transcription step (--skip-transcribe)")
 

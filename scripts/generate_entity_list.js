@@ -37,7 +37,21 @@ function loadEntitiesFromStore(content, exportName) {
   const script = new vm.Script(`
 ${transformed}
 __entities = ${exportName}
-  .map((entity) => ({ id: entity.id, name: entity.name || entity.term }))
+  .map((entity) => {
+    const sessions = new Set(entity.updatedInSessions || []);
+    if (Array.isArray(entity.history)) {
+      entity.history.forEach(h => {
+        if (h && typeof h.session === 'number') {
+          sessions.add(h.session);
+        }
+      });
+    }
+    return {
+      id: entity.id,
+      name: entity.name || entity.term,
+      updatedInSessions: Array.from(sessions).sort((a, b) => a - b)
+    };
+  })
   .filter((entity) => entity.id && entity.name);
 `);
   script.runInContext(context);
@@ -45,6 +59,7 @@ __entities = ${exportName}
 }
 
 let output = '# World Entity List\n\nThis file is auto-generated. Do not edit manually.\n\n';
+const metadata = [];
 
 files.forEach(file => {
   const filePath = path.join(storePath, file.name);
@@ -58,8 +73,13 @@ files.forEach(file => {
       entities.sort((a, b) => a.id.localeCompare(b.id));
       
       entities.forEach(entity => {
-        // Use concatenation to avoid nested template literal issues in tool calls
         output += '- `' + entity.id + '`: ' + entity.name + '\n';
+        metadata.push({
+          id: entity.id,
+          name: entity.name,
+          type: file.type,
+          updatedInSessions: entity.updatedInSessions
+        });
       });
       output += '\n';
       
@@ -73,3 +93,8 @@ files.forEach(file => {
 
 fs.writeFileSync(outputFile, output);
 console.log('Entity list generated at ' + outputFile);
+
+// Also write structured JSON metadata for weighting prompts in ASR
+const metadataFile = path.join(__dirname, 'transcription/entity_metadata.json');
+fs.writeFileSync(metadataFile, JSON.stringify(metadata, null, 2) + '\n');
+console.log('Entity metadata JSON generated at ' + metadataFile);

@@ -1,0 +1,731 @@
+[
+  {
+    "id": "black-swan",
+    "name": "The Black Swan",
+    "type": "Lore",
+    "updatedInSessions": [
+      11,
+      12
+    ]
+  },
+  {
+    "id": "curse-shadowed",
+    "name": "The Curse of the Shadowed",
+    "type": "Lore",
+    "updatedInSessions": []
+  },
+  {
+    "id": "eternal-light",
+    "name": "The Eternal Light",
+    "type": "Lore",
+    "updatedInSessions": []
+  },
+  {
+    "id": "eulogia-eternal-light",
+    "name": "Eulogia of the Eternal Light",
+    "type": "Lore",
+    "updatedInSessions": [
+      1,
+      2,
+      4,
+      6,
+      9
+    ]
+  },
+  {
+    "id": "first-emperor",
+    "name": "The First Emperor",
+    "type": "Lore",
+    "updatedInSessions": []
+  },
+  {
+    "id": "hyr",
+    "name": "Hyr",
+    "type": "Lore",
+    "updatedInSessions": [
+      1,
+      3,
+      6
+    ]
+  },
+  {
+    "id": "imperial-peerage",
+    "name": "Imperial Peerage System",
+    "type": "Lore",
+    "updatedInSessions": [
+      8
+    ]
+  },
+  {
+    "id": "light-crystals",
+    "name": "Light Crystals",
+    "type": "Lore",
+    "updatedInSessions": [
+      1,
+      3,
+      5,
+      6,
+      8,
+      14
+    ]
+  },
+  {
+    "id": "lightkeepers",
+    "name": "The Lightkeepers",
+    "type": "Lore",
+    "updatedInSessions": [
+      5,
+      6
+    ]
+  },
+  {
+    "id": "marchenbau",
+    "name": "Marchenbau",
+    "type": "Lore",
+    "updatedInSessions": [
+      8
+    ]
+  },
+  {
+    "id": "nites",
+    "name": "Nites",
+    "type": "Lore",
+    "updatedInSessions": [
+      3
+    ]
+  },
+  {
+    "id": "pilgrimage-enlightened",
+    "name": "The Pilgrimage of the Enlightened",
+    "type": "Lore",
+    "updatedInSessions": []
+  },
+  {
+    "id": "torchlight-college",
+    "name": "Torchlight College",
+    "type": "Lore",
+    "updatedInSessions": [
+      8,
+      10
+    ]
+  },
+  {
+    "id": "warforged",
+    "name": "Warforged Constructs",
+    "type": "Lore",
+    "updatedInSessions": [
+      3,
+      5,
+      6,
+      7,
+      11,
+      14
+    ]
+  },
+  {
+    "id": "whitaker-family",
+    "name": "The Whitaker Brothers",
+    "type": "Lore",
+    "updatedInSessions": [
+      10,
+      11
+    ]
+  },
+  {
+    "id": "abandoned-barn",
+    "name": "Abandoned Barn",
+    "type": "Locations",
+    "updatedInSessions": [
+      7
+    ]
+  },
+  {
+    "id": "badwater-well",
+    "name": "Badwater Well",
+    "type": "Locations",
+    "updatedInSessions": [
+      8,
+      9
+    ]
+  },
+  {
+    "id": "basement-lab",
+    "name": "Basement Synthesis Laboratory",
+    "type": "Locations",
+    "updatedInSessions": [
+      4,
+      6
+    ]
+  },
+  {
+    "id": "bastion-city",
+    "name": "Bastion City",
+    "type": "Locations",
+    "updatedInSessions": []
+  },
+  {
+    "id": "bastion-east-gate",
+    "name": "Bastion East Gate",
+    "type": "Locations",
+    "updatedInSessions": [
+      7
+    ]
+  },
+  {
+    "id": "boixden",
+    "name": "Boixden",
+    "type": "Locations",
+    "updatedInSessions": [
+      8,
+      11
+    ]
+  },
+  {
+    "id": "civic-hall-of-records",
+    "name": "Civic Hall of Records",
+    "type": "Locations",
+    "updatedInSessions": [
+      9
+    ]
+  },
+  {
+    "id": "drunken-goose",
+    "name": "The Drunken Goose Tavern",
+    "type": "Locations",
+    "updatedInSessions": [
+      3
+    ]
+  },
+  {
+    "id": "ducal-palace",
+    "name": "Ducal Palace",
+    "type": "Locations",
+    "updatedInSessions": [
+      8,
+      9,
+      10,
+      11
+    ]
+  },
+  {
+    "id": "dunston-and-kirks",
+    "name": "Dunston & Kirk's",
+    "type": "Locations",
+    "updatedInSessions": [
+      12
+    ]
+  },
+  {
+    "id": "duskbreaker-lighthouse",
+    "name": "Duskbreaker Lighthouse",
+    "type": "Locations",
+    "updatedInSessions": [
+      1,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ]
+  },
+  {
+    "id": "eulogian-seminary",
+    "name": "Eulogian Seminary",
+    "type": "Locations",
+    "updatedInSessions": [
+      2,
+      3,
+      4,
+      7,
+      12
+    ]
+  },
+  {
+    "id": "faberge-workshop",
+    "name": "Faberge's Workshop",
+    "type": "Locations",
+    "updatedInSessions": [
+      5,
+      6
+    ]
+  },
+  {
+    "id": "guard-bar-west",
+    "name": "Unnamed Guard Bar",
+    "type": "Locations",
+    "updatedInSessions": [
+      5
+    ]
+  },
+  {
+    "id": "halfling-quarter",
+    "name": "Halfling Quarter",
+    "type": "Locations",
+    "updatedInSessions": [
+      1
+    ]
+  },
+  {
+    "id": "hariolar-empire",
+    "name": "The Hariolar Empire",
+    "type": "Locations",
+    "updatedInSessions": []
+  },
+  {
+    "id": "hieroterra",
+    "name": "Hieroterra",
+    "type": "Locations",
+    "updatedInSessions": []
+  },
+  {
+    "id": "hyrta",
+    "name": "Hýrda",
+    "type": "Locations",
+    "updatedInSessions": [
+      1,
+      7,
+      12,
+      13,
+      14,
+      15,
+      16
+    ]
+  },
+  {
+    "id": "hyrta-ducal-encampment",
+    "name": "Hýrda Ducal Encampment",
+    "type": "Locations",
+    "updatedInSessions": [
+      13,
+      14,
+      15,
+      16
+    ]
+  },
+  {
+    "id": "hyrta-mines",
+    "name": "Hýrda Mines",
+    "type": "Locations",
+    "updatedInSessions": [
+      15
+    ]
+  },
+  {
+    "id": "lady-jacintas-estate",
+    "name": "Lady Jacinta's Estate",
+    "type": "Locations",
+    "updatedInSessions": [
+      9,
+      11,
+      12
+    ]
+  },
+  {
+    "id": "lighthouse-arcana-floor",
+    "name": "High Arcana Floor (Wizard Scriptorium)",
+    "type": "Locations",
+    "updatedInSessions": [
+      5
+    ]
+  },
+  {
+    "id": "lighthouse-deep-basement",
+    "name": "Deep Underground Complex",
+    "type": "Locations",
+    "updatedInSessions": [
+      4,
+      5
+    ]
+  },
+  {
+    "id": "lighthouse-engineering-floor",
+    "name": "Engineering Floor (Floor 10)",
+    "type": "Locations",
+    "updatedInSessions": [
+      5
+    ]
+  },
+  {
+    "id": "lighthouse-med-bay",
+    "name": "Lighthouse Medical Bay",
+    "type": "Locations",
+    "updatedInSessions": [
+      6
+    ]
+  },
+  {
+    "id": "lord-whitakers-estate",
+    "name": "Lord Whitaker's Estate",
+    "type": "Locations",
+    "updatedInSessions": [
+      10,
+      12
+    ]
+  },
+  {
+    "id": "luxembough",
+    "name": "Luxembough",
+    "type": "Locations",
+    "updatedInSessions": [
+      8
+    ]
+  },
+  {
+    "id": "nyxs-townhouse",
+    "name": "Nyx's Townhouse",
+    "type": "Locations",
+    "updatedInSessions": [
+      1,
+      2,
+      10
+    ]
+  },
+  {
+    "id": "old-growth-tree",
+    "name": "Old Growth Tree",
+    "type": "Locations",
+    "updatedInSessions": [
+      6,
+      7
+    ]
+  },
+  {
+    "id": "old-trade-road",
+    "name": "Old Trade Road",
+    "type": "Locations",
+    "updatedInSessions": [
+      3,
+      4
+    ]
+  },
+  {
+    "id": "ordonne",
+    "name": "Ordonne",
+    "type": "Locations",
+    "updatedInSessions": []
+  },
+  {
+    "id": "pharus",
+    "name": "Pharus",
+    "type": "Locations",
+    "updatedInSessions": []
+  },
+  {
+    "id": "shadier-bar-east",
+    "name": "Shadier Bar (East Bastion)",
+    "type": "Locations",
+    "updatedInSessions": [
+      1
+    ]
+  },
+  {
+    "id": "small-watch-house",
+    "name": "Small Watch-House (Prison #1)",
+    "type": "Locations",
+    "updatedInSessions": [
+      2
+    ]
+  },
+  {
+    "id": "sommeil",
+    "name": "Sommeil",
+    "type": "Locations",
+    "updatedInSessions": [
+      8
+    ]
+  },
+  {
+    "id": "stone-span-bridge",
+    "name": "Stone-span Bridge",
+    "type": "Locations",
+    "updatedInSessions": [
+      2
+    ]
+  },
+  {
+    "id": "stonewall-tower",
+    "name": "Stonewall Tower",
+    "type": "Locations",
+    "updatedInSessions": [
+      2
+    ]
+  },
+  {
+    "id": "the-golden-dove",
+    "name": "The Golden Dove",
+    "type": "Locations",
+    "updatedInSessions": [
+      9
+    ]
+  },
+  {
+    "id": "the-golden-goose",
+    "name": "The Golden Goose",
+    "type": "Locations",
+    "updatedInSessions": [
+      10
+    ]
+  },
+  {
+    "id": "torchlight-college",
+    "name": "Torchlight College",
+    "type": "Locations",
+    "updatedInSessions": [
+      8
+    ]
+  },
+  {
+    "id": "vaselia",
+    "name": "Vaselia",
+    "type": "Locations",
+    "updatedInSessions": [
+      8
+    ]
+  },
+  {
+    "id": "aaron",
+    "name": "Aaron",
+    "type": "NPCs",
+    "updatedInSessions": [
+      5,
+      6
+    ]
+  },
+  {
+    "id": "ardwin",
+    "name": "Ardwin",
+    "type": "NPCs",
+    "updatedInSessions": [
+      14,
+      16
+    ]
+  },
+  {
+    "id": "beth",
+    "name": "Beth",
+    "type": "NPCs",
+    "updatedInSessions": [
+      5
+    ]
+  },
+  {
+    "id": "cooper",
+    "name": "Cooper",
+    "type": "NPCs",
+    "updatedInSessions": [
+      6
+    ]
+  },
+  {
+    "id": "darius",
+    "name": "Darius",
+    "type": "NPCs",
+    "updatedInSessions": [
+      5,
+      6
+    ]
+  },
+  {
+    "id": "dawn",
+    "name": "Dawn",
+    "type": "NPCs",
+    "updatedInSessions": [
+      6
+    ]
+  },
+  {
+    "id": "denmother",
+    "name": "The Denmother",
+    "type": "NPCs",
+    "updatedInSessions": [
+      1,
+      2,
+      10
+    ]
+  },
+  {
+    "id": "donnathan-reeves",
+    "name": "Donnathan Reeves",
+    "type": "NPCs",
+    "updatedInSessions": [
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11
+    ]
+  },
+  {
+    "id": "drunken-goose-barkeep",
+    "name": "Barkeep",
+    "type": "NPCs",
+    "updatedInSessions": [
+      3
+    ]
+  },
+  {
+    "id": "duke-valerian-oliander",
+    "name": "Duke Valerian Oliander",
+    "type": "NPCs",
+    "updatedInSessions": [
+      1,
+      4,
+      9,
+      10,
+      11
+    ]
+  },
+  {
+    "id": "empress-consort-lyssandra",
+    "name": "Empress Consort Lyssandra",
+    "type": "NPCs",
+    "updatedInSessions": [
+      8
+    ]
+  },
+  {
+    "id": "guard-diane",
+    "name": "Diane",
+    "type": "NPCs",
+    "updatedInSessions": [
+      9
+    ]
+  },
+  {
+    "id": "lady-jacinta",
+    "name": "Lady Jacinta",
+    "type": "NPCs",
+    "updatedInSessions": [
+      9,
+      11,
+      12
+    ]
+  },
+  {
+    "id": "lady-ophelia-xanteres-oliander",
+    "name": "Lady Ophelia Xanteres Oliander",
+    "type": "NPCs",
+    "updatedInSessions": [
+      10,
+      11
+    ]
+  },
+  {
+    "id": "lex",
+    "name": "Lex",
+    "type": "NPCs",
+    "updatedInSessions": [
+      5,
+      6
+    ]
+  },
+  {
+    "id": "meri",
+    "name": "Meri",
+    "type": "NPCs",
+    "updatedInSessions": [
+      1,
+      2,
+      3,
+      6,
+      7,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16
+    ]
+  },
+  {
+    "id": "michelle-faberge",
+    "name": "Michelle Faberge",
+    "type": "NPCs",
+    "updatedInSessions": [
+      5,
+      6
+    ]
+  },
+  {
+    "id": "proctor-eduard",
+    "name": "Proctor Eduard",
+    "type": "NPCs",
+    "updatedInSessions": [
+      2,
+      3,
+      4,
+      6,
+      7,
+      8,
+      10,
+      11,
+      12
+    ]
+  },
+  {
+    "id": "samantha",
+    "name": "Samantha",
+    "type": "NPCs",
+    "updatedInSessions": [
+      13
+    ]
+  },
+  {
+    "id": "stanley-guard",
+    "name": "Stanley",
+    "type": "NPCs",
+    "updatedInSessions": [
+      5,
+      6
+    ]
+  },
+  {
+    "id": "tingle",
+    "name": "Tingle",
+    "type": "NPCs",
+    "updatedInSessions": [
+      5
+    ]
+  },
+  {
+    "id": "tsinyra",
+    "name": "Tsi'nyra",
+    "type": "NPCs",
+    "updatedInSessions": [
+      1
+    ]
+  },
+  {
+    "id": "berridin",
+    "name": "Berridin",
+    "type": "Characters",
+    "updatedInSessions": []
+  },
+  {
+    "id": "ellara",
+    "name": "Ellara",
+    "type": "Characters",
+    "updatedInSessions": []
+  },
+  {
+    "id": "nyx",
+    "name": "Nyx",
+    "type": "Characters",
+    "updatedInSessions": []
+  },
+  {
+    "id": "witty",
+    "name": "Whitaker \"Witty\" Whitman VI",
+    "type": "Characters",
+    "updatedInSessions": []
+  },
+  {
+    "id": "ysidor",
+    "name": "Ysidor",
+    "type": "Characters",
+    "updatedInSessions": []
+  }
+]
