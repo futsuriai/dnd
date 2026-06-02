@@ -44,13 +44,15 @@ const sessionMarkdownModules = import.meta.glob('@/assets/sessions/session-*.md'
 });
 
 const HOME_RECAP_BY_SESSION = {
-  16: 'The party escaped the ducal cages, rescued Berridin and Witty, reclaimed their gear, and got out with at least one barrel of gunpowder, but the captain still has their gold and Hyrda is still on borrowed time.',
+  17: 'The party slipped miners into the Hýrda Mines, began preparing the collapse trap, and awakened Hýr, the mountain spirit, who offered guidance while revealing that world-scale magic is hiding a name tied to Nites and Nyx\'s past.',
+  16: 'The party escaped the ducal cages, rescued Berridin and Witty, reclaimed their gear, and got out with at least one barrel of gunpowder, but the captain still has their gold and Hýrda is still on borrowed time.',
   15: 'The attempt to cripple the ducal encampment with poison and sabotage failed under concentrated resistance; the party surrendered to prevent executions and now sits caged inside enemy lines.',
-  14: 'The party reached Hyrda, warned Meri and Ardwin about the warforged threat, and committed to a mine-collapse defense plan before ducal reinforcements could arrive.'
+  14: 'The party reached Hýrda, warned Meri and Ardwin about the warforged threat, and committed to a mine-collapse defense plan before ducal reinforcements could arrive.'
 };
 
 const HOME_NEXT_STEPS_BY_SESSION = {
-  16: 'With the rescue complete and powder finally in hand, the next question is no longer whether the party can escape the ducal camp. It is whether they can turn that stolen leverage into a real defense of Hyrda before reinforcements and retaliation close the window.',
+  17: 'The mine operation is still in motion: the party needs to finish extracting ore, set the charges with Hýr\'s guidance, keep the lookout fooled, and decide how to spring the trap when the Grand Duke\'s army arrives.',
+  16: 'With the rescue complete and powder finally in hand, the next question is no longer whether the party can escape the ducal camp. It is whether they can turn that stolen leverage into a real defense of Hýrda before reinforcements and retaliation close the window.',
 };
 
 function extractSessionNumberFromFile(filePath) {
@@ -94,11 +96,6 @@ function firstSentence(text) {
   return (match ? match[0] : clean).trim();
 }
 
-function toLowerLead(sentence) {
-  if (!sentence) return '';
-  return sentence.charAt(0).toLowerCase() + sentence.slice(1);
-}
-
 function buildLatestSummary(markdown, sessionNumber) {
   if (HOME_RECAP_BY_SESSION[sessionNumber]) {
     return `Session ${sessionNumber}: ${HOME_RECAP_BY_SESSION[sessionNumber]}`;
@@ -109,7 +106,7 @@ function buildLatestSummary(markdown, sessionNumber) {
   const ending = blocks.length > 1 ? firstSentence(blocks[blocks.length - 1]) : '';
 
   if (opening && ending) {
-    return `Session ${sessionNumber}: ${opening} By the end, ${toLowerLead(ending)}`;
+    return `Session ${sessionNumber}: ${opening} By the end, ${ending}`;
   }
 
   if (opening) {

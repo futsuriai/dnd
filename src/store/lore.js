@@ -97,26 +97,60 @@ Session 6 revealed that the Lighthouse conducts a secret basement program to syn
   {
     id: 'nites', // Added ID
     term: 'Nites',
-    description: 'The title for The Eternal Light when she walked this land. From Latin *nitēs*, present 2nd person singular, meaning "to shine, sparkle, radiant."\n\nPronounced knee-tehz.',
+    description: 'The title for The Eternal Light when she walked this land. From Latin *nitēs*, present 2nd person singular, meaning "to shine, sparkle, radiant."\n\nPronounced knee-tehz. Eulogian teaching holds that Nites is an epithet and that her true birth name is sacred, unknown, and not to be uttered.',
     history: [
-      { session: 3, note: 'Mentioned by Eduard in a discussion about languages.' }
+      { session: 3, note: 'Mentioned by Eduard in a discussion about languages.' },
+      { session: 17, note: 'Hyr remembered a young woman likely tied to Nites asking the mountains to move, but the name itself was censored by static.' }
     ],
     connections: [ // Added connection
       { type: 'location', id: 'hieroterra', reason: 'Birthplace' },
-      { type: 'location', id: 'pharus', reason: 'Sacrificed herself here' }
+      { type: 'location', id: 'pharus', reason: 'Sacrificed herself here' },
+      { type: 'lore', id: 'great-cataclysm', reason: 'Associated with the mountains moving during the cataclysm' }
     ]
   },
   {
     id: 'hyr',
     term: 'Hyr',
-    description: 'A village goddess revered by some goliath communities as the heart of love, kinship, and seasonal rites such as long-grass braiding.',
+    description: 'A village goddess or mountain spirit revered by some goliath communities as the heart of love, kinship, and seasonal rites such as long-grass braiding. Session 17 revealed Hyr as the spirit of the mountain range itself, sustained in dreams by stone-goliath prayers and offerings.',
     history: [
       { session: 1, note: 'Named by Ysidor during introductions and blessings.' },
       { session: 3, note: 'Ysidor explains the goddess and her rituals to Ellara on the road.' },
-      { session: 6, note: 'Ysidor performs an atonement rite for Stanley, invoking his values.' }
+      { session: 6, note: 'Ysidor performs an atonement rite for Stanley, invoking his values.' },
+      { session: 17, note: 'Awakened inside the Hýrda Mines, revealed itself as the mountain range, and offered Meri guidance for the village defense.' }
     ],
     connections: [
-      { type: 'character', id: 'ysidor', reason: 'Personal devotion and village traditions' }
+      { type: 'character', id: 'ysidor', reason: 'Personal devotion and village traditions' },
+      { type: 'npc', id: 'meri', reason: 'Recognized her as priestess' },
+      { type: 'location', id: 'hyrta', reason: 'Sustained by local prayers and offerings' },
+      { type: 'location', id: 'hyrta-mines', reason: 'Awakened while the party moved within the mountain' },
+      { type: 'lore', id: 'great-cataclysm', reason: 'Moved and split itself to create a passage in a previous age' },
+      { type: 'lore', id: 'the-static', reason: 'Affected by the name-censorship magic' }
+    ]
+  },
+  {
+    id: 'great-cataclysm',
+    term: 'The Great Cataclysm',
+    description: 'A world-shaping crisis in which, according to Hyr\'s memory and Eulogian religious echoes, a young woman likely tied to Nites asked the mountains to move and create a great western passage from Hieroterra into the empire.',
+    history: [
+      { session: 17, note: 'Hyr remembered moving and splitting itself to make a passage during the crisis.' }
+    ],
+    connections: [
+      { type: 'lore', id: 'hyr', reason: 'Hyr moved the mountains during this event' },
+      { type: 'lore', id: 'nites', reason: 'Likely tied to the young woman in Hyr\'s memory' },
+      { type: 'location', id: 'hieroterra', reason: 'Passage led from this homeland into the empire' }
+    ]
+  },
+  {
+    id: 'the-static',
+    term: 'The Static',
+    description: 'A painful censorship effect that removes certain names or facts from speech and memory. Berridin\'s natural 20 Arcana check indicated it is not normal forgetting but world-scale magic that affects even Hyr.',
+    history: [
+      { session: 17, note: 'First identified when Hyr tried to name a woman tied to the Great Cataclysm and the words were swallowed by static.' }
+    ],
+    connections: [
+      { type: 'lore', id: 'hyr', reason: 'Observed while Hyr spoke' },
+      { type: 'lore', id: 'nites', reason: 'May hide Nites\' true birth name' },
+      { type: 'character', id: 'nyx', reason: 'Recognized it as world-scale magic connected to his own past' }
     ]
   },
   {

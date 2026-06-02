@@ -66,7 +66,13 @@ Task
      - date: '<today\'s date>'
      - upcoming: true
      - Empty highlights array
-     - Placeholder description
+   - Placeholder description
+6) Review latest-session website copy:
+   - Inspect `src/views/HomeView.vue`
+   - Inspect `src/views/StorySoFarView.vue`
+   - Add or update hardcoded latest-session recap / next-step copy when generic extracted prose would lowercase proper nouns, surface incidental details, or miss the main session turn
+   - Add a new Story So Far staged paragraph when the session materially changes the campaign state
+   - If no update is needed, state why in the report
 
 Output
 1) Processing Report (Markdown):
@@ -82,6 +88,8 @@ Output
      - <type> <id> — add connection { type: <entityType>, id: <id>, reason: "<short phrase>" }
    - Descriptions Updated
      - <type> <id> — updated description based on new information
+   - View Copy Updated
+     - HomeView / StorySoFarView changes, or explicit reason no update was needed
    - Confidence: low/medium/high per bullet.
 
 2) If MODE=autofix, append a Unified Diff (patch) that:
@@ -95,6 +103,7 @@ Output
    - Adds history entry { session: N, note: '<short cause>' } for existing entities when a significant event occurred
    - Adds obvious connections with a brief reason
    - Updates descriptions to incorporate new information from the session
+   - Updates `HomeView.vue` and `StorySoFarView.vue` when required by the latest-session state
    - Remove updatedInSessions properties if equivalent history is present (high confidence only)
    - Includes a concise change summary at the top.
 
@@ -107,6 +116,8 @@ Constraints
 - Focus on the latest session only - do not process historical sessions.
 - Session index updates: Only update session N if it has upcoming: true or empty highlights. If already processed (upcoming: false and populated highlights), skip session update.
 - Do not infer major canon changes from ASR noise or raw-note uncertainty. Prefer explicit events in the polished summary.
+- Canonical spelling QA: use `ENTITY_LIST.md`, lore/store entries, and `name_corrections.json` as spelling sources. Preserve party-name capitalization in blurbs. Use `Nites` exactly, pronounced knee-tes; do not write `Nytes` or `Nýtes`.
+- Do not rely on generic first/last-sentence extraction for public copy if it produces lowercase proper nouns or highlights a low-priority lore aside over the session's main state change.
 
 Heuristics & Mapping
 - NPC cues: "met <Name>", "<Name>, the <role>", titles (Proctor, Captain, Smith), speech acts.

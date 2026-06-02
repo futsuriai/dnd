@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """
-Generate polished Session N markdown from Raw Session N markdown through an agent CLI.
+Reconcile chunk-extracted raw notes into a scene-level raw session candidate.
 
-Supported providers:
-- codex
-- gemini
+This pass is required between chunk extraction and promotion to Raw Session N.md.
+The chunk pass preserves local transcript fidelity; this pass restores session
+shape by merging duplicate overlaps, compressing repeated planning loops, and
+keeping the IC dialogue/thoughts that matter.
 """
 
 from __future__ import annotations
@@ -18,41 +19,42 @@ from pathlib import Path
 from note_generation_guidance import CANONICAL_CAST_REFERENCE
 
 
-def build_prompt(session: str, raw_text: str) -> str:
+def build_prompt(raw_text: str, transcript_text: str | None) -> str:
+    transcript_section = ""
+    if transcript_text:
+        transcript_section = f"""
+Cleaned transcript for spot-checking quotes and uncertain facts:
+```
+{transcript_text}
+```
+"""
+
     return f"""Task:
-- Convert these raw D&D session notes into polished markdown session notes.
-- Match the structure and story-forward style of existing `session-7.md` and `session-8.md`.
-- This is the polished campaign-notes layer, not the raw-notes layer.
+- Reconcile chunk-extracted D&D raw notes into a scene-level raw session-note candidate.
+- The input was produced from many independent transcript chunks, so it may repeat beats, over-explain local process, preserve too much table chatter, or miss long-range scene shape.
+- Do not write polished website prose. Keep the output as rough, human-editable raw notes in the style of Raw Session 7/8.
 
-Required format:
-- Start with `# Session {session} — *<title>*`
-- Then a `**Locales:**` line
-- Then a `**Time:**` line
-- Then `---`
-- Use numbered markdown sections like `## 1) ...`
-- End with a status section like `## Where We Stand` when useful, preferably as a thread/status table.
-- Add `### Next Steps` or a similar short forward-looking section when the session leaves clear immediate objectives.
-
-Rules:
-- Keep chronology accurate.
-- Turn rough raw notes into readable narrative prose.
-- Preserve only the most important direct quotes.
-- Treat dialogue and thoughts preserved in the raw notes as intentional evidence; do not paraphrase away important wording unless the final summary clearly benefits from compression.
-- Keep key rolls/checks when they matter to the story.
-- Preserve GM revelations, world facts, character motivations, and consequences.
-- Fold any prior-context summary into the opening section rather than presenting it as transcript recap.
-- Do not invent facts, names, dialogue, or outcomes.
-- Do not mention transcript mechanics, chunking, or timestamps.
-- If the raw notes are uncertain, be modest and avoid false precision.
-- Output markdown only. No code fences. No commentary.
-- Preserve canonical character genders/pronouns consistently across the whole document.
+Required behavior:
+- Preserve clear in-character dialogue as `name: "quote"` with the character's actual wording where possible.
+- Preserve stated character thoughts/emotional beats, preferably in the character's own words when clear.
+- Preserve GM revelations, scene descriptions, rulings, checks, outcomes, resource changes, discoveries, and open hooks.
+- Merge duplicated overlap and repeated chunk summaries.
+- Compress repeated planning loops into final options, choices, and outcomes.
+- Keep player intent/tactical discussion when it affects character action or consequences.
+- Remove low-impact OOC logistics, rules fumbling that has no outcome, and table jokes that do not affect character/story.
+- Keep uncertainty when uncertainty affected a choice. If a fact remains risky, include a short `review:` line near that beat.
+- Preserve chronology and use `---` for scene/beat breaks.
+- Do not include headings, timestamps, chunk IDs, transcript mechanics, code fences, or commentary about this task.
+- Do not invent facts or smooth away meaningful wording.
 
 {CANONICAL_CAST_REFERENCE}
-
-Raw notes:
+{transcript_section}
+Chunk-extracted raw notes:
+```
 {raw_text}
+```
 
-Return only the final markdown."""
+Return only the reconciled raw session notes."""
 
 
 def strip_code_fences(text: str) -> str:
@@ -86,10 +88,10 @@ def run_codex(prompt: str, workspace_root: Path, model: str | None) -> str:
     ]
     if model:
         cmd.extend(["-m", model])
-    cmd.append(prompt)
+    cmd.append("-")
 
     try:
-        subprocess.run(cmd, check=True)
+        subprocess.run(cmd, input=prompt, text=True, check=True)
         return output_file.read_text(encoding="utf-8").strip()
     finally:
         output_file.unlink(missing_ok=True)
@@ -123,32 +125,34 @@ def run_gemini(prompt: str, workspace_root: Path, model: str | None) -> str:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("session", help="Session label/number for the title")
-    parser.add_argument("raw_notes_file", help="Path to Raw Session N.md")
-    parser.add_argument("output_file", help="Path to Session N.md")
+    parser.add_argument("input_file", help="Chunk-extracted Raw Session N Candidate.md")
+    parser.add_argument("output_file", help="Reconciled raw-note candidate path")
     parser.add_argument("--provider", choices=["codex", "gemini"], required=True, help="Agent CLI to use")
     parser.add_argument("--model", help="Optional model override")
     parser.add_argument("--workspace-root", default="/home/babu/source", help="Workspace root visible to the agent CLI")
+    parser.add_argument("--transcript", help="Optional cleaned transcript for spot-checking quotes/facts")
     parser.add_argument("--force", action="store_true", help="Overwrite existing output")
-    parser.add_argument("--dry-run", action="store_true", help="Print the planned action without invoking the provider")
+    parser.add_argument("--dry-run", action="store_true", help="Print planned action without invoking the provider")
     args = parser.parse_args()
 
-    raw_notes_file = Path(args.raw_notes_file).expanduser().resolve()
+    input_file = Path(args.input_file).expanduser().resolve()
     output_file = Path(args.output_file).expanduser().resolve()
     workspace_root = Path(args.workspace_root).expanduser().resolve()
+    transcript_file = Path(args.transcript).expanduser().resolve() if args.transcript else None
 
     if output_file.exists() and not args.force:
-        print(f"Session notes output already exists, skipping: {output_file}")
+        print(f"Reconciled raw-note output already exists, skipping: {output_file}")
         return 0
 
-    raw_text = raw_notes_file.read_text(encoding="utf-8")
-    prompt = build_prompt(args.session, raw_text)
+    raw_text = input_file.read_text(encoding="utf-8")
+    transcript_text = transcript_file.read_text(encoding="utf-8") if transcript_file else None
+    prompt = build_prompt(raw_text, transcript_text)
 
     if args.dry_run:
         print(f"Would run {args.provider} -> {output_file}")
         return 0
 
-    print(f"Running {args.provider} for polished session notes -> {output_file}")
+    print(f"Running {args.provider} for raw-note reconciliation -> {output_file}")
     if args.provider == "codex":
         text = run_codex(prompt, workspace_root, args.model)
     else:

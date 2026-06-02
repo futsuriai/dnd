@@ -43,7 +43,7 @@ skills/dnd-transcript-pipeline/scripts/run_pipeline.sh 15 /path/to/session-audio
 
 ## Canonical Character Pronouns
 
-Apply this canon consistently in every note-generation pass: `chunk_XXX_notes.txt`, finalized `Raw Session <N>.md`, and polished `Session <N>.md`.
+Apply this canon consistently in every note-generation pass: `chunk_XXX_notes.txt`, `Raw Session <N> Candidate.md`, finalized `Raw Session <N>.md`, and polished `Session <N>.md`.
 
 - Nyx: male, `he/him`
 - Ellara: female, `she/her`
@@ -67,7 +67,11 @@ If the transcript, voice, or an earlier draft uses the wrong pronoun for one of 
   - `Transcript Session <N> - OOC Filter Report.txt`
 - Raw-note chunk workspace:
   `../ellara/Session Notes/Raw Session <N> Chunks/`
-- Final raw-session-note target:
+- Chunk-extracted raw-session-note candidate target:
+  `../ellara/Session Notes/Raw Session <N> Candidate.md`
+- Reconciled raw-session-note candidate target:
+  `../ellara/Session Notes/Raw Session <N> Reconciled Candidate.md`
+- Approved raw-session-note target:
   `../ellara/Session Notes/Raw Session <N>.md`
 - Final polished session-note target:
   `../ellara/Session Notes/Session <N>.md`
@@ -89,7 +93,10 @@ If the transcript, voice, or an earlier draft uses the wrong pronoun for one of 
 - `--raw-notes-chunk-size`: primary transcript entries per raw-note chunk.
 - `--raw-notes-overlap`: context entries before/after each raw-note chunk.
 - `--run-raw-notes-provider`: dispatch raw-note chunks through `codex` or `gemini`.
-- `--raw-notes-finalize`: concatenate chunk outputs into `Raw Session <N>.md`.
+- `--raw-notes-finalize`: concatenate chunk outputs into `Raw Session <N> Candidate.md`.
+- `--raw-notes-output`: override the raw-note candidate output path.
+- `--run-raw-notes-reconcile-provider`: reconcile chunk output through `codex` or `gemini`.
+- `--raw-notes-reconciled-output`: override the reconciled raw-note candidate output path.
 - `--raw-notes-dry-run`: print planned raw-note agent dispatches without running them.
 - `--run-session-notes-provider`: dispatch polished session-note generation through `codex` or `gemini`.
 - `--session-notes-force`: overwrite existing `Session <N>.md`.
@@ -109,19 +116,21 @@ If the transcript, voice, or an earlier draft uses the wrong pronoun for one of 
 8. Run `filter_transcript_linewise.py` for OOC removed and ambiguous outputs.
 9. Run `generate_raw_notes.py prepare` to create chunk files with a primary range plus overlap context.
 10. Optionally run `run_raw_notes_subagents.py` through `codex` or `gemini`.
-11. `generate_raw_notes.py concat` performs seam cleanup automatically.
-12. Optionally run `run_session_notes_agent.py` through `codex` or `gemini`.
-13. Emit a manifest JSON with output paths and line counts.
-14. Copy or sync the final polished note into `src/assets/sessions/session-<N>.md`.
-15. Run the logic from `.copilot/prompts/process-latest-session.md` logically against the latest website session summary:
+11. `generate_raw_notes.py concat` performs seam cleanup automatically into `Raw Session <N> Candidate.md`.
+12. Run `reconcile_raw_notes.py` into `Raw Session <N> Reconciled Candidate.md`; this pass is required before promotion.
+13. Review and promote the reconciled candidate to `Raw Session <N>.md`.
+14. Optionally run `run_session_notes_agent.py` through `codex` or `gemini`.
+15. Emit a manifest JSON with output paths and line counts.
+16. Copy or sync the final polished note into `src/assets/sessions/session-<N>.md`.
+17. Run the logic from `.copilot/prompts/process-latest-session.md` logically against the latest website session summary:
     - treat `src/assets/sessions/session-<N>.md` as the source summary
     - review `src/store/sessions.js`, `src/store/locations.js`, `src/store/npcs.js`, `src/store/lore.js`, and `ENTITY_LIST.md`
     - update session metadata for session `N`
     - create or verify the session `N+1` upcoming stub
     - add only significant history, connection, and entity updates
-16. Refresh `src/views/StorySoFarView.vue` and `src/views/HomeView.vue`.
-17. If entity/store changes were made, rerun `node scripts/generate_entity_list.js`.
-18. Verify the site still builds with `npm run build`.
+18. Refresh `src/views/StorySoFarView.vue` and `src/views/HomeView.vue`.
+19. If entity/store changes were made, rerun `node scripts/generate_entity_list.js`.
+20. Verify the site still builds with `npm run build`.
 
 ## Dual-Provider Baseline
 
@@ -139,16 +148,18 @@ Do not create a separate prompt file for this. The comparison is part of the orc
 
 ## End-to-End Path
 
-1. Run `scripts/transcription/run_transcript_pipeline.py` on the audio directory.
+1. Run `scripts/transcription/run_transcript_pipeline.py` on the audio directory and stop for transcript review.
 2. Read `../ellara/Session Notes/Raw Session <N> Chunks/chunks_manifest.json`.
 3. Produce every `chunk_XXX_notes.txt` from `chunk_XXX.txt`.
-4. Finalize `Raw Session <N>.md`.
-5. Generate polished `Session <N>.md`.
-6. Sync `Session <N>.md` into `src/assets/sessions/session-<N>.md`.
-7. Update `src/store/sessions.js` for session `N` and add or verify session `N+1`.
-8. Review significant world-data changes using `.copilot/prompts/process-latest-session.md`.
-9. Refresh Story So Far and the home-page blurb/current-state copy.
-10. Build the site to verify nothing broke.
+4. Finalize `Raw Session <N> Candidate.md`.
+5. Reconcile into `Raw Session <N> Reconciled Candidate.md`.
+6. Review and promote it to `Raw Session <N>.md`.
+7. Generate polished `Session <N>.md`.
+8. Sync `Session <N>.md` into `src/assets/sessions/session-<N>.md`.
+9. Update `src/store/sessions.js` for session `N` and add or verify session `N+1`.
+10. Review significant world-data changes using `.copilot/prompts/process-latest-session.md`.
+11. Refresh Story So Far and the home-page blurb/current-state copy.
+12. Build the site to verify nothing broke.
 
 ## Raw Notes Contract
 
@@ -160,11 +171,17 @@ For each chunk:
 - Read `chunk_XXX.txt`
 - Use context sections only for continuity
 - Write notes only for the `PRIMARY RANGE`
+- Preserve clear IC dialogue as `character: "quote"` with minimal paraphrase.
+- Preserve stated character thoughts, preferably in the character's own words when clear.
 - Normalize the listed character pronouns to the canon above even if the transcript gets them wrong
 - Save output as `chunk_XXX_notes.txt`
 
-When all chunks are done, finalize with:
+When all chunks are done, finalize the chunk-extracted candidate with:
 `skills/dnd-transcript-pipeline/scripts/finalize_raw_notes.sh`
+
+Then reconcile the candidate with `scripts/transcription/reconcile_raw_notes.py`.
+
+After review, promote `Raw Session <N> Reconciled Candidate.md` to `Raw Session <N>.md`.
 
 To dispatch chunk work through an installed agent CLI, use:
 `skills/dnd-transcript-pipeline/scripts/run_raw_notes_agents.sh`
@@ -175,11 +192,7 @@ To clean an already-generated raw file in place, use:
 To generate polished `Session <N>.md` from `Raw Session <N>.md`, use:
 `skills/dnd-transcript-pipeline/scripts/run_session_notes_agent.sh`
 
-For the raw -> polished pass, use the existing files
-`../ellara/Session Notes/Session 11.md`
-through
-`../ellara/Session Notes/Session 15.md`
-as the style guide.
+For the raw -> polished pass, use `src/assets/sessions/session-7.md` and `src/assets/sessions/session-8.md` as the style guide.
 
 During the raw -> polished pass, preserve the canonical pronouns above even if the raw notes contain an earlier mistake.
 
@@ -212,6 +225,8 @@ Required follow-up:
 - `src/store/sessions.js` drives the home page cards, session list ordering, current quest, and upcoming-session state.
 - `src/views/HomeView.vue` may contain hardcoded recap overrides for recent sessions.
 - `src/views/StorySoFarView.vue` contains staged narrative text that often needs a new paragraph when the campaign meaningfully turns.
+- `scripts/transcription/entity_metadata.json` is regenerated from `ENTITY_LIST.md` and feeds future ASR name prompts.
+- `scripts/transcription/name_corrections.json` is the durable place for recurring ASR/name substitutions and pronunciation-like variants.
 
 ## Operational Notes
 
@@ -221,6 +236,10 @@ Required follow-up:
 - If there is no `src/assets/sessions/session-<N>.md`, the site can still behave as if an older session is latest even if `sessions.js` was updated.
 - When a completed latest session is marked `upcoming: false`, also create the next upcoming session stub or the home page may show no next-session state.
 - Reuse canonical IDs from the stores and `ENTITY_LIST.md` exactly, even when display names use corrected spelling.
+- Inspect and update `src/views/HomeView.vue` every full latest-session sync when the latest session changes. Prefer a hardcoded recap override over generic extracted prose if extraction lowercases proper nouns or promotes an incidental detail.
+- Inspect and update `src/views/StorySoFarView.vue` every full latest-session sync. Add a new staged paragraph when the latest session materially changes the back-cover campaign state.
+- Canonical spelling check: use `Nites` exactly, pronounced knee-tes. Do not use `Nytes` or `Nýtes`.
+- Before finishing, grep generated notes and website copy for known bad spellings, incorrect party-name capitalization, and wrong-name substitutions.
 - Keep chunk folders and transcript scratch output local-only via `.git/info/exclude` unless the repo intentionally starts tracking them.
 
 ## Verification
@@ -229,7 +248,9 @@ After a full run, verify:
 
 - manifest exists
 - chunk note count matches the manifest
-- `Raw Session <N>.md` exists
+- `Raw Session <N> Candidate.md` exists
+- `Raw Session <N> Reconciled Candidate.md` exists
+- approved `Raw Session <N>.md` exists
 - `Session <N>.md` exists
 - `src/assets/sessions/session-<N>.md` exists
 - site build succeeds

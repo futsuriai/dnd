@@ -47,15 +47,19 @@ const BACK_OF_BOOK_STAGES = [
   },
   {
     minSession: 12,
-    text: 'The road carries them from Bastion to Hyrda, where ducal pressure threatens to become conquest and village defense becomes a race against reinforcements. Strategy shifts from investigation to resistance, and every plan is measured in lives, not glory.'
+    text: 'The road carries them from Bastion to Hýrda, where ducal pressure threatens to become conquest and village defense becomes a race against reinforcements. Strategy shifts from investigation to resistance, and every plan is measured in lives, not glory.'
   },
   {
     minSession: 15,
-    text: 'Their latest gamble - poison, sabotage, and a collapsing timetable - fails to break the encampment before the counterstrike lands. Rather than watch captors begin executions, the party yields, stripped of gear and locked in cages inside enemy lines, with the next move likely deciding not only their fate but Hyrda\'s.'
+    text: 'Their latest gamble - poison, sabotage, and a collapsing timetable - fails to break the encampment before the counterstrike lands. Rather than watch captors begin executions, the party yields, stripped of gear and locked in cages inside enemy lines, with the next move likely deciding not only their fate but Hýrda\'s.'
   },
   {
     minSession: 16,
-    text: 'Captivity does not hold for long. Ellara slips free in spider form, Nyx and Ysidor turn panic into momentum, and the party claws Berridin and Witty back out of the ducal camp while reclaiming their gear and stealing gunpowder. Survival becomes counterattack, but the rescue only sharpens the real problem: Hyrda still stands in the path of a larger force that has not yet arrived.'
+    text: 'Captivity does not hold for long. Ellara slips free in spider form, Nyx and Ysidor turn panic into momentum, and the party claws Berridin and Witty back out of the ducal camp while reclaiming their gear and stealing gunpowder. Survival becomes counterattack, but the rescue only sharpens the real problem: Hýrda still stands in the path of a larger force that has not yet arrived.'
+  },
+  {
+    minSession: 17,
+    text: 'With the powder finally in hand, the party moves from rescue to preparation. Under cover of night they slip miners into the Hýrda Mines, silence the cave-mouth guards without killing them, and begin turning the mountain itself into a trap. Then Hýr wakes: not merely a village story, but the spirit of the range, old enough to remember Nites, the Great Cataclysm, and a name that the world itself refuses to let anyone hear.'
   }
 ];
 
@@ -91,20 +95,15 @@ function extractFirstNarrativeSentence(markdown) {
   return sentenceMatch ? sentenceMatch[0].trim() : stripMarkdown(proseBlock);
 }
 
-function lowerFirst(text) {
-  if (!text) return text;
-  return text.charAt(0).toLowerCase() + text.slice(1);
-}
-
 function buildStoryParagraphs(latestSessionNumber, latestSessionContent) {
   const staged = BACK_OF_BOOK_STAGES
     .filter(stage => latestSessionNumber >= stage.minSession)
     .map(stage => stage.text);
 
-  if (latestSessionNumber > 16) {
+  if (latestSessionNumber > 17) {
     const continuation = extractFirstNarrativeSentence(latestSessionContent);
     if (continuation) {
-      staged.push(`Beyond that turning point, the tale keeps moving: ${lowerFirst(continuation)}`);
+      staged.push(`Beyond that turning point, the tale keeps moving: ${continuation}`);
     }
   }
 

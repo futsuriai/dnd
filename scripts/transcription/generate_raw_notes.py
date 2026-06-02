@@ -1,21 +1,21 @@
 """
-Generate raw session notes from a transcript that is mostly in-game content.
+Generate raw session-note candidates from a cleaned transcript.
 
 This is an LLM-assisted process:
 1. Prepare chunk files with a primary range and surrounding context.
 2. Process each chunk with a strong model/subagent.
-3. Concatenate the chunk outputs into `Raw Session XX.md`.
+3. Concatenate the chunk outputs into `Raw Session XX Candidate.md`.
 
 Usage:
     # Step 1: Create chunk files for subagents/LLM passes
-    python generate_raw_notes.py prepare session-XX-ingame.txt ./notes_chunks
+    python generate_raw_notes.py prepare "Transcript Session XX.txt" ./notes_chunks
 
     # Step 2: Process each chunk through an LLM
     #   Input:  notes_chunks/chunk_000.txt
     #   Output: notes_chunks/chunk_000_notes.txt
 
-    # Step 3: Concatenate chunk outputs
-    python generate_raw_notes.py concat ./notes_chunks "Raw Session XX.md"
+    # Step 3: Concatenate chunk outputs into a review candidate
+    python generate_raw_notes.py concat ./notes_chunks "Raw Session XX Candidate.md"
 
 Options:
     --chunk-size N     Primary entries per chunk (default: 20)
@@ -36,7 +36,17 @@ RECOMMENDED_MODEL = "gpt-5.2-codex"
 ENTRY_RE = re.compile(r"^\[\d{2}:\d{2}:\d{2}\] [^:]+: .+$")
 
 PROMPT_TEMPLATE = f"""\
-Convert this D&D transcript chunk into raw session notes.
+Convert this D&D transcript chunk into rough raw session notes.
+
+This is the interstitial artifact used to create final website session notes.
+It should resemble the existing Raw Session 7/8 style: chronological,
+human-editable scene/action notes with useful dialogue snippets, checks,
+outcomes, character thoughts, GM descriptions, discoveries, and decisions.
+
+Do not produce a cleaned transcript. Do not preserve timestamped speaker-line
+shape. Transform transcript chatter into concise story/game-state notes.
+When a character speaks or states an internal thought clearly, preserve the
+actual wording as much as possible instead of paraphrasing it.
 
 The chunk file contains three possible sections:
 - `CONTEXT BEFORE`: prior material for continuity only
@@ -46,10 +56,12 @@ The chunk file contains three possible sections:
 Rules:
 - Output notes ONLY for the `PRIMARY RANGE`
 - Use the context sections only to resolve pronouns, scene continuity, or references
-- Strip remaining out-of-character chatter, table talk, scheduling, tech talk, and player-side commentary
+- Strip remaining out-of-character chatter, scheduling, tech talk, and table banter
+- Preserve player planning, intent, uncertainty, and tactical discussion when it affects character action or outcomes
 - Keep the output in rough raw-note format, not polished campaign recap prose
-- Stay close to transcript order and wording
-- Keep in-character dialogue as dialogue using `name: "quote"` when a direct quote matters
+- Stay chronological, but compress repeated discussion into the final choice/outcome
+- Keep in-character dialogue as dialogue using `name: "quote"` and preserve the transcript wording where possible
+- Preserve stated character thoughts as thoughts, preferably in the character's own words when clear
 - Summarize actions and narration in short informal prose or sentence fragments
 - It is fine for the notes to feel draft-like and a little messy; do not smooth everything into elegant narration
 - Do not add headings, titles, bullet lists, or recap framing
@@ -60,6 +72,10 @@ Rules:
 - Do not mention timestamps
 - Do not add commentary about what you removed
 - Do not restate the whole scene if the chunk starts in the middle of it
+- Fold prior-session recap into short continuity facts only when it is needed to understand current action
+- Convert player phrasing into character/action notes when it is not clear IC dialogue or stated character thought
+- Preserve GM lore, revelations, rulings, and scene descriptions as durable facts
+- Preserve character internal thoughts and emotional beats when stated
 
 {CANONICAL_CAST_REFERENCE}
 
@@ -75,6 +91,17 @@ ellara: "it's time for bed. perhaps tomorrow we should ask proctor eduard about 
 nyx: "sure. be careful"
 ysidor: "are you not worried for your safety? there's dark magic going on"
 ellara: "exactly. who better to ask?"
+```
+
+Bad output:
+```
+[01:12:15] Nyx: Nyx asks whether there are only three soldiers at the cave mouth.
+```
+
+Good output:
+```
+nyx asks whether there are only three soldiers at the cave mouth.
+the scouts confirm two guards at the entrance and a tower lookout.
 ```
 
 === CHUNK ===
@@ -218,8 +245,6 @@ def apply_corrections(text):
     for wrong, right in NAME_CORRECTIONS.items():
         text = text.replace(wrong, right)
 
-    text = re.sub(r"(?<!\w)nites(?!\w)", "nýtes", text)
-    text = re.sub(r"(?<!\w)Nites(?!\w)", "Nýtes", text)
     return text
 
 

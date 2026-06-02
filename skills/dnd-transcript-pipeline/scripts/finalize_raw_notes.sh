@@ -13,7 +13,7 @@ REPO_ROOT="${DND_REPO_ROOT:-$(cd "$SCRIPT_DIR/../../.." && pwd)}"
 ELLARA_ROOT="${ELLARA_ROOT:-$(cd "$REPO_ROOT/.." && pwd)/ellara}"
 RAW_NOTES_PY="$REPO_ROOT/scripts/transcription/generate_raw_notes.py"
 CHUNK_DIR="$ELLARA_ROOT/Session Notes/Raw Session ${SESSION} Chunks"
-OUTPUT_FILE="$ELLARA_ROOT/Session Notes/Raw Session ${SESSION}.md"
+OUTPUT_FILE="$ELLARA_ROOT/Session Notes/Raw Session ${SESSION} Candidate.md"
 
 if [ ! -f "$RAW_NOTES_PY" ]; then
   echo "Raw notes script not found: $RAW_NOTES_PY"

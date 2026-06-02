@@ -6,8 +6,9 @@ Supported providers:
 - codex
 - gemini
 
-The script reads `chunks_manifest.json`, dispatches one agent run per chunk,
-writes `chunk_XXX_notes.txt`, and can optionally finalize `Raw Session XX.md`.
+The script reads `chunks_manifest.json`, dispatches one clean-context agent run
+per chunk, writes `chunk_XXX_notes.txt`, and can optionally finalize a raw
+session candidate such as `Raw Session XX Candidate.md`.
 """
 
 from __future__ import annotations
@@ -29,13 +30,19 @@ def log(msg: str) -> None:
 
 def build_prompt(chunk_text: str) -> str:
     return f"""Task:
-- Convert the chunk into raw D&D session notes.
+- Convert the chunk into rough raw D&D session notes.
+- This is the interstitial artifact used to create final website session notes.
+- Match the style of existing Raw Session 7/8 notes: chronological scene/action notes, useful dialogue snippets, checks/outcomes, character thoughts, GM descriptions, discoveries, and decisions.
+- When a character speaks or states an internal thought clearly, preserve the actual wording as much as possible instead of paraphrasing it.
 - Use only the PRIMARY RANGE for the output.
 - Use CONTEXT BEFORE and CONTEXT AFTER only for continuity, pronouns, and scene boundaries.
-- Remove out-of-character chatter, player discussion, scheduling, tech talk, and table banter.
+- Remove out-of-character chatter, scheduling, tech talk, table banter, and low-impact process discussion.
+- Preserve player planning, intent, uncertainty, and tactical discussion when it affects character action or outcomes.
 - Keep the result in rough raw-note format, not polished campaign recap prose.
-- Stay close to transcript order and wording.
-- Preserve in-character dialogue as dialogue using `name: "quote"` when a direct quote matters.
+- Do not preserve timestamped transcript shape; transform transcript chatter into concise story/game-state notes.
+- Stay chronological, but compress repeated discussion into the final choice/outcome.
+- Preserve in-character dialogue as dialogue using `name: "quote"` and preserve the transcript wording where possible.
+- Preserve stated character thoughts as thoughts, preferably in the character's own words when clear.
 - Summarize actions and narration in short informal prose or sentence fragments.
 - It is fine if the notes feel draft-like and a little messy.
 - Use --- for scene or beat breaks when helpful.
@@ -43,6 +50,10 @@ def build_prompt(chunk_text: str) -> str:
 - Do not mention timestamps.
 - Do not include commentary, headings, code fences, or explanations.
 - Do not restate the whole scene if the chunk starts in the middle of it.
+- Fold prior-session recap into short continuity facts only when needed to understand current action.
+- Convert player phrasing into character/action notes when it is not clear IC dialogue or stated character thought.
+- Preserve GM lore, revelations, rulings, and scene descriptions as durable facts.
+- Preserve stated character internal thoughts and emotional beats.
 
 {CANONICAL_CAST_REFERENCE}
 
@@ -155,7 +166,8 @@ def main() -> int:
     parser.add_argument("--end-chunk", type=int, help="Last chunk id to process")
     parser.add_argument("--limit", type=int, help="Maximum number of chunks to process")
     parser.add_argument("--force", action="store_true", help="Overwrite existing chunk note outputs")
-    parser.add_argument("--finalize", action="store_true", help="Finalize Raw Session output after processing")
+    parser.add_argument("--finalize", action="store_true", help="Finalize Raw Session candidate output after processing")
+    parser.add_argument("--output-file", help="Output file for --finalize; defaults to Raw Session Candidate name from chunk dir")
     parser.add_argument("--dry-run", action="store_true", help="Print planned actions without invoking an agent")
     args = parser.parse_args()
 
@@ -165,7 +177,14 @@ def main() -> int:
     manifest = load_manifest(manifest_path)
     chunks = select_chunks(manifest.get("chunks", []), args.start_chunk, args.end_chunk, args.limit)
     chunk_dir = Path(manifest["chunk_dir"])
-    raw_session_output = chunk_dir.parent / f"{chunk_dir.name.replace(' Chunks', '')}.md"
+    candidate_name = chunk_dir.name.replace(" Chunks", "")
+    if not candidate_name.endswith(" Candidate"):
+        candidate_name = f"{candidate_name} Candidate"
+    raw_session_output = (
+        Path(args.output_file).expanduser().resolve()
+        if args.output_file
+        else chunk_dir.parent / f"{candidate_name}.md"
+    )
 
     if not chunks:
         raise RuntimeError("No chunks selected")

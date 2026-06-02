@@ -354,10 +354,23 @@ export const locations = [
     ]
   },
   {
+    id: 'arcos',
+    name: 'Arcos',
+    type: 'town',
+    description: 'A small highland town of a few hundred people with harsh seasons and a resilient community. Ellara described it as her home and a place of "all the colors."',
+    tags: ['town', 'highland', 'ellara'],
+    history: [
+      { session: 17, note: 'Ellara named Arcos as her home while touring Hýrda with Ysidor.' }
+    ],
+    connections: [
+      { type: 'character', id: 'ellara', reason: 'Home town' }
+    ]
+  },
+  {
     id: 'hyrta',
     name: 'Hýrda',
     type: 'village',
-    description: 'A communal stone-goliath village in the mountains, home to Meri and Ysidor. The party arrived in Session 14 to find Hýrda preparing for a ducal attempt to seize the mines and displace its people.',
+    description: 'A communal stone-goliath village in the mountains, home to Meri and Ysidor. The party arrived in Session 14 to find Hýrda preparing for a ducal attempt to seize the mines and displace its people; Session 17 revealed its traditions preserve the sleeping mountain spirit Hyr.',
     tags: ['village', 'goliath', 'mountains'],
     history: [
       { session: 1, note: 'Ysidor\'s home village.' },
@@ -366,27 +379,31 @@ export const locations = [
       { session: 13, note: 'Party sighted a Grand Duke encampment of ~20 soldiers near the village.' },
       { session: 14, note: 'Party reached the village; Meri and Ardwin began coordinating mine-defense sabotage plans.' },
       { session: 15, note: 'Operation launched from Hýrda failed at the encampment, leaving the party captured in cages.' },
-      { session: 16, note: 'Ysidor, Nyx, and Ellara regrouped here, rearmed with Meri and Ardwin, and launched an immediate rescue back into the encampment.' }
+      { session: 16, note: 'Ysidor, Nyx, and Ellara regrouped here, rearmed with Meri and Ardwin, and launched an immediate rescue back into the encampment.' },
+      { session: 17, note: 'The party regrouped here, planned the mine infiltration, and Ellara learned more about Hýrda\'s devotion to Hyr.' }
     ],
     connections: [
       { type: 'location', id: 'hieroterra', reason: 'Village within the province' },
       { type: 'location', id: 'hyrta-mines', reason: 'Village mining network and defensive choke point' },
       { type: 'location', id: 'hyrta-ducal-encampment', reason: 'Ducal forces staged near the mines' },
-      { type: 'npc', id: 'ardwin', reason: 'Village blacksmith helping lead defenses' }
+      { type: 'npc', id: 'ardwin', reason: 'Village blacksmith helping lead defenses' },
+      { type: 'lore', id: 'hyr', reason: 'Local mountain spirit sustained by village prayers' }
     ]
   },
   {
     id: 'hyrta-mines',
     name: 'Hýrda Mines',
     type: 'poi',
-    description: 'The cave-and-tunnel mining network near Hýrda. It is both a vital resource and the centerpiece of sabotage plans against incoming ducal reinforcements.',
+    description: 'The cave-and-tunnel mining network near Hýrda. It is both a vital resource and the centerpiece of sabotage plans against incoming ducal reinforcements; within it, the party awakened Hyr, the spirit of the mountain range.',
     tags: ['mines', 'caves', 'hyrda'],
     history: [
-      { session: 15, note: 'Mine-cave collapse strategy remained the objective while the party attempted to disable the nearby camp first.' }
+      { session: 15, note: 'Mine-cave collapse strategy remained the objective while the party attempted to disable the nearby camp first.' },
+      { session: 17, note: 'Party infiltrated with miners, began extracting ore and setting charges, and awakened Hyr within the mountain.' }
     ],
     connections: [
       { type: 'location', id: 'hyrta', reason: 'Primary village mining site' },
-      { type: 'location', id: 'hyrta-ducal-encampment', reason: 'Encampment is positioned at the cave approach' }
+      { type: 'location', id: 'hyrta-ducal-encampment', reason: 'Encampment is positioned at the cave approach' },
+      { type: 'lore', id: 'hyr', reason: 'Spirit tied to the mountain range' }
     ]
   },
   {
@@ -399,7 +416,8 @@ export const locations = [
       { session: 13, note: 'First sighted as a Grand Duke encampment near Hýrda.' },
       { session: 14, note: 'Confirmed as the ducal staging force; party plans to steal powder and sabotage operations.' },
       { session: 15, note: 'Poison-assisted assault only partially disabled defenders; the party surrendered and was imprisoned in camp cages.' },
-      { session: 16, note: 'Party escaped captivity, rescued the remaining prisoners, recovered their gear, and stole at least one barrel of gunpowder from the camp.' }
+      { session: 16, note: 'Party escaped captivity, rescued the remaining prisoners, recovered their gear, and stole at least one barrel of gunpowder from the camp.' },
+      { session: 17, note: 'Berridin confirmed the mine mouth remained guarded by two soldiers and a tower lookout; the party later incapacitated the cave-mouth guards nonlethally.' }
     ],
     connections: [
       { type: 'location', id: 'hyrta', reason: 'Positioned beside village mining approaches' },

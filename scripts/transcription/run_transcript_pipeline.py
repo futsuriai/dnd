@@ -262,12 +262,25 @@ def main() -> int:
     parser.add_argument("--skip-raw-notes-prep", action="store_true", help="Skip preparing raw-session-note chunks for subagents")
     parser.add_argument("--raw-notes-chunk-size", type=int, default=20, help="Primary transcript entries per raw-notes chunk")
     parser.add_argument("--raw-notes-overlap", type=int, default=5, help="Context entries before/after each raw-notes chunk")
+    parser.add_argument(
+        "--raw-notes-source",
+        help="Override transcript source for raw-note prep, usually the annotation-cleaned transcript candidate",
+    )
+    parser.add_argument(
+        "--raw-notes-output",
+        help="Output path for finalized raw-note candidate; defaults to 'Raw Session N Candidate.md'",
+    )
     parser.add_argument("--run-raw-notes-provider", choices=["codex", "gemini"], help="Optionally dispatch raw-note chunks through the selected agent CLI")
     parser.add_argument("--raw-notes-model", help="Optional model override for raw-note agent runs")
     parser.add_argument("--raw-notes-limit", type=int, help="Limit how many raw-note chunks to dispatch")
     parser.add_argument("--raw-notes-force", action="store_true", help="Overwrite existing raw-note chunk outputs when dispatching agents")
     parser.add_argument("--raw-notes-dry-run", action="store_true", help="Show planned raw-note agent dispatches without invoking the provider")
-    parser.add_argument("--raw-notes-finalize", action="store_true", help="Finalize Raw Session N.md after raw-note agent dispatch")
+    parser.add_argument("--raw-notes-finalize", action="store_true", help="Finalize Raw Session N Candidate.md after raw-note agent dispatch")
+    parser.add_argument("--run-raw-notes-reconcile-provider", choices=["codex", "gemini"], help="Reconcile chunk-extracted raw-note candidate through the selected agent CLI")
+    parser.add_argument("--raw-notes-reconcile-model", help="Optional model override for raw-note reconciliation")
+    parser.add_argument("--raw-notes-reconciled-output", help="Output path for reconciled raw-note candidate; defaults to 'Raw Session N Reconciled Candidate.md'")
+    parser.add_argument("--raw-notes-reconcile-force", action="store_true", help="Overwrite existing reconciled raw-note candidate")
+    parser.add_argument("--raw-notes-reconcile-dry-run", action="store_true", help="Show planned raw-note reconciliation without invoking the provider")
     parser.add_argument("--run-session-notes-provider", choices=["codex", "gemini"], help="Optionally generate polished Session N.md through the selected agent CLI")
     parser.add_argument("--session-notes-model", help="Optional model override for polished session-note generation")
     parser.add_argument("--session-notes-force", action="store_true", help="Overwrite existing Session N.md when dispatching the agent")
@@ -278,6 +291,12 @@ def main() -> int:
         help='Keep speaker name as \'Whitaker "Witty" Whitman VI\' instead of normalizing to "Witty"',
     )
     args = parser.parse_args()
+
+    if (args.raw_notes_finalize or args.run_raw_notes_reconcile_provider) and args.run_session_notes_provider:
+        raise ValueError(
+            "raw-note candidate generation/reconciliation must be reviewed first; "
+            "run polished session-note generation after promoting it to Raw Session N.md"
+        )
 
     session = str(args.session).strip()
     if not session:
@@ -443,11 +462,26 @@ def main() -> int:
     else:
         log("Skipping OOC filtering step (--skip-ooc)")
 
+    raw_notes_candidate_output = (
+        Path(args.raw_notes_output).expanduser()
+        if args.raw_notes_output
+        else session_notes_dir / f"Raw Session {session} Candidate.md"
+    )
+    raw_notes_reconciled_output = (
+        Path(args.raw_notes_reconciled_output).expanduser()
+        if args.raw_notes_reconciled_output
+        else session_notes_dir / f"Raw Session {session} Reconciled Candidate.md"
+    )
     raw_session_output = session_notes_dir / f"Raw Session {session}.md"
     session_notes_output = session_notes_dir / f"Session {session}.md"
     raw_notes_chunk_dir = session_notes_dir / f"Raw Session {session} Chunks"
     raw_notes_chunk_manifest = raw_notes_chunk_dir / "chunks_manifest.json"
-    raw_notes_source = ooc_removed if ooc_removed.exists() else ellara_transcript
+    if args.raw_notes_source:
+        raw_notes_source = Path(args.raw_notes_source).expanduser()
+        if not raw_notes_source.exists():
+            raise FileNotFoundError(f"--raw-notes-source does not exist: {raw_notes_source}")
+    else:
+        raw_notes_source = ooc_removed if ooc_removed.exists() else ellara_transcript
 
     # 7) Prepare raw-note chunks for subagents/LLM passes.
     if not args.skip_raw_notes_prep:
@@ -490,8 +524,36 @@ def main() -> int:
             raw_runner_cmd.append("--dry-run")
         if args.raw_notes_finalize:
             raw_runner_cmd.append("--finalize")
+            raw_runner_cmd.extend(["--output-file", str(raw_notes_candidate_output)])
 
         run_cmd(raw_runner_cmd, cwd=dnd_dir, env=env_base)
+
+    # 8b) Optionally reconcile the chunk-extracted raw-note candidate.
+    if args.run_raw_notes_reconcile_provider:
+        if not raw_notes_candidate_output.exists():
+            raise FileNotFoundError(
+                f"raw-note candidate not found for reconciliation: {raw_notes_candidate_output}"
+            )
+        reconcile_cmd = [
+            str(py_bin),
+            "scripts/transcription/reconcile_raw_notes.py",
+            str(raw_notes_candidate_output),
+            str(raw_notes_reconciled_output),
+            "--provider",
+            args.run_raw_notes_reconcile_provider,
+            "--workspace-root",
+            str(dnd_dir.parent),
+            "--transcript",
+            str(ellara_transcript),
+        ]
+        if args.raw_notes_reconcile_model:
+            reconcile_cmd.extend(["--model", args.raw_notes_reconcile_model])
+        if args.raw_notes_reconcile_force:
+            reconcile_cmd.append("--force")
+        if args.raw_notes_reconcile_dry_run:
+            reconcile_cmd.append("--dry-run")
+
+        run_cmd(reconcile_cmd, cwd=dnd_dir, env=env_base)
 
     # 9) Optionally generate polished session notes.
     if args.run_session_notes_provider:
@@ -534,10 +596,13 @@ def main() -> int:
         "ambiguous": str(ambiguous),
         "ooc_report": str(ooc_report),
         "raw_notes_source": str(raw_notes_source),
+        "raw_notes_candidate_output": str(raw_notes_candidate_output),
+        "raw_notes_reconciled_output": str(raw_notes_reconciled_output),
         "raw_notes_chunk_dir": str(raw_notes_chunk_dir),
         "raw_notes_chunk_manifest": str(raw_notes_chunk_manifest),
         "raw_session_output": str(raw_session_output),
         "raw_notes_provider": args.run_raw_notes_provider or "",
+        "raw_notes_reconcile_provider": args.run_raw_notes_reconcile_provider or "",
         "session_notes_output": str(session_notes_output),
         "session_notes_provider": args.run_session_notes_provider or "",
         "line_counts": {
@@ -545,6 +610,8 @@ def main() -> int:
             "ellara_transcript": count_lines(ellara_transcript),
             "ooc_removed": count_lines(ooc_removed) if ooc_removed.exists() else 0,
             "ambiguous": count_lines(ambiguous) if ambiguous.exists() else 0,
+            "raw_notes_candidate_output": count_lines(raw_notes_candidate_output) if raw_notes_candidate_output.exists() else 0,
+            "raw_notes_reconciled_output": count_lines(raw_notes_reconciled_output) if raw_notes_reconciled_output.exists() else 0,
             "raw_session_output": count_lines(raw_session_output) if raw_session_output.exists() else 0,
             "session_notes_output": count_lines(session_notes_output) if session_notes_output.exists() else 0,
         },
@@ -562,7 +629,9 @@ def main() -> int:
     if not args.skip_raw_notes_prep:
         log(f"Raw note chunks: {raw_notes_chunk_dir}")
         log(f"Raw note chunk manifest: {raw_notes_chunk_manifest}")
-        log(f"Raw session output target: {raw_session_output}")
+        log(f"Raw session candidate output target: {raw_notes_candidate_output}")
+        log(f"Reconciled raw session candidate target: {raw_notes_reconciled_output}")
+        log(f"Approved raw session output target: {raw_session_output}")
     if args.run_session_notes_provider or session_notes_output.exists():
         log(f"Session notes output: {session_notes_output}")
     log(f"Manifest: {manifest_path}")

@@ -39,13 +39,22 @@
     "updatedInSessions": []
   },
   {
+    "id": "great-cataclysm",
+    "name": "The Great Cataclysm",
+    "type": "Lore",
+    "updatedInSessions": [
+      17
+    ]
+  },
+  {
     "id": "hyr",
     "name": "Hyr",
     "type": "Lore",
     "updatedInSessions": [
       1,
       3,
-      6
+      6,
+      17
     ]
   },
   {
@@ -91,7 +100,8 @@
     "name": "Nites",
     "type": "Lore",
     "updatedInSessions": [
-      3
+      3,
+      17
     ]
   },
   {
@@ -99,6 +109,14 @@
     "name": "The Pilgrimage of the Enlightened",
     "type": "Lore",
     "updatedInSessions": []
+  },
+  {
+    "id": "the-static",
+    "name": "The Static",
+    "type": "Lore",
+    "updatedInSessions": [
+      17
+    ]
   },
   {
     "id": "torchlight-college",
@@ -137,6 +155,14 @@
     "type": "Locations",
     "updatedInSessions": [
       7
+    ]
+  },
+  {
+    "id": "arcos",
+    "name": "Arcos",
+    "type": "Locations",
+    "updatedInSessions": [
+      17
     ]
   },
   {
@@ -289,7 +315,8 @@
       13,
       14,
       15,
-      16
+      16,
+      17
     ]
   },
   {
@@ -300,7 +327,8 @@
       13,
       14,
       15,
-      16
+      16,
+      17
     ]
   },
   {
@@ -308,7 +336,8 @@
     "name": "Hýrda Mines",
     "type": "Locations",
     "updatedInSessions": [
-      15
+      15,
+      17
     ]
   },
   {
@@ -498,7 +527,8 @@
     "type": "NPCs",
     "updatedInSessions": [
       14,
-      16
+      16,
+      17
     ]
   },
   {
@@ -637,7 +667,8 @@
       13,
       14,
       15,
-      16
+      16,
+      17
     ]
   },
   {

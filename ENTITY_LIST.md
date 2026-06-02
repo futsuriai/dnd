@@ -9,6 +9,7 @@ This file is auto-generated. Do not edit manually.
 - `eternal-light`: The Eternal Light
 - `eulogia-eternal-light`: Eulogia of the Eternal Light
 - `first-emperor`: The First Emperor
+- `great-cataclysm`: The Great Cataclysm
 - `hyr`: Hyr
 - `imperial-peerage`: Imperial Peerage System
 - `light-crystals`: Light Crystals
@@ -16,6 +17,7 @@ This file is auto-generated. Do not edit manually.
 - `marchenbau`: Marchenbau
 - `nites`: Nites
 - `pilgrimage-enlightened`: The Pilgrimage of the Enlightened
+- `the-static`: The Static
 - `torchlight-college`: Torchlight College
 - `warforged`: Warforged Constructs
 - `whitaker-family`: The Whitaker Brothers
@@ -23,6 +25,7 @@ This file is auto-generated. Do not edit manually.
 ## Locations
 
 - `abandoned-barn`: Abandoned Barn
+- `arcos`: Arcos
 - `badwater-well`: Badwater Well
 - `basement-lab`: Basement Synthesis Laboratory
 - `bastion-city`: Bastion City

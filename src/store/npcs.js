@@ -53,7 +53,7 @@ export const npcs = [
         name: 'Meri',
         role: 'Goliath Chieftess and Mentor',
         location: 'Hýrda',
-        description: 'Mentor to Ysidor and acting chieftess of Hýrda. Arrested in Bastion City after speaking against the Lighthouse, later found captive beneath the Lighthouse and rescued, she is now organizing village defenses against a ducal mine-seizure campaign.',
+        description: 'Mentor to Ysidor and acting chieftess of Hýrda. Arrested in Bastion City after speaking against the Lighthouse, later found captive beneath the Lighthouse and rescued, she is now organizing village defenses against a ducal mine-seizure campaign. Hyr recognized her as a priestess whose prayers and offerings helped sustain the mountain spirit through sleep.',
         fullText: 'A towering goliath of granite-gray skin and lilac-silver hair, Meri served as Ysidor\'s mentor, drilling him in blessing and stance with her characteristic phrase: "Hold your guard higher, little hill." After being reported as violent and dangerous following an altercation near the Lighthouse, she was transferred under Proctor Eduard\'s custody and ultimately subjected to horrific basement experiments involving crystal synthesis. She was rescued partway through the process and is now recovering from her ordeal.',
         history: [
             { session: 1, note: 'Established as Ysidor\'s missing mentor.' },
@@ -66,7 +66,8 @@ export const npcs = [
             { session: 13, note: 'A bounty hunter sent after her was killed on the road; a note read "Hyrda".' },
             { session: 14, note: 'Briefed the party on ducal pressure and led planning for mine-defense sabotage in Hýrda.' },
             { session: 15, note: 'Received Nyx\'s sending-stone report that the encampment operation failed and the party surrendered into cages.' },
-            { session: 16, note: 'Helped receive the escapees, arm the rescue attempt, and send the party back toward the camp before the ducal response could harden.' }
+            { session: 16, note: 'Helped receive the escapees, arm the rescue attempt, and send the party back toward the camp before the ducal response could harden.' },
+            { session: 17, note: 'Recognized Hyr\'s voice and accepted a boon of guidance for the mine-defense plan.' }
         ],
         connections: [
             { type: 'character', id: 'ysidor', reason: 'Mentor and guardian' },
@@ -74,7 +75,8 @@ export const npcs = [
             { type: 'location', id: 'hyrta', reason: 'Home village' },
             { type: 'lore', id: 'light-crystals', reason: 'Subject of crystal synthesis process' },
             { type: 'npc', id: 'ardwin', reason: 'Coordinates village defense strategy with him' },
-            { type: 'location', id: 'hyrta-ducal-encampment', reason: 'Leading resistance against nearby ducal forces' }
+            { type: 'location', id: 'hyrta-ducal-encampment', reason: 'Leading resistance against nearby ducal forces' },
+            { type: 'lore', id: 'hyr', reason: 'Recognized as priestess by the mountain spirit' }
         ]
     },
     {
@@ -85,7 +87,8 @@ export const npcs = [
         description: 'A towering blacksmith of Hýrda who is helping Meri convert available metal into defensive tools and shape the village\'s war plan.',
         history: [
             { session: 14, note: 'Met the party, received warforged intelligence, and joined planning for mine sabotage and defense.' },
-            { session: 16, note: 'Aided Meri in rearming the escapees for an immediate rescue and counter-raid into the encampment.' }
+            { session: 16, note: 'Aided Meri in rearming the escapees for an immediate rescue and counter-raid into the encampment.' },
+            { session: 17, note: 'Helped refine the mine-collapse plan, including sending miners to identify weak points and extract needed ore.' }
         ],
         connections: [
             { type: 'location', id: 'hyrta', reason: 'Lives and forges in the village' },

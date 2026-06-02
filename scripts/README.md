@@ -101,36 +101,48 @@ python3 scripts/transcription/run_transcript_pipeline.py \
 
 For a provider baseline comparison, run the pipeline twice with `--stop-after-transcript`: once with `--transcription-provider whisper --clean`, archive `Transcript Session XX.txt` as `Transcript Session XX - Whisper Baseline.txt`, then run with `--transcription-provider gladia --clean` and archive `Transcript Session XX.txt` as `Transcript Session XX - Gladia Baseline.txt`. Compare the two archived normalized transcripts by timestamp windows before choosing which one becomes the canonical review transcript.
 
-### 6a. Full End-to-End Checklist: Raw Audio -> Raw Session MD
+### 6a. Full End-to-End Checklist: Raw Audio -> Raw Session Candidate -> Session MD
 
-If you want the full path spelled out from Craig-style speaker audio streams to a completed `Raw Session XX.md`, this is the sequence:
+`AGENT_SESSION_PIPELINE.md` is the authoritative runbook. At a high level, the sequence from Craig-style speaker audio streams to completed website notes is:
 
 1. Put all speaker-isolated audio files for the session in one directory.
 2. Make sure `scripts/transcription/speaker_map.json` is current.
-3. Run the one-command pipeline once to generate:
+3. Run the transcript pipeline with `--stop-after-transcript` and review the canonical transcript.
+4. If needed, run the annotation-first OOC cleanup and approve `Transcript Session XX - Annotation Cleaned Candidate.txt`.
+5. Resume the pipeline to generate raw-note chunks and `Raw Session XX Candidate.md`.
+6. Run raw-note reconciliation into `Raw Session XX Reconciled Candidate.md`.
+7. Review and promote the reconciled candidate to `Raw Session XX.md`.
+8. Generate polished `Session XX.md` and sync it into `src/assets/sessions/session-XX.md`.
+
+The pipeline can generate:
    - per-speaker transcripts
    - combined normalized transcript
    - OOC-filtered transcript variants
    - raw-note chunk files and `chunks_manifest.json`
-4. Run a provider over every raw-note chunk so each `chunk_XXX.txt` gets a matching `chunk_XXX_notes.txt`.
-5. Finalize the raw notes by concatenating the chunk outputs into `Raw Session XX.md`.
-6. If needed, rerun the raw-note chunk stage with `--raw-notes-force` and re-finalize; seam cleanup now happens automatically during `concat`.
+   - raw-note candidate and pipeline manifest
 
 Concrete commands:
 ```bash
-# 1) Build transcript artifacts and raw-note chunks
+# 1) Build transcript artifacts, then stop for review
 python3 scripts/transcription/run_transcript_pipeline.py \
   --session 15 \
-  --audio-dir "/path/to/session-audio"
+  --audio-dir "/path/to/session-audio" \
+  --stop-after-transcript
 
-# 2) Run the raw-note agent loop
-python3 scripts/transcription/run_raw_notes_subagents.py \
-  "/home/babu/source/ellara/Session Notes/Raw Session 15 Chunks/chunks_manifest.json" \
-  --provider codex \
-  --finalize
+# 2) After transcript/OOC review, generate the raw-note candidate
+python3 scripts/transcription/run_transcript_pipeline.py \
+  --session 15 \
+  --audio-dir "/path/to/session-audio" \
+  --resume-after-transcript \
+  --run-raw-notes-provider codex \
+  --raw-notes-finalize \
+  --raw-notes-output "/home/babu/source/ellara/Session Notes/Raw Session 15 Candidate.md" \
+  --run-raw-notes-reconcile-provider codex \
+  --raw-notes-reconciled-output "/home/babu/source/ellara/Session Notes/Raw Session 15 Reconciled Candidate.md"
 
-# 3) The completed raw notes land here
-/home/babu/source/ellara/Session Notes/Raw Session 15.md
+# 3) After review, promote the reconciled candidate
+cp "/home/babu/source/ellara/Session Notes/Raw Session 15 Reconciled Candidate.md" \
+  "/home/babu/source/ellara/Session Notes/Raw Session 15.md"
 ```
 
 If you already have the per-speaker `.txt` files and only want to rebuild the downstream artifacts:
@@ -161,24 +173,25 @@ python3 scripts/transcription/run_transcript_pipeline.py \
   --audio-dir "/path/to/session-audio" \
   --skip-raw-notes-prep
 
-# Prepare chunk files and dispatch them through Codex
+# After transcript review, prepare raw-note chunks and dispatch them through Codex
 python3 scripts/transcription/run_transcript_pipeline.py \
   --session 15 \
   --audio-dir "/path/to/session-audio" \
-  --skip-transcribe \
+  --resume-after-transcript \
   --run-raw-notes-provider codex \
-  --raw-notes-finalize
-
-# Rebuild raw notes, clean seam artifacts during concat, and generate polished Session 15 notes
-python3 scripts/transcription/run_transcript_pipeline.py \
-  --session 15 \
-  --audio-dir "/path/to/session-audio" \
-  --skip-transcribe \
-  --run-raw-notes-provider codex \
-  --raw-notes-force \
   --raw-notes-finalize \
-  --run-session-notes-provider codex \
-  --session-notes-force
+  --raw-notes-output "/home/babu/source/ellara/Session Notes/Raw Session 15 Candidate.md" \
+  --run-raw-notes-reconcile-provider codex \
+  --raw-notes-reconciled-output "/home/babu/source/ellara/Session Notes/Raw Session 15 Reconciled Candidate.md"
+
+# After reviewing and promoting Raw Session 15 Candidate.md, generate polished notes
+python3 scripts/transcription/run_session_notes_agent.py \
+  15 \
+  "/home/babu/source/ellara/Session Notes/Raw Session 15.md" \
+  "/home/babu/source/ellara/Session Notes/Session 15.md" \
+  --provider codex \
+  --workspace-root /home/babu/source \
+  --force
 
 # Show planned raw-note dispatches without running the model
 python3 scripts/transcription/run_transcript_pipeline.py \
@@ -270,22 +283,28 @@ For session 14, this was 32 LLM-processed chunks + 3 Zoom-only chunks (pre-recor
 
 A final regex pass catches any remaining name variants the LLM missed.
 
-### Stage 4: OOC Dialogue Filtering
+### Stage 4: Annotation-First OOC Cleanup
 
-The diarized transcript contains both in-game content and out-of-character (OOC) table talk. An LLM pass filters these apart.
+The diarized transcript contains both in-game content and out-of-character (OOC) table talk. The current OOC cleanup flow is annotation-first: the LLM emits JSONL decisions, and `filter_ooc.py apply` deterministically rebuilds the cleaned transcript plus review artifacts.
 
 ```bash
 # Split into chunks
 python3 scripts/transcription/filter_ooc.py prepare session-XX-diarized.txt ./ooc_chunks
 
 # View the prompt template
-python3 scripts/transcription/filter_ooc.py prompt
+python3 scripts/transcription/filter_ooc.py prompt --chunk-file ./ooc_chunks/chunk_00.txt
 
 # (Process each chunk through LLM — see prompt template)
-# Save results as ooc_chunks/chunk_NN_filtered.txt
+# Save results as ooc_chunks/chunk_NN_annotations.jsonl
 
-# Concatenate filtered chunks
-python3 scripts/transcription/filter_ooc.py concat ./ooc_chunks session-XX-ingame.txt
+# Apply annotations into deterministic review outputs
+python3 scripts/transcription/filter_ooc.py apply \
+  ./ooc_chunks/annotation_manifest.json \
+  ./ooc_chunks \
+  "Transcript Session XX - Annotation Cleaned Candidate.txt" \
+  "Transcript Session XX - Annotation OOC Review Report.md" \
+  "Transcript Session XX - Annotation OOC Ambiguous.md" \
+  "Transcript Session XX - Annotation Cleaned.diff"
 ```
 
 **Removed as OOC:**
@@ -298,22 +317,17 @@ python3 scripts/transcription/filter_ooc.py concat ./ooc_chunks session-XX-ingam
 - GM narration and world-building
 - In-character dialogue (players speaking as their characters)
 - NPC dialogue and descriptions
-- Session recaps and in-game strategic discussion
+- Recap continuity facts and in-game strategic discussion
 
-**Session 14 results:**
-| File | Entries | Size |
-|------|---------|------|
-| `session-14-diarized.txt` (full) | 1,056 | 120 KB |
-| `session-14-ingame.txt` (filtered) | 583 | 80 KB |
-| Removed (OOC) | 473 (45%) | — |
+Review the cleaned candidate diff before replacing the canonical transcript.
 
-### Stage 5: Raw Session Notes Generation
+### Stage 5: Raw Session Candidate Generation
 
-The in-game transcript is converted into condensed prose-style session notes matching the format used in existing `Raw Session XX.md` files. The chunk preparation step now produces non-overlapping primary ranges with overlapping context before/after each chunk so subagents can work independently without duplicating scenes.
+The cleaned transcript is converted into a raw-note candidate matching the rough style used in `Raw Session 7.md` and `Raw Session 8.md`: chronological scene/action notes, meaningful IC dialogue, stated character thoughts, checks/outcomes, GM revelations, and decisions. This is not another transcript-shaped cleanup artifact. Where possible, clear IC dialogue and thoughts should keep the character's actual wording instead of being paraphrased.
 
 ```bash
 # Split into subagent-ready chunks
-python3 scripts/transcription/generate_raw_notes.py prepare session-XX-ingame.txt ./notes_chunks \
+python3 scripts/transcription/generate_raw_notes.py prepare "Transcript Session XX.txt" ./notes_chunks \
     --chunk-size 20 \
     --overlap 5
 
@@ -323,19 +337,30 @@ python3 scripts/transcription/generate_raw_notes.py prompt
 # (Process each chunk through LLM — see prompt template)
 # Save results as notes_chunks/chunk_XXX_notes.txt
 
-# Concatenate, apply name corrections, and clean seam artifacts
-python3 scripts/transcription/generate_raw_notes.py concat ./notes_chunks "Raw Session XX.md"
+# Concatenate, apply name corrections, and clean seam artifacts into a review candidate
+python3 scripts/transcription/generate_raw_notes.py concat ./notes_chunks "Raw Session XX Candidate.md"
 
-# Clean an existing raw-session file in place
-python3 scripts/transcription/generate_raw_notes.py clean "Raw Session XX.md"
+# Reconcile chunk output into a scene-level review candidate
+python3 scripts/transcription/reconcile_raw_notes.py \
+  "Raw Session XX Candidate.md" \
+  "Raw Session XX Reconciled Candidate.md" \
+  --provider codex \
+  --transcript "Transcript Session XX.txt" \
+  --force
+
+# After review, promote it to the approved raw notes
+cp "Raw Session XX Reconciled Candidate.md" "Raw Session XX.md"
 ```
 
 **Notes format:**
 - Casual shorthand prose with `---` scene breaks
-- All in-character dialogue preserved as `character: "quote"`
+- Clear in-character dialogue preserved as `character: "quote"` with minimal paraphrase
+- Stated character thoughts preserved as thoughts, preferably in the character's own words
 - GM narration condensed into descriptions
 - Dice rolls/checks noted inline
 - No timestamps in output
+- No low-impact OOC logistics or transcript-line formatting
+- Chunk outputs must be reconciled before promotion to `Raw Session XX.md`
 - Each chunk file contains:
   - `CONTEXT BEFORE`
   - `PRIMARY RANGE`
@@ -357,12 +382,12 @@ python3 scripts/transcription/run_session_notes_agent.py \
     --provider codex
 ```
 
-This stage is intended to match the existing `Session 11.md` through `Session 14.md` format:
+This stage is intended to match the existing `session-7.md` and `session-8.md` website-note format:
 - markdown title with a session subtitle
 - `Locales` and `Time`
 - numbered sections
 - cleaner narrative prose than the raw notes
-- use the existing `Session 11.md` through `Session 14.md` files as the style guide for tone, structure, and level of detail
+- use `src/assets/sessions/session-7.md` and `src/assets/sessions/session-8.md` as the style guide for tone, structure, and level of detail
 
 ### Quick Reference: Full Pipeline
 
@@ -379,15 +404,27 @@ python3 scripts/transcription/merge_transcripts.py zoom.txt whisper.txt ENTITY_L
 #    Concatenate all merged chunks → session-XX-diarized.txt
 #    Run final regex pass for remaining name variants
 
-# Stage 4: OOC filtering
+# Stage 4: OOC annotation cleanup
 python3 scripts/transcription/filter_ooc.py prepare session-XX-diarized.txt ./ooc_chunks
-#    Process each chunk through LLM (model: gpt-5.2-codex)
-python3 scripts/transcription/filter_ooc.py concat ./ooc_chunks session-XX-ingame.txt
+#    Process each chunk through LLM into chunk_NN_annotations.jsonl
+python3 scripts/transcription/filter_ooc.py apply \
+  ./ooc_chunks/annotation_manifest.json \
+  ./ooc_chunks \
+  "Transcript Session XX - Annotation Cleaned Candidate.txt" \
+  "Transcript Session XX - Annotation OOC Review Report.md" \
+  "Transcript Session XX - Annotation OOC Ambiguous.md" \
+  "Transcript Session XX - Annotation Cleaned.diff"
 
-# Stage 5: Raw session notes
-python3 scripts/transcription/generate_raw_notes.py prepare session-XX-ingame.txt ./notes_chunks
+# Stage 5: Raw session-note candidate
+python3 scripts/transcription/generate_raw_notes.py prepare "Transcript Session XX.txt" ./notes_chunks
 #    Process each chunk through LLM (model: gpt-5.2-codex)
-python3 scripts/transcription/generate_raw_notes.py concat ./notes_chunks "Raw Session XX.md"
+python3 scripts/transcription/generate_raw_notes.py concat ./notes_chunks "Raw Session XX Candidate.md"
+python3 scripts/transcription/reconcile_raw_notes.py \
+  "Raw Session XX Candidate.md" \
+  "Raw Session XX Reconciled Candidate.md" \
+  --provider codex \
+  --transcript "Transcript Session XX.txt" \
+  --force
 ```
 
 ---
@@ -411,8 +448,9 @@ node scripts/generate_entity_list.js
     - `combine_transcripts.py`: Logic to merge and sort multiple tracks.
     - `align_whisper_timestamps.py`: Stage 1 — aligns Whisper timestamps to a Zoom transcript's clock.
     - `merge_transcripts.py`: Stage 2 — mechanical merge + chunk preparation for LLM refinement.
-    - `filter_ooc.py`: Stage 4 — chunking, prompts, and concatenation for OOC dialogue filtering.
-    - `generate_raw_notes.py`: Stage 5 — chunking, prompts, and concatenation for raw session notes.
+    - `filter_ooc.py`: Stage 4 — annotation-first OOC cleanup with deterministic apply/report/diff outputs.
+    - `generate_raw_notes.py`: Stage 5 — chunking, prompts, and concatenation for raw session-note candidates.
+    - `reconcile_raw_notes.py`: Stage 5b — scene-level reconciliation before raw-note promotion.
     - `speaker_map.json`: Mapping of usernames to Character names.
     - `name_corrections.json`: ASR mis-transcription → canonical name mappings.
     - `TRANSCRIPTION_GUIDE.md`: Detailed technical setup guide.

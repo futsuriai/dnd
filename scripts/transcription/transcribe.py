@@ -44,6 +44,13 @@ CAMPAIGN_TRANSCRIPTION_TERMS = [
     "sending stone",
 ]
 
+PRIORITY_TRANSCRIPTION_TERMS = [
+    "Nites",
+    "Hyr",
+    "Hýr",
+    "Hýrda",
+]
+
 ENTITY_RE = re.compile(r"^- `(?P<id>[^`]+)`: (?P<name>.+)$")
 
 
@@ -193,7 +200,11 @@ def load_entity_terms(entity_list_path):
                 "id": ent["id"],
                 "name": clean_term(ent["name"]),
             })
-        terms = dedupe_terms(expand_entity_terms(records) + CAMPAIGN_TRANSCRIPTION_TERMS)
+        terms = dedupe_terms(
+            PRIORITY_TRANSCRIPTION_TERMS
+            + expand_entity_terms(records)
+            + CAMPAIGN_TRANSCRIPTION_TERMS
+        )
         return terms
 
     # Fallback to standard parsing of ENTITY_LIST.md if metadata file is not available
@@ -232,7 +243,11 @@ def load_entity_terms(entity_list_path):
         SECTION_PRIORITY.get(record["section"], 99),
         record["name"].casefold(),
     ))
-    terms = dedupe_terms(expand_entity_terms(records) + CAMPAIGN_TRANSCRIPTION_TERMS)
+    terms = dedupe_terms(
+        PRIORITY_TRANSCRIPTION_TERMS
+        + expand_entity_terms(records)
+        + CAMPAIGN_TRANSCRIPTION_TERMS
+    )
 
     if terms:
         print(f"Loaded {len(records)} entities and expanded to {len(terms)} prompt terms from {entity_list_path}")
@@ -254,7 +269,8 @@ def build_initial_prompt(entity_terms):
     sample_terms = join_terms_with_budget(entity_terms[:term_limit], max_chars=max_chars - 120, separator=", ")
     return (
         "English D&D campaign transcript. Preserve exact spellings for speaker names, "
-        f"fantasy proper nouns, and tabletop terms such as: {sample_terms}."
+        f"fantasy proper nouns, and tabletop terms such as: {sample_terms}. "
+        "Use Nites for the future Eternal Light, pronounced knee-tes; do not write Nytes or Nýtes."
     )
 
 
@@ -342,7 +358,9 @@ def transcribe_file(model, audio_path, output_path, initial_prompt=None, hotword
         transcribe_kwargs = {
             "beam_size": beam_size,
             "vad_filter": True,
-            "condition_on_previous_text": bool_env("WHISPER_CONDITION_ON_PREVIOUS_TEXT", True),
+            # Long campaign sessions plus hotwords can fill faster-whisper's
+            # decoder prompt when previous text is carried forward.
+            "condition_on_previous_text": bool_env("WHISPER_CONDITION_ON_PREVIOUS_TEXT", False),
         }
         vad_parameters = build_vad_parameters()
         if vad_parameters:
