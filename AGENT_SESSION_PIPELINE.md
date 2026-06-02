@@ -7,7 +7,8 @@ Use this file as the primary context for running a full session update from raw 
 Given a session number and a directory of speaker-isolated audio files, produce:
 
 - normalized per-session transcript
-- OOC-filtered transcript and ambiguous review file
+- annotation-cleaned transcript candidate and review artifacts
+- legacy OOC-filtered transcript and ambiguous review file
 - raw session-note candidate
 - approved raw session notes
 - polished session markdown
@@ -39,7 +40,7 @@ Use the transcript checkpoint flow by default. It is more deterministic than ask
 Run:
 
 ```bash
-node scripts/generate_entity_list.js
+npm run generate-list
 ```
 
 Review `ENTITY_LIST.md` only if the campaign data stores recently changed.
@@ -200,10 +201,24 @@ Expected review artifacts:
 
 ```text
 /home/babu/source/ellara/Session Notes/Transcripts/Transcript Session N - Annotation Cleaned Candidate.txt
-/home/babu/source/ellara/Session Notes/Transcripts/Transcript Session N - Annotation OOC Review Report.md
-/home/babu/source/ellara/Session Notes/Transcripts/Transcript Session N - Annotation OOC Ambiguous.md
-/home/babu/source/ellara/Session Notes/Transcripts/Transcript Session N - Annotation Cleaned.diff
+/home/babu/source/ellara/Session Notes/Transcripts/Transcript Session N - Annotation Cleanup Report.md
+/home/babu/source/ellara/Session Notes/Transcripts/Transcript Session N - Annotation Ambiguous Review.md
+/home/babu/source/ellara/Session Notes/Transcripts/Transcript Session N - Annotation Cleaned Candidate.diff
 ```
+
+Runnable orchestration:
+
+```bash
+python3 scripts/transcription/run_transcript_pipeline.py \
+  --session N \
+  --audio-dir "/path/to/session-audio" \
+  --resume-after-transcript \
+  --run-ooc-annotation-provider codex \
+  --raw-notes-source-mode annotation \
+  --skip-raw-notes-prep
+```
+
+This prepares annotation chunks, runs clean-context annotation agents, applies `filter_ooc.py`, and stops before raw-note generation. Show the user the VS Code comparison between `Transcript Session N.txt` and `Transcript Session N - Annotation Cleaned Candidate.txt` before approving it.
 
 After approval, copy the cleaned candidate to:
 
@@ -247,8 +262,8 @@ Prepare chunks:
 python3 scripts/transcription/generate_raw_notes.py prepare \
   "/home/babu/source/ellara/Session Notes/Transcripts/Transcript Session N.txt" \
   "/home/babu/source/ellara/Session Notes/Raw Session N Chunks" \
-  --chunk-size 20 \
-  --overlap 5
+  --chunk-size 100 \
+  --overlap 12
 ```
 
 Run chunk agents and finalize to a chunk-extracted candidate file:
@@ -310,6 +325,14 @@ cp "/home/babu/source/ellara/Session Notes/Raw Session N Reconciled Candidate.md
   "/home/babu/source/ellara/Session Notes/Raw Session N.md"
 ```
 
+Before polished-note generation, validate the approved raw artifact:
+
+```bash
+python3 scripts/transcription/validate_raw_notes.py \
+  "/home/babu/source/ellara/Session Notes/Raw Session N.md" \
+  --session N
+```
+
 ### 7. Final Session Notes
 
 Generate the polished session markdown only after `Raw Session N.md` has been reviewed and approved:
@@ -348,17 +371,18 @@ Useful additions for generating the raw candidate:
 ```bash
   --run-raw-notes-provider codex \
   --raw-notes-finalize \
-  --run-raw-notes-reconcile-provider codex
+  --run-raw-notes-reconcile-provider codex \
+  --raw-notes-source-mode canonical
 ```
 
-On resume, the pipeline uses the reviewed Ellara transcript as source and copies it back to `src/assets/sessions/transcripts/session_N_raw.txt`. If `--raw-notes-source` is provided, raw-note chunk preparation uses that transcript instead of the conservative OOC output. Use `--raw-notes-output` to name the candidate explicitly:
+On resume, the pipeline uses the reviewed Ellara transcript as source and copies it back to `src/assets/sessions/transcripts/session_N_raw.txt`. Raw-note chunk preparation uses `--raw-notes-source-mode canonical` by default; use `annotation` for an annotation-cleaned candidate, `legacy-ooc` only for the old linewise output, or `--raw-notes-source` for an explicit custom path. Use `--raw-notes-output` to name the candidate explicitly:
 
 ```bash
 python3 scripts/transcription/run_transcript_pipeline.py \
   --session N \
   --audio-dir "/path/to/session-audio" \
   --resume-after-transcript \
-  --raw-notes-source "/home/babu/source/ellara/Session Notes/Transcripts/Transcript Session N.txt" \
+  --raw-notes-source-mode canonical \
   --run-raw-notes-provider codex \
   --raw-notes-finalize \
   --raw-notes-output "/home/babu/source/ellara/Session Notes/Raw Session N Candidate.md" \
@@ -368,10 +392,25 @@ python3 scripts/transcription/run_transcript_pipeline.py \
 
 Do not use `--run-session-notes-provider` until after the reconciled raw candidate has been reviewed and copied to `Raw Session N.md`.
 
+For a user-approved one-pass continuation after raw review, use explicit promotion:
+
+```bash
+python3 scripts/transcription/run_transcript_pipeline.py \
+  --session N \
+  --audio-dir "/path/to/session-audio" \
+  --resume-after-transcript \
+  --promote-raw-notes \
+  --run-session-notes-provider codex \
+  --session-notes-force \
+  --sync-website \
+  --website-sync-provider codex \
+  --validate
+```
+
 On resume, the pipeline runs:
 
-- conservative OOC filter
-- ambiguous-line report
+- legacy conservative OOC filter and ambiguous-line report
+- optional annotation-first OOC cleanup
 - raw-note chunk preparation
 - optional raw-note agents to `Raw Session N Candidate.md`
 - optional raw-note reconciliation to `Raw Session N Reconciled Candidate.md`
@@ -452,9 +491,19 @@ python3 scripts/transcription/filter_ooc.py apply \
   "/home/babu/source/ellara/Session Notes/Transcripts/Session N OOC Annotation Chunks/annotation_manifest.json" \
   "/home/babu/source/ellara/Session Notes/Transcripts/Session N OOC Annotation Chunks" \
   "/home/babu/source/ellara/Session Notes/Transcripts/Transcript Session N - Annotation Cleaned Candidate.txt" \
-  "/home/babu/source/ellara/Session Notes/Transcripts/Transcript Session N - Annotation OOC Review Report.md" \
-  "/home/babu/source/ellara/Session Notes/Transcripts/Transcript Session N - Annotation OOC Ambiguous.md" \
-  "/home/babu/source/ellara/Session Notes/Transcripts/Transcript Session N - Annotation Cleaned.diff"
+  "/home/babu/source/ellara/Session Notes/Transcripts/Transcript Session N - Annotation Cleanup Report.md" \
+  "/home/babu/source/ellara/Session Notes/Transcripts/Transcript Session N - Annotation Ambiguous Review.md" \
+  "/home/babu/source/ellara/Session Notes/Transcripts/Transcript Session N - Annotation Cleaned Candidate.diff"
+```
+
+Or dispatch and apply through the orchestration helper:
+
+```bash
+python3 scripts/transcription/run_ooc_annotation_agents.py \
+  "/home/babu/source/ellara/Session Notes/Transcripts/Session N OOC Annotation Chunks/annotation_manifest.json" \
+  --provider codex \
+  --workspace-root /home/babu/source \
+  --apply
 ```
 
 Review with a side-by-side comparison:
@@ -480,7 +529,7 @@ python3 scripts/transcription/run_transcript_pipeline.py \
   --session N \
   --audio-dir "/path/to/session-audio" \
   --resume-after-transcript \
-  --raw-notes-source "/home/babu/source/ellara/Session Notes/Transcripts/Transcript Session N.txt" \
+  --raw-notes-source-mode canonical \
   --run-raw-notes-provider codex \
   --raw-notes-finalize \
   --raw-notes-output "/home/babu/source/ellara/Session Notes/Raw Session N Candidate.md" \
@@ -526,18 +575,27 @@ cp "/home/babu/source/ellara/Session Notes/Raw Session N Reconciled Candidate.md
   "/home/babu/source/ellara/Session Notes/Raw Session N.md"
 ```
 
+Validate the approved raw artifact:
+
+```bash
+python3 scripts/transcription/validate_raw_notes.py \
+  "/home/babu/source/ellara/Session Notes/Raw Session N.md" \
+  --session N
+```
+
 Then produce polished notes with the `Final Session Notes` command above.
 
 ## Website Sync
 
-Copy the polished note into the website session asset:
+Sync the polished note into the website session asset and optionally dispatch a website-update agent:
 
 ```bash
-cp "/home/babu/source/ellara/Session Notes/Session N.md" \
-  "src/assets/sessions/session-N.md"
+python3 scripts/transcription/run_website_sync_agent.py \
+  --session N \
+  --provider codex
 ```
 
-Then apply the logic in:
+This copies `/home/babu/source/ellara/Session Notes/Session N.md` to `src/assets/sessions/session-N.md`, then applies the logic in:
 
 ```text
 .copilot/prompts/process-latest-session.md
@@ -576,12 +634,13 @@ Canonical-name QA:
 - `Nites` is spelled exactly `Nites` and pronounced knee-tes. Do not write `Nytes` or `Nýtes`.
 - Preserve `Ellara`, `Nyx`, `Ysidor`, `Berridin`, and `Witty` capitalization in website copy and generated blurbs.
 - If a generated note says a character asked about the wrong named person or concept, verify against the transcript/raw notes before syncing website data.
+- For Session 17's Hýr/static-name beat, do not write that Hýr did not recognize `Jacinta`; that is a bad substitution for the Nites/unknown censored-name context. `Lady Jacinta` remains valid in her own Bastion sessions.
 - Before final verification, grep the generated session and website copy for known bad forms such as `Nýtes`, `Nytes`, lowercase party names in sentence-leading blurbs, and accidental generated substitutions.
 
 After entity/store changes, regenerate:
 
 ```bash
-node scripts/generate_entity_list.js
+npm run generate-list
 ```
 
 Regenerating `ENTITY_LIST.md` also refreshes `scripts/transcription/entity_metadata.json`, which feeds future Whisper/Gladia name prompting. If new durable name/pronunciation issues were found, update `scripts/transcription/name_corrections.json` before this regeneration.
@@ -592,15 +651,20 @@ Run these before considering the job complete:
 
 ```bash
 python3 -m json.tool scripts/transcription/name_corrections.json >/tmp/name_corrections.valid.json
-rg -n 'Nýtes|Nytes|Session [0-9]+: [a-z]' src/views src/assets/sessions/session-N.md "/home/babu/source/ellara/Session Notes/Session N.md" || true
-node --check scripts/generate_entity_list.js
 /home/babu/.gemini/tmp/transcribe_env/bin/python3 -m py_compile \
   scripts/transcription/run_transcript_pipeline.py \
   scripts/transcription/filter_ooc.py \
+  scripts/transcription/run_ooc_annotation_agents.py \
+  scripts/transcription/validate_raw_notes.py \
+  scripts/transcription/validate_session_pipeline.py \
+  scripts/transcription/cleanup_session_artifacts.py \
+  scripts/transcription/run_website_sync_agent.py \
   scripts/transcription/transcribe.py \
   scripts/transcription/transcribe_gladia.py \
   scripts/transcription/vad_compact.py
-npm run build
+python3 scripts/transcription/validate_raw_notes.py "/home/babu/source/ellara/Session Notes/Raw Session N.md" --session N
+python3 scripts/transcription/validate_session_pipeline.py --session N --check-clean
+npm run sync-check
 ```
 
 Check expected artifacts:
@@ -614,6 +678,27 @@ Check expected artifacts:
 - `/home/babu/source/ellara/Session Notes/Session N.md`
 - `src/assets/sessions/session-N.md`
 - `/home/babu/source/ellara/Session Notes/Transcripts/Transcript Session N - Pipeline Manifest.json`
+
+After durable outputs are reviewed and synced, clean scratch artifacts with a dry run first:
+
+```bash
+python3 scripts/transcription/cleanup_session_artifacts.py \
+  --session N \
+  --audio-dir "/path/to/session-audio" \
+  --include-dnd-transcript-assets \
+  --include-repo-scratch
+```
+
+Then apply when the planned removals are correct:
+
+```bash
+python3 scripts/transcription/cleanup_session_artifacts.py \
+  --session N \
+  --audio-dir "/path/to/session-audio" \
+  --include-dnd-transcript-assets \
+  --include-repo-scratch \
+  --apply
+```
 
 ## Determinism Notes
 
@@ -632,5 +717,5 @@ When asking an agentic CLI to run everything, provide this file and say:
 ```text
 Read AGENT_SESSION_PIPELINE.md. Run the DnD session pipeline for session N from /path/to/session-audio.
 Use the transcript checkpoint flow. Stop after --stop-after-transcript and ask me to review the transcript.
-After I confirm, run the annotation-first OOC cleanup checkpoint and show me the cleaned transcript diff. After I approve the cleaned transcript, generate Raw Session N Candidate.md with clean raw-note subagents, run the raw-note reconciliation pass into Raw Session N Reconciled Candidate.md, and stop for review. After I approve or promote the reconciled candidate to Raw Session N.md, generate polished Session N.md, sync the website, apply .copilot/prompts/process-latest-session.md, and run verification.
+After I confirm, run the annotation-first OOC cleanup checkpoint and show me the cleaned transcript comparison. After I approve the cleaned transcript, generate Raw Session N Candidate.md with clean raw-note subagents, run the raw-note reconciliation pass into Raw Session N Reconciled Candidate.md, validate it, and stop for review. After I approve or promote the reconciled candidate to Raw Session N.md, generate polished Session N.md, sync the website with run_website_sync_agent.py, run npm run sync-check plus validate_session_pipeline.py, and then run cleanup_session_artifacts.py after showing the dry run.
 ```

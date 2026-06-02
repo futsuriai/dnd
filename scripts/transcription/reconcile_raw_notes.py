@@ -16,7 +16,11 @@ import subprocess
 import tempfile
 from pathlib import Path
 
-from note_generation_guidance import CANONICAL_CAST_REFERENCE
+from note_generation_guidance import (
+    CANONICAL_CAST_REFERENCE,
+    CANONICAL_EVIDENCE_POLICY,
+    RAW_NOTE_CONTRACT,
+)
 
 
 def build_prompt(raw_text: str, transcript_text: str | None) -> str:
@@ -46,8 +50,17 @@ Required behavior:
 - Preserve chronology and use `---` for scene/beat breaks.
 - Do not include headings, timestamps, chunk IDs, transcript mechanics, code fences, or commentary about this task.
 - Do not invent facts or smooth away meaningful wording.
+- Do not resolve `review:` or `review-name:` lines by guessing from canon. Keep them unless the cleaned transcript directly resolves them.
+- Do not promote uncertain names into final facts.
+- Preserve representative dialogue from each meaningful exchange; remove duplication without flattening scenes into recap.
+- Convert remaining `GM says`, `GM clarifies`, `GM rules`, or `GM lore` phrasing into fact lines or `rules:` lines.
+- Remove opening recap blocks unless they are needed continuity, capped at 1-3 lines.
+
+{RAW_NOTE_CONTRACT}
 
 {CANONICAL_CAST_REFERENCE}
+
+{CANONICAL_EVIDENCE_POLICY}
 {transcript_section}
 Chunk-extracted raw notes:
 ```

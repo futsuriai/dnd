@@ -8,10 +8,12 @@ Pipeline:
 3. Combine per-speaker transcripts into one chronological transcript.
 4. Apply name/speaker corrections and optional speaker display normalization.
 5. Copy final files into DnD assets and Ellara transcript folders.
-6. Produce OOC-removed and ambiguous outputs with the linewise filter.
+6. Produce legacy linewise OOC outputs and optionally annotation-first OOC cleanup.
 7. Prepare overlapping raw-session-note chunks for subagents/LLM passes.
-8. Optionally generate polished Session N markdown from Raw Session N markdown.
-9. Write a manifest JSON listing all generated artifacts.
+8. Optionally reconcile, promote, and validate Raw Session N markdown.
+9. Optionally generate polished Session N markdown and sync website state.
+10. Optionally clean scratch artifacts and validate durable outputs.
+11. Write a manifest JSON listing all generated artifacts.
 """
 
 from __future__ import annotations
@@ -259,9 +261,22 @@ def main() -> int:
     parser.add_argument("--resume-after-transcript", action="store_true", help="Resume from an existing Ellara transcript without rebuilding per-speaker/combined transcripts")
     parser.add_argument("--clean", action="store_true", help="Delete existing per-speaker transcript files before transcribing")
     parser.add_argument("--skip-ooc", action="store_true", help="Skip OOC and ambiguous output generation")
+    parser.add_argument("--run-ooc-annotation-provider", choices=["codex", "gemini"], help="Dispatch annotation-first OOC cleanup through the selected agent CLI")
+    parser.add_argument("--ooc-annotation-model", help="Optional model override for annotation-first OOC cleanup")
+    parser.add_argument("--ooc-annotation-chunk-size", type=int, default=80, help="Editable transcript lines per OOC annotation chunk")
+    parser.add_argument("--ooc-annotation-overlap", type=int, default=8, help="Context lines before/after each OOC annotation chunk")
+    parser.add_argument("--ooc-annotation-force", action="store_true", help="Overwrite existing OOC annotation JSONL outputs")
+    parser.add_argument("--ooc-annotation-dry-run", action="store_true", help="Show planned OOC annotation dispatches without invoking the provider")
+    parser.add_argument("--ooc-annotation-allow-missing", action="store_true", help="Allow missing annotation records during apply")
     parser.add_argument("--skip-raw-notes-prep", action="store_true", help="Skip preparing raw-session-note chunks for subagents")
-    parser.add_argument("--raw-notes-chunk-size", type=int, default=20, help="Primary transcript entries per raw-notes chunk")
-    parser.add_argument("--raw-notes-overlap", type=int, default=5, help="Context entries before/after each raw-notes chunk")
+    parser.add_argument("--raw-notes-chunk-size", type=int, default=100, help="Primary transcript entries per raw-notes chunk")
+    parser.add_argument("--raw-notes-overlap", type=int, default=12, help="Context entries before/after each raw-notes chunk")
+    parser.add_argument(
+        "--raw-notes-source-mode",
+        choices=["canonical", "annotation", "legacy-ooc", "custom"],
+        default="canonical",
+        help="Default source for raw-note prep when --raw-notes-source is omitted",
+    )
     parser.add_argument(
         "--raw-notes-source",
         help="Override transcript source for raw-note prep, usually the annotation-cleaned transcript candidate",
@@ -281,10 +296,22 @@ def main() -> int:
     parser.add_argument("--raw-notes-reconciled-output", help="Output path for reconciled raw-note candidate; defaults to 'Raw Session N Reconciled Candidate.md'")
     parser.add_argument("--raw-notes-reconcile-force", action="store_true", help="Overwrite existing reconciled raw-note candidate")
     parser.add_argument("--raw-notes-reconcile-dry-run", action="store_true", help="Show planned raw-note reconciliation without invoking the provider")
+    parser.add_argument("--promote-raw-notes", action="store_true", help="After reconciliation, copy the reconciled candidate to canonical Raw Session N.md")
     parser.add_argument("--run-session-notes-provider", choices=["codex", "gemini"], help="Optionally generate polished Session N.md through the selected agent CLI")
     parser.add_argument("--session-notes-model", help="Optional model override for polished session-note generation")
     parser.add_argument("--session-notes-force", action="store_true", help="Overwrite existing Session N.md when dispatching the agent")
     parser.add_argument("--session-notes-dry-run", action="store_true", help="Show the planned polished session-note run without invoking the provider")
+    parser.add_argument("--skip-raw-notes-validation", action="store_true", help="Skip raw-note validation before polished session-note generation")
+    parser.add_argument("--sync-website", action="store_true", help="Copy polished Session N.md into website assets")
+    parser.add_argument("--website-sync-provider", choices=["codex", "gemini"], help="Optionally run a website-sync agent after copying the session asset")
+    parser.add_argument("--website-sync-model", help="Optional model override for website-sync agent")
+    parser.add_argument("--website-sync-dry-run", action="store_true", help="Show website sync actions without writing or invoking an agent")
+    parser.add_argument("--cleanup-scratch", action="store_true", help="Remove intermediate artifacts after durable outputs are produced")
+    parser.add_argument("--cleanup-include-dnd-transcript-assets", action="store_true", help="Cleanup also removes website raw transcript assets for this session")
+    parser.add_argument("--cleanup-include-repo-scratch", action="store_true", help="Cleanup also removes dist, pycache, and local logs")
+    parser.add_argument("--validate", action="store_true", help="Run durable session output validation before finishing")
+    parser.add_argument("--validate-check-clean", action="store_true", help="Validator warns if intermediate artifacts remain")
+    parser.add_argument("--validate-strict-clean", action="store_true", help="Validator errors if intermediate artifacts remain")
     parser.add_argument(
         "--keep-full-whitaker-name",
         action="store_true",
@@ -292,11 +319,19 @@ def main() -> int:
     )
     args = parser.parse_args()
 
-    if (args.raw_notes_finalize or args.run_raw_notes_reconcile_provider) and args.run_session_notes_provider:
+    if (
+        (args.raw_notes_finalize or args.run_raw_notes_reconcile_provider)
+        and args.run_session_notes_provider
+        and not args.promote_raw_notes
+    ):
         raise ValueError(
             "raw-note candidate generation/reconciliation must be reviewed first; "
-            "run polished session-note generation after promoting it to Raw Session N.md"
+            "run polished session-note generation after promoting it to Raw Session N.md, "
+            "or pass --promote-raw-notes for an approved one-pass run"
         )
+    if args.raw_notes_source and args.raw_notes_source_mode != "custom":
+        log("Explicit --raw-notes-source provided; treating source mode as custom.")
+        args.raw_notes_source_mode = "custom"
 
     session = str(args.session).strip()
     if not session:
@@ -323,6 +358,31 @@ def main() -> int:
     ellara_transcript = ellara_dir / f"Transcript Session {session}.txt"
     combined_tmp = audio_dir / f"session-{session}-combined.txt"
     combined_final = audio_dir / f"session-{session}-combined-normalized.txt"
+    ooc_removed = ellara_dir / f"Transcript Session {session} - OOC Removed.txt"
+    ambiguous = ellara_dir / f"Transcript Session {session} - Ambiguous.txt"
+    ooc_report = ellara_dir / f"Transcript Session {session} - OOC Filter Report.txt"
+    ooc_annotation_dir = ellara_dir / f"Session {session} OOC Annotation Chunks"
+    ooc_annotation_manifest = ooc_annotation_dir / "annotation_manifest.json"
+    ooc_annotation_cleaned = ellara_dir / f"Transcript Session {session} - Annotation Cleaned Candidate.txt"
+    ooc_annotation_report = ellara_dir / f"Transcript Session {session} - Annotation Cleanup Report.md"
+    ooc_annotation_ambiguous = ellara_dir / f"Transcript Session {session} - Annotation Ambiguous Review.md"
+    ooc_annotation_diff = ellara_dir / f"Transcript Session {session} - Annotation Cleaned Candidate.diff"
+    raw_notes_candidate_output = (
+        Path(args.raw_notes_output).expanduser()
+        if args.raw_notes_output
+        else session_notes_dir / f"Raw Session {session} Candidate.md"
+    )
+    raw_notes_reconciled_output = (
+        Path(args.raw_notes_reconciled_output).expanduser()
+        if args.raw_notes_reconciled_output
+        else session_notes_dir / f"Raw Session {session} Reconciled Candidate.md"
+    )
+    raw_session_output = session_notes_dir / f"Raw Session {session}.md"
+    session_notes_output = session_notes_dir / f"Session {session}.md"
+    website_session_output = dnd_dir / "src" / "assets" / "sessions" / f"session-{session}.md"
+    raw_notes_chunk_dir = session_notes_dir / f"Raw Session {session} Chunks"
+    raw_notes_chunk_manifest = raw_notes_chunk_dir / "chunks_manifest.json"
+    manifest_path = ellara_dir / f"Transcript Session {session} - Pipeline Manifest.json"
 
     audio_files = list_audio_files(audio_dir)
     if not audio_files:
@@ -436,14 +496,27 @@ def main() -> int:
         shutil.copy2(combined_final, ellara_transcript)
 
         if args.stop_after_transcript:
+            manifest = {
+                "session": session,
+                "stage": "transcript_checkpoint",
+                "audio_dir": str(audio_dir),
+                "speaker_audio_files": [str(p) for p in audio_files],
+                "speaker_transcripts_dir": str(session_assets_dir),
+                "combined_transcript_raw": str(combined_tmp),
+                "combined_transcript_normalized": str(combined_final),
+                "dnd_session_raw": str(dnd_session_raw),
+                "ellara_transcript": str(ellara_transcript),
+                "line_counts": {
+                    "combined_normalized": count_lines(combined_final),
+                    "ellara_transcript": count_lines(ellara_transcript),
+                },
+            }
+            manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
             log("Stopping after normalized transcript generation (--stop-after-transcript).")
             log(f"Review transcript: {ellara_transcript}")
+            log(f"Manifest: {manifest_path}")
             log("Resume downstream steps with --resume-after-transcript.")
             return 0
-
-    ooc_removed = ellara_dir / f"Transcript Session {session} - OOC Removed.txt"
-    ambiguous = ellara_dir / f"Transcript Session {session} - Ambiguous.txt"
-    ooc_report = ellara_dir / f"Transcript Session {session} - OOC Filter Report.txt"
 
     # 6) Generate OOC-removed and ambiguous variants.
     if not args.skip_ooc:
@@ -462,26 +535,69 @@ def main() -> int:
     else:
         log("Skipping OOC filtering step (--skip-ooc)")
 
-    raw_notes_candidate_output = (
-        Path(args.raw_notes_output).expanduser()
-        if args.raw_notes_output
-        else session_notes_dir / f"Raw Session {session} Candidate.md"
-    )
-    raw_notes_reconciled_output = (
-        Path(args.raw_notes_reconciled_output).expanduser()
-        if args.raw_notes_reconciled_output
-        else session_notes_dir / f"Raw Session {session} Reconciled Candidate.md"
-    )
-    raw_session_output = session_notes_dir / f"Raw Session {session}.md"
-    session_notes_output = session_notes_dir / f"Session {session}.md"
-    raw_notes_chunk_dir = session_notes_dir / f"Raw Session {session} Chunks"
-    raw_notes_chunk_manifest = raw_notes_chunk_dir / "chunks_manifest.json"
+    if args.run_ooc_annotation_provider:
+        run_cmd(
+            [
+                str(py_bin),
+                "scripts/transcription/filter_ooc.py",
+                "prepare",
+                str(ellara_transcript),
+                str(ooc_annotation_dir),
+                "--chunk-size",
+                str(args.ooc_annotation_chunk_size),
+                "--overlap-lines",
+                str(args.ooc_annotation_overlap),
+            ],
+            cwd=dnd_dir,
+            env=env_base,
+        )
+        annotation_cmd = [
+            str(py_bin),
+            "scripts/transcription/run_ooc_annotation_agents.py",
+            str(ooc_annotation_manifest),
+            "--provider",
+            args.run_ooc_annotation_provider,
+            "--workspace-root",
+            str(dnd_dir.parent),
+            "--cleaned-output",
+            str(ooc_annotation_cleaned),
+            "--report-output",
+            str(ooc_annotation_report),
+            "--ambiguous-output",
+            str(ooc_annotation_ambiguous),
+            "--diff-output",
+            str(ooc_annotation_diff),
+            "--apply",
+        ]
+        if args.ooc_annotation_model:
+            annotation_cmd.extend(["--model", args.ooc_annotation_model])
+        if args.ooc_annotation_force:
+            annotation_cmd.append("--force")
+        if args.ooc_annotation_dry_run:
+            annotation_cmd.append("--dry-run")
+        if args.ooc_annotation_allow_missing:
+            annotation_cmd.append("--allow-missing")
+        run_cmd(annotation_cmd, cwd=dnd_dir, env=env_base)
+
     if args.raw_notes_source:
         raw_notes_source = Path(args.raw_notes_source).expanduser()
         if not raw_notes_source.exists():
             raise FileNotFoundError(f"--raw-notes-source does not exist: {raw_notes_source}")
     else:
-        raw_notes_source = ooc_removed if ooc_removed.exists() else ellara_transcript
+        if args.raw_notes_source_mode == "custom":
+            raise ValueError("--raw-notes-source-mode custom requires --raw-notes-source")
+        if args.raw_notes_source_mode == "annotation":
+            raw_notes_source = ooc_annotation_cleaned
+            if not raw_notes_source.exists():
+                raise FileNotFoundError(
+                    f"annotation-cleaned raw-note source not found: {raw_notes_source}"
+                )
+        elif args.run_ooc_annotation_provider and ooc_annotation_cleaned.exists():
+            raw_notes_source = ooc_annotation_cleaned
+        elif args.raw_notes_source_mode == "legacy-ooc":
+            raw_notes_source = ooc_removed if ooc_removed.exists() else ellara_transcript
+        else:
+            raw_notes_source = ellara_transcript
 
     # 7) Prepare raw-note chunks for subagents/LLM passes.
     if not args.skip_raw_notes_prep:
@@ -544,7 +660,7 @@ def main() -> int:
             "--workspace-root",
             str(dnd_dir.parent),
             "--transcript",
-            str(ellara_transcript),
+            str(raw_notes_source),
         ]
         if args.raw_notes_reconcile_model:
             reconcile_cmd.extend(["--model", args.raw_notes_reconcile_model])
@@ -554,6 +670,22 @@ def main() -> int:
             reconcile_cmd.append("--dry-run")
 
         run_cmd(reconcile_cmd, cwd=dnd_dir, env=env_base)
+
+        if args.promote_raw_notes and not args.raw_notes_reconcile_dry_run:
+            if not raw_notes_reconciled_output.exists():
+                raise FileNotFoundError(
+                    f"reconciled raw-note candidate not found for promotion: {raw_notes_reconciled_output}"
+                )
+            shutil.copy2(raw_notes_reconciled_output, raw_session_output)
+            log(f"Promoted raw notes: {raw_notes_reconciled_output} -> {raw_session_output}")
+
+    elif args.promote_raw_notes:
+        if not raw_notes_reconciled_output.exists():
+            raise FileNotFoundError(
+                f"reconciled raw-note candidate not found for promotion: {raw_notes_reconciled_output}"
+            )
+        shutil.copy2(raw_notes_reconciled_output, raw_session_output)
+        log(f"Promoted raw notes: {raw_notes_reconciled_output} -> {raw_session_output}")
 
     # 9) Optionally generate polished session notes.
     if args.run_session_notes_provider:
@@ -579,10 +711,73 @@ def main() -> int:
             session_runner_cmd.append("--force")
         if args.session_notes_dry_run:
             session_runner_cmd.append("--dry-run")
+        if args.skip_raw_notes_validation:
+            session_runner_cmd.append("--skip-raw-validation")
 
         run_cmd(session_runner_cmd, cwd=dnd_dir, env=env_base)
 
-    # 10) Write manifest for downstream agents/scripts.
+    # 10) Optionally sync polished notes into website assets and run website update agent.
+    if args.sync_website or args.website_sync_provider:
+        website_cmd = [
+            str(py_bin),
+            "scripts/transcription/run_website_sync_agent.py",
+            "--session",
+            str(session),
+            "--dnd-dir",
+            str(dnd_dir),
+            "--ellara-root",
+            str(session_notes_dir.parent),
+        ]
+        if args.website_sync_provider:
+            website_cmd.extend(["--provider", args.website_sync_provider])
+        if args.website_sync_model:
+            website_cmd.extend(["--model", args.website_sync_model])
+        if args.website_sync_dry_run:
+            website_cmd.append("--dry-run")
+        run_cmd(website_cmd, cwd=dnd_dir, env=env_base)
+
+    if args.cleanup_scratch:
+        cleanup_cmd = [
+            str(py_bin),
+            "scripts/transcription/cleanup_session_artifacts.py",
+            "--session",
+            str(session),
+            "--dnd-dir",
+            str(dnd_dir),
+            "--ellara-root",
+            str(session_notes_dir.parent),
+            "--audio-dir",
+            str(audio_dir),
+            "--apply",
+        ]
+        if args.cleanup_include_dnd_transcript_assets:
+            cleanup_cmd.append("--include-dnd-transcript-assets")
+        if args.cleanup_include_repo_scratch:
+            cleanup_cmd.append("--include-repo-scratch")
+        run_cmd(cleanup_cmd, cwd=dnd_dir, env=env_base)
+
+    if args.validate:
+        validate_cmd = [
+            str(py_bin),
+            "scripts/transcription/validate_session_pipeline.py",
+            "--session",
+            str(session),
+            "--dnd-dir",
+            str(dnd_dir),
+            "--ellara-root",
+            str(session_notes_dir.parent),
+        ]
+        if args.validate_check_clean:
+            validate_cmd.append("--check-clean")
+        if args.validate_strict_clean:
+            validate_cmd.append("--strict-clean")
+        run_cmd(validate_cmd, cwd=dnd_dir, env=env_base)
+        if website_session_output.exists():
+            run_cmd(["npm", "run", "generate-list"], cwd=dnd_dir, env=env_base)
+            run_cmd(["npm", "run", "verify-session-sync", "--", "--session", str(session)], cwd=dnd_dir, env=env_base)
+            run_cmd(["npm", "run", "build"], cwd=dnd_dir, env=env_base)
+
+    # 11) Write manifest for downstream agents/scripts.
     manifest = {
         "session": session,
         "audio_dir": str(audio_dir),
@@ -595,28 +790,43 @@ def main() -> int:
         "ooc_removed": str(ooc_removed),
         "ambiguous": str(ambiguous),
         "ooc_report": str(ooc_report),
+        "ooc_annotation_chunk_dir": str(ooc_annotation_dir),
+        "ooc_annotation_manifest": str(ooc_annotation_manifest),
+        "ooc_annotation_cleaned": str(ooc_annotation_cleaned),
+        "ooc_annotation_report": str(ooc_annotation_report),
+        "ooc_annotation_ambiguous": str(ooc_annotation_ambiguous),
+        "ooc_annotation_diff": str(ooc_annotation_diff),
+        "ooc_annotation_provider": args.run_ooc_annotation_provider or "",
+        "raw_notes_source_mode": args.raw_notes_source_mode,
         "raw_notes_source": str(raw_notes_source),
         "raw_notes_candidate_output": str(raw_notes_candidate_output),
         "raw_notes_reconciled_output": str(raw_notes_reconciled_output),
         "raw_notes_chunk_dir": str(raw_notes_chunk_dir),
         "raw_notes_chunk_manifest": str(raw_notes_chunk_manifest),
         "raw_session_output": str(raw_session_output),
+        "raw_notes_promoted": bool(args.promote_raw_notes and raw_session_output.exists()),
         "raw_notes_provider": args.run_raw_notes_provider or "",
         "raw_notes_reconcile_provider": args.run_raw_notes_reconcile_provider or "",
         "session_notes_output": str(session_notes_output),
         "session_notes_provider": args.run_session_notes_provider or "",
+        "website_session_output": str(website_session_output),
+        "website_synced": bool((args.sync_website or args.website_sync_provider) and website_session_output.exists()),
+        "website_sync_provider": args.website_sync_provider or "",
+        "cleanup_scratch": bool(args.cleanup_scratch),
+        "validated": bool(args.validate),
         "line_counts": {
             "combined_normalized": count_lines(combined_final),
             "ellara_transcript": count_lines(ellara_transcript),
             "ooc_removed": count_lines(ooc_removed) if ooc_removed.exists() else 0,
             "ambiguous": count_lines(ambiguous) if ambiguous.exists() else 0,
+            "ooc_annotation_cleaned": count_lines(ooc_annotation_cleaned) if ooc_annotation_cleaned.exists() else 0,
             "raw_notes_candidate_output": count_lines(raw_notes_candidate_output) if raw_notes_candidate_output.exists() else 0,
             "raw_notes_reconciled_output": count_lines(raw_notes_reconciled_output) if raw_notes_reconciled_output.exists() else 0,
             "raw_session_output": count_lines(raw_session_output) if raw_session_output.exists() else 0,
             "session_notes_output": count_lines(session_notes_output) if session_notes_output.exists() else 0,
+            "website_session_output": count_lines(website_session_output) if website_session_output.exists() else 0,
         },
     }
-    manifest_path = ellara_dir / f"Transcript Session {session} - Pipeline Manifest.json"
     manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
 
     log("Pipeline complete.")
@@ -626,6 +836,10 @@ def main() -> int:
         log(f"OOC removed transcript: {ooc_removed}")
         log(f"Ambiguous lines: {ambiguous}")
         log(f"OOC report: {ooc_report}")
+    if args.run_ooc_annotation_provider or ooc_annotation_cleaned.exists():
+        log(f"Annotation-cleaned transcript: {ooc_annotation_cleaned}")
+        log(f"Annotation cleanup report: {ooc_annotation_report}")
+        log(f"Annotation cleanup diff: {ooc_annotation_diff}")
     if not args.skip_raw_notes_prep:
         log(f"Raw note chunks: {raw_notes_chunk_dir}")
         log(f"Raw note chunk manifest: {raw_notes_chunk_manifest}")
@@ -634,6 +848,8 @@ def main() -> int:
         log(f"Approved raw session output target: {raw_session_output}")
     if args.run_session_notes_provider or session_notes_output.exists():
         log(f"Session notes output: {session_notes_output}")
+    if args.sync_website or args.website_sync_provider or website_session_output.exists():
+        log(f"Website session output: {website_session_output}")
     log(f"Manifest: {manifest_path}")
     return 0
 

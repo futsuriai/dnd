@@ -89,6 +89,8 @@ If the transcript, voice, or an earlier draft uses the wrong pronoun for one of 
 - `--transcription-provider`: choose `whisper` or `gladia`.
 - `--gladia-artifact-dir`: directory for Gladia compact audio, manifests, and API JSON.
 - `--skip-ooc`: skip OOC/ambiguous output generation.
+- `--run-ooc-annotation-provider`: dispatch annotation-first OOC cleanup through `codex` or `gemini`.
+- `--raw-notes-source-mode`: choose `canonical`, `annotation`, `legacy-ooc`, or `custom` as the raw-note source mode.
 - `--skip-raw-notes-prep`: skip preparing raw-note chunk files.
 - `--raw-notes-chunk-size`: primary transcript entries per raw-note chunk.
 - `--raw-notes-overlap`: context entries before/after each raw-note chunk.
@@ -98,39 +100,45 @@ If the transcript, voice, or an earlier draft uses the wrong pronoun for one of 
 - `--run-raw-notes-reconcile-provider`: reconcile chunk output through `codex` or `gemini`.
 - `--raw-notes-reconciled-output`: override the reconciled raw-note candidate output path.
 - `--raw-notes-dry-run`: print planned raw-note agent dispatches without running them.
+- `--promote-raw-notes`: copy the reconciled raw candidate to canonical `Raw Session <N>.md`.
 - `--run-session-notes-provider`: dispatch polished session-note generation through `codex` or `gemini`.
 - `--session-notes-force`: overwrite existing `Session <N>.md`.
 - `--session-notes-dry-run`: print the planned polished session-note run without invoking the provider.
+- `--sync-website`: copy polished notes into `src/assets/sessions/session-<N>.md`.
+- `--website-sync-provider`: dispatch website store/view sync through `codex` or `gemini`.
+- `--cleanup-scratch`: remove intermediate artifacts after durable outputs are produced.
+- `--validate`: run durable output validation and, when website markdown exists, npm website sync/build checks before finishing.
 - `--keep-full-whitaker-name`: keep full speaker label instead of normalizing to `Witty`.
 - `--attempt-models`: override retry model sequence.
 
 ## Workflow
 
-1. Run `node scripts/generate_entity_list.js`.
+1. Run `npm run generate-list`.
 2. Transcribe each speaker file with retry/fallback model sequence, or Gladia VAD-compaction upload when `--transcription-provider gladia` is selected. The Gladia path keeps small phrase-boundary gaps in compact audio, retries once on empty non-empty results, and remaps/splits word timestamps back onto the original session timeline.
 3. Combine transcripts in timestamp order.
 4. Apply `name_corrections.json` text and speaker fixes.
 5. Copy final artifacts into DnD and Ellara target locations.
 6. If `--stop-after-transcript` is set, stop here for user transcript cleanup.
 7. On `--resume-after-transcript`, copy the reviewed Ellara transcript back to the DnD raw transcript asset and continue.
-8. Run `filter_transcript_linewise.py` for OOC removed and ambiguous outputs.
-9. Run `generate_raw_notes.py prepare` to create chunk files with a primary range plus overlap context.
-10. Optionally run `run_raw_notes_subagents.py` through `codex` or `gemini`.
-11. `generate_raw_notes.py concat` performs seam cleanup automatically into `Raw Session <N> Candidate.md`.
-12. Run `reconcile_raw_notes.py` into `Raw Session <N> Reconciled Candidate.md`; this pass is required before promotion.
-13. Review and promote the reconciled candidate to `Raw Session <N>.md`.
-14. Optionally run `run_session_notes_agent.py` through `codex` or `gemini`.
-15. Emit a manifest JSON with output paths and line counts.
-16. Copy or sync the final polished note into `src/assets/sessions/session-<N>.md`.
-17. Run the logic from `.copilot/prompts/process-latest-session.md` logically against the latest website session summary:
+8. Run `filter_transcript_linewise.py` for legacy OOC removed and ambiguous outputs.
+9. Optionally run annotation-first OOC cleanup with `filter_ooc.py` plus `run_ooc_annotation_agents.py`.
+10. Run `generate_raw_notes.py prepare` to create larger chunk files with a primary range plus overlap context.
+11. Optionally run `run_raw_notes_subagents.py` through `codex` or `gemini`.
+12. `generate_raw_notes.py concat` performs cleanup automatically into `Raw Session <N> Candidate.md`.
+13. Run `reconcile_raw_notes.py` into `Raw Session <N> Reconciled Candidate.md`; this pass is required before promotion.
+14. Validate and promote the reconciled candidate to `Raw Session <N>.md`.
+15. Optionally run `run_session_notes_agent.py` through `codex` or `gemini`.
+16. Sync the final polished note into `src/assets/sessions/session-<N>.md`.
+17. Emit a manifest JSON with output paths and line counts.
+18. Run the logic from `.copilot/prompts/process-latest-session.md` logically against the latest website session summary:
     - treat `src/assets/sessions/session-<N>.md` as the source summary
     - review `src/store/sessions.js`, `src/store/locations.js`, `src/store/npcs.js`, `src/store/lore.js`, and `ENTITY_LIST.md`
     - update session metadata for session `N`
     - create or verify the session `N+1` upcoming stub
     - add only significant history, connection, and entity updates
-18. Refresh `src/views/StorySoFarView.vue` and `src/views/HomeView.vue`.
-19. If entity/store changes were made, rerun `node scripts/generate_entity_list.js`.
-20. Verify the site still builds with `npm run build`.
+19. Refresh `src/views/StorySoFarView.vue` and `src/views/HomeView.vue`.
+20. If entity/store changes were made, rerun `npm run generate-list`.
+21. Verify with `python3 scripts/transcription/validate_session_pipeline.py --session <N>` and `npm run sync-check`.
 
 ## Dual-Provider Baseline
 
@@ -149,17 +157,16 @@ Do not create a separate prompt file for this. The comparison is part of the orc
 ## End-to-End Path
 
 1. Run `scripts/transcription/run_transcript_pipeline.py` on the audio directory and stop for transcript review.
-2. Read `../ellara/Session Notes/Raw Session <N> Chunks/chunks_manifest.json`.
-3. Produce every `chunk_XXX_notes.txt` from `chunk_XXX.txt`.
-4. Finalize `Raw Session <N> Candidate.md`.
-5. Reconcile into `Raw Session <N> Reconciled Candidate.md`.
-6. Review and promote it to `Raw Session <N>.md`.
-7. Generate polished `Session <N>.md`.
-8. Sync `Session <N>.md` into `src/assets/sessions/session-<N>.md`.
-9. Update `src/store/sessions.js` for session `N` and add or verify session `N+1`.
-10. Review significant world-data changes using `.copilot/prompts/process-latest-session.md`.
-11. Refresh Story So Far and the home-page blurb/current-state copy.
-12. Build the site to verify nothing broke.
+2. Run annotation-first OOC cleanup and show the cleaned transcript comparison.
+3. After approval, generate raw-note chunks from the approved cleaned transcript.
+4. Produce every `chunk_XXX_notes.txt` from `chunk_XXX.txt`.
+5. Finalize `Raw Session <N> Candidate.md`.
+6. Reconcile into `Raw Session <N> Reconciled Candidate.md`.
+7. Validate, review, and promote it to `Raw Session <N>.md`.
+8. Generate polished `Session <N>.md`.
+9. Run `run_website_sync_agent.py` to sync `Session <N>.md` into `src/assets/sessions/session-<N>.md` and update stores/views.
+10. Run `npm run sync-check` and `validate_session_pipeline.py`.
+11. Dry-run and then apply `cleanup_session_artifacts.py` when the planned removals are correct.
 
 ## Raw Notes Contract
 
@@ -181,7 +188,7 @@ When all chunks are done, finalize the chunk-extracted candidate with:
 
 Then reconcile the candidate with `scripts/transcription/reconcile_raw_notes.py`.
 
-After review, promote `Raw Session <N> Reconciled Candidate.md` to `Raw Session <N>.md`.
+After review, validate and promote `Raw Session <N> Reconciled Candidate.md` to `Raw Session <N>.md`.
 
 To dispatch chunk work through an installed agent CLI, use:
 `skills/dnd-transcript-pipeline/scripts/run_raw_notes_agents.sh`
@@ -202,9 +209,7 @@ After transcript + notes generation, do not stop at the Ellara outputs. The DnD 
 
 Required follow-up:
 
-1. Add or update the website session markdown asset:
-   - Source: `../ellara/Session Notes/Session <N>.md`
-   - Target: `src/assets/sessions/session-<N>.md`
+1. Run `python3 scripts/transcription/run_website_sync_agent.py --session <N> --provider codex` to copy the session markdown asset and dispatch the website-sync pass.
 2. Update `src/store/sessions.js`:
    - mark session `N` as `upcoming: false`
    - set `summaryFile: 'session-<N>.md'`
@@ -217,7 +222,7 @@ Required follow-up:
 4. Update site copy surfaces outside the stores:
    - `src/views/StorySoFarView.vue`
    - `src/views/HomeView.vue`
-5. Rebuild with `npm run build`.
+5. Run `npm run sync-check`.
 
 ## What The Site Actually Uses
 
@@ -241,6 +246,7 @@ Required follow-up:
 - Canonical spelling check: use `Nites` exactly, pronounced knee-tes. Do not use `Nytes` or `Nýtes`.
 - Before finishing, grep generated notes and website copy for known bad spellings, incorrect party-name capitalization, and wrong-name substitutions.
 - Keep chunk folders and transcript scratch output local-only via `.git/info/exclude` unless the repo intentionally starts tracking them.
+- Clean intermediate artifacts with `scripts/transcription/cleanup_session_artifacts.py` after showing a dry run.
 
 ## Verification
 
@@ -253,7 +259,8 @@ After a full run, verify:
 - approved `Raw Session <N>.md` exists
 - `Session <N>.md` exists
 - `src/assets/sessions/session-<N>.md` exists
-- site build succeeds
+- `npm run sync-check` succeeds
+- `python3 scripts/transcription/validate_session_pipeline.py --session <N> --check-clean` succeeds or reports only expected scratch warnings before cleanup
 
 ## Agent Prompt Template
 

@@ -4,9 +4,9 @@ export const sessions = [
     title: 'Session 18',
     subtitle: 'The Mine Trap',
     location: 'Hýrda Mines',
-    date: 'June 1, 2026',
+    date: 'June 2, 2026',
     upcoming: true,
-    description: 'With Hýr awake only long enough to offer guidance, the party must finish setting the mine trap, keep the lookout from noticing, and prepare for the Grand Duke\'s approaching army.',
+    description: 'With Hyr awake only long enough to offer guidance, the party must finish setting the mine trap, keep the lookout from noticing, and prepare for the Grand Duke\'s approaching army.',
     highlights: [],
   },
   {
@@ -17,18 +17,18 @@ export const sessions = [
     date: 'March 9, 2026',
     upcoming: false,
     summaryFile: 'session-17.md',
-    description: 'The party scouts and infiltrates the Hýrda mine to prepare a collapse trap, only for the mountain spirit Hýr to wake, reveal a censored link to Nites and Nyx\'s past, and offer guidance for the village\'s defense.',
+    description: 'The party scouts and infiltrates the Hýrda mine to prepare a collapse trap, only for the mountain spirit Hyr to wake, reveal a censored link to Nites and Nyx\'s past, and offer guidance for the village\'s defense.',
     highlights: [
       'The party regroups in Hýrda after the prison escape, recovering their gear but not the shared gold taken by the captain.',
       'Berridin and Witty scout the mine approach, confirming two guards at the cave mouth, a northern tower lookout, and no obvious magical detection.',
-      'Ysidor gives Ellara a tour of Hýrda, explaining Hýr and learning that Ellara comes from the highland town of Arcos.',
+      'Ysidor gives Ellara a tour of Hýrda, explaining Hyr and learning that Ellara comes from the highland town of Arcos.',
       'Meri and Ardwin help refine the plan: escort miners inside, extract needed ore, identify weak stone, set charges, and preserve the mine trap for the incoming army.',
       'Ellara recruits an owl as an outside watcher before the night operation begins.',
       'The party silently incapacitates the two cave-mouth guards, hides them inside, and covers the entrance with Minor Illusion.',
       'Miners enter the Hýrda Mines while Witty starts preparing explosive charges and Ysidor waits to weaken the stone.',
-      'Hýr wakes within the mountain, revealing itself as the spirit of the range and offering Meri guidance to ensure the village\'s safety.',
-      'Hýr remembers a young woman likely tied to Nites and the Great Cataclysm, but her name is swallowed by painful static.',
-      'Berridin\'s natural 20 Arcana check reveals the static as world-scale censorship magic, and Nyx realizes he heard Hýr before when he was found here long ago.'
+      'Hyr wakes within the mountain, revealing itself as the spirit of the range and offering Meri guidance to ensure the village\'s safety.',
+      'Hyr remembers a young woman likely tied to Nites and the Great Cataclysm, but her name is swallowed by painful static.',
+      'Berridin\'s natural 20 Arcana check reveals the static as world-scale censorship magic, and Nyx realizes he heard Hyr before when he was found here long ago.'
     ],
   },
   {

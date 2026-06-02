@@ -12,6 +12,7 @@ from __future__ import annotations
 import argparse
 import shutil
 import subprocess
+import sys
 import tempfile
 from pathlib import Path
 
@@ -131,6 +132,7 @@ def main() -> int:
     parser.add_argument("--workspace-root", default="/home/babu/source", help="Workspace root visible to the agent CLI")
     parser.add_argument("--force", action="store_true", help="Overwrite existing output")
     parser.add_argument("--dry-run", action="store_true", help="Print the planned action without invoking the provider")
+    parser.add_argument("--skip-raw-validation", action="store_true", help="Skip validate_raw_notes.py before generation")
     args = parser.parse_args()
 
     raw_notes_file = Path(args.raw_notes_file).expanduser().resolve()
@@ -140,6 +142,13 @@ def main() -> int:
     if output_file.exists() and not args.force:
         print(f"Session notes output already exists, skipping: {output_file}")
         return 0
+
+    if not args.skip_raw_validation:
+        validator = Path(__file__).with_name("validate_raw_notes.py")
+        subprocess.run(
+            [sys.executable, str(validator), str(raw_notes_file), "--session", str(args.session)],
+            check=True,
+        )
 
     raw_text = raw_notes_file.read_text(encoding="utf-8")
     prompt = build_prompt(args.session, raw_text)

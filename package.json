@@ -6,6 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "generate-list": "node scripts/generate_entity_list.js",
+    "verify-session-sync": "node scripts/verify_session_sync.js",
+    "sync-check": "npm run generate-list && npm run verify-session-sync -- --session latest && npm run build",
     "preview": "vite preview",
     "deploy": "npm run build && gh-pages -d dist"
   },

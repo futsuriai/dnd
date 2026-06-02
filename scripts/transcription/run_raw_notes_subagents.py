@@ -21,7 +21,11 @@ import sys
 import tempfile
 from pathlib import Path
 
-from note_generation_guidance import CANONICAL_CAST_REFERENCE
+from note_generation_guidance import (
+    CANONICAL_CAST_REFERENCE,
+    CANONICAL_EVIDENCE_POLICY,
+    RAW_NOTE_CONTRACT,
+)
 
 
 def log(msg: str) -> None:
@@ -55,7 +59,11 @@ def build_prompt(chunk_text: str) -> str:
 - Preserve GM lore, revelations, rulings, and scene descriptions as durable facts.
 - Preserve stated character internal thoughts and emotional beats.
 
+{RAW_NOTE_CONTRACT}
+
 {CANONICAL_CAST_REFERENCE}
+
+{CANONICAL_EVIDENCE_POLICY}
 
 Chunk:
 {chunk_text}

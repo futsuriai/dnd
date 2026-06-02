@@ -44,14 +44,14 @@ const sessionMarkdownModules = import.meta.glob('@/assets/sessions/session-*.md'
 });
 
 const HOME_RECAP_BY_SESSION = {
-  17: 'The party slipped miners into the Hýrda Mines, began preparing the collapse trap, and awakened Hýr, the mountain spirit, who offered guidance while revealing that world-scale magic is hiding a name tied to Nites and Nyx\'s past.',
+  17: 'The party slipped miners into the Hýrda Mines, began preparing the collapse trap, and awakened Hyr, the mountain spirit, who offered guidance while revealing that world-scale magic is hiding a name tied to Nites and Nyx\'s past.',
   16: 'The party escaped the ducal cages, rescued Berridin and Witty, reclaimed their gear, and got out with at least one barrel of gunpowder, but the captain still has their gold and Hýrda is still on borrowed time.',
   15: 'The attempt to cripple the ducal encampment with poison and sabotage failed under concentrated resistance; the party surrendered to prevent executions and now sits caged inside enemy lines.',
   14: 'The party reached Hýrda, warned Meri and Ardwin about the warforged threat, and committed to a mine-collapse defense plan before ducal reinforcements could arrive.'
 };
 
 const HOME_NEXT_STEPS_BY_SESSION = {
-  17: 'The mine operation is still in motion: the party needs to finish extracting ore, set the charges with Hýr\'s guidance, keep the lookout fooled, and decide how to spring the trap when the Grand Duke\'s army arrives.',
+  17: 'The mine operation is still in motion: the party needs to finish extracting ore, set the charges with Hyr\'s guidance, keep the lookout fooled, and decide how to spring the trap when the Grand Duke\'s army arrives.',
   16: 'With the rescue complete and powder finally in hand, the next question is no longer whether the party can escape the ducal camp. It is whether they can turn that stolen leverage into a real defense of Hýrda before reinforcements and retaliation close the window.',
 };
 
@@ -128,6 +128,22 @@ function buildFallbackNextNarrative(session) {
   return `The fallout from Session ${session.idNumber} is still unfolding.`;
 }
 
+function buildNextSessionNarrative(upcomingSession, latestCompletedSession) {
+  const latestOverride = latestCompletedSession
+    ? HOME_NEXT_STEPS_BY_SESSION[latestCompletedSession.idNumber]
+    : '';
+
+  if (latestOverride) {
+    return latestOverride;
+  }
+
+  if (upcomingSession) {
+    return `${upcomingSession.subtitle}: ${upcomingSession.description}`;
+  }
+
+  return buildFallbackNextNarrative(latestCompletedSession);
+}
+
 function getLatestCompletedSession(sessionList) {
   return sessionList
     .filter(session => session && session.upcoming === false)
@@ -154,9 +170,7 @@ export default {
         ? (upcomingSession.time ? `${upcomingSession.date} at ${upcomingSession.time}` : upcomingSession.date)
         : 'No upcoming session scheduled',
       latestSessionSummary: '',
-      nextSessionNarrative: upcomingSession
-        ? `${upcomingSession.subtitle}: ${upcomingSession.description}`
-        : buildFallbackNextNarrative(latestCompletedSession)
+      nextSessionNarrative: buildNextSessionNarrative(upcomingSession, latestCompletedSession)
     };
   },
   async created() {

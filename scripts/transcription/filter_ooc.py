@@ -91,6 +91,11 @@ and prior-session summaries unless they add a concrete continuity fact needed
 for this session and not otherwise present in the editable/context window. Mark
 those rare kept recap facts as RECAP_CONTINUITY.
 
+Opening/session recap policy:
+- Mark opening/session recap as RECAP_REDUNDANT unless it contains a concrete fact required for the current session.
+- Mark only the minimum needed recap facts as RECAP_CONTINUITY.
+- Do not keep table jokes, movie references, rules fumbling, or player meta-planning unless they cause an IC action, choice, roll, resource change, or lore conclusion.
+
 TRIM constraints:
 - Do not invent content.
 - Do not improve style unless needed to remove OOC.

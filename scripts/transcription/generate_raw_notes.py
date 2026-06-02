@@ -18,8 +18,8 @@ Usage:
     python generate_raw_notes.py concat ./notes_chunks "Raw Session XX Candidate.md"
 
 Options:
-    --chunk-size N     Primary entries per chunk (default: 20)
-    --overlap N        Context entries before/after each chunk (default: 5)
+    --chunk-size N     Primary entries per chunk (default: 100)
+    --overlap N        Context entries before/after each chunk (default: 12)
 """
 import argparse
 import difflib
@@ -29,7 +29,11 @@ import sys
 import unicodedata
 from pathlib import Path
 
-from note_generation_guidance import CANONICAL_CAST_REFERENCE
+from note_generation_guidance import (
+    CANONICAL_CAST_REFERENCE,
+    CANONICAL_EVIDENCE_POLICY,
+    RAW_NOTE_CONTRACT,
+)
 
 
 RECOMMENDED_MODEL = "gpt-5.2-codex"
@@ -72,12 +76,15 @@ Rules:
 - Do not mention timestamps
 - Do not add commentary about what you removed
 - Do not restate the whole scene if the chunk starts in the middle of it
-- Fold prior-session recap into short continuity facts only when it is needed to understand current action
 - Convert player phrasing into character/action notes when it is not clear IC dialogue or stated character thought
 - Preserve GM lore, revelations, rulings, and scene descriptions as durable facts
 - Preserve character internal thoughts and emotional beats when stated
 
+{RAW_NOTE_CONTRACT}
+
 {CANONICAL_CAST_REFERENCE}
+
+{CANONICAL_EVIDENCE_POLICY}
 
 Example target style:
 ```
@@ -443,8 +450,8 @@ def main():
     p_prepare = sub.add_parser("prepare", help="Create chunk files for raw-note generation")
     p_prepare.add_argument("input_file", help="Transcript file, usually OOC-filtered")
     p_prepare.add_argument("output_dir", help="Directory for chunk files")
-    p_prepare.add_argument("--chunk-size", type=int, default=20, help="Primary entries per chunk (default: 20)")
-    p_prepare.add_argument("--overlap", type=int, default=5, help="Context entries before/after each chunk (default: 5)")
+    p_prepare.add_argument("--chunk-size", type=int, default=100, help="Primary entries per chunk (default: 100)")
+    p_prepare.add_argument("--overlap", type=int, default=12, help="Context entries before/after each chunk (default: 12)")
 
     p_concat = sub.add_parser("concat", help="Concatenate raw note chunks into one session note file")
     p_concat.add_argument("chunk_dir", help="Directory containing chunk_XXX_notes.txt files")

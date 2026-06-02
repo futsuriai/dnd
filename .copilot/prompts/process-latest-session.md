@@ -5,6 +5,7 @@ Context
 - For the full raw-audio-to-website workflow, read `AGENT_SESSION_PIPELINE.md`.
 - Use the polished website session markdown as your primary narrative source, not the raw transcript, unless you need to verify ambiguity.
 - Do not update website stores from an unreviewed transcript.
+- End every autofix run with `npm run generate-list`, `npm run verify-session-sync -- --session latest`, and `npm run build` unless the user explicitly asked for report-only mode.
 
 Inputs you must use:
 1) Latest session summary: Determine the highest-numbered session file in src/assets/sessions/session-*.md
@@ -59,7 +60,7 @@ Task
      - Update description with brief summary
      - Populate highlights array with 5-10 key events
    - If yes, verify added highlights properly convey what happened and match the session but don't duplicate data
-   - Create session N+1 stub at top of array:
+  - Create or verify session N+1 stub at top of array:
      - id: 'session-N+1'
      - title: 'Session N+1'
      - subtitle: '<something fitting for where we left off>'
@@ -73,6 +74,10 @@ Task
    - Add or update hardcoded latest-session recap / next-step copy when generic extracted prose would lowercase proper nouns, surface incidental details, or miss the main session turn
    - Add a new Story So Far staged paragraph when the session materially changes the campaign state
    - If no update is needed, state why in the report
+7) Run deterministic verification:
+   - `npm run generate-list`
+   - `npm run verify-session-sync -- --session latest`
+   - `npm run build`
 
 Output
 1) Processing Report (Markdown):
@@ -157,7 +162,8 @@ Quality gates
 - No syntax errors in modified files
 - Avoid duplicate history.session values; keep history sorted ascending by session when practical
 - Connections reference existing ids (or stubs you add in the same patch)
-- New descriptions maintain existing tone and style
+  - New descriptions maintain existing tone and style
+- Reruns must be idempotent: verify an existing processed session N and existing N+1 stub instead of duplicating or replacing them unless they are stale or incorrect.
 
 Session Discovery
 - Find all session-*.md files in src/assets/sessions/

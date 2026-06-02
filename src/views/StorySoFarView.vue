@@ -59,7 +59,7 @@ const BACK_OF_BOOK_STAGES = [
   },
   {
     minSession: 17,
-    text: 'With the powder finally in hand, the party moves from rescue to preparation. Under cover of night they slip miners into the Hýrda Mines, silence the cave-mouth guards without killing them, and begin turning the mountain itself into a trap. Then Hýr wakes: not merely a village story, but the spirit of the range, old enough to remember Nites, the Great Cataclysm, and a name that the world itself refuses to let anyone hear.'
+    text: 'With the powder finally in hand, the party moves from rescue to preparation. Under cover of night they slip miners into the Hýrda Mines, silence the cave-mouth guards without killing them, and begin turning the mountain itself into a trap. Then Hyr wakes: not merely a village story, but the spirit of the range, old enough to remember Nites, the Great Cataclysm, and a name that the world itself refuses to let anyone hear.'
   }
 ];
 
