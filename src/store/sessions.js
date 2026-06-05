@@ -28,7 +28,7 @@ export const sessions = [
       'Miners enter the Hýrda Mines while Witty starts preparing explosive charges and Ysidor waits to weaken the stone.',
       'Hyr wakes within the mountain, revealing itself as the spirit of the range and offering Meri guidance to ensure the village\'s safety.',
       'Hyr remembers a young woman likely tied to Nites and the Great Cataclysm, but her name is swallowed by painful static.',
-      'Berridin\'s natural 20 Arcana check reveals the static as world-scale censorship magic, and Nyx realizes he heard Hyr before when he was found here long ago.'
+      'Nyx\'s natural 20 Arcana check reveals the static as world-scale censorship magic, and he realizes he heard Hyr before when he was found here long ago.'
     ],
   },
   {

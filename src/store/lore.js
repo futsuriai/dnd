@@ -143,7 +143,7 @@ Session 6 revealed that the Lighthouse conducts a secret basement program to syn
   {
     id: 'the-static',
     term: 'The Static',
-    description: 'A painful censorship effect that removes certain names or facts from speech and memory. Berridin\'s natural 20 Arcana check indicated it is not normal forgetting but world-scale magic that affects even Hyr.',
+    description: 'A painful censorship effect that removes certain names or facts from speech and memory. Nyx\'s natural 20 Arcana check indicated it is not normal forgetting but world-scale magic that affects even Hyr.',
     history: [
       { session: 17, note: 'First identified when Hyr tried to name a woman tied to the Great Cataclysm and the words were swallowed by static.' }
     ],
