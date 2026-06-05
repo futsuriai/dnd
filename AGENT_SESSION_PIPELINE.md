@@ -635,7 +635,14 @@ Canonical-name QA:
 - Preserve `Ellara`, `Nyx`, `Ysidor`, `Berridin`, and `Witty` capitalization in website copy and generated blurbs.
 - If a generated note says a character asked about the wrong named person or concept, verify against the transcript/raw notes before syncing website data.
 - For Session 17's Hýr/static-name beat, do not write that Hýr did not recognize `Jacinta`; that is a bad substitution for the Nites/unknown censored-name context. `Lady Jacinta` remains valid in her own Bastion sessions.
+- For Session 17's Hýr/static-name beat, the Arcana natural 20 was Nyx's roll, not Berridin's. The follow-on realization that the voice was familiar also belongs to Nyx.
 - Before final verification, grep the generated session and website copy for known bad forms such as `Nýtes`, `Nytes`, lowercase party names in sentence-leading blurbs, and accidental generated substitutions.
+
+Roll/check attribution QA:
+
+- Preserve important rolls/checks, but only name the roller when the transcript speaker, GM address, or approved raw notes explicitly identify them.
+- If a roll matters but the roller is ambiguous, write `check: <skill> = <result> (roller uncertain)` in the raw notes and omit the roller in polished/public summaries.
+- Do not transfer credit for natural 20s or lore-unlocking checks while polishing raw notes or reducing them into `sessions.js`, lore entries, HomeView copy, or Story So Far text.
 
 After entity/store changes, regenerate:
 

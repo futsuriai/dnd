@@ -24,6 +24,15 @@ BAD_PUBLIC_PATTERNS: list[tuple[re.Pattern[str], str]] = [
     (re.compile(r"Session\s+\d+:\s+[a-z]"), "Homepage/session recap appears to lowercase a sentence-leading proper noun."),
     (re.compile(r"By the end,\s+[a-z]"), "Generic recap ending appears to lowercase a sentence-leading proper noun."),
 ]
+SESSION_17_BAD_STATIC_ATTRIBUTION_RE = re.compile(
+    r"\bBerridin\s+Arcana\s*=\s*nat(?:ural)?\s*20\b|"
+    r"\b(?:static|censorship)\b[^\n]{0,220}\bBerridin\b[^\n]{0,120}\b(?:Arcana\s+natural\s+20|natural\s+20\s+Arcana)\b|"
+    r"\bBerridin\b[^\n]{0,120}\b(?:Arcana\s+natural\s+20|natural\s+20\s+Arcana)\b[^\n]{0,220}\b(?:static|censorship|world-scale|world scale|H[ýy]r)\b|"
+    r"\bBerridin['’]s\b[^\n]{0,80}\bnatural\s+20\s+Arcana\b[^\n]{0,220}\b(?:static|censorship|world-scale|world scale|H[ýy]r)\b|"
+    r"\bBerridin\s+remembered\s+hearing\s+it\b|"
+    r"\bvoice\s+was\s+not\s+new\s+to\s+Berridin\b",
+    re.IGNORECASE,
+)
 
 
 class Reporter:
@@ -67,6 +76,18 @@ def check_public_text(path: Path, text: str, reporter: Reporter) -> None:
         for match in pattern.finditer(text):
             line = text.count("\n", 0, match.start()) + 1
             reporter.error(f"{path}:{line}: {message} Found `{match.group(0)}`.")
+
+
+def check_session_specific_facts(session: int, path: Path, text: str, reporter: Reporter) -> None:
+    if session != 17:
+        return
+
+    for match in SESSION_17_BAD_STATIC_ATTRIBUTION_RE.finditer(text):
+        line = text.count("\n", 0, match.start()) + 1
+        reporter.error(
+            f"{path}:{line}: Session 17 Hýr/static-name Arcana natural 20 and familiar-voice realization "
+            f"belong to Nyx, not Berridin. Found `{match.group(0)}`."
+        )
 
 
 def object_block(js: str, session: int) -> str:
@@ -188,6 +209,14 @@ def main() -> int:
         if final_notes != website_notes:
             reporter.error(f"Website session markdown differs from Ellara Session {session}.md")
 
+    for path, text in (
+        (ellara_notes_dir / f"Raw Session {session}.md", raw_notes),
+        (ellara_notes_dir / f"Session {session}.md", final_notes),
+        (dnd_dir / "src" / "assets" / "sessions" / f"session-{session}.md", website_notes),
+    ):
+        if text:
+            check_session_specific_facts(session, path, text, reporter)
+
     public_files = [
         dnd_dir / "src" / "assets" / "sessions" / f"session-{session}.md",
         dnd_dir / "src" / "views" / "HomeView.vue",
@@ -199,7 +228,9 @@ def main() -> int:
     ]
     for path in public_files:
         if path.exists():
-            check_public_text(path, read_text(path), reporter)
+            public_text = read_text(path)
+            check_public_text(path, public_text, reporter)
+            check_session_specific_facts(session, path, public_text, reporter)
 
     sessions_js = dnd_dir / "src" / "store" / "sessions.js"
     if sessions_js.exists():

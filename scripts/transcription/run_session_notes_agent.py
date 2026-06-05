@@ -40,6 +40,8 @@ Rules:
 - Preserve only the most important direct quotes.
 - Treat dialogue and thoughts preserved in the raw notes as intentional evidence; do not paraphrase away important wording unless the final summary clearly benefits from compression.
 - Keep key rolls/checks when they matter to the story.
+- Preserve roll attribution exactly from the raw notes. If the raw notes mark the roller as uncertain, keep the uncertainty or omit the roller instead of guessing.
+- When a roll unlocks a lore clue, do not credit a different character with that clue unless the raw notes explicitly support the transfer.
 - Preserve GM revelations, world facts, character motivations, and consequences.
 - Fold any prior-context summary into the opening section rather than presenting it as transcript recap.
 - Do not invent facts, names, dialogue, or outcomes.

@@ -245,6 +245,8 @@ Required follow-up:
 - Inspect and update `src/views/StorySoFarView.vue` every full latest-session sync. Add a new staged paragraph when the latest session materially changes the back-cover campaign state.
 - Canonical spelling check: use `Nites` exactly, pronounced knee-tes. Do not use `Nytes` or `Nýtes`.
 - Before finishing, grep generated notes and website copy for known bad spellings, incorrect party-name capitalization, and wrong-name substitutions.
+- Preserve roll attribution exactly. Only name the roller of a natural 20, skill check, or lore-unlocking roll when the transcript/raw notes explicitly identify them; if uncertain, mark the raw note as `(roller uncertain)` and omit the roller from polished/public copy.
+- Session 17 known correction: the Hýr/static-name Arcana natural 20 was Nyx's roll, not Berridin's, and Nyx was the one who recognized the voice as familiar.
 - Keep chunk folders and transcript scratch output local-only via `.git/info/exclude` unless the repo intentionally starts tracking them.
 - Clean intermediate artifacts with `scripts/transcription/cleanup_session_artifacts.py` after showing a dry run.
 

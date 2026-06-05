@@ -29,6 +29,14 @@ OOC_DENSITY_RE = re.compile(
     r"\b(GM|rules:|player|we as players|mechanically|classic movie scene|recording|discord|microphone)\b",
     re.IGNORECASE,
 )
+SESSION_17_BAD_STATIC_ATTRIBUTION_RE = re.compile(
+    r"\bBerridin\s+Arcana\s*=\s*nat(?:ural)?\s*20\b|"
+    r"\bBerridin\b[^\n]{0,80}\bArcana\s+natural\s+20\b|"
+    r"\bBerridin\b[^\n]{0,80}\bnatural\s+20\s+Arcana\b|"
+    r"\bBerridin\s+remembered\s+hearing\s+it\b|"
+    r"\bvoice\s+was\s+not\s+new\s+to\s+Berridin\b",
+    re.IGNORECASE,
+)
 
 
 class Reporter:
@@ -62,6 +70,18 @@ def check_matches(pattern: re.Pattern[str], text: str, reporter: Reporter, messa
         else:
             reporter.warn(f"line {location}: {message} Found `{match.group(0)}`.")
     return count
+
+
+def check_session_specific_facts(session: int | None, text: str, reporter: Reporter) -> None:
+    if session != 17:
+        return
+
+    check_matches(
+        SESSION_17_BAD_STATIC_ATTRIBUTION_RE,
+        text,
+        reporter,
+        "Session 17 Hýr/static-name Arcana natural 20 and familiar-voice realization belong to Nyx, not Berridin",
+    )
 
 
 def count_opening_continuity(lines: list[str]) -> int:
@@ -115,6 +135,7 @@ def main() -> int:
     check_matches(PROCESS_LANGUAGE_RE, text, reporter, "raw notes contain table/process phrasing that should be converted or removed")
     check_matches(BAD_NAME_RE, text, reporter, "raw notes contain a known bad canonical spelling")
     check_matches(RISKY_NITES_RE, text, reporter, "raw notes risk equating Nites with the censored unknown birth name", error=False)
+    check_session_specific_facts(args.session, text, reporter)
 
     review_count = check_matches(
         REVIEW_RE,

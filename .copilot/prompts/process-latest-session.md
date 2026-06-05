@@ -123,6 +123,7 @@ Constraints
 - Do not infer major canon changes from ASR noise or raw-note uncertainty. Prefer explicit events in the polished summary.
 - Canonical spelling QA: use `ENTITY_LIST.md`, lore/store entries, and `name_corrections.json` as spelling sources. Preserve party-name capitalization in blurbs. Use `Nites` exactly, pronounced knee-tes; do not write `Nytes` or `Nýtes`.
 - Do not rely on generic first/last-sentence extraction for public copy if it produces lowercase proper nouns or highlights a low-priority lore aside over the session's main state change.
+- Roll attribution QA: when public copy credits a named character with a natural 20, skill check, or lore-unlocking roll, the polished session summary must explicitly support that exact roller. If the source is ambiguous, omit the character name rather than guessing.
 
 Heuristics & Mapping
 - NPC cues: "met <Name>", "<Name>, the <role>", titles (Proctor, Captain, Smith), speech acts.

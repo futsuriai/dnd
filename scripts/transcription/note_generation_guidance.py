@@ -31,6 +31,10 @@ RAW_NOTE_CONTRACT = """Raw-note contract:
 - Do not write `GM:` unless the GM is voicing an NPC or supernatural speaker.
 - Convert GM narration to fact lines.
 - Convert important rulings to `rules:` lines only when the ruling affects future play.
+- Preserve important rolls/checks as evidence, but do not invent roller attribution.
+- Only write `check: <character> <skill> = <result>` when the transcript speaker, GM address, or surrounding dialogue clearly identifies the roller.
+- If the roll matters but the roller is uncertain, write `check: <skill> = <result> (roller uncertain)` and keep nearby context rather than choosing the most likely party member.
+- When a roll unlocks a lore clue, keep the check line next to the clue/outcome so later polished notes can trace who learned what.
 - Do not write "GM says", "GM clarifies", "GM rules", "GM lore", "the player asks", or transcript-process phrasing.
 - Prior-session recap is usually not session action.
 - If the primary range is recap, emit at most 1-3 `continuity:` lines needed for the current scene.

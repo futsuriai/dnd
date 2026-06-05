@@ -75,6 +75,7 @@ function checkBadPatterns(relativePath) {
     [/Ardwin,\s+the\s+Black\s+Swan/gi, 'Ardwin is the blacksmith, not the Black Swan.'],
     [/Ellara asked if .*Jacinta/gi, 'Verify this likely means Nites, not Jacinta.'],
     [/\bH[ýy]r\b[^.\n]{0,140}\bJacinta\b|\bJacinta\b[^.\n]{0,140}\bH[ýy]r\b/gi, 'In the Session 17 Hýr/static beat, verify this means Nites or the unknown censored birth name, not Jacinta.'],
+    [/\b(?:static|censorship)\b[^\n]{0,220}\bBerridin\b[^\n]{0,120}\b(?:Arcana\s+natural\s+20|natural\s+20\s+Arcana)\b|\bBerridin\b[^\n]{0,120}\b(?:Arcana\s+natural\s+20|natural\s+20\s+Arcana)\b[^\n]{0,220}\b(?:static|censorship|world-scale|world scale|H[ýy]r)\b|\bBerridin['’]s\b[^\n]{0,80}\bnatural\s+20\s+Arcana\b[^\n]{0,220}\b(?:static|censorship|world-scale|world scale|H[ýy]r)\b|\bBerridin\s+remembered\s+hearing\s+it\b|\bvoice\s+was\s+not\s+new\s+to\s+Berridin\b/gi, 'Session 17 Hýr/static-name Arcana natural 20 and familiar-voice realization belong to Nyx, not Berridin.'],
     [/Session\s+\d+:\s+[a-z]/g, 'A public recap appears to lowercase a sentence-leading proper noun.'],
     [/By the end,\s+[a-z]/g, 'A generic recap ending appears to lowercase a sentence-leading proper noun.'],
   ];

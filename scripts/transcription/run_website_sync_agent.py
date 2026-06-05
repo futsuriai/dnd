@@ -26,6 +26,8 @@ Required work:
 - Preserve canonical spellings from `ENTITY_LIST.md`, `src/store/lore.js`, and `scripts/transcription/name_corrections.json`.
 - Use `Nites` exactly, pronounced knee-tes. Do not write `Nytes` or `Nýtes`.
 - Preserve capitalization for Ellara, Nyx, Ysidor, Berridin, and Witty in public copy.
+- Preserve dice/check attribution from `src/assets/sessions/session-{session}.md`; do not reassign a natural 20, skill check, or lore clue to another character while summarizing into stores/views.
+- If the polished summary is ambiguous about who rolled, omit the roller from store/view copy instead of guessing.
 - Do not touch unrelated files or generated intermediate artifacts.
 
 After editing, run `npm run verify-session-sync -- --session latest` and `npm run build`.
