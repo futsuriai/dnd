@@ -3,7 +3,7 @@
 Run an end-to-end DnD transcript pipeline from speaker-isolated audio files.
 
 Pipeline:
-1. Regenerate ENTITY_LIST.md (used as Whisper initial prompt).
+1. Regenerate ENTITY_LIST.md (used for ASR prompting/custom vocabulary).
 2. Transcribe per-speaker audio with retries and model fallback.
 3. Combine per-speaker transcripts into one chronological transcript.
 4. Apply name/speaker corrections and optional speaker display normalization.
@@ -29,6 +29,7 @@ from pathlib import Path
 
 
 AUDIO_EXTENSIONS = {".flac", ".mp3", ".wav", ".m4a", ".ogg", ".aac"}
+DEFAULT_TRANSCRIPTION_PROVIDER = "gladia"
 LINE_RE = re.compile(r"^(\[\d{2}:\d{2}:\d{2}\]\s+)([^:]+)(:\s*)(.*)$")
 
 
@@ -40,6 +41,22 @@ def run_cmd(cmd: list[str], cwd: Path | None = None, env: dict[str, str] | None 
     location = f" (cwd={cwd})" if cwd else ""
     log(f"$ {' '.join(cmd)}{location}")
     subprocess.run(cmd, cwd=str(cwd) if cwd else None, env=env, check=True)
+
+
+def load_env_file(path: Path, env: dict[str, str]) -> None:
+    if not path.exists():
+        return
+
+    for raw_line in path.read_text(encoding="utf-8").splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+
+        key, value = line.split("=", 1)
+        key = key.strip()
+        value = value.strip().strip('"').strip("'")
+        if key and key not in env:
+            env[key] = value
 
 
 def list_audio_files(audio_dir: Path) -> list[Path]:
@@ -237,7 +254,10 @@ def transcribe_one(
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description=__doc__)
+    parser = argparse.ArgumentParser(
+        description=__doc__,
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
     parser.add_argument("--session", required=True, help="Session number or label (e.g. 15)")
     parser.add_argument("--audio-dir", required=True, help="Directory with per-speaker audio files")
     parser.add_argument("--dnd-dir", default="/home/babu/source/dnd", help="Path to dnd repo root")
@@ -254,7 +274,12 @@ def main() -> int:
     )
     parser.add_argument("--beam-size", type=int, default=1, help="Whisper beam size")
     parser.add_argument("--min-lines", type=int, default=20, help="Minimum lines for a valid per-speaker transcript")
-    parser.add_argument("--transcription-provider", choices=["whisper", "gladia"], default="whisper", help="Speech-to-text provider")
+    parser.add_argument(
+        "--transcription-provider",
+        choices=["gladia", "whisper"],
+        default=DEFAULT_TRANSCRIPTION_PROVIDER,
+        help="Speech-to-text provider; use whisper only for an explicit local fallback",
+    )
     parser.add_argument("--gladia-artifact-dir", help="Directory for Gladia compact audio, manifests, and API JSON")
     parser.add_argument("--skip-transcribe", action="store_true", help="Skip transcription and reuse existing *.ext.txt files")
     parser.add_argument("--stop-after-transcript", action="store_true", help="Stop after writing normalized transcript artifacts for manual review")
@@ -406,6 +431,16 @@ def main() -> int:
     if ld_library_path:
         env_base["LD_LIBRARY_PATH"] = ld_library_path
 
+    if args.transcription_provider == "gladia" and not args.resume_after_transcript and not args.skip_transcribe:
+        gladia_env_file = dnd_dir / ".env.local"
+        load_env_file(gladia_env_file, env_base)
+        if not env_base.get("GLADIA_API_KEY"):
+            raise RuntimeError(
+                "GLADIA_API_KEY is required because Gladia is the default transcription provider. "
+                f"Set it in the environment or in {gladia_env_file}. "
+                "Use --transcription-provider whisper only when intentionally running local transcription."
+            )
+
     if args.resume_after_transcript:
         if not ellara_transcript.exists():
             raise FileNotFoundError(f"cannot resume; transcript not found: {ellara_transcript}")
@@ -499,6 +534,7 @@ def main() -> int:
             manifest = {
                 "session": session,
                 "stage": "transcript_checkpoint",
+                "transcription_provider": args.transcription_provider,
                 "audio_dir": str(audio_dir),
                 "speaker_audio_files": [str(p) for p in audio_files],
                 "speaker_transcripts_dir": str(session_assets_dir),
@@ -780,6 +816,7 @@ def main() -> int:
     # 11) Write manifest for downstream agents/scripts.
     manifest = {
         "session": session,
+        "transcription_provider": args.transcription_provider,
         "audio_dir": str(audio_dir),
         "speaker_audio_files": [str(p) for p in audio_files],
         "speaker_transcripts_dir": str(session_assets_dir),

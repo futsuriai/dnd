@@ -2,7 +2,6 @@
 import fs from 'fs';
 import path from 'path';
 import vm from 'vm';
-import { spawnSync } from 'child_process';
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -64,6 +63,61 @@ function loadExportedArray(relativePath, exportName) {
   const script = new vm.Script(`${content}\n__value = ${exportName};`);
   script.runInContext(context);
   return context.__value;
+}
+
+const generatedEntityFiles = [
+  { name: 'lore.js', type: 'Lore', exportName: 'lore' },
+  { name: 'locations.js', type: 'Locations', exportName: 'locations' },
+  { name: 'npcs.js', type: 'NPCs', exportName: 'npcs' },
+  { name: 'characters.js', type: 'Characters', exportName: 'characters' },
+];
+
+function buildGeneratedEntityArtifacts() {
+  let list = '# World Entity List\n\nThis file is auto-generated. Do not edit manually.\n\n';
+  const metadata = [];
+
+  for (const file of generatedEntityFiles) {
+    const relativePath = `src/store/${file.name}`;
+    const absolutePath = path.join(repoRoot, relativePath);
+    if (!fs.existsSync(absolutePath)) continue;
+
+    const entities = loadExportedArray(relativePath, file.exportName)
+      .map((entity) => {
+        const sessions = new Set(entity.updatedInSessions || []);
+        if (Array.isArray(entity.history)) {
+          entity.history.forEach((entry) => {
+            if (entry && typeof entry.session === 'number') {
+              sessions.add(entry.session);
+            }
+          });
+        }
+
+        return {
+          id: entity.id,
+          name: entity.name || entity.term,
+          updatedInSessions: Array.from(sessions).sort((a, b) => a - b),
+        };
+      })
+      .filter((entity) => entity.id && entity.name)
+      .sort((a, b) => a.id.localeCompare(b.id));
+
+    list += `## ${file.type}\n\n`;
+    for (const entity of entities) {
+      list += `- \`${entity.id}\`: ${entity.name}\n`;
+      metadata.push({
+        id: entity.id,
+        name: entity.name,
+        type: file.type,
+        updatedInSessions: entity.updatedInSessions,
+      });
+    }
+    list += '\n';
+  }
+
+  return {
+    entityList: list,
+    metadata: `${JSON.stringify(metadata, null, 2)}\n`,
+  };
 }
 
 function checkBadPatterns(relativePath) {
@@ -154,19 +208,14 @@ function checkViewCoverage(session) {
 
 function checkGeneratedDrift() {
   if (skipGeneratedDrift) return;
-  const result = spawnSync('git', [
-    'diff',
-    '--quiet',
-    '--',
-    'ENTITY_LIST.md',
-    'scripts/transcription/entity_metadata.json',
-  ], { cwd: repoRoot });
-  if (result.status === 0) {
-    ok('generated entity list and metadata have no git drift');
-  } else if (result.status === 1) {
-    error('ENTITY_LIST.md or entity_metadata.json has uncommitted drift; run `npm run generate-list` and review the result');
+  const expected = buildGeneratedEntityArtifacts();
+  const actualEntityList = readText('ENTITY_LIST.md');
+  const actualMetadata = readText('scripts/transcription/entity_metadata.json');
+
+  if (actualEntityList !== expected.entityList || actualMetadata !== expected.metadata) {
+    error('ENTITY_LIST.md or entity_metadata.json is stale; run `npm run generate-list` and review the result');
   } else {
-    warn('could not check generated entity drift with git');
+    ok('generated entity list and metadata match the current stores');
   }
 }
 
@@ -187,8 +236,12 @@ function checkScratchArtifacts(session) {
 
   const transcriptsDir = path.join(sessionAssets, 'transcripts');
   if (!fs.existsSync(transcriptsDir)) return;
+  const currentTranscriptDir = `Session ${session}`;
   const currentTranscriptLeak = new RegExp(`^session_${session}_.+\\.(txt|json)$`);
   for (const name of fs.readdirSync(transcriptsDir)) {
+    if (name === currentTranscriptDir) {
+      error(`current-session transcript artifact should not be bundled unless intentionally exposed: src/assets/sessions/transcripts/${name}`);
+    }
     if (currentTranscriptLeak.test(name)) {
       error(`current-session transcript artifact should not be bundled unless intentionally exposed: src/assets/sessions/transcripts/${name}`);
     }

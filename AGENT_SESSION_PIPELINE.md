@@ -23,7 +23,7 @@ Do not stop when Ellara notes exist. The DnD website is updated only after the r
 - Session number: `N`
 - Audio directory with per-speaker files: `.flac`, `.aac`, `.mp3`, `.wav`, `.m4a`, or `.ogg`
 - Current speaker mapping: `scripts/transcription/speaker_map.json`
-- Local env file for Gladia if using Gladia: `.env.local`
+- Local env file for default Gladia/cloud transcription: `.env.local`
 
 The `.env.local` file is ignored by git. It should contain:
 
@@ -33,7 +33,7 @@ GLADIA_API_KEY=...
 
 ## Preferred Flow
 
-Use the transcript checkpoint flow by default. It is more deterministic than asking an agent to clean transcript issues after raw notes already exist.
+Use the transcript checkpoint flow by default. Gladia/cloud transcription is the default ASR path; use local Whisper only when the user explicitly asks for a local fallback or a dual-provider comparison. The checkpoint flow is more deterministic than asking an agent to clean transcript issues after raw notes already exist.
 
 ### 1. Prepare Canonical Terms
 
@@ -47,7 +47,7 @@ Review `ENTITY_LIST.md` only if the campaign data stores recently changed.
 
 ### 2. Build Transcript And Stop
 
-Whisper/local transcription:
+Default Gladia/cloud transcription with local VAD compaction:
 
 ```bash
 python3 scripts/transcription/run_transcript_pipeline.py \
@@ -56,13 +56,13 @@ python3 scripts/transcription/run_transcript_pipeline.py \
   --stop-after-transcript
 ```
 
-Gladia/cloud transcription with local VAD compaction:
+Explicit Whisper/local fallback:
 
 ```bash
 python3 scripts/transcription/run_transcript_pipeline.py \
   --session N \
   --audio-dir "/path/to/session-audio" \
-  --transcription-provider gladia \
+  --transcription-provider whisper \
   --stop-after-transcript
 ```
 
@@ -710,6 +710,7 @@ python3 scripts/transcription/cleanup_session_artifacts.py \
 ## Determinism Notes
 
 - Prefer `--stop-after-transcript` before downstream generation so transcript fixes happen once and feed every later artifact.
+- Gladia is the default transcription provider in `run_transcript_pipeline.py`; pass `--transcription-provider whisper` only for intentional local fallback runs.
 - Prefer `--resume-after-transcript` after user review; do not rerun transcription unless the audio or provider settings changed.
 - Keep `name_corrections.json` as the durable ASR correction source. Do not hand-fix the same spelling issue in every transcript if it should be a reusable correction.
 - For Gladia, audio is VAD-compacted before upload and remapped back to original timestamps before aggregation. The compact WAV intentionally keeps short silence gaps between retained VAD islands so cloud ASR has phrase boundaries.
@@ -723,6 +724,6 @@ When asking an agentic CLI to run everything, provide this file and say:
 
 ```text
 Read AGENT_SESSION_PIPELINE.md. Run the DnD session pipeline for session N from /path/to/session-audio.
-Use the transcript checkpoint flow. Stop after --stop-after-transcript and ask me to review the transcript.
+Use the transcript checkpoint flow with the default Gladia/cloud transcription provider unless I explicitly ask for Whisper/local. Stop after --stop-after-transcript and ask me to review the transcript.
 After I confirm, run the annotation-first OOC cleanup checkpoint and show me the cleaned transcript comparison. After I approve the cleaned transcript, generate Raw Session N Candidate.md with clean raw-note subagents, run the raw-note reconciliation pass into Raw Session N Reconciled Candidate.md, validate it, and stop for review. After I approve or promote the reconciled candidate to Raw Session N.md, generate polished Session N.md, sync the website with run_website_sync_agent.py, run npm run sync-check plus validate_session_pipeline.py, and then run cleanup_session_artifacts.py after showing the dry run.
 ```

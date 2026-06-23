@@ -329,12 +329,13 @@ export const locations = [
     id: 'nyxs-townhouse',
     name: "Nyx's Townhouse",
     type: 'poi',
-    description: 'A five-story, unassuming building in East Bastion serving as Nyx\'s residence. Modestly upscale with polished wood and nice fixtures.',
+    description: 'A five-story, unassuming building in East Bastion serving as Nyx\'s residence. Modestly upscale with polished wood, nice fixtures, historical books, and Nyx\'s meticulous diaries from the years since everything changed.',
     tags: ['residence', 'east bastion'],
     history: [
       { session: 1, note: 'Introduced as Nyx\'s residence where he receives a letter and hosts Tsi\'Nyra.' },
       { session: 2, note: 'Described as modestly upscale for East Bastion with nice fixtures.' },
-      { session: 10, note: 'Berridin and Ysidor stayed here; raided Nyx\'s cache for gold' }
+      { session: 10, note: 'Berridin and Ysidor stayed here; raided Nyx\'s cache for gold' },
+      { session: 18, note: 'Nyx\'s History natural 20 reminded him that his books and detailed diaries here may help cross-reference old events.' }
     ],
     connections: [
       { type: 'location', id: 'bastion-city', reason: 'Located In' }
@@ -370,7 +371,7 @@ export const locations = [
     id: 'hyrta',
     name: 'Hýrda',
     type: 'village',
-    description: 'A communal stone-goliath village in the mountains, home to Meri and Ysidor. The party arrived in Session 14 to find Hýrda preparing for a ducal attempt to seize the mines and displace its people; Session 17 revealed its traditions preserve the sleeping mountain spirit Hyr.',
+    description: 'A communal stone-goliath village in the mountains, home to Meri and Ysidor. The party arrived in Session 14 to find Hýrda preparing for a ducal attempt to seize the mines and displace its people; Sessions 17-18 revealed its traditions preserve the sleeping mountain spirit Hyr through stories, memories, songs, prayers, and offerings.',
     tags: ['village', 'goliath', 'mountains'],
     history: [
       { session: 1, note: 'Ysidor\'s home village.' },
@@ -380,13 +381,15 @@ export const locations = [
       { session: 14, note: 'Party reached the village; Meri and Ardwin began coordinating mine-defense sabotage plans.' },
       { session: 15, note: 'Operation launched from Hýrda failed at the encampment, leaving the party captured in cages.' },
       { session: 16, note: 'Ysidor, Nyx, and Ellara regrouped here, rearmed with Meri and Ardwin, and launched an immediate rescue back into the encampment.' },
-      { session: 17, note: 'The party regrouped here, planned the mine infiltration, and Ellara learned more about Hýrda\'s devotion to Hyr.' }
+      { session: 17, note: 'The party regrouped here, planned the mine infiltration, and Ellara learned more about Hýrda\'s devotion to Hyr.' },
+      { session: 18, note: 'Meri returned with the rescued group and offered to share Hýrda\'s stories, memories, and songs of Hyr after the long rest.' }
     ],
     connections: [
       { type: 'location', id: 'hieroterra', reason: 'Village within the province' },
       { type: 'location', id: 'hyrta-mines', reason: 'Village mining network and defensive choke point' },
       { type: 'location', id: 'hyrta-ducal-encampment', reason: 'Ducal forces staged near the mines' },
       { type: 'npc', id: 'ardwin', reason: 'Village blacksmith helping lead defenses' },
+      { type: 'npc', id: 'meri', reason: 'Story-keeper and mentor in the village' },
       { type: 'lore', id: 'hyr', reason: 'Local mountain spirit sustained by village prayers' }
     ]
   },
@@ -394,11 +397,12 @@ export const locations = [
     id: 'hyrta-mines',
     name: 'Hýrda Mines',
     type: 'poi',
-    description: 'The cave-and-tunnel mining network near Hýrda. It is both a vital resource and the centerpiece of sabotage plans against incoming ducal reinforcements; within it, the party awakened Hyr, the spirit of the mountain range.',
+    description: 'The cave-and-tunnel mining network near Hýrda. It is both a vital resource and the centerpiece of sabotage plans against incoming ducal reinforcements; within it, the party awakened Hyr, the spirit of the mountain range, and set the charges for a controlled collapse trap.',
     tags: ['mines', 'caves', 'hyrda'],
     history: [
       { session: 15, note: 'Mine-cave collapse strategy remained the objective while the party attempted to disable the nearby camp first.' },
-      { session: 17, note: 'Party infiltrated with miners, began extracting ore and setting charges, and awakened Hyr within the mountain.' }
+      { session: 17, note: 'Party infiltrated with miners, began extracting ore and setting charges, and awakened Hyr within the mountain.' },
+      { session: 18, note: 'Charges were completed with an inside trigger reachable by Berridin and a hidden backup plunger outside in the ferns.' }
     ],
     connections: [
       { type: 'location', id: 'hyrta', reason: 'Primary village mining site' },
@@ -417,7 +421,8 @@ export const locations = [
       { session: 14, note: 'Confirmed as the ducal staging force; party plans to steal powder and sabotage operations.' },
       { session: 15, note: 'Poison-assisted assault only partially disabled defenders; the party surrendered and was imprisoned in camp cages.' },
       { session: 16, note: 'Party escaped captivity, rescued the remaining prisoners, recovered their gear, and stole at least one barrel of gunpowder from the camp.' },
-      { session: 17, note: 'Berridin confirmed the mine mouth remained guarded by two soldiers and a tower lookout; the party later incapacitated the cave-mouth guards nonlethally.' }
+      { session: 17, note: 'Berridin confirmed the mine mouth remained guarded by two soldiers and a tower lookout; the party later incapacitated the cave-mouth guards nonlethally.' },
+      { session: 18, note: 'Ellara\'s owl recon on a Perception natural 20 confirmed the camp and watchtower were distracted while the party and miners exited the mines.' }
     ],
     connections: [
       { type: 'location', id: 'hyrta', reason: 'Positioned beside village mining approaches' },

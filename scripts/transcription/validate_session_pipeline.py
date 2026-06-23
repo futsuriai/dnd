@@ -150,7 +150,12 @@ def intermediate_paths(session: int, dnd_dir: Path, ellara_notes_dir: Path) -> l
         dnd_dir / "src" / "assets" / "sessions" / "transcripts" / f"Session {session}",
         dnd_dir / "src" / "assets" / "sessions" / "transcripts" / f"session_{session}_raw.txt",
     ]
-    paths.extend(sorted(transcript_dir.glob(f"Transcript Session {session} - *")))
+    durable_manifest = transcript_dir / f"Transcript Session {session} - Pipeline Manifest.json"
+    paths.extend(
+        path
+        for path in sorted(transcript_dir.glob(f"Transcript Session {session} - *"))
+        if path != durable_manifest
+    )
     return paths
 
 

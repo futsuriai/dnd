@@ -60,6 +60,10 @@ const BACK_OF_BOOK_STAGES = [
   {
     minSession: 17,
     text: 'With the powder finally in hand, the party moves from rescue to preparation. Under cover of night they slip miners into the Hýrda Mines, silence the cave-mouth guards without killing them, and begin turning the mountain itself into a trap. Then Hyr wakes: not merely a village story, but the spirit of the range, old enough to remember Nites, the Great Cataclysm, and a name that the world itself refuses to let anyone hear.'
+  },
+  {
+    minSession: 18,
+    text: 'The mine trap is no longer theory. The charges are set, the backup plunger is hidden, and the party has slipped back to Hýrda for a long rest while the army is still about a week away. What remains is stranger than tactics: Meri is ready to tell the stories Hýrda keeps, Ellara must carry her questions about Nites and Hyr back toward Proctor Eduard, and the party now has to defend a village whose god has spoken.'
   }
 ];
 
@@ -100,7 +104,7 @@ function buildStoryParagraphs(latestSessionNumber, latestSessionContent) {
     .filter(stage => latestSessionNumber >= stage.minSession)
     .map(stage => stage.text);
 
-  if (latestSessionNumber > 17) {
+  if (latestSessionNumber > 18) {
     const continuation = extractFirstNarrativeSentence(latestSessionContent);
     if (continuation) {
       staged.push(`Beyond that turning point, the tale keeps moving: ${continuation}`);

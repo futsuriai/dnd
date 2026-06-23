@@ -97,10 +97,11 @@ Session 6 revealed that the Lighthouse conducts a secret basement program to syn
   {
     id: 'nites', // Added ID
     term: 'Nites',
-    description: 'The title for The Eternal Light when she walked this land. From Latin *nitēs*, present 2nd person singular, meaning "to shine, sparkle, radiant."\n\nPronounced knee-tehz. Eulogian teaching holds that Nites is an epithet and that her true birth name is sacred, unknown, and not to be uttered.',
+    description: 'The title for The Eternal Light when she walked this land. From Latin *nitēs*, present 2nd person singular, meaning "to shine, sparkle, radiant."\n\nPronounced knee-tes. Eulogian teaching holds that Nites is an epithet and that her true birth name is sacred, unknown, and not to be uttered. Scripture also credits Nites with moving the mountains and creating the path now tied to Hyr\'s own memory.',
     history: [
       { session: 3, note: 'Mentioned by Eduard in a discussion about languages.' },
-      { session: 17, note: 'Hyr remembered a young woman likely tied to Nites asking the mountains to move, but the name itself was censored by static.' }
+      { session: 17, note: 'Hyr remembered a young woman likely tied to Nites asking the mountains to move, but the name itself was censored by static.' },
+      { session: 18, note: 'Witty recalled scripture teaching that Nites moved the mountains and made the path, sharpening the tension with Hyr saying it moved itself after someone unknown asked.' }
     ],
     connections: [ // Added connection
       { type: 'location', id: 'hieroterra', reason: 'Birthplace' },
@@ -111,12 +112,13 @@ Session 6 revealed that the Lighthouse conducts a secret basement program to syn
   {
     id: 'hyr',
     term: 'Hyr',
-    description: 'A village goddess or mountain spirit revered by some goliath communities as the heart of love, kinship, and seasonal rites such as long-grass braiding. Session 17 revealed Hyr as the spirit of the mountain range itself, sustained in dreams by stone-goliath prayers and offerings.',
+    description: 'A village goddess or mountain spirit revered by some goliath communities as the heart of love, kinship, and seasonal rites such as long-grass braiding. Sessions 17-18 revealed Hyr as the spirit of the mountain range itself, sustained in dreams by stone-goliath prayers and offerings, and claiming to have moved itself after someone unknown asked.',
     history: [
       { session: 1, note: 'Named by Ysidor during introductions and blessings.' },
       { session: 3, note: 'Ysidor explains the goddess and her rituals to Ellara on the road.' },
       { session: 6, note: 'Ysidor performs an atonement rite for Stanley, invoking his values.' },
-      { session: 17, note: 'Awakened inside the Hýrda Mines, revealed itself as the mountain range, and offered Meri guidance for the village defense.' }
+      { session: 17, note: 'Awakened inside the Hýrda Mines, revealed itself as the mountain range, and offered Meri guidance for the village defense.' },
+      { session: 18, note: 'Spoke clearly enough for the party and stone goliaths to hear, but older names and words were swallowed by static before Hyr returned to sleep.' }
     ],
     connections: [
       { type: 'character', id: 'ysidor', reason: 'Personal devotion and village traditions' },
@@ -130,9 +132,10 @@ Session 6 revealed that the Lighthouse conducts a secret basement program to syn
   {
     id: 'great-cataclysm',
     term: 'The Great Cataclysm',
-    description: 'A world-shaping crisis in which, according to Hyr\'s memory and Eulogian religious echoes, a young woman likely tied to Nites asked the mountains to move and create a great western passage from Hieroterra into the empire.',
+    description: 'A world-shaping crisis in which Hyr remembers moving itself after someone unknown asked, while Eulogian religious echoes credit Nites with moving the mountains and creating a great western passage from Hieroterra into the empire.',
     history: [
-      { session: 17, note: 'Hyr remembered moving and splitting itself to make a passage during the crisis.' }
+      { session: 17, note: 'Hyr remembered moving and splitting itself to make a passage during the crisis.' },
+      { session: 18, note: 'Hyr\'s claim that it moved itself after an unknown request conflicted with scripture crediting Nites with moving the mountains and making the path.' }
     ],
     connections: [
       { type: 'lore', id: 'hyr', reason: 'Hyr moved the mountains during this event' },
@@ -145,7 +148,8 @@ Session 6 revealed that the Lighthouse conducts a secret basement program to syn
     term: 'The Static',
     description: 'A painful censorship effect that removes certain names or facts from speech and memory. Nyx\'s natural 20 Arcana check indicated it is not normal forgetting but world-scale magic that affects even Hyr.',
     history: [
-      { session: 17, note: 'First identified when Hyr tried to name a woman tied to the Great Cataclysm and the words were swallowed by static.' }
+      { session: 17, note: 'First identified when Hyr tried to name a woman tied to the Great Cataclysm and the words were swallowed by static.' },
+      { session: 18, note: 'Nyx\'s natural 20 confirmed that deep magic was preventing certain old names and words from being spoken.' }
     ],
     connections: [
       { type: 'lore', id: 'hyr', reason: 'Observed while Hyr spoke' },
@@ -161,13 +165,14 @@ Session 6 revealed that the Lighthouse conducts a secret basement program to syn
   {
     id: 'eulogia-eternal-light', // Added ID
     term: 'Eulogia of the Eternal Light',
-    description: 'The religion of The Hariolar Empire.',
+    description: 'The religion of The Hariolar Empire. Its scripture teaches that Nites moved the mountains and made the path, a point now in tension with Hyr\'s account of moving itself after someone unknown asked.',
     history: [
       { session: 1, note: 'Introduced as the dominant faith and the organizer of the Alms Giving event.' },
       { session: 2, note: 'Proctor Eduard\'s involvement in Meri\'s custody transfer is discovered.' },
       { session: 4, note: 'Tensions with the Duskbreaker Lighthouse over ambition and control are discussed by Eduard.' },
       { session: 6, note: 'Implicated in the secret synthesis program through liaison Donnathan Reeves, who delivers subjects.' },
-      { session: 9, note: 'Schism regarding warforged mentioned; Eduard argues they are gifts of light.' }
+      { session: 9, note: 'Schism regarding warforged mentioned; Eduard argues they are gifts of light.' },
+      { session: 18, note: 'Ellara\'s Religion 13 found Hyr\'s revelation mostly compatible with scripture except for the conflict over whether Nites or Hyr moved the mountains.' }
     ],
     connections: [
       { type: 'npc', id: 'proctor-eduard', reason: 'Clergy member (Proctor)' },

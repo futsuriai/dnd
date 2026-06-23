@@ -44,6 +44,7 @@ const sessionMarkdownModules = import.meta.glob('@/assets/sessions/session-*.md'
 });
 
 const HOME_RECAP_BY_SESSION = {
+  18: 'The cave charges are set, with an inside trigger for Berridin and a hidden backup plunger outside, while Hyr\'s half-heard history leaves Ellara weighing a new tension between Hýrda\'s stories and scripture about Nites.',
   17: 'The party slipped miners into the Hýrda Mines, began preparing the collapse trap, and awakened Hyr, the mountain spirit, who offered guidance while revealing that world-scale magic is hiding a name tied to Nites and Nyx\'s past.',
   16: 'The party escaped the ducal cages, rescued Berridin and Witty, reclaimed their gear, and got out with at least one barrel of gunpowder, but the captain still has their gold and Hýrda is still on borrowed time.',
   15: 'The attempt to cripple the ducal encampment with poison and sabotage failed under concentrated resistance; the party surrendered to prevent executions and now sits caged inside enemy lines.',
@@ -51,6 +52,7 @@ const HOME_RECAP_BY_SESSION = {
 };
 
 const HOME_NEXT_STEPS_BY_SESSION = {
+  18: 'After the long rest, the party can hear Meri\'s account of Hyr\'s origins, let Witty craft replacement sending stones, preserve Ellara\'s questions for Proctor Eduard, and keep the cave trap ready for the Grand Duke\'s army.',
   17: 'The mine operation is still in motion: the party needs to finish extracting ore, set the charges with Hyr\'s guidance, keep the lookout fooled, and decide how to spring the trap when the Grand Duke\'s army arrives.',
   16: 'With the rescue complete and powder finally in hand, the next question is no longer whether the party can escape the ducal camp. It is whether they can turn that stolen leverage into a real defense of Hýrda before reinforcements and retaliation close the window.',
 };

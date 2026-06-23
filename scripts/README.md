@@ -78,25 +78,27 @@ python3 scripts/transcription/transcribe.py "/path/to/speaker.aac"
 
 ### 6. One-Command Session Pipeline (Recommended)
 To run the full Session pipeline (entity refresh, transcription retries, combine, name fixes, final copies, OOC split, raw-note chunk prep, optional raw-note agents, optional polished-session generation, manifest):
+Gladia/cloud transcription is the default provider. Store the key in `.env.local` before running audio transcription:
+
+```bash
+GLADIA_API_KEY=...
+```
+
 ```bash
 python3 scripts/transcription/run_transcript_pipeline.py \
   --session 15 \
   --audio-dir "/path/to/session-audio"
 ```
 
-To run the same pipeline with Gladia transcription, store the key in `.env.local`:
+Each speaker file is locally compacted with VAD before upload, transcribed with Gladia custom vocabulary, remapped back to original timestamps, and then passed through the same combine/normalize/OOC/raw-note pipeline. If Gladia returns no utterances for non-empty compact speech, the script retries once with a less aggressive compact file before writing the final transcript.
 
-```bash
-GLADIA_API_KEY=...
-```
-
-Then select the Gladia provider. Each speaker file is locally compacted with VAD before upload, transcribed with Gladia custom vocabulary, remapped back to original timestamps, and then passed through the same combine/normalize/OOC/raw-note pipeline. If Gladia returns no utterances for non-empty compact speech, the script retries once with a less aggressive compact file before writing the final transcript:
+Use local Whisper only when intentionally running a local fallback or provider comparison:
 
 ```bash
 python3 scripts/transcription/run_transcript_pipeline.py \
   --session 15 \
   --audio-dir "/path/to/session-audio" \
-  --transcription-provider gladia
+  --transcription-provider whisper
 ```
 
 For a provider baseline comparison, run the pipeline twice with `--stop-after-transcript`: once with `--transcription-provider whisper --clean`, archive `Transcript Session XX.txt` as `Transcript Session XX - Whisper Baseline.txt`, then run with `--transcription-provider gladia --clean` and archive `Transcript Session XX.txt` as `Transcript Session XX - Gladia Baseline.txt`. Compare the two archived normalized transcripts by timestamp windows before choosing which one becomes the canonical review transcript.
