@@ -23,7 +23,10 @@ PROCESS_LANGUAGE_RE = re.compile(
     r")\b",
     re.IGNORECASE,
 )
-BAD_NAME_RE = re.compile(r"\b(Nytes|Nýtes|Netus|Nitesh)\b")
+BAD_NAME_RE = re.compile(
+    r"\b(Nytes|Nýtes|Netus|Nitesh|Marie|Mara|Illaoi|Bigilar|Stongalais|Stonegull(?:\s+eyes?)?)\b",
+    re.IGNORECASE,
+)
 RISKY_NITES_RE = re.compile(r"\b(?:Nites.*censored|censored.*Nites)\b", re.IGNORECASE)
 OOC_DENSITY_RE = re.compile(
     r"\b(GM|rules:|player|we as players|mechanically|classic movie scene|recording|discord|microphone)\b",

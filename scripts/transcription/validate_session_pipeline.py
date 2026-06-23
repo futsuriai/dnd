@@ -12,10 +12,25 @@ from pathlib import Path
 TIMESTAMP_RE = re.compile(r"^\[\d{2}:\d{2}:\d{2}\]\s+", re.MULTILINE)
 DIALOGUE_RE = re.compile(r"^[A-Za-z][A-Za-z'\" .-]{1,40}:\s*\"", re.MULTILINE)
 
-BAD_PUBLIC_PATTERNS: list[tuple[re.Pattern[str], str]] = [
+BAD_CANONICAL_PATTERNS: list[tuple[re.Pattern[str], str]] = [
     (re.compile(r"\bNýtes\b|\bNytes\b"), "Use canonical spelling `Nites`, not `Nýtes` or `Nytes`."),
+    (re.compile(r"\bMarie\b"), "Use canonical spelling `Meri`, not `Marie`."),
+    (
+        re.compile(r"\b(?:Mara|Illaoi|Bigilar)\b"),
+        "Unrecognized ASR-like character name; use the canonical entity name or add a real entity before publishing.",
+    ),
+    (
+        re.compile(r"\b(?:Stongalais|Stonegull(?:\s+eyes?)?)\b", re.IGNORECASE),
+        "Use canonical phrase `stone goliaths`, not ASR variants like `Stongalais` or `Stonegull eyes`.",
+    ),
     (re.compile(r"\bHirotera\b"), "Use canonical spelling `Hieroterra`."),
+]
+BAD_PUBLIC_PATTERNS: list[tuple[re.Pattern[str], str]] = BAD_CANONICAL_PATTERNS + [
     (re.compile(r"Ardwin,\s+the\s+Black\s+Swan", re.IGNORECASE), "Ardwin is the blacksmith, not the Black Swan."),
+    (
+        re.compile(r"Is there any books|comically long fuse|tasted the freedom|Mom,\s+not like Jeeves", re.IGNORECASE),
+        "Polished public copy preserved a known awkward ASR/direct-transcript phrase; paraphrase or clean it before publishing.",
+    ),
     (re.compile(r"Ellara asked if .*Jacinta", re.IGNORECASE), "Verify this likely means Nites, not Jacinta."),
     (
         re.compile(r"\bH[ýy]r\b[^.\n]{0,140}\bJacinta\b|\bJacinta\b[^.\n]{0,140}\bH[ýy]r\b", re.IGNORECASE),
@@ -71,11 +86,24 @@ def count_matches(pattern: re.Pattern[str], text: str) -> int:
     return sum(1 for _ in pattern.finditer(text))
 
 
-def check_public_text(path: Path, text: str, reporter: Reporter) -> None:
-    for pattern, message in BAD_PUBLIC_PATTERNS:
+def check_patterns(
+    path: Path,
+    text: str,
+    reporter: Reporter,
+    patterns: list[tuple[re.Pattern[str], str]],
+) -> None:
+    for pattern, message in patterns:
         for match in pattern.finditer(text):
             line = text.count("\n", 0, match.start()) + 1
             reporter.error(f"{path}:{line}: {message} Found `{match.group(0)}`.")
+
+
+def check_canonical_text(path: Path, text: str, reporter: Reporter) -> None:
+    check_patterns(path, text, reporter, BAD_CANONICAL_PATTERNS)
+
+
+def check_public_text(path: Path, text: str, reporter: Reporter) -> None:
+    check_patterns(path, text, reporter, BAD_PUBLIC_PATTERNS)
 
 
 def check_session_specific_facts(session: int, path: Path, text: str, reporter: Reporter) -> None:
@@ -191,6 +219,12 @@ def main() -> int:
 
     if transcript and count_matches(TIMESTAMP_RE, transcript) == 0:
         reporter.warn("Canonical transcript has no timestamped lines; verify format if this is intentional.")
+    if transcript:
+        check_canonical_text(
+            ellara_notes_dir / "Transcripts" / f"Transcript Session {session}.txt",
+            transcript,
+            reporter,
+        )
 
     if raw_notes:
         timestamp_count = count_matches(TIMESTAMP_RE, raw_notes)

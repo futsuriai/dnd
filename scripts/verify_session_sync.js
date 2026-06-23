@@ -125,8 +125,12 @@ function checkBadPatterns(relativePath) {
   const text = readText(relativePath);
   const checks = [
     [/\bNýtes\b|\bNytes\b/g, 'Use canonical spelling `Nites`, not `Nýtes` or `Nytes`.'],
+    [/\bMarie\b/g, 'Use canonical spelling `Meri`, not `Marie`.'],
+    [/\b(?:Mara|Illaoi|Bigilar)\b/g, 'Unrecognized ASR-like character name; use the canonical entity name or add a real entity before publishing.'],
+    [/\b(?:Stongalais|Stonegull(?:\s+eyes?)?)\b/gi, 'Use canonical phrase `stone goliaths`, not ASR variants like `Stongalais` or `Stonegull eyes`.'],
     [/\bHirotera\b/g, 'Use canonical spelling `Hieroterra`.'],
     [/Ardwin,\s+the\s+Black\s+Swan/gi, 'Ardwin is the blacksmith, not the Black Swan.'],
+    [/Is there any books|comically long fuse|tasted the freedom|Mom,\s+not like Jeeves/gi, 'Polished public copy preserved a known awkward ASR/direct-transcript phrase; paraphrase or clean it before publishing.'],
     [/Ellara asked if .*Jacinta/gi, 'Verify this likely means Nites, not Jacinta.'],
     [/\bH[ýy]r\b[^.\n]{0,140}\bJacinta\b|\bJacinta\b[^.\n]{0,140}\bH[ýy]r\b/gi, 'In the Session 17 Hýr/static beat, verify this means Nites or the unknown censored birth name, not Jacinta.'],
     [/\b(?:static|censorship)\b[^\n]{0,220}\bBerridin\b[^\n]{0,120}\b(?:Arcana\s+natural\s+20|natural\s+20\s+Arcana)\b|\bBerridin\b[^\n]{0,120}\b(?:Arcana\s+natural\s+20|natural\s+20\s+Arcana)\b[^\n]{0,220}\b(?:static|censorship|world-scale|world scale|H[ýy]r)\b|\bBerridin['’]s\b[^\n]{0,80}\bnatural\s+20\s+Arcana\b[^\n]{0,220}\b(?:static|censorship|world-scale|world scale|H[ýy]r)\b|\bBerridin\s+remembered\s+hearing\s+it\b|\bvoice\s+was\s+not\s+new\s+to\s+Berridin\b/gi, 'Session 17 Hýr/static-name Arcana natural 20 and familiar-voice realization belong to Nyx, not Berridin.'],
