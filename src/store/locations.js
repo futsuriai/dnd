@@ -371,7 +371,7 @@ export const locations = [
     id: 'hyrta',
     name: 'Hýrda',
     type: 'village',
-    description: 'A communal stone-goliath village in the mountains, home to Meri and Ysidor. The party arrived in Session 14 to find Hýrda preparing for a ducal attempt to seize the mines and displace its people; Sessions 17-18 revealed its traditions preserve the sleeping mountain spirit Hyr through stories, memories, songs, prayers, and offerings.',
+    description: 'A communal stone-goliath village in the mountains, home to Meri and Ysidor. Its traditions preserve the mountain spirit Hyr through stories, memories, songs, prayers, and offerings. Hýrda survived the ducal attempt to seize its mines after its defenders and the party broke the invasion force in Session 19.',
     tags: ['village', 'goliath', 'mountains'],
     history: [
       { session: 1, note: 'Ysidor\'s home village.' },
@@ -382,7 +382,8 @@ export const locations = [
       { session: 15, note: 'Operation launched from Hýrda failed at the encampment, leaving the party captured in cages.' },
       { session: 16, note: 'Ysidor, Nyx, and Ellara regrouped here, rearmed with Meri and Ardwin, and launched an immediate rescue back into the encampment.' },
       { session: 17, note: 'The party regrouped here, planned the mine infiltration, and Ellara learned more about Hýrda\'s devotion to Hyr.' },
-      { session: 18, note: 'Meri returned with the rescued group and offered to share Hýrda\'s stories, memories, and songs of Hyr after the long rest.' }
+      { session: 18, note: 'Meri returned with the rescued group and offered to share Hýrda\'s stories, memories, and songs of Hyr after the long rest.' },
+      { session: 19, note: 'Hýrda’s defenders held the remaining ducal forces outside the mountain; most survivors surrendered after the titan fell.' }
     ],
     connections: [
       { type: 'location', id: 'hieroterra', reason: 'Village within the province' },
@@ -397,12 +398,13 @@ export const locations = [
     id: 'hyrta-mines',
     name: 'Hýrda Mines',
     type: 'poi',
-    description: 'The cave-and-tunnel mining network near Hýrda. It is both a vital resource and the centerpiece of sabotage plans against incoming ducal reinforcements; within it, the party awakened Hyr, the spirit of the mountain range, and set the charges for a controlled collapse trap.',
+    description: 'The cave-and-tunnel mining network near Hýrda, where the party awakened Hyr and prepared a controlled collapse trap. In Session 19, the trap sealed the passage over roughly eighty soldiers who pursued Berridin and Ysidor underground.',
     tags: ['mines', 'caves', 'hyrda'],
     history: [
       { session: 15, note: 'Mine-cave collapse strategy remained the objective while the party attempted to disable the nearby camp first.' },
       { session: 17, note: 'Party infiltrated with miners, began extracting ore and setting charges, and awakened Hyr within the mountain.' },
-      { session: 18, note: 'Charges were completed with an inside trigger reachable by Berridin and a hidden backup plunger outside in the ferns.' }
+      { session: 18, note: 'Charges were completed with an inside trigger reachable by Berridin and a hidden backup plunger outside in the ferns.' },
+      { session: 19, note: 'Ysidor triggered the charges after roughly eighty soldiers entered, collapsing the passage over the pursuing force.' }
     ],
     connections: [
       { type: 'location', id: 'hyrta', reason: 'Primary village mining site' },
@@ -414,7 +416,7 @@ export const locations = [
     id: 'hyrta-ducal-encampment',
     name: 'Hýrda Ducal Encampment',
     type: 'poi',
-    description: 'A forward military camp east of Hýrda near the mines, currently holding roughly twenty ducal soldiers and waiting for reinforcements before a larger push.',
+    description: 'A forward military camp east of Hýrda near the mines. Its awaited army arrived in Session 19 with modern warforged and a titan, but the invasion was broken after most soldiers entered the mine trap and most of the surviving force surrendered.',
     tags: ['military', 'hyrda', 'mines'],
     history: [
       { session: 13, note: 'First sighted as a Grand Duke encampment near Hýrda.' },
@@ -422,7 +424,8 @@ export const locations = [
       { session: 15, note: 'Poison-assisted assault only partially disabled defenders; the party surrendered and was imprisoned in camp cages.' },
       { session: 16, note: 'Party escaped captivity, rescued the remaining prisoners, recovered their gear, and stole at least one barrel of gunpowder from the camp.' },
       { session: 17, note: 'Berridin confirmed the mine mouth remained guarded by two soldiers and a tower lookout; the party later incapacitated the cave-mouth guards nonlethally.' },
-      { session: 18, note: 'Ellara\'s owl recon on a Perception natural 20 confirmed the camp and watchtower were distracted while the party and miners exited the mines.' }
+      { session: 18, note: 'Ellara\'s owl recon on a Perception natural 20 confirmed the camp and watchtower were distracted while the party and miners exited the mines.' },
+      { session: 19, note: 'The main army arrived with warforged and a titan; most entered the mine trap, and most survivors surrendered after the titan was destroyed.' }
     ],
     connections: [
       { type: 'location', id: 'hyrta', reason: 'Positioned beside village mining approaches' },

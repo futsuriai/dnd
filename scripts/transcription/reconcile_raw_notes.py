@@ -45,7 +45,8 @@ Required behavior:
 - Merge duplicated overlap and repeated chunk summaries.
 - Compress repeated planning loops into final options, choices, and outcomes.
 - Keep player intent/tactical discussion when it affects character action or consequences.
-- Remove low-impact OOC logistics, rules fumbling that has no outcome, and table jokes that do not affect character/story.
+- Remove low-impact OOC logistics, rules fumbling that has no outcome, and clearly real-world table jokes that do not affect character/story.
+- Preserve IC banter, humor, reactions, descriptions, and small character beats even when they are casual; classify by fictional context rather than tone.
 - Keep uncertainty when uncertainty affected a choice. If a fact remains risky, include a short `review:` line near that beat.
 - Preserve chronology and use `---` for scene/beat breaks.
 - Do not include headings, timestamps, chunk IDs, transcript mechanics, code fences, or commentary about this task.

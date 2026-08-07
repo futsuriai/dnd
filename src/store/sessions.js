@@ -1,13 +1,33 @@
 export const sessions = [
   {
+    id: 'session-20',
+    title: 'Session 20',
+    subtitle: 'After the Mountain Held',
+    location: 'Hýrda',
+    date: 'July 11, 2026',
+    upcoming: true,
+    description: 'With the invasion force broken, the party must secure the surrendered soldiers, assess Hýrda’s losses, and decide what victory means before the Empire answers.',
+    highlights: [],
+  },
+  {
     id: 'session-19',
     title: 'Session 19',
-    subtitle: 'Stories Before the Army',
-    location: 'Hýrda',
+    subtitle: 'Operation Don’t Fuck It Up',
+    location: 'Hýrda · Imperial encampment · Hýrda Mines',
     date: 'June 21, 2026',
-    upcoming: true,
-    description: 'After a deep-night rest in Hýrda, the party can hear Meri\'s stories of Hyr, let Witty craft replacement sending stones, and keep the mine trap ready for the Grand Duke\'s army.',
-    highlights: [],
+    upcoming: false,
+    summaryFile: 'session-19.md',
+    description: 'Meri shares Hýrda’s oldest history before the ducal army arrives; Berridin and Ysidor lure most of the force into the mountain trap, the party destroys its warforged titan, and most surviving soldiers surrender as the party reaches level 5.',
+    highlights: [
+      'Meri tells Ellara and Ysidor that Hyr is one of several ancient beings predating kingdoms, while Nites entered Hýrda’s history only with the Empire.',
+      'Berridin infiltrates the encampment alone and recovers the party’s purse of more than 1,000 gold with an 18 Sleight of Hand check.',
+      'Witty and Ysidor build a hidden spike pit outside Ysidor’s house, concealed by Witty’s Deception natural 20, and Berridin promptly falls into it.',
+      'A ducal force of roughly one hundred units arrives with modern warforged and a colossal titan previously seen at the Duskbreaker Lighthouse.',
+      'Disguised as Meri, Berridin uses the 10,000-gold bounty to provoke roughly three-quarters of the army into pursuing him and Ysidor underground.',
+      'Nyx’s first bolt against the titan is a natural 20, but the construct repeatedly knocks Nyx and Witty unconscious while the party keeps restoring them to the fight.',
+      'Invisible Ysidor carries Berridin to the detonator, and the mine passage collapses over approximately eighty pursuing soldiers.',
+      'Nyx fires the final bolt through the titan’s eye; most surviving imperial soldiers surrender, and the party advances to level 5.'
+    ],
   },
   {
     id: 'session-18',

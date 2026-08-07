@@ -25,6 +25,8 @@ RAW_NOTE_CONTRACT = """Raw-note contract:
 - Produce a raw evidence artifact, not a recap and not a cleaned transcript.
 - Default to IC action, IC/NPC dialogue, character thoughts, GM scene facts, checks, outcomes, resource changes, durable lore, and choices that affect the fiction.
 - Drop table-process wording unless it changes the game state.
+- Classify casual speech by fictional context rather than tone: retain IC banter, jokes, teasing, reactions, sensory description, and small character beats; drop banter only when it is clearly real-world/OOC.
+- When a casual line could plausibly be IC or a description of the scene, preserve it as evidence instead of silently discarding it.
 - Preserve memorable IC/NPC dialogue as `name: "quote"` whenever it carries decision, emotion, character voice, lore, threat, promise, or an in-character joke.
 - Prefer 1-3 short quote lines plus one action line over paragraph recap of a conversation.
 - Do not summarize away a clear character quote unless it is repetitive filler.

@@ -86,6 +86,18 @@ Action policy:
 - REVIEW: keep in output but flag when context is insufficient or removal could
   lose continuity.
 
+Classify by fictional context, not by tone or speaker alone:
+- KEEP casual conversation, jokes, teasing, banter, reactions, descriptions,
+  and small character beats when they occur in character or describe the
+  fictional scene. IC speech does not need to be plot-critical to be evidence.
+- REMOVE banter only when it is clearly about the players' real lives, the
+  recording/session logistics, or an unrelated real-world topic.
+- A player voice may alternate between IC and OOC. Use nearby narration,
+  addressee, tense, character knowledge, and scene response to classify each
+  utterance; do not treat informality or humor as proof of OOC speech.
+- If a line could plausibly be IC, scene description, or a character reaction
+  and context does not settle it, use REVIEW rather than REMOVE.
+
 Session recap is not automatically gameplay. Remove recap intros, recap jokes,
 and prior-session summaries unless they add a concrete continuity fact needed
 for this session and not otherwise present in the editable/context window. Mark
@@ -94,7 +106,10 @@ those rare kept recap facts as RECAP_CONTINUITY.
 Opening/session recap policy:
 - Mark opening/session recap as RECAP_REDUNDANT unless it contains a concrete fact required for the current session.
 - Mark only the minimum needed recap facts as RECAP_CONTINUITY.
-- Do not keep table jokes, movie references, rules fumbling, or player meta-planning unless they cause an IC action, choice, roll, resource change, or lore conclusion.
+- Do not keep clearly OOC table jokes, real-world references, rules fumbling,
+  or player meta-planning unless they cause an IC action, choice, roll,
+  resource change, or lore conclusion. Preserve jokes and references delivered
+  in character or used as fictional description.
 
 TRIM constraints:
 - Do not invent content.

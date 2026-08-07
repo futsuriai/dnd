@@ -60,7 +60,9 @@ The chunk file contains three possible sections:
 Rules:
 - Output notes ONLY for the `PRIMARY RANGE`
 - Use the context sections only to resolve pronouns, scene continuity, or references
-- Strip remaining out-of-character chatter, scheduling, tech talk, and table banter
+- Strip remaining out-of-character chatter, scheduling, tech talk, and clearly real-world table banter
+- Preserve IC banter, humor, teasing, reactions, descriptions, and small character beats even when they are casual or not plot-critical
+- Classify ambiguous casual speech from scene context; do not infer OOC solely from an informal tone or a player speaker
 - Preserve player planning, intent, uncertainty, and tactical discussion when it affects character action or outcomes
 - Keep the output in rough raw-note format, not polished campaign recap prose
 - Stay chronological, but compress repeated discussion into the final choice/outcome

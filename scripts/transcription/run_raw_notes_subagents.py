@@ -40,7 +40,8 @@ def build_prompt(chunk_text: str) -> str:
 - When a character speaks or states an internal thought clearly, preserve the actual wording as much as possible instead of paraphrasing it.
 - Use only the PRIMARY RANGE for the output.
 - Use CONTEXT BEFORE and CONTEXT AFTER only for continuity, pronouns, and scene boundaries.
-- Remove out-of-character chatter, scheduling, tech talk, table banter, and low-impact process discussion.
+- Remove out-of-character chatter, scheduling, tech talk, clearly real-world table banter, and low-impact process discussion.
+- Preserve IC banter, jokes, reactions, descriptions, and small character beats; classify by fictional context rather than casual tone or player identity.
 - Preserve player planning, intent, uncertainty, and tactical discussion when it affects character action or outcomes.
 - Keep the result in rough raw-note format, not polished campaign recap prose.
 - Do not preserve timestamped transcript shape; transform transcript chatter into concise story/game-state notes.

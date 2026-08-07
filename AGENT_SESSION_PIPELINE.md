@@ -434,6 +434,13 @@ Transcript Session N - OOC Filter Report.txt
 
 The manual checkpoint should be used for cleanup that is obvious to a human but too risky for regex, such as long setup/debug digressions. Do not depend on the LLM raw-note pass to remove all OOC chatter.
 
+Classify banter by fictional context, not by casual tone or speaker identity.
+Preserve IC jokes, teasing, reactions, scene descriptions, and small character
+beats even when they are not plot-critical. Remove banter only when it is
+clearly about real-world topics, players' lives, or session/recording logistics.
+When context cannot distinguish IC speech from OOC chatter, keep it in the
+candidate as `REVIEW` rather than deleting it.
+
 For sessions with substantial table chatter, use the annotation-first OOC review pass before accepting the final reviewed transcript. This pass produces a cleaned candidate transcript, reports, and a diff before replacing the canonical transcript.
 
 Prepare annotation chunks from the chosen transcript or provider-merge candidate:

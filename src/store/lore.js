@@ -65,14 +65,15 @@ Session 6 revealed that the Lighthouse conducts a secret basement program to syn
   {
     id: 'warforged',
     term: 'Warforged Constructs',
-    description: 'Magically powered constructs deployed by the Duskbreaker Lighthouse. Early field units were rusted and used light crystals; newer models are cleaner designs with research into continuous operation and autonomous commands, with reserve units reportedly stockpiled for larger deployments.',
+    description: 'Magically powered constructs deployed by the Duskbreaker Lighthouse. Early field units were rusted and used light crystals; newer models include smaller modern units and colossal titan-scale machines built to carry riders into battle.',
     history: [
       { session: 3, note: 'First encountered as a trio of rusted constructs in an ambush on the Old Trade Road.' },
       { session: 5, note: 'Upgraded units and a titan-scale chassis were observed during the Lighthouse infiltration.' },
       { session: 6, note: 'The goal of continuous operation is linked to the synthetic crystal program.' },
       { session: 7, note: 'New-model units posted at Bastion East Gate (inactive) and on Lighthouse exterior watch as security posture shifts.' },
       { session: 11, note: 'Reeves mentioned "new models" could easily handle the resistance.' },
-      { session: 14, note: 'Party warned Hýrda that dozens of dormant units were stored at the Lighthouse and could be deployed as reinforcements.' }
+      { session: 14, note: 'Party warned Hýrda that dozens of dormant units were stored at the Lighthouse and could be deployed as reinforcements.' },
+      { session: 19, note: 'Modern units and a rider-carrying titan deployed with the ducal army at Hýrda; the party destroyed the titan, with Nyx firing the final bolt.' }
     ],
     connections: [
       { type: 'location', id: 'duskbreaker-lighthouse', reason: 'Manufactured and researched here' },
@@ -97,11 +98,12 @@ Session 6 revealed that the Lighthouse conducts a secret basement program to syn
   {
     id: 'nites', // Added ID
     term: 'Nites',
-    description: 'The title for The Eternal Light when she walked this land. From Latin *nitēs*, present 2nd person singular, meaning "to shine, sparkle, radiant."\n\nPronounced knee-tes. Eulogian teaching holds that Nites is an epithet and that her true birth name is sacred, unknown, and not to be uttered. Scripture also credits Nites with moving the mountains and creating the path now tied to Hyr\'s own memory.',
+    description: 'The title for The Eternal Light when she walked this land. From Latin *nitēs*, present 2nd person singular, meaning "to shine, sparkle, radiant."\n\nPronounced knee-tes. Eulogian teaching holds that Nites is an epithet and that her true birth name is sacred, unknown, and not to be uttered. Scripture credits Nites with moving the mountains and creating the path now tied to Hyr\'s own memory, though Hýrda’s oral history contains no mention of Nites before contact with the Empire.',
     history: [
       { session: 3, note: 'Mentioned by Eduard in a discussion about languages.' },
       { session: 17, note: 'Hyr remembered a young woman likely tied to Nites asking the mountains to move, but the name itself was censored by static.' },
-      { session: 18, note: 'Witty recalled scripture teaching that Nites moved the mountains and made the path, sharpening the tension with Hyr saying it moved itself after someone unknown asked.' }
+      { session: 18, note: 'Witty recalled scripture teaching that Nites moved the mountains and made the path, sharpening the tension with Hyr saying it moved itself after someone unknown asked.' },
+      { session: 19, note: 'Meri revealed that Nites appears in Hýrda’s history only as far back as the village’s contact with the Empire.' }
     ],
     connections: [ // Added connection
       { type: 'location', id: 'hieroterra', reason: 'Birthplace' },
@@ -112,13 +114,14 @@ Session 6 revealed that the Lighthouse conducts a secret basement program to syn
   {
     id: 'hyr',
     term: 'Hyr',
-    description: 'A village goddess or mountain spirit revered by some goliath communities as the heart of love, kinship, and seasonal rites such as long-grass braiding. Sessions 17-18 revealed Hyr as the spirit of the mountain range itself, sustained in dreams by stone-goliath prayers and offerings, and claiming to have moved itself after someone unknown asked.',
+    description: 'A village goddess or mountain spirit revered by some goliath communities as the heart of love, kinship, and seasonal rites such as long-grass braiding. Hyr is the mountain range itself, sustained in dreams by stone-goliath prayers and offerings. Hýrda’s oldest histories place Hyr among ancient beings that predate kingdoms; most such beings were hunted and killed, while any survivors are likely hidden.',
     history: [
       { session: 1, note: 'Named by Ysidor during introductions and blessings.' },
       { session: 3, note: 'Ysidor explains the goddess and her rituals to Ellara on the road.' },
       { session: 6, note: 'Ysidor performs an atonement rite for Stanley, invoking his values.' },
       { session: 17, note: 'Awakened inside the Hýrda Mines, revealed itself as the mountain range, and offered Meri guidance for the village defense.' },
-      { session: 18, note: 'Spoke clearly enough for the party and stone goliaths to hear, but older names and words were swallowed by static before Hyr returned to sleep.' }
+      { session: 18, note: 'Spoke clearly enough for the party and stone goliaths to hear, but older names and words were swallowed by static before Hyr returned to sleep.' },
+      { session: 19, note: 'Meri shared histories identifying Hyr as one of several ancient beings predating kingdoms and described Hýrda as a refuge hidden within the mountain.' }
     ],
     connections: [
       { type: 'character', id: 'ysidor', reason: 'Personal devotion and village traditions' },

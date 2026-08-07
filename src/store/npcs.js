@@ -53,7 +53,7 @@ export const npcs = [
         name: 'Meri',
         role: 'Goliath Chieftess and Mentor',
         location: 'Hýrda',
-        description: 'Mentor to Ysidor, acting chieftess of Hýrda, and keeper of the village\'s stories, memories, and songs of Hyr. Arrested in Bastion City after speaking against the Lighthouse, later found captive beneath the Lighthouse and rescued, she is now organizing village defenses against a ducal mine-seizure campaign. Hyr recognized her as a priestess whose prayers and offerings helped sustain the mountain spirit through sleep.',
+        description: 'Mentor to Ysidor, acting chieftess of Hýrda, and keeper of the village\'s stories, memories, and songs of Hyr. Arrested in Bastion City after speaking against the Lighthouse and later rescued from its hidden synthesis program, she went on to lead Hýrda’s successful defense against the ducal mine-seizure campaign. Hyr recognized her as a priestess whose prayers and offerings helped sustain the mountain spirit through sleep.',
         fullText: 'A towering goliath of granite-gray skin and lilac-silver hair, Meri served as Ysidor\'s mentor, drilling him in blessing and stance with her characteristic phrase: "Hold your guard higher, little hill." After being reported as violent and dangerous following an altercation near the Lighthouse, she was transferred under Proctor Eduard\'s custody and ultimately subjected to horrific basement experiments involving crystal synthesis. She was rescued partway through the process and is now recovering from her ordeal.',
         history: [
             { session: 1, note: 'Established as Ysidor\'s missing mentor.' },
@@ -68,7 +68,8 @@ export const npcs = [
             { session: 15, note: 'Received Nyx\'s sending-stone report that the encampment operation failed and the party surrendered into cages.' },
             { session: 16, note: 'Helped receive the escapees, arm the rescue attempt, and send the party back toward the camp before the ducal response could harden.' },
             { session: 17, note: 'Recognized Hyr\'s voice and accepted a boon of guidance for the mine-defense plan.' },
-            { session: 18, note: 'Steadied her people after Hyr spoke, offered to share Hýrda\'s passed-down stories with Ellara, and confirmed Ysidor is her chosen successor with no current runner-up.' }
+            { session: 18, note: 'Steadied her people after Hyr spoke, offered to share Hýrda\'s passed-down stories with Ellara, and confirmed Ysidor is her chosen successor with no current runner-up.' },
+            { session: 19, note: 'Taught Ellara and Ysidor Hýrda’s pre-imperial history, then led the village defenders as they broke the ducal invasion force.' }
         ],
         connections: [
             { type: 'character', id: 'ysidor', reason: 'Mentor, guardian, and succession teacher' },

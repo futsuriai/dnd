@@ -64,6 +64,10 @@ const BACK_OF_BOOK_STAGES = [
   {
     minSession: 18,
     text: 'The mine trap is no longer theory. The charges are set, the backup plunger is hidden, and the party has slipped back to Hýrda for a long rest while the army is still about a week away. What remains is stranger than tactics: Meri is ready to tell the stories Hýrda keeps, Ellara must carry her questions about Nites and Hyr back toward Proctor Eduard, and the party now has to defend a village whose god has spoken.'
+  },
+  {
+    minSession: 19,
+    text: 'When the ducal army finally arrives, the trap holds. Berridin and Ysidor draw roughly eighty soldiers beneath the mountain before collapsing the passage, while Ellara, Nyx, Witty, Meri, and Hýrda’s defenders break the force left outside. Nyx’s final bolt topples the warforged titan, most surviving soldiers surrender, and the party reaches level 5—victorious, but now responsible for prisoners, casualties, and whatever answer the Empire sends next.'
   }
 ];
 
@@ -104,7 +108,7 @@ function buildStoryParagraphs(latestSessionNumber, latestSessionContent) {
     .filter(stage => latestSessionNumber >= stage.minSession)
     .map(stage => stage.text);
 
-  if (latestSessionNumber > 18) {
+  if (latestSessionNumber > 19) {
     const continuation = extractFirstNarrativeSentence(latestSessionContent);
     if (continuation) {
       staged.push(`Beyond that turning point, the tale keeps moving: ${continuation}`);
