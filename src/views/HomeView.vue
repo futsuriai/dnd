@@ -44,6 +44,7 @@ const sessionMarkdownModules = import.meta.glob('@/assets/sessions/session-*.md'
 });
 
 const HOME_RECAP_BY_SESSION = {
+  20: 'Witty recovered a head-sized light crystal from the fallen titan, Hýrda mourned and celebrated its costly victory, and Berridin raced ahead to Bastion to settle the Whitaker loan before the estate could be seized. The party has regrouped at Lord Whitaker’s Estate with the Lighthouse crisis still unresolved.',
   19: 'Berridin and Ysidor lured roughly eighty soldiers into the mountain trap, the passage collapsed behind them, and Nyx fired the final bolt that destroyed the warforged titan. Hýrda held, most surviving soldiers surrendered, and the party reached level 5.',
   18: 'The cave charges are set, with an inside trigger for Berridin and a hidden backup plunger outside, while Hyr\'s half-heard history leaves Ellara weighing a new tension between Hýrda\'s stories and scripture about Nites.',
   17: 'The party slipped miners into the Hýrda Mines, began preparing the collapse trap, and awakened Hyr, the mountain spirit, who offered guidance while revealing that world-scale magic is hiding a name tied to Nites and Nyx\'s past.',
@@ -53,6 +54,7 @@ const HOME_RECAP_BY_SESSION = {
 };
 
 const HOME_NEXT_STEPS_BY_SESSION = {
+  20: 'Recover at Lord Whitaker’s Estate, secure and investigate the titan’s light crystal, decide whether to approach Proctor Eduard, and learn how Bastion and the Duke are responding to Hýrda’s victory.',
   19: 'Secure the surrendered soldiers, assess Hýrda’s casualties and damage, investigate the fallen titan and abandoned camp, and decide how the village will answer the Empire after its victory.',
   18: 'After the long rest, the party can hear Meri\'s account of Hyr\'s origins, let Witty craft replacement sending stones, preserve Ellara\'s questions for Proctor Eduard, and keep the cave trap ready for the Grand Duke\'s army.',
   17: 'The mine operation is still in motion: the party needs to finish extracting ore, set the charges with Hyr\'s guidance, keep the lookout fooled, and decide how to spring the trap when the Grand Duke\'s army arrives.',

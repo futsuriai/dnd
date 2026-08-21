@@ -69,7 +69,8 @@ export const npcs = [
             { session: 16, note: 'Helped receive the escapees, arm the rescue attempt, and send the party back toward the camp before the ducal response could harden.' },
             { session: 17, note: 'Recognized Hyr\'s voice and accepted a boon of guidance for the mine-defense plan.' },
             { session: 18, note: 'Steadied her people after Hyr spoke, offered to share Hýrda\'s passed-down stories with Ellara, and confirmed Ysidor is her chosen successor with no current runner-up.' },
-            { session: 19, note: 'Taught Ellara and Ysidor Hýrda’s pre-imperial history, then led the village defenders as they broke the ducal invasion force.' }
+            { session: 19, note: 'Taught Ellara and Ysidor Hýrda’s pre-imperial history, then led the village defenders as they broke the ducal invasion force.' },
+            { session: 20, note: 'Confirmed Hýrda had survived with casualties, reminded Ysidor that he would one day lead, and sent the party back to Bastion.' }
         ],
         connections: [
             { type: 'character', id: 'ysidor', reason: 'Mentor, guardian, and succession teacher' },

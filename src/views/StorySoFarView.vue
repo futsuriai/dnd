@@ -68,6 +68,10 @@ const BACK_OF_BOOK_STAGES = [
   {
     minSession: 19,
     text: 'When the ducal army finally arrives, the trap holds. Berridin and Ysidor draw roughly eighty soldiers beneath the mountain before collapsing the passage, while Ellara, Nyx, Witty, Meri, and Hýrda’s defenders break the force left outside. Nyx’s final bolt topples the warforged titan, most surviving soldiers surrender, and the party reaches level 5—victorious, but now responsible for prisoners, casualties, and whatever answer the Empire sends next.'
+  },
+  {
+    minSession: 20,
+    text: 'Victory leaves the party holding both leverage and danger: Witty extracts a head-sized light crystal from the titan, Nyx reveals that Michelle Faberge died during their confrontation, and Hýrda mourns its dead before Meri sends the party back toward Bastion. A desperate ride gets Berridin to the city in time to save Lord Whitaker’s Estate from repossession, and the party regroups there with the Lighthouse’s work, Proctor Eduard’s loyalties, and the Duke’s response still unresolved.'
   }
 ];
 
@@ -108,7 +112,7 @@ function buildStoryParagraphs(latestSessionNumber, latestSessionContent) {
     .filter(stage => latestSessionNumber >= stage.minSession)
     .map(stage => stage.text);
 
-  if (latestSessionNumber > 19) {
+  if (latestSessionNumber > 20) {
     const continuation = extractFirstNarrativeSentence(latestSessionContent);
     if (continuation) {
       staged.push(`Beyond that turning point, the tale keeps moving: ${continuation}`);

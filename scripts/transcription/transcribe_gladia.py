@@ -17,6 +17,7 @@ import importlib.util
 import json
 import mimetypes
 import os
+import subprocess
 import sys
 import time
 import uuid
@@ -74,13 +75,34 @@ def http_json(method: str, url: str, api_key: str, payload: dict | None = None) 
 
 
 def upload_audio(path: Path, api_key: str) -> dict:
+    upload_path = path
+    if path.suffix.lower() == ".wav" and path.stat().st_size >= 128 * 1024 * 1024:
+        flac_path = path.with_suffix(".flac")
+        if not flac_path.exists() or flac_path.stat().st_mtime < path.stat().st_mtime:
+            subprocess.run(
+                [
+                    "ffmpeg",
+                    "-y",
+                    "-loglevel",
+                    "error",
+                    "-i",
+                    str(path),
+                    "-compression_level",
+                    "8",
+                    str(flac_path),
+                ],
+                check=True,
+            )
+        upload_path = flac_path
+        print(f"Compressed upload audio: {upload_path} ({upload_path.stat().st_size} bytes)")
+
     boundary = f"----dnd-gladia-{uuid.uuid4().hex}"
-    content_type = mimetypes.guess_type(path.name)[0] or "application/octet-stream"
-    file_bytes = path.read_bytes()
+    content_type = mimetypes.guess_type(upload_path.name)[0] or "application/octet-stream"
+    file_bytes = upload_path.read_bytes()
     body = b"".join([
         f"--{boundary}\r\n".encode("utf-8"),
         (
-            f'Content-Disposition: form-data; name="audio"; filename="{path.name}"\r\n'
+            f'Content-Disposition: form-data; name="audio"; filename="{upload_path.name}"\r\n'
             f"Content-Type: {content_type}\r\n\r\n"
         ).encode("utf-8"),
         file_bytes,
@@ -95,7 +117,8 @@ def upload_audio(path: Path, api_key: str) -> dict:
     }
     req = request.Request(UPLOAD_URL, data=body, headers=headers, method="POST")
     try:
-        with request.urlopen(req, timeout=300) as response:
+        upload_timeout = int(os.environ.get("GLADIA_UPLOAD_TIMEOUT_SECONDS", "1200"))
+        with request.urlopen(req, timeout=upload_timeout) as response:
             return json.loads(response.read().decode("utf-8"))
     except error.HTTPError as exc:
         body = exc.read().decode("utf-8", errors="replace")

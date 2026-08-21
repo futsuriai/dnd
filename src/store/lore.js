@@ -17,7 +17,7 @@ export const lore = [
   {
     id: 'light-crystals',
     term: 'Light Crystals',
-    description: 'A recently discovered technology revolutionizing The Hariolar Empire, involving magically rechargeable crystals found in ancient ruins. Session 6 revealed that the Lighthouse secretly synthesizes enhanced crystals by consuming living Shadowed beings.',
+    description: 'A recently discovered technology revolutionizing The Hariolar Empire, involving magically rechargeable crystals found in ancient ruins. The Lighthouse secretly synthesizes enhanced crystals by consuming living Shadowed beings, and the head-sized core recovered from the Hýrda titan proved powerful enough to operate a colossal warforged.',
     fullText: `A recently discovered technology that is causing a technological revolution in [[The Hariolar Empire/The Hariolar Empire|The Hariolar Empire]]. The study and development of light crystal technology is headquartered by the [[Duskbreaker Lighthouse]] in [[Bastion City]].
 
 Their first public use were replacing the candle-powered streetlamps of Bastion City.
@@ -59,7 +59,8 @@ Session 6 revealed that the Lighthouse conducts a secret basement program to syn
       { session: 5, note: 'Research into phosphorus additives to increase capacity tenfold is revealed.' },
       { session: 6, note: 'Secret synthesis program revealed: enhanced crystals are forged from living Shadowed beings.' },
       { session: 8, note: 'Ellara\'s vision of a screaming lamp highlights the suffering infused into every synthetic crystal.' },
-      { session: 14, note: 'Berridin briefed Ardwin that shadowed goliaths were being converted into crystals for newer warforged units.' }
+      { session: 14, note: 'Berridin briefed Ardwin that shadowed goliaths were being converted into crystals for newer warforged units.' },
+      { session: 20, note: 'Witty extracted a head-sized crystal from the fallen titan and identified it as dangerous, cutting-edge Duskbreaker technology capable of powering the construct.' }
     ]
   },
   {

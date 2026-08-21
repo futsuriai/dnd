@@ -31,11 +31,12 @@ export const locations = [
     id: 'lord-whitakers-estate',
     name: 'Lord Whitaker\'s Estate',
     type: 'poi',
-    description: 'The Bastion City residence of Lord Whitaker the 6th, located on the West Side. Used as staging ground for the ball infiltration.',
+    description: 'The Bastion City residence of Lord Whitaker the 6th, located on the West Side. Used as staging ground for the ball infiltration and later pledged as collateral for a 1,000-gold loan, it was saved from imminent repossession when Berridin settled the debt in full.',
     tags: ['residence', 'west bastion'],
     history: [
       { session: 10, note: 'Party prepared for the ball here; Berridin cooked spicy curry' },
-      { session: 12, note: 'Party regrouped here morning after the ball; discussed Black Swan bounty via sending stones' }
+      { session: 12, note: 'Party regrouped here morning after the ball; discussed Black Swan bounty via sending stones' },
+      { session: 20, note: 'Saved from imminent repossession when Berridin paid the 1,000-gold loan in full; the party regrouped here afterward.' }
     ],
     connections: [
       { type: 'location', id: 'bastion-city', reason: 'Located in West Bastion' },
@@ -371,7 +372,7 @@ export const locations = [
     id: 'hyrta',
     name: 'Hýrda',
     type: 'village',
-    description: 'A communal stone-goliath village in the mountains, home to Meri and Ysidor. Its traditions preserve the mountain spirit Hyr through stories, memories, songs, prayers, and offerings. Hýrda survived the ducal attempt to seize its mines after its defenders and the party broke the invasion force in Session 19.',
+    description: 'A communal stone-goliath village in the mountains, home to Meri and Ysidor. Its traditions preserve the mountain spirit Hyr through stories, memories, songs, prayers, and offerings. Hýrda survived the ducal attempt to seize its mines after its defenders and the party broke the invasion force, though the village suffered casualties.',
     tags: ['village', 'goliath', 'mountains'],
     history: [
       { session: 1, note: 'Ysidor\'s home village.' },
@@ -383,7 +384,8 @@ export const locations = [
       { session: 16, note: 'Ysidor, Nyx, and Ellara regrouped here, rearmed with Meri and Ardwin, and launched an immediate rescue back into the encampment.' },
       { session: 17, note: 'The party regrouped here, planned the mine infiltration, and Ellara learned more about Hýrda\'s devotion to Hyr.' },
       { session: 18, note: 'Meri returned with the rescued group and offered to share Hýrda\'s stories, memories, and songs of Hyr after the long rest.' },
-      { session: 19, note: 'Hýrda’s defenders held the remaining ducal forces outside the mountain; most survivors surrendered after the titan fell.' }
+      { session: 19, note: 'Hýrda’s defenders held the remaining ducal forces outside the mountain; most survivors surrendered after the titan fell.' },
+      { session: 20, note: 'The village cared for its wounded and dead, celebrated the defeated invasion, and sent the party back to Bastion.' }
     ],
     connections: [
       { type: 'location', id: 'hieroterra', reason: 'Village within the province' },
@@ -416,7 +418,7 @@ export const locations = [
     id: 'hyrta-ducal-encampment',
     name: 'Hýrda Ducal Encampment',
     type: 'poi',
-    description: 'A forward military camp east of Hýrda near the mines. Its awaited army arrived in Session 19 with modern warforged and a titan, but the invasion was broken after most soldiers entered the mine trap and most of the surviving force surrendered.',
+    description: 'A forward military camp east of Hýrda near the mines. Its awaited army arrived with modern warforged and a titan, but the invasion was broken after most soldiers entered the mine trap. The abandoned camp later yielded recent orders, a vague route map, and a treasure hoard.',
     tags: ['military', 'hyrda', 'mines'],
     history: [
       { session: 13, note: 'First sighted as a Grand Duke encampment near Hýrda.' },
@@ -425,7 +427,8 @@ export const locations = [
       { session: 16, note: 'Party escaped captivity, rescued the remaining prisoners, recovered their gear, and stole at least one barrel of gunpowder from the camp.' },
       { session: 17, note: 'Berridin confirmed the mine mouth remained guarded by two soldiers and a tower lookout; the party later incapacitated the cave-mouth guards nonlethally.' },
       { session: 18, note: 'Ellara\'s owl recon on a Perception natural 20 confirmed the camp and watchtower were distracted while the party and miners exited the mines.' },
-      { session: 19, note: 'The main army arrived with warforged and a titan; most entered the mine trap, and most survivors surrendered after the titan was destroyed.' }
+      { session: 19, note: 'The main army arrived with warforged and a titan; most entered the mine trap, and most survivors surrendered after the titan was destroyed.' },
+      { session: 20, note: 'Nyx scouted the abandoned camp before the party recovered recent orders, a vague route map, and a treasure hoard.' }
     ],
     connections: [
       { type: 'location', id: 'hyrta', reason: 'Positioned beside village mining approaches' },
