@@ -709,8 +709,9 @@ git -C /home/babu/source/ellara push origin main
 ```
 
 Do not include transcript scratch files, review candidates, diffs, or other
-pipeline intermediates in this commit. Confirm the `ellara` working tree and
-`origin/main` are synchronized before considering publication complete.
+pipeline intermediates in this commit. Confirm the two published note paths
+have no uncommitted changes and the local branch matches `origin/main` before
+considering publication complete.
 
 After durable outputs are reviewed and synced, clean scratch artifacts with a dry run first:
 
