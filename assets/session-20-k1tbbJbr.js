@@ -1,6 +1,7 @@
 const e=`# Session 20 — *Victory, with Interest*
 
-**Locales:** Battlefield south of Hýrda · Abandoned ducal encampment · Hýrda · Mountain road · Bastion East Gate · Bastion bank · Nyx’s townhouse · Lord Whitaker’s Estate  
+**Locales:** Battlefield south of Hýrda · Abandoned ducal encampment · Hýrda · Mountain road · Bastion East Gate · Bastion bank · Nyx’s townhouse · Lord Whitaker’s Estate
+
 **Time:** Aftermath of the battle → celebratory night → following dawn → five days into the return journey
 
 ---
