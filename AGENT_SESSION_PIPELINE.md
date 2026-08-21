@@ -693,6 +693,25 @@ Check expected artifacts:
 - `src/assets/sessions/session-N.md`
 - `/home/babu/source/ellara/Session Notes/Transcripts/Transcript Session N - Pipeline Manifest.json`
 
+## Ellara Repository Publication
+
+After the approved raw notes and polished notes pass validation and the polished
+notes match `src/assets/sessions/session-N.md`, commit and push the two durable
+note files to the `ellara` repository:
+
+```bash
+git -C /home/babu/source/ellara fetch origin
+git -C /home/babu/source/ellara add \
+  "Session Notes/Raw Session N.md" \
+  "Session Notes/Session N.md"
+git -C /home/babu/source/ellara commit -m "Publish Session N notes"
+git -C /home/babu/source/ellara push origin main
+```
+
+Do not include transcript scratch files, review candidates, diffs, or other
+pipeline intermediates in this commit. Confirm the `ellara` working tree and
+`origin/main` are synchronized before considering publication complete.
+
 After durable outputs are reviewed and synced, clean scratch artifacts with a dry run first:
 
 ```bash
@@ -732,5 +751,5 @@ When asking an agentic CLI to run everything, provide this file and say:
 ```text
 Read AGENT_SESSION_PIPELINE.md. Run the DnD session pipeline for session N from /path/to/session-audio.
 Use the transcript checkpoint flow with the default Gladia/cloud transcription provider unless I explicitly ask for Whisper/local. Stop after --stop-after-transcript and ask me to review the transcript.
-After I confirm, run the annotation-first OOC cleanup checkpoint and show me the cleaned transcript comparison. After I approve the cleaned transcript, generate Raw Session N Candidate.md with clean raw-note subagents, run the raw-note reconciliation pass into Raw Session N Reconciled Candidate.md, validate it, and stop for review. After I approve or promote the reconciled candidate to Raw Session N.md, generate polished Session N.md, sync the website with run_website_sync_agent.py, run npm run sync-check plus validate_session_pipeline.py, and then run cleanup_session_artifacts.py after showing the dry run.
+After I confirm, run the annotation-first OOC cleanup checkpoint and show me the cleaned transcript comparison. After I approve the cleaned transcript, generate Raw Session N Candidate.md with clean raw-note subagents, run the raw-note reconciliation pass into Raw Session N Reconciled Candidate.md, validate it, and stop for review. After I approve or promote the reconciled candidate to Raw Session N.md, generate polished Session N.md, sync the website with run_website_sync_agent.py, run npm run sync-check plus validate_session_pipeline.py, publish Raw Session N.md and Session N.md to the ellara repository, and then run cleanup_session_artifacts.py after showing the dry run.
 ```
