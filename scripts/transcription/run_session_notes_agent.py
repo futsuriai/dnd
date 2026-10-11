@@ -10,13 +10,14 @@ Supported providers:
 from __future__ import annotations
 
 import argparse
-import shutil
 import subprocess
 import sys
-import tempfile
 from pathlib import Path
 
+import agent_cli
 from note_generation_guidance import CANONICAL_CAST_REFERENCE
+
+STYLE_EXAMPLE = Path(__file__).resolve().parents[2] / "src" / "assets" / "sessions" / "session-8.md"
 
 
 def build_prompt(session: str, raw_text: str) -> str:
@@ -52,76 +53,15 @@ Rules:
 
 {CANONICAL_CAST_REFERENCE}
 
+Example of the target style (an earlier finished session; match its structure and voice, not its content):
+<example>
+{STYLE_EXAMPLE.read_text(encoding="utf-8") if STYLE_EXAMPLE.exists() else "(missing)"}
+</example>
+
 Raw notes:
 {raw_text}
 
 Return only the final markdown."""
-
-
-def strip_code_fences(text: str) -> str:
-    stripped = text.strip()
-    if stripped.startswith("```") and stripped.endswith("```"):
-        lines = stripped.splitlines()
-        if len(lines) >= 2:
-            stripped = "\n".join(lines[1:-1]).strip()
-    return stripped
-
-
-def run_codex(prompt: str, workspace_root: Path, model: str | None) -> str:
-    codex_bin = shutil.which("codex")
-    if not codex_bin:
-        raise FileNotFoundError("codex CLI not found in PATH")
-
-    with tempfile.NamedTemporaryFile("r+", encoding="utf-8", delete=False) as tmp:
-        output_file = Path(tmp.name)
-
-    cmd = [
-        codex_bin,
-        "exec",
-        "--ephemeral",
-        "--skip-git-repo-check",
-        "-C",
-        str(workspace_root),
-        "-s",
-        "read-only",
-        "-o",
-        str(output_file),
-    ]
-    if model:
-        cmd.extend(["-m", model])
-    cmd.append(prompt)
-
-    try:
-        subprocess.run(cmd, check=True)
-        return output_file.read_text(encoding="utf-8").strip()
-    finally:
-        output_file.unlink(missing_ok=True)
-
-
-def run_gemini(prompt: str, workspace_root: Path, model: str | None) -> str:
-    gemini_bin = shutil.which("gemini")
-    if not gemini_bin:
-        raise FileNotFoundError("gemini CLI not found in PATH")
-
-    cmd = [
-        gemini_bin,
-        "--include-directories",
-        str(workspace_root),
-        "--output-format",
-        "text",
-    ]
-    if model:
-        cmd.extend(["--model", model])
-    cmd.append(prompt)
-
-    result = subprocess.run(cmd, check=False, capture_output=True, text=True)
-    if result.returncode != 0:
-        raise RuntimeError(
-            f"gemini failed with exit code {result.returncode}\n"
-            f"stdout:\n{result.stdout}\n"
-            f"stderr:\n{result.stderr}"
-        )
-    return result.stdout.strip()
 
 
 def main() -> int:
@@ -129,7 +69,7 @@ def main() -> int:
     parser.add_argument("session", help="Session label/number for the title")
     parser.add_argument("raw_notes_file", help="Path to Raw Session N.md")
     parser.add_argument("output_file", help="Path to Session N.md")
-    parser.add_argument("--provider", choices=["codex", "gemini"], required=True, help="Agent CLI to use")
+    parser.add_argument("--provider", choices=agent_cli.PROVIDERS, required=True, help="Agent CLI to use")
     parser.add_argument("--model", help="Optional model override")
     parser.add_argument("--workspace-root", default="/home/babu/source", help="Workspace root visible to the agent CLI")
     parser.add_argument("--force", action="store_true", help="Overwrite existing output")
@@ -160,12 +100,8 @@ def main() -> int:
         return 0
 
     print(f"Running {args.provider} for polished session notes -> {output_file}")
-    if args.provider == "codex":
-        text = run_codex(prompt, workspace_root, args.model)
-    else:
-        text = run_gemini(prompt, workspace_root, args.model)
-
-    text = strip_code_fences(text).rstrip() + "\n"
+    text = agent_cli.run_agent(args.provider, prompt, workspace_root, args.model)
+    text = agent_cli.strip_code_fences(text).rstrip() + "\n"
     output_file.write_text(text, encoding="utf-8")
     print(f"Wrote {output_file}")
     return 0

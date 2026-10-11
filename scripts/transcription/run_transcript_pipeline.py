@@ -27,6 +27,8 @@ import subprocess
 import time
 from pathlib import Path
 
+from name_normalizer import NameNormalizer
+
 
 AUDIO_EXTENSIONS = {".flac", ".mp3", ".wav", ".m4a", ".ogg", ".aac"}
 DEFAULT_TRANSCRIPTION_PROVIDER = "gladia"
@@ -85,53 +87,14 @@ def build_whisper_attempt_plan(raw_models: str) -> list[str]:
     return models
 
 
-def make_smart_replacement(wrong: str, right: str):
-    right_has_possessive = right.endswith("'s") or right.endswith("s'")
-
-    def replacer(match: re.Match[str]) -> str:
-        matched_base = match.group(1)
-        possessive = match.group(2)
-
-        # Preserve capitalization style
-        if matched_base.isupper():
-            res = right.upper()
-        elif matched_base[0].isupper() if matched_base else False:
-            if right:
-                res = right[0].upper() + right[1:]
-            else:
-                res = right
-        else:
-            res = right
-
-        if possessive:
-            if not right_has_possessive:
-                res = f"{res}{possessive}"
-        return res
-    return replacer
-
-
-def load_name_corrections(path: Path) -> tuple[list[tuple[re.Pattern[str], any]], dict[str, str]]:
-    with path.open("r", encoding="utf-8") as f:
-        data = json.load(f)
-
-    text_fixes = data.get("text_fixes", {})
-    speaker_fixes = data.get("speaker_label_fixes", {})
-
-    patterns = []
-    for wrong in sorted(text_fixes.keys(), key=len, reverse=True):
-        right = text_fixes[wrong]
-        pattern = re.compile(
-            rf"(?<!\w)({re.escape(wrong)})((?:'s|s)?)(?!\w)",
-            re.IGNORECASE
-        )
-        replacer = make_smart_replacement(wrong, right)
-        patterns.append((pattern, replacer))
-    return patterns, speaker_fixes
+def load_name_corrections(path: Path) -> tuple[NameNormalizer, dict[str, str]]:
+    normalizer = NameNormalizer(path)
+    return normalizer, normalizer.speaker_label_fixes
 
 
 def apply_line_corrections(
     line: str,
-    text_patterns: list[tuple[re.Pattern[str], any]],
+    normalizer: NameNormalizer,
     speaker_fixes: dict[str, str],
     keep_full_whitaker_name: bool,
 ) -> str:
@@ -144,17 +107,13 @@ def apply_line_corrections(
     if not keep_full_whitaker_name and speaker == 'Whitaker "Witty" Whitman VI':
         speaker = "Witty"
 
-    for pat, replacement in text_patterns:
-        text = pat.sub(replacement, text)
-
-    return f"{prefix}{speaker}{colon}{text}"
-
+    return f"{prefix}{speaker}{colon}{normalizer.normalize(text)}"
 
 
 def normalize_transcript(
     source: Path,
     dest: Path,
-    text_patterns: list[tuple[re.Pattern[str], str]],
+    normalizer: NameNormalizer,
     speaker_fixes: dict[str, str],
     keep_full_whitaker_name: bool,
 ) -> None:
@@ -165,7 +124,7 @@ def normalize_transcript(
             out_lines.append(
                 apply_line_corrections(
                     line=line,
-                    text_patterns=text_patterns,
+                    normalizer=normalizer,
                     speaker_fixes=speaker_fixes,
                     keep_full_whitaker_name=keep_full_whitaker_name,
                 )
@@ -511,11 +470,11 @@ def main() -> int:
 
         # 4) Apply canonical corrections.
         correction_file = dnd_dir / "scripts" / "transcription" / "name_corrections.json"
-        text_patterns, speaker_fixes = load_name_corrections(correction_file)
+        normalizer, speaker_fixes = load_name_corrections(correction_file)
         normalize_transcript(
             source=combined_tmp,
             dest=combined_final,
-            text_patterns=text_patterns,
+            normalizer=normalizer,
             speaker_fixes=speaker_fixes,
             keep_full_whitaker_name=args.keep_full_whitaker_name,
         )

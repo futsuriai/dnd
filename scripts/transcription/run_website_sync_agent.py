@@ -5,9 +5,9 @@ from __future__ import annotations
 
 import argparse
 import shutil
-import subprocess
-import tempfile
 from pathlib import Path
+
+import agent_cli
 
 
 def build_prompt(session: int) -> str:
@@ -34,65 +34,12 @@ After editing, run `npm run verify-session-sync -- --session latest` and `npm ru
 Report the files changed and validation commands you ran."""
 
 
-def run_codex(prompt: str, dnd_dir: Path, model: str | None) -> str:
-    codex_bin = shutil.which("codex")
-    if not codex_bin:
-        raise FileNotFoundError("codex CLI not found in PATH")
-
-    with tempfile.NamedTemporaryFile("r+", encoding="utf-8", delete=False) as tmp:
-        output_file = Path(tmp.name)
-
-    cmd = [
-        codex_bin,
-        "exec",
-        "--skip-git-repo-check",
-        "-C",
-        str(dnd_dir),
-        "-s",
-        "workspace-write",
-        "-o",
-        str(output_file),
-    ]
-    if model:
-        cmd.extend(["-m", model])
-    cmd.append("-")
-
-    try:
-        subprocess.run(cmd, input=prompt, text=True, check=True)
-        return output_file.read_text(encoding="utf-8").strip()
-    finally:
-        output_file.unlink(missing_ok=True)
-
-
-def run_gemini(prompt: str, dnd_dir: Path, model: str | None) -> str:
-    gemini_bin = shutil.which("gemini")
-    if not gemini_bin:
-        raise FileNotFoundError("gemini CLI not found in PATH")
-
-    cmd = [
-        gemini_bin,
-        "--include-directories",
-        str(dnd_dir),
-        "--output-format",
-        "text",
-    ]
-    if model:
-        cmd.extend(["--model", model])
-    cmd.append(prompt)
-    result = subprocess.run(cmd, cwd=str(dnd_dir), capture_output=True, text=True, check=False)
-    if result.returncode != 0:
-        raise RuntimeError(
-            f"gemini failed with exit code {result.returncode}\nstdout:\n{result.stdout}\nstderr:\n{result.stderr}"
-        )
-    return result.stdout.strip()
-
-
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--session", required=True, type=int, help="Session number to sync")
     parser.add_argument("--dnd-dir", default="/home/babu/source/dnd", help="DnD repo root")
     parser.add_argument("--ellara-root", default="/home/babu/source/ellara", help="Ellara repo root")
-    parser.add_argument("--provider", choices=["codex", "gemini"], help="Optional agent provider for store/view updates")
+    parser.add_argument("--provider", choices=agent_cli.PROVIDERS, help="Optional agent provider for store/view updates")
     parser.add_argument("--model", help="Optional model override")
     parser.add_argument("--skip-copy", action="store_true", help="Do not copy Ellara Session N.md into website assets")
     parser.add_argument("--dry-run", action="store_true", help="Print planned prompt/actions without writing or invoking an agent")
@@ -122,10 +69,7 @@ def main() -> int:
         print(prompt)
         return 0
 
-    if args.provider == "codex":
-        output = run_codex(prompt, dnd_dir=dnd_dir, model=args.model)
-    else:
-        output = run_gemini(prompt, dnd_dir=dnd_dir, model=args.model)
+    output = agent_cli.run_agent(args.provider, prompt, dnd_dir, args.model, write=True)
 
     if output:
         print(output)

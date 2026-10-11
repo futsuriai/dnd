@@ -47,6 +47,9 @@ def collect_paths(
                 audio_dir / ".gladia",
             ]
         )
+        # Compact VAD audio is large and reproducible; the raw provider JSON,
+        # per-word engine JSON, dice data and diagnostics under asr/ are kept.
+        paths.extend(sorted((audio_dir / "asr").glob("*/work")))
         for audio in sorted(audio_dir.iterdir()) if audio_dir.exists() else []:
             if not audio.is_file() or audio.suffix.lower() not in AUDIO_EXTENSIONS:
                 continue
@@ -74,6 +77,9 @@ def collect_paths(
         notes_dir / f"Session {session}.md",
         transcript_dir / f"Transcript Session {session}.txt",
         transcript_dir / f"Transcript Session {session} - Pipeline Manifest.json",
+        transcript_dir / f"Transcript Session {session} - ASR Diagnostics.md",
+        transcript_dir / f"Transcript Session {session} - ASR Diagnostics.json",
+        transcript_dir / f"Transcript Session {session}.lines.jsonl",
         dnd_dir / "src" / "assets" / "sessions" / f"session-{session}.md",
     }
     return [path for path in dict.fromkeys(paths) if path not in durable]

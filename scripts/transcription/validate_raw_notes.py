@@ -10,7 +10,12 @@ from pathlib import Path
 
 
 TIMESTAMP_RE = re.compile(r"^\[\d{2}:\d{2}:\d{2}\]\s+", re.MULTILINE)
-DIALOGUE_RE = re.compile(r"^[A-Za-z][A-Za-z'\" .-]{1,40}:\s*\"", re.MULTILINE)
+# Dialogue lines in either the hand-written style (`nyx: we go now`) or the
+# quoted style (`nyx: "we go now"`); meta prefixes are not dialogue.
+DIALOGUE_RE = re.compile(
+    r"^(?!(?:check|rules|continuity|review|review-name)\s*:)[A-Za-z][A-Za-z'\" .-]{1,40}:\s*\S",
+    re.IGNORECASE | re.MULTILINE,
+)
 REVIEW_RE = re.compile(r"^[ \t]*review(?:-name)?:", re.IGNORECASE | re.MULTILINE)
 PROCESS_LANGUAGE_RE = re.compile(
     r"\b("

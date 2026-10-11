@@ -10,7 +10,10 @@ from pathlib import Path
 
 
 TIMESTAMP_RE = re.compile(r"^\[\d{2}:\d{2}:\d{2}\]\s+", re.MULTILINE)
-DIALOGUE_RE = re.compile(r"^[A-Za-z][A-Za-z'\" .-]{1,40}:\s*\"", re.MULTILINE)
+DIALOGUE_RE = re.compile(
+    r"^(?!(?:check|rules|continuity|review|review-name)\s*:)[A-Za-z][A-Za-z'\" .-]{1,40}:\s*\S",
+    re.IGNORECASE | re.MULTILINE,
+)
 
 BAD_CANONICAL_PATTERNS: list[tuple[re.Pattern[str], str]] = [
     (re.compile(r"\bNýtes\b|\bNytes\b"), "Use canonical spelling `Nites`, not `Nýtes` or `Nytes`."),

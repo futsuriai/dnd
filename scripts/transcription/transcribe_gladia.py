@@ -16,6 +16,7 @@ import argparse
 import importlib.util
 import json
 import mimetypes
+import re
 import os
 import subprocess
 import sys
@@ -24,6 +25,7 @@ import uuid
 from pathlib import Path
 from urllib import error, request
 
+import asr_common
 import vad_compact
 
 
@@ -74,9 +76,28 @@ def http_json(method: str, url: str, api_key: str, payload: dict | None = None) 
         raise RuntimeError(f"Gladia {method} {url} failed: HTTP {exc.code}: {body}") from exc
 
 
-def upload_audio(path: Path, api_key: str) -> dict:
+def upload_audio(path: Path, api_key: str, attempts: int = 4) -> dict:
+    """Upload with retries; transient 408/429/5xx and network errors back off."""
+    for attempt in range(1, attempts + 1):
+        try:
+            return _upload_audio_once(path, api_key)
+        except (RuntimeError, error.URLError, TimeoutError, ConnectionError) as exc:
+            transient = not isinstance(exc, RuntimeError) or any(
+                f"HTTP {code}" in str(exc) for code in (408, 429, 500, 502, 503, 504)
+            )
+            if not transient or attempt == attempts:
+                raise
+            delay = 15 * attempt
+            print(f"Upload attempt {attempt} failed ({exc}); retrying in {delay}s", flush=True)
+            time.sleep(delay)
+    raise RuntimeError("unreachable")
+
+
+def _upload_audio_once(path: Path, api_key: str) -> dict:
     upload_path = path
-    if path.suffix.lower() == ".wav" and path.stat().st_size >= 128 * 1024 * 1024:
+    # Always send lossless FLAC: roughly half the bytes of 16-bit WAV, which
+    # avoids upload timeouts on long GM tracks.
+    if path.suffix.lower() == ".wav" and path.stat().st_size >= 8 * 1024 * 1024:
         flac_path = path.with_suffix(".flac")
         if not flac_path.exists() or flac_path.stat().st_mtime < path.stat().st_mtime:
             subprocess.run(
@@ -180,24 +201,114 @@ def naive_pronunciations(term: str, transcribe_module, corrections: dict[str, li
     return transcribe_module.dedupe_terms(candidates)[:6]
 
 
+VOCAB_SKIP_TERMS = {
+    # Common English words or fragments that phoneme matching would over-apply.
+    "static", "vi", "the", "light", "estate", "mines", "gate", "road", "barkeep", "lex",
+}
+VOCAB_TITLE_WORDS = {
+    "The", "Duke", "Duchess", "Lady", "Lord", "Proctor", "Empress", "Emperor",
+    "Consort", "Captain", "Director", "Grand", "Saint", "Sir", "Master", "Mistress",
+}
+VOCAB_MAX_CHARS = 9500  # Gladia caps custom vocabulary at ~10k characters overall.
+ENGLISH_WORDLIST = Path("/usr/share/dict/words")
+
+
+def load_common_words() -> set[str]:
+    if not ENGLISH_WORDLIST.exists():
+        return set()
+    return {
+        line.strip()
+        for line in ENGLISH_WORDLIST.read_text(encoding="utf-8", errors="ignore").splitlines()
+        if line.strip() and line.strip().islower()
+    }
+
+
+def is_plain_english(term: str, common_words: set[str]) -> bool:
+    """True when every word is ordinary lowercase English (ASR needs no help)."""
+    if not common_words:
+        return False
+    words = re.findall(r"[A-Za-zÀ-ÖØ-öø-ÿ']+|\d+", term)
+    for word in words:
+        if word.isdigit():
+            continue
+        base = word.lower()
+        for suffix in ("'s", "’s"):
+            if base.endswith(suffix):
+                base = base[: -len(suffix)]
+        if base not in common_words and base.rstrip("s") not in common_words:
+            return False
+    return bool(words)
+
+
+def vocabulary_terms_from_metadata(dnd_dir: Path, current_session: str | None, transcribe_module) -> list[str]:
+    """All campaign entity names plus useful sub-terms, most relevant first."""
+    metadata_path = dnd_dir / "scripts" / "transcription" / "entity_metadata.json"
+    entities = json.loads(metadata_path.read_text(encoding="utf-8")) if metadata_path.exists() else []
+
+    def weight(entity: dict) -> float:
+        if entity.get("type") == "Characters":
+            return 1000.0
+        return transcribe_module.get_session_weight(entity.get("updatedInSessions", []), current_session)
+
+    entities.sort(key=lambda e: (-weight(e), transcribe_module.SECTION_PRIORITY.get(e.get("type"), 99), e["name"]))
+
+    terms: list[str] = list(transcribe_module.PRIORITY_TRANSCRIPTION_TERMS)
+    for entity in entities:
+        name = transcribe_module.clean_term(entity["name"])
+        terms.append(name)
+        if name.startswith("The "):
+            terms.append(name[4:])
+        for quoted in re.findall(r'"([^"]+)"', name):
+            terms.append(quoted)
+        for parenthetical in re.findall(r"\(([^)]+)\)", name):
+            terms.append(parenthetical)
+            terms.append(re.sub(r"\s*\([^)]*\)", "", name))
+        if entity.get("type") in {"Characters", "NPCs"}:
+            person = re.sub(r'"[^"]+"', "", name)
+            for word in re.findall(r"[A-Z][A-Za-zÀ-ÖØ-öø-ÿ'-]+", person):
+                if word not in VOCAB_TITLE_WORDS and len(word) >= 4:
+                    terms.append(word)
+
+    corrections_path = dnd_dir / "scripts" / "transcription" / "name_corrections.json"
+    if corrections_path.exists():
+        aliases = json.loads(corrections_path.read_text(encoding="utf-8")).get("aliases", {})
+        terms.extend(aliases.keys())
+
+    common_words = load_common_words()
+    keep_anyway = set(transcribe_module.PRIORITY_TRANSCRIPTION_TERMS) | {"Witty", "Din", "Little Hill"}
+    return [
+        term for term in transcribe_module.dedupe_terms(terms)
+        if term in keep_anyway
+        or (term.casefold() not in VOCAB_SKIP_TERMS and len(term) >= 3 and not is_plain_english(term, common_words))
+    ]
+
+
 def build_custom_vocabulary(
     dnd_dir: Path,
     limit: int,
     default_intensity: float,
     transcribe_module,
 ) -> dict:
-    entity_list = dnd_dir / "ENTITY_LIST.md"
     corrections = load_name_correction_pronunciations(
         dnd_dir / "scripts" / "transcription" / "name_corrections.json"
     )
-    terms = transcribe_module.load_entity_terms(str(entity_list))[:limit]
+    terms = vocabulary_terms_from_metadata(
+        dnd_dir, os.getenv("WHISPER_SESSION_NUMBER"), transcribe_module
+    )[:limit]
 
     vocabulary = []
+    used_chars = 0
     for term in terms:
         entry = {"value": term}
-        pronunciations = naive_pronunciations(term, transcribe_module, corrections)
+        # Only unambiguous misspellings become pronunciations; ASCII folding of
+        # accented names is left out because it re-introduces rejected spellings.
+        pronunciations = transcribe_module.dedupe_terms(corrections.get(term, []))[:6]
         if pronunciations:
             entry["pronunciations"] = pronunciations
+        cost = len(term) + sum(len(p) for p in pronunciations)
+        if used_chars + cost > VOCAB_MAX_CHARS:
+            break
+        used_chars += cost
         vocabulary.append(entry)
 
     return {
@@ -387,7 +498,31 @@ def utterance_to_original_entries(
     return [entry for entry in entries if entry["text"]]
 
 
-def write_remapped_transcript(result: dict, manifest_path: Path, output_path: Path) -> None:
+def remapped_words(result: dict, mapper: vad_compact.TimelineMapper) -> list[dict]:
+    words = []
+    for utterance in extract_utterances(result):
+        for word in utterance.get("words", []) or []:
+            text = clean_text(word.get("word", ""))
+            if not text:
+                continue
+            words.append({
+                "s": mapper.map_time(float(word.get("start", 0))),
+                "e": mapper.map_time(float(word.get("end", word.get("start", 0))), is_end=True),
+                "w": text,
+                "p": word.get("confidence"),
+            })
+    words.sort(key=lambda w: w["s"])
+    return words
+
+
+def write_remapped_transcript(
+    result: dict,
+    manifest_path: Path,
+    output_path: Path,
+    words_json_path: Path | None = None,
+    audio_file: Path | None = None,
+    params: dict | None = None,
+) -> None:
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     mapper = vad_compact.TimelineMapper(manifest["segments"])
     utterances = extract_utterances(result)
@@ -406,15 +541,23 @@ def write_remapped_transcript(result: dict, manifest_path: Path, output_path: Pa
         max_chars=int(os.getenv("GLADIA_UTTERANCE_MERGE_MAX_CHARS", "260")),
     )
 
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-    with output_path.open("w", encoding="utf-8") as f:
-        for utterance in merged_entries:
-            text = utterance["text"]
-            start = utterance["start"]
-            end = utterance["end"]
-            f.write(
-                f"[{vad_compact.format_timestamp(start)} -> {vad_compact.format_timestamp(end)}] {text}\n"
-            )
+    segments = [{"s": e["start"], "e": e["end"], "text": e["text"]} for e in merged_entries]
+    asr_common.write_segment_txt(output_path, segments)
+
+    if words_json_path:
+        asr_common.write_engine_json(
+            words_json_path,
+            engine="gladia",
+            model=str(result.get("request_params", {}).get("model") or "gladia-default"),
+            audio_file=audio_file or Path(manifest.get("source_audio", "")),
+            words=remapped_words(result, mapper),
+            segments=segments,
+            duration=manifest.get("original_duration"),
+            speech_seconds=sum(
+                seg["original_end"] - seg["original_start"] for seg in manifest.get("segments", [])
+            ),
+            params=params,
+        )
 
 
 def compact_audio(input_audio: Path, compact_audio_path: Path, manifest_path: Path, args) -> None:
@@ -495,7 +638,7 @@ def main() -> int:
     parser.add_argument("--artifact-dir", help="Directory for compact audio, manifests, and Gladia JSON")
     parser.add_argument("--env-file", help="Local env file with GLADIA_API_KEY; defaults to <dnd-dir>/.env.local")
     parser.add_argument("--api-key-env", default="GLADIA_API_KEY")
-    parser.add_argument("--custom-vocabulary-limit", type=int, default=120)
+    parser.add_argument("--custom-vocabulary-limit", type=int, default=400)
     parser.add_argument("--custom-vocabulary-intensity", type=float, default=0.45)
     parser.add_argument("--disable-custom-vocabulary", action="store_true")
     parser.add_argument("--disable-custom-spelling", action="store_true")
@@ -511,6 +654,14 @@ def main() -> int:
         type=int,
         default=250,
         help="Insert this much silence between retained VAD islands before upload",
+    )
+    parser.add_argument(
+        "--words-json",
+        help="Also write the common dnd-asr-v1 JSON (word timings + confidence) here",
+    )
+    parser.add_argument(
+        "--raw-archive",
+        help="Copy the raw Gladia result JSON (gzipped) to this path for later reprocessing",
     )
     parser.add_argument(
         "--no-empty-result-retry",
@@ -605,7 +756,26 @@ def main() -> int:
         else:
             print("Relaxed VAD retry also returned no utterances; keeping the original empty result.")
 
-    write_remapped_transcript(result, final_manifest_path, output_file)
+    params = {
+        "custom_vocabulary_entries": len(custom_vocabulary_config["vocabulary"]),
+        "custom_vocabulary_intensity": custom_vocabulary_config.get("default_intensity"),
+        "custom_spelling_entries": len(custom_spelling_config["spelling_dictionary"]),
+        "vad_manifest": str(final_manifest_path),
+    }
+    write_remapped_transcript(
+        result,
+        final_manifest_path,
+        output_file,
+        words_json_path=Path(args.words_json).expanduser().resolve() if args.words_json else None,
+        audio_file=audio_file,
+        params=params,
+    )
+    if args.raw_archive:
+        raw_result = final_manifest_path.parent / "result.json"
+        archive = Path(args.raw_archive).expanduser().resolve()
+        asr_common.archive_json(raw_result, archive)
+        asr_common.archive_json(final_manifest_path, archive.with_name(archive.name.replace(".result.json.gz", "") + ".vad.json.gz"))
+        print(f"Archived raw Gladia result: {archive}")
     print(f"Transcript saved to {output_file}")
     return 0
 
