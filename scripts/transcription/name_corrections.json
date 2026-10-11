@@ -46,7 +46,17 @@
     "Nitis": "Nites",
     "Nytes": "Nites",
     "Nýtes": "Nites",
-    "warforges": "warforged"
+    "warforges": "warforged",
+    "Ysador": "Ysidor",
+    "Yusador": "Ysidor",
+    "Ysidre": "Ysidor",
+    "Ysir": "Ysidor",
+    "Dustbreaker": "Duskbreaker",
+    "Donathan": "Donnathan",
+    "Wittman": "Whitman",
+    "Fabregé": "Faberge",
+    "Fabergé": "Faberge",
+    "Pfeffer": "Faberge"
   },
   "capitalized_only_fixes": {
     "Mary": "Meri",
@@ -60,7 +70,9 @@
     "Hilda": "Hýrda",
     "Gilda": "Hýrda",
     "Woody": "Witty",
-    "Dan": "Din"
+    "Dan": "Din",
+    "Pharos": "Pharus",
+    "Ferris": "Pharus"
   },
   "context_hints": {
     "Baron": "Usually the noble title (Baron/Baroness is real in the Imperial Peerage); only Berridin when someone is clearly addressing or naming Berridin.",
@@ -70,7 +82,9 @@
     "the area": "ASR sometimes hears \"the Lara\"; do not turn \"the Ellara\" into the character unless she is being addressed.",
     "Static": "\"The Static\" is campaign lore; lowercase static is just the word.",
     "nites (lowercase)": "Gladia's vocabulary boost sometimes turns the word \"night\" into \"nites\"; only Nites (capitalized, the deity) is the name.",
-    "here": "The GM pronounces Hýr like \"here\"; \"the story of here\" / \"here guides us\" usually means Hyr."
+    "here": "The GM pronounces Hýr like \"here\"; \"the story of here\" / \"here guides us\" usually means Hyr.",
+    "Eduardo": "Players' running joke name for Proctor Eduard; keep it when they are joking, use Eduard in narration.",
+    "Jeeves / Jarvis": "Witty's former butler is Jarvis; the GM sometimes says Jeeves."
   },
   "aliases": {
     "Din": "Berridin",

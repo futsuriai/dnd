@@ -14,6 +14,8 @@ Stages (in order):
     fuse         LLM judge picks/combines the engines' readings per line, in context
     diagnostics  compare engines (coverage, agreement, names, loops; optional audio judge)
     raw-notes    scene-based Raw Session N.md
+    audit        LLM audit of each scene's notes vs transcript (OOC leaks, missing beats,
+                 misattributions, game content in skipped scenes); flagged scenes regenerated
     notes        polished Session N.md
     website      copy into the site, update stores/views via agent, regenerate entity list
     verify       raw-note validation, npm run sync-check, pipeline validation
@@ -47,7 +49,7 @@ NOTES_DIR = ELLARA_DIR / "Session Notes"
 TRANSCRIPTS_DIR = NOTES_DIR / "Transcripts"
 VENV_PYTHON = Path("~/.gemini/tmp/transcribe_env/bin/python3").expanduser()
 
-STAGES = ["entities", "asr", "gemini", "transcript", "dice", "fuse", "diagnostics", "raw-notes", "notes", "website", "verify", "publish"]
+STAGES = ["entities", "asr", "gemini", "transcript", "dice", "fuse", "diagnostics", "raw-notes", "audit", "notes", "website", "verify", "publish"]
 
 
 def log(msg: str) -> None:
@@ -84,6 +86,8 @@ def main() -> int:
     parser.add_argument("--fuse-provider", help="Judge for the fusion stage (default: --provider); e.g. claude")
     parser.add_argument("--judge", action="store_true", help="Diagnostics: let Gemini listen to disagreement clips")
     parser.add_argument("--no-fuse", action="store_true", help="Skip the LLM transcript proofreading stage")
+    parser.add_argument("--no-audit", action="store_true", help="Skip the raw-notes audit/repair stage")
+    parser.add_argument("--session-date", help="Date the session was played (default: D&D Beyond rolls, else audio file date)")
     parser.add_argument("--provider", default="codex", help="Agent CLI for notes/website (codex or claude)")
     parser.add_argument("--model")
     parser.add_argument("--notes-provider", help="Override provider for raw + polished notes")
@@ -119,7 +123,6 @@ def main() -> int:
     raw_notes = notes_dir / f"Raw Session {session}.md"
     session_notes = notes_dir / f"Session {session}.md"
     website_md = DND_DIR / "src" / "assets" / "sessions" / f"session-{session}.md"
-    dnd_raw_copy = DND_DIR / "src" / "assets" / "sessions" / "transcripts" / f"session_{session}_raw.txt"
     notes_provider = args.notes_provider or args.provider
     website_provider = args.website_provider or args.provider
     engines = [e.strip() for e in args.engines.split(",") if e.strip()]
@@ -149,9 +152,6 @@ def main() -> int:
         if dice and dice.exists() and dice.stat().st_size:
             cmd += ["--dice", dice]
         run(cmd, python=True)
-        if not args.sandbox:
-            dnd_raw_copy.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(transcript, dnd_raw_copy)
 
     if args.sandbox:
         selected = [s for s in selected if s not in {"entities", "website", "verify", "publish"}]
@@ -230,8 +230,6 @@ def main() -> int:
             if args.model and not args.fuse_provider:
                 cmd += ["--model", args.model]
             run(cmd, python=True)
-            if not args.sandbox:
-                shutil.copy2(transcript, dnd_raw_copy)
             mark(stage, alt_engines=alts)
 
         elif stage == "diagnostics":
@@ -257,6 +255,18 @@ def main() -> int:
             run([SCRIPT_DIR / "validate_raw_notes.py", raw_notes, "--session", session], check=False)
             mark(stage, raw_notes=str(raw_notes))
 
+        elif stage == "audit":
+            if args.no_audit:
+                log("audit: disabled (--no-audit)")
+                continue
+            cmd = [SCRIPT_DIR / "audit_raw_notes.py", "--session", session, "--transcript", transcript,
+                   "--notes", raw_notes, "--work-dir", work / "raw_notes", "--provider", notes_provider, "--fix"]
+            if args.model:
+                cmd += ["--model", args.model]
+            run(cmd, python=True)
+            run([SCRIPT_DIR / "validate_raw_notes.py", raw_notes, "--session", session], check=False)
+            mark(stage)
+
         elif stage == "notes":
             cmd = [SCRIPT_DIR / "run_session_notes_agent.py", session, raw_notes, session_notes,
                    "--provider", notes_provider, "--force", "--skip-raw-validation"]
@@ -266,7 +276,18 @@ def main() -> int:
             mark(stage, session_notes=str(session_notes))
 
         elif stage == "website":
+            facts_path = work / "session_facts.json"
+            facts_cmd = [SCRIPT_DIR / "session_facts.py", "--audio-dir", audio_dir, "--transcript", transcript,
+                         "--out", facts_path, "--provider", notes_provider]
+            if args.session_date:
+                facts_cmd += ["--session-date", args.session_date]
+            run(facts_cmd, python=True, check=False)
+            facts = json.loads(facts_path.read_text()) if facts_path.exists() else {}
             cmd = [SCRIPT_DIR / "run_website_sync_agent.py", "--session", session, "--provider", website_provider]
+            if facts.get("session_date"):
+                cmd += ["--session-date", facts["session_date"]]
+            if facts.get("next_session_date"):
+                cmd += ["--next-session-date", facts["next_session_date"]]
             if args.model:
                 cmd += ["--model", args.model]
             run(cmd, python=True)

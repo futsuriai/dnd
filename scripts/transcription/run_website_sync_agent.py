@@ -10,7 +10,15 @@ from pathlib import Path
 import agent_cli
 
 
-def build_prompt(session: int) -> str:
+def build_prompt(session: int, session_date: str | None = None, next_session_date: str | None = None) -> str:
+    played = f"Session {session} was played on {session_date}: set its `date` to exactly '{session_date}'." if session_date else (
+        f"Keep session {session}'s existing `date` unless it is clearly a placeholder."
+    )
+    upcoming = (
+        f"The table scheduled the next session for {next_session_date}: give session {session + 1} the `date` '{next_session_date}'."
+        if next_session_date
+        else f"No next-session date was scheduled: give session {session + 1} the `date` 'TBD'."
+    )
     return f"""Task:
 Update the DnD website repo for completed Session {session}.
 
@@ -30,6 +38,21 @@ Required work:
 - If the polished summary is ambiguous about who rolled, omit the roller from store/view copy instead of guessing.
 - Do not touch unrelated files or generated intermediate artifacts.
 
+Dates (authoritative, overriding "today's date" in the governing instructions):
+- {played}
+- {upcoming}
+
+Keep the update proportionate and in the existing voice:
+- Touch only entities whose state or understanding genuinely changed this session; for a normal session that
+  is usually 3-8 entities. Look at how sessions 19 and 20 were recorded and match that scale.
+- Entity `description` fields describe what the entity is. Do not put the party's current plans, pending tasks,
+  or undecided choices into descriptions; record session events as one-sentence `history` notes instead.
+- History notes and highlights state what happened plainly, one or two sentences each (highlights: 5-8, under
+  ~220 characters). Do not stack caveats such as "without laboratory testing", "remains unconfirmed", or
+  "has not yet occurred"; mention an open question once, where it matters.
+- Do not rewrite existing descriptions or connection reasons. If the session adds or contradicts a detail, add
+  it (e.g. a new history note) rather than replacing earlier canon.
+
 After editing, run `npm run verify-session-sync -- --session latest` and `npm run build`.
 Report the files changed and validation commands you ran."""
 
@@ -42,6 +65,8 @@ def main() -> int:
     parser.add_argument("--provider", choices=agent_cli.PROVIDERS, help="Optional agent provider for store/view updates")
     parser.add_argument("--model", help="Optional model override")
     parser.add_argument("--skip-copy", action="store_true", help="Do not copy Ellara Session N.md into website assets")
+    parser.add_argument("--session-date", help="Date the session was played, e.g. 'October 11, 2026'")
+    parser.add_argument("--next-session-date", help="Scheduled date of the next session, if the table set one")
     parser.add_argument("--dry-run", action="store_true", help="Print planned prompt/actions without writing or invoking an agent")
     args = parser.parse_args()
 
@@ -62,7 +87,7 @@ def main() -> int:
             shutil.copy2(source, target)
             print(f"copied: {source} -> {target}")
 
-    prompt = build_prompt(session)
+    prompt = build_prompt(session, args.session_date, args.next_session_date)
     if not args.provider or args.dry_run:
         print()
         print("Website-sync agent prompt:")

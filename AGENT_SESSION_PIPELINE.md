@@ -39,14 +39,16 @@ DDB_CAMPAIGN_ID=...      # number in https://www.dndbeyond.com/campaigns/<id>
 | fuse | LLM judge reads every line's Gladia/Whisper/Gemini readings in context and picks or combines them | `Transcript Session N - Fusion Report.md` |
 | diagnostics | engine comparison (coverage, disagreement, names, loops) | `Transcript Session N - ASR Diagnostics.md` |
 | raw-notes | scene plan, then one notes call per scene, in the hand-written style | `Raw Session N.md` |
+| audit | per scene, an LLM checks notes vs transcript for out-of-game leaks, missing in-game beats and wrong attributions, and whether skipped "ooc" scenes hid game content; flagged scenes are regenerated with the findings | `Raw Session N - Audit.md` |
 | notes | polished website notes | `Session N.md` |
-| website | copy to `src/assets/sessions/`, agent updates stores and views | `src/` |
+| website | work out the played date (dice log, else audio date) and any next-session date the table agreed on; copy notes to `src/assets/sessions/`; agent updates stores and views proportionately | `src/`, `<audio>/pipeline/session_facts.json` |
 | verify | raw-note validator, `npm run sync-check`, pipeline validator | console |
 | publish | only with `--publish` | git commits |
 
 Useful flags: `--only STAGE`, `--from-stage STAGE`, `--stop-after STAGE`, `--force`,
 `--provider claude`, `--fuse-provider claude` (judge only), `--engines`, `--primary`,
-`--gemini off|disputed|all`, `--gemini-model`, `--judge`, `--no-fuse`.
+`--gemini off|disputed|all`, `--gemini-model`, `--judge`, `--no-fuse`, `--no-audit`,
+`--session-date YYYY-MM-DD` (if processing a session days later without dice data).
 
 ## Transcription engines
 

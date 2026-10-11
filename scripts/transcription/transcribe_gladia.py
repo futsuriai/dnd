@@ -76,45 +76,47 @@ def http_json(method: str, url: str, api_key: str, payload: dict | None = None) 
         raise RuntimeError(f"Gladia {method} {url} failed: HTTP {exc.code}: {body}") from exc
 
 
-def upload_audio(path: Path, api_key: str, attempts: int = 4) -> dict:
-    """Upload with retries; transient 408/429/5xx and network errors back off."""
+def upload_audio(path: Path, api_key: str, attempts: int = 6) -> dict:
+    """Upload with retries; any network/HTTP failure except auth errors backs off."""
     for attempt in range(1, attempts + 1):
         try:
             return _upload_audio_once(path, api_key)
-        except (RuntimeError, error.URLError, TimeoutError, ConnectionError) as exc:
-            transient = not isinstance(exc, RuntimeError) or any(
-                f"HTTP {code}" in str(exc) for code in (408, 429, 500, 502, 503, 504)
+        except Exception as exc:  # noqa: BLE001 - http.client raises a zoo of exception types
+            # Gladia reports upstream upload timeouts as 400 "Failed to download or
+            # upload the input file"; those are transient, other 4xx are not.
+            message = str(exc)
+            fatal = (
+                isinstance(exc, RuntimeError)
+                and any(f"HTTP {code}" in message for code in (400, 401, 403, 413, 415))
+                and "Failed to download or upload" not in message
             )
-            if not transient or attempt == attempts:
+            if fatal or attempt == attempts:
                 raise
-            delay = 15 * attempt
-            print(f"Upload attempt {attempt} failed ({exc}); retrying in {delay}s", flush=True)
+            delay = 20 * attempt
+            print(f"Upload attempt {attempt} failed ({type(exc).__name__}: {exc}); retrying in {delay}s", flush=True)
             time.sleep(delay)
     raise RuntimeError("unreachable")
 
 
+def compressed_upload_path(path: Path) -> Path:
+    """Small upload file for long compact WAVs.
+
+    Default is 48 kbps mono Opus: Discord/Craig audio is Opus to begin with, so
+    nothing audible is lost, and it is ~1/5 of FLAC, which avoids the HTTP 408
+    timeouts long GM tracks hit. GLADIA_UPLOAD_FORMAT=flac keeps lossless FLAC.
+    """
+    fmt = os.environ.get("GLADIA_UPLOAD_FORMAT", "opus").lower()
+    target = path.with_suffix(".ogg" if fmt == "opus" else ".flac")
+    if not target.exists() or target.stat().st_mtime < path.stat().st_mtime:
+        codec = ["-c:a", "libopus", "-b:a", os.environ.get("GLADIA_OPUS_BITRATE", "48k"), "-application", "voip"] if fmt == "opus" else ["-compression_level", "8"]
+        subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", str(path), "-ac", "1", *codec, str(target)], check=True)
+    return target
+
+
 def _upload_audio_once(path: Path, api_key: str) -> dict:
     upload_path = path
-    # Always send lossless FLAC: roughly half the bytes of 16-bit WAV, which
-    # avoids upload timeouts on long GM tracks.
     if path.suffix.lower() == ".wav" and path.stat().st_size >= 8 * 1024 * 1024:
-        flac_path = path.with_suffix(".flac")
-        if not flac_path.exists() or flac_path.stat().st_mtime < path.stat().st_mtime:
-            subprocess.run(
-                [
-                    "ffmpeg",
-                    "-y",
-                    "-loglevel",
-                    "error",
-                    "-i",
-                    str(path),
-                    "-compression_level",
-                    "8",
-                    str(flac_path),
-                ],
-                check=True,
-            )
-        upload_path = flac_path
+        upload_path = compressed_upload_path(path)
         print(f"Compressed upload audio: {upload_path} ({upload_path.stat().st_size} bytes)")
 
     boundary = f"----dnd-gladia-{uuid.uuid4().hex}"
