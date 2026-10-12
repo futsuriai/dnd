@@ -60,7 +60,8 @@ Session 6 revealed that the Lighthouse conducts a secret basement program to syn
       { session: 6, note: 'Secret synthesis program revealed: enhanced crystals are forged from living Shadowed beings.' },
       { session: 8, note: 'Ellara\'s vision of a screaming lamp highlights the suffering infused into every synthetic crystal.' },
       { session: 14, note: 'Berridin briefed Ardwin that shadowed goliaths were being converted into crystals for newer warforged units.' },
-      { session: 20, note: 'Witty extracted a head-sized crystal from the fallen titan and identified it as dangerous, cutting-edge Duskbreaker technology capable of powering the construct.' }
+      { session: 20, note: 'Witty extracted a head-sized crystal from the fallen titan and identified it as dangerous, cutting-edge Duskbreaker technology capable of powering the construct.' },
+      { session: 21, note: 'Witty’s Investigation 19, aided by Hyr’s blessing, identified the titan’s crystal as artificial, estimated its output at about one hundred ordinary crystals, and suggested overloading its stable matrix could cause catastrophic destruction.' }
     ]
   },
   {
@@ -304,7 +305,8 @@ The family employs halfling servants who traditionally adopt "normal" human name
     ],
     history: [
       { session: 10, note: 'Brothers referenced when party adopted Whitaker identities for the ball' },
-      { session: 11, note: 'Cover used for the Grand Duke\'s ball; Reeves and the Duke suspect/know the brothers are fakes.' }
+      { session: 11, note: 'Cover used for the Grand Duke\'s ball; Reeves and the Duke suspect/know the brothers are fakes.' },
+      { session: 21, note: 'Countess Tallulah Whitman’s letter announced the parents’ move to Pharus for several months, and Witty revealed that his separate allowance account had continued receiving deposits while he was away.' }
     ]
   }
 ];

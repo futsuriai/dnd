@@ -36,7 +36,8 @@ export const locations = [
     history: [
       { session: 10, note: 'Party prepared for the ball here; Berridin cooked spicy curry' },
       { session: 12, note: 'Party regrouped here morning after the ball; discussed Black Swan bounty via sending stones' },
-      { session: 20, note: 'Saved from imminent repossession when Berridin paid the 1,000-gold loan in full; the party regrouped here afterward.' }
+      { session: 20, note: 'Saved from imminent repossession when Berridin paid the 1,000-gold loan in full; the party regrouped here afterward.' },
+      { session: 21, note: 'The party examined the titan’s crystal here, and Ysidor performed Ceremony for the lives lost while Ellara secretly continued her own blessing.' }
     ],
     connections: [
       { type: 'location', id: 'bastion-city', reason: 'Located in West Bastion' },
@@ -128,7 +129,8 @@ export const locations = [
       { session: 5, note: 'Infiltration maps R&D floors; titan chassis and advanced warforged observed.' },
       { session: 6, note: 'Basement lab confirmed to be synthesizing crystals from living subjects.' },
       { session: 7, note: 'Security increased with modern warforged deployment' },
-      { session: 8, note: 'Security breach; party\'s rune passes compromised; forecourt battle with warforged' }
+      { session: 8, note: 'Security breach; party\'s rune passes compromised; forecourt battle with warforged' },
+      { session: 21, note: 'The party clarified the Lighthouse’s independence from the Duke and chose Witty’s application for Faberge’s vacant position as their way inside to stop the living-subject experiments.' }
     ],
     connections: [
       { type: 'location', id: 'bastion-city', relationship: 'Located In' }

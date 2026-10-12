@@ -72,6 +72,10 @@ const BACK_OF_BOOK_STAGES = [
   {
     minSession: 20,
     text: 'Victory leaves the party holding both leverage and danger: Witty extracts a head-sized light crystal from the titan, Nyx reveals that Michelle Faberge died during their confrontation, and Hýrda mourns its dead before Meri sends the party back toward Bastion. A desperate ride gets Berridin to the city in time to save Lord Whitaker’s Estate from repossession, and the party regroups there with the Lighthouse’s work, Proctor Eduard’s loyalties, and the Duke’s response still unresolved.'
+  },
+  {
+    minSession: 21,
+    text: 'At Lord Whitaker’s Estate, Witty finds an artificial matrix inside the titan’s crystal and estimates its power at a hundred ordinary lamps. The lives behind that power give the party a shared purpose: stop more people becoming fuel. Ellara tells Proctor Eduard what they witnessed; he expresses shock and offers passage to Pharus, but she returns to her companions. With the Duke funding an independent Lighthouse and his knowledge of the experiments still uncertain, they choose a new way inside: Witty will seek Faberge’s vacant position through his credentials and family ties to Reeves.'
   }
 ];
 
@@ -112,7 +116,7 @@ function buildStoryParagraphs(latestSessionNumber, latestSessionContent) {
     .filter(stage => latestSessionNumber >= stage.minSession)
     .map(stage => stage.text);
 
-  if (latestSessionNumber > 20) {
+  if (latestSessionNumber > 21) {
     const continuation = extractFirstNarrativeSentence(latestSessionContent);
     if (continuation) {
       staged.push(`Beyond that turning point, the tale keeps moving: ${continuation}`);

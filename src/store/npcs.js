@@ -177,7 +177,8 @@ export const npcs = [
             { session: 8, note: 'Reveals Marchenbau heritage and cautions Ellara that Reeves is bound to his own ambitions.' },
             { session: 10, note: 'Invited Ellara to the Grand Duke\'s ball; escorted her as his guest' },
             { session: 11, note: 'Privately claimed to control Ellara, stating she will "do as expected."' },
-            { session: 12, note: 'Gave Ellara his blessing to travel and gifted her "Josephine\'s Insights on the Nature of Eulogia"' }
+            { session: 12, note: 'Gave Ellara his blessing to travel and gifted her "Josephine\'s Insights on the Nature of Eulogia"' },
+            { session: 21, note: 'Ellara disclosed the living-subject experiments; Eduard expressed shock, said he had understood crystals to be mined from ruins, and issued her an undated, church-funded rail writ to Pharus.' }
         ],
         connections: [
             { type: 'character', id: 'ellara', reason: 'Mentor at the Seminary' },
@@ -186,7 +187,8 @@ export const npcs = [
             { type: 'lore', id: 'eulogia-eternal-light', reason: 'Clergy of the faith' },
             { type: 'lore', id: 'marchenbau', reason: 'Scion of the Marchenbau noble house' },
             { type: 'npc', id: 'donnathan-reeves', reason: 'Old ally and political liaison' },
-            { type: 'npc', id: 'empress-consort-lyssandra', reason: 'Grand-uncle' }
+            { type: 'npc', id: 'empress-consort-lyssandra', reason: 'Grand-uncle' },
+            { type: 'location', id: 'duskbreaker-lighthouse', reason: 'Eulogia’s contact with the Lighthouse' }
         ]
     },
     {
@@ -204,7 +206,8 @@ export const npcs = [
             { session: 8, note: 'Confirmed as Viscount Sommeil; heading to the ducal palace after conferring with Proctor Eduard.' },
             { session: 9, note: 'Revealed to be the lover of Grand Duke Oliander; stays at the Palace.' },
             { session: 10, note: 'Greeted party at the ball; recognized "Orange" Whitaker with dangerous familiarity' },
-            { session: 11, note: 'Confronted Nyx about Whitaker identity; revealed romantic relationship with Grand Duke Oliander.' }
+            { session: 11, note: 'Confronted Nyx about Whitaker identity; revealed romantic relationship with Grand Duke Oliander.' },
+            { session: 21, note: 'Eduard reported that Reeves had repeatedly delayed his Lighthouse inquiries, while Witty identified Reeves’s ties to his family as a possible route inside.' }
         ],
         connections: [
             { type: 'location', id: 'duskbreaker-lighthouse', reason: 'Executive at the Lighthouse' },
@@ -214,7 +217,8 @@ export const npcs = [
             { type: 'location', id: 'ducal-palace', reason: 'Frequent visitor and liaison to the duke' },
             { type: 'npc', id: 'proctor-eduard', reason: 'Longtime ally coordinating political cover' },
             { type: 'npc', id: 'duke-valerian-oliander', reason: 'College acquaintance and romantic partner' },
-            { type: 'lore', id: 'torchlight-college', reason: 'Alumnus; met Valerian at the college' }
+            { type: 'lore', id: 'torchlight-college', reason: 'Alumnus; met Valerian at the college' },
+            { type: 'lore', id: 'whitaker-family', reason: 'Knows the Whitmans from the same region' }
         ]
     },
     {
@@ -228,13 +232,15 @@ export const npcs = [
             { session: 4, note: 'Eduard claims to have warned the duke about Lighthouse hubris.' },
             { session: 9, note: 'Revealed to be the lover of Donnathan Reeves.' },
             { session: 10, note: 'Hosted the ball celebrating his niece Ophelia\'s return; greeted the party' },
-            { session: 11, note: 'Hosted the ball; discussed resistance delays with inner circle.' }
+            { session: 11, note: 'Hosted the ball; discussed resistance delays with inner circle.' },
+            { session: 21, note: 'Nyx and Ellara clarified that the Duke funds the independent Lighthouse for Bastion and Hieroterra’s interests, gaining money and prestige without running it.' }
         ],
         connections: [
             { type: 'location', id: 'bastion-city', reason: 'Seat of ducal power' },
             { type: 'location', id: 'hieroterra', reason: 'Province lord' },
             { type: 'npc', id: 'donnathan-reeves', reason: 'Romantic partner' },
-            { type: 'npc', id: 'lady-ophelia-xanteres-oliander', reason: 'Niece and heir' }
+            { type: 'npc', id: 'lady-ophelia-xanteres-oliander', reason: 'Niece and heir' },
+            { type: 'location', id: 'duskbreaker-lighthouse', reason: 'Financial supporter of the independent institution' }
         ]
     },
     {
