@@ -4,233 +4,231 @@
     <p class="section-intro">Chronicles of our adventures and key events from each session.</p>
     <p class="story-link-row">
       <router-link to="/sessions/story-so-far" class="story-link">
-        Read The Story So Far
+        Read The Story So Far →
       </router-link>
     </p>
 
-    <div v-if="sessions.length" class="sessions-container">
-      <div v-for="session in sessions" :key="session.id" class="session-card" :id="session.id">
-        <div class="session-header" :class="{ 'upcoming': session.upcoming }">
+    <FilterBar
+      v-model="searchQuery"
+      v-model:activeFilter="activeFilter"
+      :filters="filterPills"
+      :totalCount="sessions.length"
+      :filteredCount="filteredSessions.length"
+      itemLabel="sessions"
+      placeholder="Search sessions by title, location, summary, or key moment..."
+    />
+
+    <div v-if="filteredSessions.length" class="sessions-container">
+      <article
+        v-for="session in filteredSessions"
+        :key="session.id"
+        class="session-card"
+        :class="{ 'is-upcoming': session.upcoming }"
+        :id="session.id"
+      >
+        <div class="session-header" :class="{ upcoming: session.upcoming }">
           <div class="header-top-line">
-            <h3 class="session-title">{{ session.title }}:</h3>
+            <h3 class="session-title">
+              <router-link :to="`/sessions/${session.id}`" class="session-title-link">
+                {{ session.title }}
+              </router-link>
+              <span v-if="session.upcoming" class="upcoming-badge">Upcoming</span>
+            </h3>
             <span class="session-date">{{ session.date }}</span>
           </div>
           <p class="session-subtitle">{{ session.subtitle }}</p>
+          <p v-if="session.location" class="session-location">📍 {{ session.location }}</p>
         </div>
-        
+
         <div class="session-content">
           <div v-if="session.upcoming" class="upcoming-message">
             <p>{{ session.description }}</p>
+            <div class="session-links">
+              <router-link :to="`/sessions/${session.id}`" class="read-more-link">
+                View Session Details →
+              </router-link>
+            </div>
           </div>
+
           <div v-else class="session-summary">
             <p>{{ session.description }}</p>
-            
-            <!-- Session links container -->
+
             <div class="session-links">
-              <!-- Add Read More link if there's a summaryFile property -->
-              <a v-if="session.summaryFile" @click.prevent="showFullSummary(session)" href="#" class="read-more-link">
-                📜 Read Full Summary
-              </a>
-              
-              <!-- Add Transcript link if there's a transcriptFile property -->
-              <a v-if="session.transcriptFile" @click.prevent="showTranscript(session)" href="#" class="transcript-link">
-                📝 View Transcript
-              </a>
+              <router-link :to="`/sessions/${session.id}`" class="read-more-link">
+                📜 {{ session.summaryFile ? 'Read Full Session' : 'View Session Details' }} →
+              </router-link>
+
+              <button
+                v-if="session.transcriptFile"
+                type="button"
+                class="transcript-link"
+                @click="showTranscript(session)"
+              >
+                📝 Quick View Transcript
+              </button>
             </div>
-            
-            <div v-if="session.highlights" class="highlights">
+
+            <div v-if="session.highlights && session.highlights.length" class="highlights">
               <h4>Key Moments:</h4>
               <ul>
-                <li v-for="(highlight, i) in session.highlights" :key="i">
+                <li v-for="(highlight, i) in session.highlights" :key="`${session.id}-hl-${i}`">
                   {{ highlight }}
                 </li>
               </ul>
             </div>
           </div>
         </div>
-      </div>
+      </article>
     </div>
-    <p v-else class="empty-message">No sessions recorded yet.</p>
-    
-    <!-- Add FullTextModal component -->
-    <FullTextModal 
-      :visible="isModalVisible" 
-      :title="modalTitle" 
-      :text="modalText" 
-      :loading="isLoading"
-      :contentClass="modalContentClass"
-      @close="closeModal" 
+
+    <p v-else class="empty-message">No sessions match your current filter.</p>
+
+    <FullTextModal
+      :visible="isOpen"
+      :title="modalTitle"
+      :text="modalContent"
+      :loading="Boolean(modalMeta.loading)"
+      :contentClass="modalMeta.contentClass || ''"
+      @close="closeModal"
     />
   </div>
 </template>
 
-<script>
-import { sessions } from '../store/worldData';
-import FullTextModal from '@/components/FullTextModal.vue'; // Import the modal
-import { loadSessionMarkdown, loadSessionTranscript } from '@/utils/markdownLoader'; // Import our loader utilities
+<script setup>
+import { ref, computed } from 'vue';
+import { sessions } from '@/store/worldData.js';
+import FullTextModal from '@/components/FullTextModal.vue';
+import FilterBar from '@/components/FilterBar.vue';
+import { loadSessionTranscript } from '@/utils/markdownLoader.js';
+import { getCharacterAvatar } from '@/utils/avatars.js';
+import { useModal } from '@/composables/useModal.js';
 
-// Import avatar images for transcript display
-const avatarModules = import.meta.glob('@/assets/avatars/avatar/*', { eager: true, import: 'default' });
+const { isOpen, modalTitle, modalContent, modalMeta, openModal, closeModal } = useModal();
 
-// Map speaker names to avatar file ids
-const speakerAvatarMap = {
-  'Nyx': 'nyx',
-  'Ellara': 'ellara', 
-  'Berridin': 'berridin',
-  'Ysidor': 'ysidor',
-  'Tsi\'Nyra': 'tsinyra',
-  'Tsinyra': 'tsinyra',
-  'Whitaker "Witty" Whitman VI': 'witty',
-  'Witty': 'witty',
-  'GM': 'gm' // GM has no avatar but we track it
-};
+const searchQuery = ref('');
+const activeFilter = ref('all');
 
-// Get avatar URL for a speaker
-function getAvatarUrl(speaker) {
-  const id = speakerAvatarMap[speaker];
-  if (!id || id === 'gm') return null;
-  
-  for (const path in avatarModules) {
-    if (path.includes(`/avatar/${id}.`)) {
-      return avatarModules[path];
-    }
-  }
-  return null;
-}
+const filterPills = computed(() => [
+  { value: 'all', label: 'All', count: sessions.length },
+  {
+    value: 'completed',
+    label: 'Completed',
+    count: sessions.filter((s) => !s.upcoming).length,
+  },
+  {
+    value: 'upcoming',
+    label: 'Upcoming',
+    count: sessions.filter((s) => s.upcoming).length,
+  },
+  {
+    value: 'transcript',
+    label: 'With Transcript',
+    count: sessions.filter((s) => Boolean(s.transcriptFile)).length,
+  },
+]);
 
-// Get speaker class for color coding
+const filteredSessions = computed(() => {
+  const q = searchQuery.value.trim().toLowerCase();
+
+  return sessions.filter((session) => {
+    if (activeFilter.value === 'completed' && session.upcoming) return false;
+    if (activeFilter.value === 'upcoming' && !session.upcoming) return false;
+    if (activeFilter.value === 'transcript' && !session.transcriptFile) return false;
+
+    if (!q) return true;
+    const haystack = [
+      session.title,
+      session.subtitle,
+      session.location,
+      session.date,
+      session.description,
+      ...(Array.isArray(session.highlights) ? session.highlights : []),
+    ]
+      .filter(Boolean)
+      .join(' ')
+      .toLowerCase();
+    return haystack.includes(q);
+  });
+});
+
 function getSpeakerClass(speaker) {
-  const id = speakerAvatarMap[speaker];
-  if (id) return `speaker-${id}`;
+  const normalized = String(speaker || '')
+    .trim()
+    .toLowerCase()
+    .replace(/['’]/g, '');
+  if (normalized === 'gm') return 'speaker-gm';
+  if (normalized.includes('nyx')) return 'speaker-nyx';
+  if (normalized.includes('ellara')) return 'speaker-ellara';
+  if (normalized.includes('berridin')) return 'speaker-berridin';
+  if (normalized.includes('ysidor')) return 'speaker-ysidor';
+  if (normalized.includes('tsinyra')) return 'speaker-tsinyra';
+  if (normalized.includes('witty') || normalized.includes('whitaker')) return 'speaker-witty';
   return 'speaker-unknown';
 }
 
-export default {
-  name: 'SessionsView',
-  components: {
-    FullTextModal // Register the modal
-  },
-  data() {
-    return {
-      sessions,
-      isModalVisible: false, // State for modal visibility
-      modalText: '', // State for modal content
-      modalTitle: '', // Add state for modal title
-      isLoading: false, // Track loading state
-      modalContentClass: '' // CSS class for modal content
-    };
-  },
-  methods: {
-    async showFullSummary(session) {
-      this.isLoading = true;
-      this.modalTitle = `${session.title}: ${session.subtitle}`;
-      this.modalContentClass = ''; // Reset class for summaries
-      
-      try {
-        // Load the markdown file dynamically using our utility
-        if (session.summaryFile) {
-          try {
-            const markdownContent = await loadSessionMarkdown(session.summaryFile);
-            this.modalText = markdownContent;
-          } catch (importError) {
-            console.error("Import error:", importError);
-            this.modalText = "Unable to load the session summary file.";
-          }
-        } else {
-          this.modalText = "No detailed summary available for this session.";
-        }
-      } catch (error) {
-        this.modalText = "An error occurred while loading the session summary.";
-        console.error("Error loading session summary:", error);
-      } finally {
-        this.isLoading = false;
-        this.isModalVisible = true;
-      }
-    },
-    async showTranscript(session) {
-      this.isLoading = true;
-      this.modalTitle = `${session.title}: ${session.subtitle} — Transcript`;
-      this.modalContentClass = 'transcript-content'; // Add class for transcript styling
-      
-      try {
-        if (session.transcriptFile) {
-          try {
-            const transcriptContent = await loadSessionTranscript(session.transcriptFile);
-            // Format transcript for display (it's already timestamped)
-            this.modalText = this.formatTranscript(transcriptContent);
-          } catch (importError) {
-            console.error("Import error:", importError);
-            this.modalText = "Unable to load the session transcript file.";
-          }
-        } else {
-          this.modalText = "No transcript available for this session.";
-        }
-      } catch (error) {
-        this.modalText = "An error occurred while loading the transcript.";
-        console.error("Error loading transcript:", error);
-      } finally {
-        this.isLoading = false;
-        this.isModalVisible = true;
-      }
-    },
-    formatTranscript(content) {
-      // Format the transcript for better readability as HTML with avatars
-      // Each line is in format: [HH:MM:SS] Speaker: Text
-      
-      const lines = content.split('\n').filter(line => line.trim());
-      let formattedLines = [];
-      let currentSpeaker = null;
-      
-      for (const line of lines) {
-        // Match timestamp and speaker pattern
-        const match = line.match(/^\[(\d{2}:\d{2}:\d{2})\]\s*([^:]+):\s*(.*)$/);
-        if (match) {
-          const [, timestamp, speaker, text] = match;
-          const trimmedSpeaker = speaker.trim();
-          
-          // Add visual separator when speaker changes
-          const isNewSpeaker = currentSpeaker !== null && currentSpeaker !== trimmedSpeaker;
-          currentSpeaker = trimmedSpeaker;
-          
-          // Get avatar for this speaker
-          const avatarUrl = getAvatarUrl(trimmedSpeaker);
-          const avatarHtml = avatarUrl 
-            ? `<img src="${avatarUrl}" alt="${trimmedSpeaker}" class="transcript-avatar" />`
-            : `<span class="transcript-avatar-placeholder">${trimmedSpeaker.charAt(0)}</span>`;
-          
-          // Determine speaker class for color coding (character-specific)
-          const speakerClass = getSpeakerClass(trimmedSpeaker);
-          
-          // Build the line HTML - order: timestamp, avatar, speaker, text
-          const lineHtml = `<div class="transcript-line${isNewSpeaker ? ' new-speaker' : ''}">
-            <span class="transcript-timestamp">${timestamp}</span>
-            ${avatarHtml}
-            <span class="transcript-speaker ${speakerClass}">${trimmedSpeaker}:</span>
-            <span class="transcript-text">${this.escapeHtml(text)}</span>
-          </div>`;
-          
-          formattedLines.push(lineHtml);
-        } else if (line.trim()) {
-          // Keep non-matching lines as plain text
-          formattedLines.push(`<div class="transcript-line transcript-plain">${this.escapeHtml(line)}</div>`);
-        }
-      }
-      
-      return formattedLines.join('');
-    },
-    escapeHtml(text) {
-      const div = document.createElement('div');
-      div.textContent = text;
-      return div.innerHTML;
-    },
-    closeModal() {
-      this.isModalVisible = false;
-      this.modalText = '';
-      this.modalTitle = '';
-      this.modalContentClass = '';
+function escapeHtml(text) {
+  return String(text || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function formatTranscript(content) {
+  const lines = content.split('\n').filter((line) => line.trim());
+  const formattedLines = [];
+  let currentSpeaker = null;
+
+  for (const line of lines) {
+    const match = line.match(/^\[(\d{2}:\d{2}:\d{2})\]\s*([^:]+):\s*(.*)$/);
+    if (match) {
+      const [, timestamp, speaker, text] = match;
+      const trimmedSpeaker = speaker.trim();
+      const isNewSpeaker = currentSpeaker !== null && currentSpeaker !== trimmedSpeaker;
+      currentSpeaker = trimmedSpeaker;
+
+      const avatarUrl = getCharacterAvatar(trimmedSpeaker);
+      const avatarHtml = avatarUrl
+        ? `<img src="${avatarUrl}" alt="${escapeHtml(trimmedSpeaker)}" class="transcript-avatar" />`
+        : `<span class="transcript-avatar-placeholder">${escapeHtml(trimmedSpeaker.charAt(0))}</span>`;
+
+      const speakerClass = getSpeakerClass(trimmedSpeaker);
+      formattedLines.push(
+        `<div class="transcript-line${isNewSpeaker ? ' new-speaker' : ''}">` +
+          `<span class="transcript-timestamp">${escapeHtml(timestamp)}</span>` +
+          `${avatarHtml}` +
+          `<span class="transcript-speaker ${speakerClass}">${escapeHtml(trimmedSpeaker)}:</span>` +
+          `<span class="transcript-text">${escapeHtml(text)}</span>` +
+          `</div>`
+      );
+    } else if (line.trim()) {
+      formattedLines.push(
+        `<div class="transcript-line transcript-plain">${escapeHtml(line)}</div>`
+      );
     }
   }
-};
+
+  return formattedLines.join('');
+}
+
+async function showTranscript(session) {
+  const title = `${session.title}: ${session.subtitle} — Transcript`;
+  openModal(title, '', { loading: true, contentClass: 'transcript-content' });
+
+  try {
+    const transcriptContent = await loadSessionTranscript(session.transcriptFile);
+    openModal(title, formatTranscript(transcriptContent), {
+      loading: false,
+      contentClass: 'transcript-content',
+    });
+  } catch (error) {
+    console.error('Error loading transcript:', error);
+    openModal(title, '<p>Unable to load the session transcript file.</p>', {
+      loading: false,
+      contentClass: 'transcript-content',
+    });
+  }
+}
 </script>
 
 <style scoped>
@@ -242,7 +240,7 @@ export default {
 
 .story-link-row {
   text-align: center;
-  margin: 0 auto 1.75rem;
+  margin: 0 auto 1.5rem;
 }
 
 .story-link {
@@ -252,7 +250,7 @@ export default {
 }
 
 .story-link:hover {
-  color: var(--color-accent);
+  color: var(--color-link-hover);
   text-decoration: underline;
 }
 
@@ -275,10 +273,17 @@ export default {
   border-bottom: 1px solid var(--border-accent);
 }
 
+/* Fixed selector: .upcoming is applied directly on .session-header */
+.session-header.upcoming {
+  background: linear-gradient(90deg, rgba(201, 169, 89, 0.16) 0%, rgba(91, 176, 207, 0.12) 100%);
+  border-bottom-color: rgba(201, 169, 89, 0.45);
+}
+
 .header-top-line {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 0.75rem;
   width: 100%;
 }
 
@@ -287,29 +292,60 @@ export default {
   font-family: var(--font-display);
   font-size: 1.4rem;
   line-height: 1.2;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.session-title-link {
+  color: var(--color-primary);
+  border-bottom: none;
+}
+
+.session-title-link:hover {
+  color: var(--color-highlight);
+  text-decoration: underline;
+}
+
+.upcoming-badge {
+  font-family: var(--font-main);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  background: var(--color-primary);
+  color: var(--color-background);
 }
 
 .session-subtitle {
-  margin: 0.25rem 0 0;
-  font-size: 0.95rem;
-  color: var(--text-muted, #aaa);
+  margin: 0.3rem 0 0;
+  font-size: 0.98rem;
+  color: var(--color-text);
   font-style: italic;
-  width: 100%;
+}
+
+.session-location {
+  margin: 0.25rem 0 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
 }
 
 .session-date {
   font-family: var(--font-accent);
   font-size: 0.9em;
   font-weight: bold;
-  padding: 0.3em 0.6em;
+  padding: 0.3em 0.65em;
   border-radius: 4px;
-  background-color: rgba(100, 100, 100, 0.2);
+  background-color: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(var(--border-color-rgb), 0.6);
   white-space: nowrap;
 }
 
 .session-content {
-  padding: 1.5rem;
+  padding: 1.35rem 1.5rem;
 }
 
 .upcoming-message {
@@ -318,12 +354,8 @@ export default {
   padding-left: 1rem;
 }
 
-.upcoming .session-header {
-  background-color: rgba(65, 105, 225, 0.1);
-}
-
 .highlights {
-  margin-top: 1.5rem;
+  margin-top: 1.25rem;
 }
 
 .highlights h4 {
@@ -332,11 +364,12 @@ export default {
 }
 
 .highlights ul {
-  padding-left: 1.5rem;
+  padding-left: 1.4rem;
+  margin: 0;
 }
 
 .highlights li {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.45rem;
 }
 
 .empty-message {
@@ -345,50 +378,54 @@ export default {
   color: var(--text-muted);
 }
 
-/* Add styling for session links container */
 .session-links {
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
-  margin-top: 0.75rem;
+  align-items: center;
+  gap: 1.15rem;
+  margin-top: 0.85rem;
 }
 
-/* Add styling for read more link */
 .read-more-link {
   color: var(--color-highlight);
   cursor: pointer;
   text-decoration: none;
-  font-weight: 700; /* Increased font weight for better visibility */
-  font-size: 1.05em; /* Slightly increased font size */
+  font-weight: 700;
+  font-size: 1rem;
   display: inline-block;
+  border-bottom: none;
 }
 
 .read-more-link:hover {
-  color: var(--color-accent);
+  color: var(--color-link-hover);
   text-decoration: underline;
 }
 
-/* Add styling for transcript link */
 .transcript-link {
-  color: var(--color-text-muted, #8a9ba8);
+  color: var(--color-link);
+  background: transparent;
+  border: none;
+  padding: 0;
   cursor: pointer;
-  text-decoration: none;
   font-weight: 700;
-  font-size: 1.05em;
-  display: inline-block;
-  opacity: 0.85;
+  font-size: 0.95rem;
 }
 
 .transcript-link:hover {
-  color: var(--color-highlight);
+  background: transparent;
+  color: var(--color-link-hover);
   text-decoration: underline;
-  opacity: 1;
 }
 
 @media (max-width: 600px) {
   .header-top-line {
     flex-wrap: wrap;
     gap: 0.5rem;
+  }
+
+  .session-header,
+  .session-content {
+    padding: 1rem 1.1rem;
   }
 }
 </style>

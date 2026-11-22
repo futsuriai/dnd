@@ -4,7 +4,7 @@
 
 import { sessions } from './sessions.js';
 
-function parseSessionNumber(id) {
+export function parseSessionNumber(id) {
   const m = typeof id === 'string' && id.match(/^session-(\d+)$/i);
   return m ? parseInt(m[1], 10) : null;
 }
@@ -27,19 +27,25 @@ export function getCurrentSessionNumber() {
 
 export const currentSession = getCurrentSessionNumber();
 
-export function isEntityNew(entity) {
+export function isEntityNew(entity, sessionNum = currentSession) {
   if (!entity) return false;
   if (!Array.isArray(entity.history)) return false;
-  return entity.history.some(h => h && typeof h.session === 'number' && h.session === currentSession);
+  return entity.history.some(h => h && typeof h.session === 'number' && h.session === sessionNum);
 }
 
 export function getEntityUpdateHistory(entity) {
   if (!entity) return [];
   if (!Array.isArray(entity.history)) return [];
-  const sessions = entity.history
+  const sessionList = entity.history
     .map(h => (h && typeof h.session === 'number' ? h.session : null))
     .filter(n => typeof n === 'number');
-  return Array.from(new Set(sessions)).sort((a, b) => a - b);
+  return Array.from(new Set(sessionList)).sort((a, b) => a - b);
 }
 
-export default { currentSession, isEntityNew, getCurrentSessionNumber, getEntityUpdateHistory };
+export default {
+  currentSession,
+  isEntityNew,
+  getCurrentSessionNumber,
+  getEntityUpdateHistory,
+  parseSessionNumber,
+};

@@ -1,16 +1,5 @@
 // NPC data for the world
-
-const avatarModules = import.meta.glob('@/assets/avatars/avatar/*', { eager: true, import: 'default' });
-const portraitModules = import.meta.glob('@/assets/avatars/portrait/*', { eager: true, import: 'default' });
-
-function getImageUrl(modules, id, type) {
-    for (const path in modules) {
-        if (path.includes(`/${type}/${id}.`)) {
-            return modules[path];
-        }
-    }
-    return null;
-}
+import { getCharacterAvatar, getCharacterPortrait } from '../utils/avatars.js';
 
 export const npcs = [
     // Major NPCs (show like CharactersView with portraits/avatars)
@@ -22,8 +11,8 @@ export const npcs = [
         status: 'ally',
         description: 'A quiet traveler from the Mother Tree\'s line, seeking her missing siblings while learning the wider world beyond her forest roots.',
         fullText: 'Child of the Mother Tree, Tsi\'nyra travels to witness the world and gather what it teaches. She arrived in Bastion City unsure of its rhythms but determined to find her missing siblings, carrying both her mother\'s token and a patient sense of purpose. Her calm demeanor and bond with her leopard companion make her seem reserved at first glance, yet she has repeatedly chosen to stand beside the party when danger rises.',
-        avatarUrl: getImageUrl(avatarModules, 'tsinyra', 'avatar'),
-        portraitUrl: getImageUrl(portraitModules, 'tsinyra', 'portrait'),
+        avatarUrl: getCharacterAvatar('tsinyra'),
+        portraitUrl: getCharacterPortrait('tsinyra'),
         history: [
             { session: 1, note: 'Introduced in Bastion City while searching for her missing siblings; began traveling with Nyx and the party.' }
         ],
@@ -37,6 +26,7 @@ export const npcs = [
         name: 'Lady Ophelia Xanteres Oliander',
         role: 'Marchioness of Bastion City',
         location: 'Ducal Palace, Bastion City',
+        prominence: 'major',
         description: 'Grand Duke Valerian Oliander\'s niece and heir. Recently returned from Torchlight College. The ball was held in her honor.',
         history: [
             { session: 10, note: 'Introduced at the ball; hinted at army delays at a mining town' },
@@ -148,7 +138,6 @@ export const npcs = [
         name: 'Michelle Faberge',
         role: 'Director of Research, Duskbreaker Lighthouse',
         location: 'West Bastion',
-        prominence: 'minor',
         description: 'Once brilliant artificer-scientist leading research at the Lighthouse; killed during a pursuit in West Bastion. Her workshop held notes on power concurrency and a Dimension Door rune. Deceased.',
         fullText: 'Michelle Faberge was a brilliant artificer-scientist who served as Director of Research at the Duskbreaker Lighthouse. Her workshop revealed extensive notes on power concurrency problems affecting both warforged long-term energy systems and east-side water purification infrastructure. Among her personal effects was a disturbing notation questioning "How much more blood will this cost." She possessed experimental runestones capable of casting spells like Dimension Door, suggesting she was preparing contingency plans. Her death during a street pursuit has created gaps in the Lighthouse\'s research hierarchy and security protocols.',
         history: [
@@ -196,7 +185,6 @@ export const npcs = [
         name: 'Donnathan Reeves',
         role: 'Director of Relations, Duskbreaker Lighthouse',
         location: 'Bastion City & Pharus',
-        prominence: 'minor',
         description: 'Viscount Donnathan "Lord Sommeil" Reeves, the Lighthouse\'s diplomatic liaison to imperial nobility and the Eulogians; named as the hand-off agent for living "subjects".',
         fullText: 'Donnathan Reeves serves as the diplomatic face of the Duskbreaker Lighthouse, frequently traveling to maintain relationships with political authorities, particularly in the capital city of Pharus. Basement laboratory testimony has identified him as the crucial liaison who facilitates the delivery of living "subjects" into Lighthouse custody for crystal synthesis experiments. These transfers are conducted "per protocol," suggesting an established and sanctioned arrangement between the Lighthouse and Eulogian authorities. His role makes him a key political lever and potentially the keystone figure in understanding the full scope of the institutional conspiracy. Session 8 revealed that Reeves holds the hereditary title Viscount Sommeil, hails from a vintner family, and maintains direct access to Grand Duke Valerian Oliander, rekindling Torchlight College ties while shuttling between Bastion and the ducal palace. It is an "open secret" that he and the Duke are lovers.',
         history: [
@@ -226,6 +214,7 @@ export const npcs = [
         name: 'Duke Valerian Oliander',
         role: 'Duke of Hieroterra',
         location: 'Bastion City',
+        prominence: 'major',
         description: 'Provincial ruler of Hieroterra; mentioned as having been warned about the Lighthouse hubris and politics around light crystals. Revealed to be the lover of Donnathan Reeves.',
         history: [
             { session: 1, note: 'Named as Duke of Hieroterra during city introduction.' },
@@ -254,7 +243,7 @@ export const npcs = [
             { session: 6, note: 'Research partnership with Faberge on energy bottleneck.' }
         ],
         connections: [
-            { type: 'character', id: 'michelle-faberge', reason: 'Research collaborator' },
+            { type: 'npc', id: 'michelle-faberge', reason: 'Research collaborator' },
             { type: 'location', id: 'duskbreaker-lighthouse', reason: 'Contractor' }
         ]
     },
@@ -268,7 +257,7 @@ export const npcs = [
             { session: 6, note: 'Assisted in moving Meri from lab to medical bay.' }
         ],
         connections: [
-            { type: 'character', id: 'stanley-guard', reason: 'Guard partner' },
+            { type: 'npc', id: 'stanley-guard', reason: 'Guard partner' },
             { type: 'location', id: 'duskbreaker-lighthouse', reason: 'Security staff' },
             { type: 'location', id: 'lighthouse-med-bay', reason: 'Transported subject to medical bay' }
         ]
@@ -328,7 +317,7 @@ export const npcs = [
         connections: [
             { type: 'location', id: 'duskbreaker-lighthouse', reason: 'Employed as guard' },
             { type: 'location', id: 'guard-bar-west', reason: 'Frequent patron' },
-            { type: 'character', id: 'aaron', reason: 'Spouse' }
+            { type: 'npc', id: 'aaron', reason: 'Spouse' }
         ]
     },
     {
@@ -342,7 +331,7 @@ export const npcs = [
             { session: 6, note: 'Initially resistant to Stanley\'s return; hopefully reconciled?' }
         ],
         connections: [
-            { type: 'character', id: 'stanley-guard', reason: 'Spouse' }
+            { type: 'npc', id: 'stanley-guard', reason: 'Spouse' }
         ]
     },
     {
@@ -369,7 +358,7 @@ export const npcs = [
             { session: 5, note: 'Provided technical briefing on crystal power enhancement and warforged applications.' }
         ],
         connections: [
-            { type: 'character', id: 'michelle-faberge', reason: 'Research subordinate' },
+            { type: 'npc', id: 'michelle-faberge', reason: 'Research subordinate' },
             { type: 'location', id: 'duskbreaker-lighthouse', reason: 'Staff member' }
         ]
     },
@@ -385,8 +374,8 @@ export const npcs = [
         connections: [
             { type: 'location', id: 'duskbreaker-lighthouse', reason: 'Staff lead' },
             { type: 'location', id: 'basement-lab', reason: 'Operates the synthesis rig' },
-            { type: 'character', id: 'michelle-faberge', reason: 'Reported to as Director of Research' },
-            { type: 'character', id: 'donnathan-reeves', reason: 'Named as liaison delivering subjects per protocol' },
+            { type: 'npc', id: 'michelle-faberge', reason: 'Reported to as Director of Research' },
+            { type: 'npc', id: 'donnathan-reeves', reason: 'Named as liaison delivering subjects per protocol' },
             { type: 'lore', id: 'light-crystals', reason: 'Operates crystal synthesis process' }
         ]
     },

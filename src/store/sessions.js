@@ -1,3 +1,7 @@
+export const storyPreamble = `In Bastion City, crystal lamps burn so bright they throw crueler shadows. Progress is preached as holy, order is sold as mercy, and the people least protected by either are the first to disappear.
+
+Into that fracture step five unlikely allies: Ellara, a faithful acolyte-druid torn between doctrine and conscience; Nyx, a shadowed hunter who trusts little and misses less; Berridin, a silver-tongued halfling survivor; Ysidor, a mountain paladin searching for his mentor Meri; and Witty, a volatile noble artificer whose absurdity often hides real nerve.`;
+
 export const sessions = [
   {
     id: 'session-22',
@@ -18,6 +22,14 @@ export const sessions = [
     upcoming: false,
     summaryFile: 'session-21.md',
     description: 'At Lord Whitaker’s Estate, Witty identifies the titan’s crystal as artificial and estimates its output at a hundred ordinary crystals. Ellara confides in Proctor Eduard and receives passage to Pharus, but stays with the party as they commit to stopping the living-subject experiments through Witty’s Lighthouse application.',
+    homeRecap: 'Witty identified the titan’s crystal as artificial and estimated its output at a hundred ordinary light crystals. Ellara told Proctor Eduard about the experiments and received passage to Pharus, but chose to stay. The party agreed to stop crystals being made from living beings, with Witty planning to apply for Faberge’s vacant Lighthouse position.',
+    nextSteps: [
+      'Prepare Witty’s Lighthouse application using his scientific credentials and family ties to Donnathan Reeves.',
+      'Withdraw funds from Witty’s separate allowance account, with Berridin proposed as signatory.',
+      'Seek evidence of who directs the living-subject crystal experiments at the Lighthouse.',
+      'Keep Ellara’s undated, church-funded rail passage to Pharus available if needed.'
+    ],
+    storyBeat: 'At Lord Whitaker’s Estate, Witty finds an artificial matrix inside the titan’s crystal and estimates its power at a hundred ordinary lamps. The lives behind that power give the party a shared purpose: stop more people becoming fuel. Ellara tells Proctor Eduard what they witnessed; he expresses shock and offers passage to Pharus, but she returns to her companions. With the Duke funding an independent Lighthouse and his knowledge of the experiments still uncertain, they choose a new way inside: Witty will seek Faberge’s vacant position through his credentials and family ties to Reeves.',
     highlights: [
       'Witty’s Investigation 19, aided by Hyr’s blessing, reveals an artificial matrix inside the titan’s crystal; he estimates its output at about one hundred ordinary light crystals.',
       'The crystal is extremely stable, but Witty warns that overloading its matrix could cause catastrophic destruction.',
@@ -38,6 +50,13 @@ export const sessions = [
     upcoming: false,
     summaryFile: 'session-20.md',
     description: 'After Hýrda’s victory, the party recovers a titan-scale light crystal and ducal intelligence, confronts Michelle Faberge’s death, celebrates and mourns with the village, then races back to Bastion to save Lord Whitaker’s Estate from repossession.',
+    homeRecap: 'Witty recovered a head-sized light crystal from the fallen titan, Hýrda mourned and celebrated its costly victory, and Berridin raced ahead to Bastion to settle the Whitaker loan before the estate could be seized. The party has regrouped at Lord Whitaker’s Estate with the Lighthouse crisis still unresolved.',
+    nextSteps: [
+      'Recover at Lord Whitaker’s Estate and secure the titan’s light crystal for investigation.',
+      'Decide whether to approach Proctor Eduard about the Lighthouse and the experiments.',
+      'Learn how Bastion City and the Grand Duke are responding to Hýrda’s victory.'
+    ],
+    storyBeat: 'Victory leaves the party holding both leverage and danger: Witty extracts a head-sized light crystal from the titan, Nyx reveals that Michelle Faberge died during their confrontation, and Hýrda mourns its dead before Meri sends the party back toward Bastion. A desperate ride gets Berridin to the city in time to save Lord Whitaker’s Estate from repossession, and the party regroups there with the Lighthouse’s work, Proctor Eduard’s loyalties, and the Duke’s response still unresolved.',
     highlights: [
       'Witty traces the fallen titan’s mechanisms, extracts a head-sized light crystal, and identifies it as dangerous, cutting-edge Duskbreaker technology capable of powering the colossal warforged.',
       'Nyx scouts the abandoned ducal camp before the party recovers recent orders, a vague route map, and a treasure hoard that Berridin initially tries to conceal.',
@@ -59,6 +78,13 @@ export const sessions = [
     upcoming: false,
     summaryFile: 'session-19.md',
     description: 'Meri shares Hýrda’s oldest history before the ducal army arrives; Berridin and Ysidor lure most of the force into the mountain trap, the party destroys its warforged titan, and most surviving soldiers surrender as the party reaches level 5.',
+    homeRecap: 'Berridin and Ysidor lured roughly eighty soldiers into the mountain trap, the passage collapsed behind them, and Nyx fired the final bolt that destroyed the warforged titan. Hýrda held, most surviving soldiers surrendered, and the party reached level 5.',
+    nextSteps: [
+      'Secure the surrendered soldiers and assess Hýrda’s casualties and damage.',
+      'Investigate the fallen warforged titan and the abandoned ducal camp.',
+      'Decide how the village will answer the Empire after its victory.'
+    ],
+    storyBeat: 'When the ducal army finally arrives, the trap holds. Berridin and Ysidor draw roughly eighty soldiers beneath the mountain before collapsing the passage, while Ellara, Nyx, Witty, Meri, and Hýrda’s defenders break the force left outside. Nyx’s final bolt topples the warforged titan, most surviving soldiers surrender, and the party reaches level 5—victorious, but now responsible for prisoners, casualties, and whatever answer the Empire sends next.',
     highlights: [
       'Meri tells Ellara and Ysidor that Hyr is one of several ancient beings predating kingdoms, while Nites entered Hýrda’s history only with the Empire.',
       'Berridin infiltrates the encampment alone and recovers the party’s purse of more than 1,000 gold with an 18 Sleight of Hand check.',
@@ -79,6 +105,13 @@ export const sessions = [
     upcoming: false,
     summaryFile: 'session-18.md',
     description: 'After Hyr speaks and old names vanish into static, the party completes the mine detonation plan, escapes the guard camp overlook, and returns to Hýrda for rest while Ellara prepares deeper questions about Nites, Hyr, and the mountain path.',
+    homeRecap: 'The cave charges are set, with an inside trigger for Berridin and a hidden backup plunger outside, while Hyr\'s half-heard history leaves Ellara weighing a new tension between Hýrda\'s stories and scripture about Nites.',
+    nextSteps: [
+      'Hear Meri\'s account of Hyr\'s origins after the long rest.',
+      'Let Witty craft replacement sending stones using tinkerer\'s tools.',
+      'Preserve Ellara\'s questions for Proctor Eduard and keep the cave trap ready for the Grand Duke\'s army.'
+    ],
+    storyBeat: 'The mine trap is no longer theory. The charges are set, the backup plunger is hidden, and the party has slipped back to Hýrda for a long rest while the army is still about a week away. What remains is stranger than tactics: Meri is ready to tell the stories Hýrda keeps, Ellara must carry her questions about Nites and Hyr back toward Proctor Eduard, and the party now has to defend a village whose god has spoken.',
     highlights: [
       'Hyr\'s voice leaves many stone goliaths stunned, and Nyx\'s natural 20 confirms deep magic is preventing certain historical names and words from being spoken.',
       'Ellara asks Meri and Ysidor for Hýrda\'s histories of Hyr, and Meri clarifies that Ysidor is her chosen successor in keeping those stories alive.',
@@ -101,6 +134,13 @@ export const sessions = [
     upcoming: false,
     summaryFile: 'session-17.md',
     description: 'The party scouts and infiltrates the Hýrda mine to prepare a collapse trap, only for the mountain spirit Hyr to wake, reveal a censored link to Nites and Nyx\'s past, and offer guidance for the village\'s defense.',
+    homeRecap: 'The party slipped miners into the Hýrda Mines, began preparing the collapse trap, and awakened Hyr, the mountain spirit, who offered guidance while revealing that world-scale magic is hiding a name tied to Nites and Nyx\'s past.',
+    nextSteps: [
+      'Finish extracting ore and setting the explosive charges with Hyr\'s guidance.',
+      'Keep the guard camp lookout fooled while exiting the mines.',
+      'Decide how to spring the trap when the Grand Duke\'s army arrives.'
+    ],
+    storyBeat: 'With the powder finally in hand, the party moves from rescue to preparation. Under cover of night they slip miners into the Hýrda Mines, silence the cave-mouth guards without killing them, and begin turning the mountain itself into a trap. Then Hyr wakes: not merely a village story, but the spirit of the range, old enough to remember Nites, the Great Cataclysm, and a name that the world itself refuses to let anyone hear.',
     highlights: [
       'The party regroups in Hýrda after the prison escape, recovering their gear but not the shared gold taken by the captain.',
       'Berridin and Witty scout the mine approach, confirming two guards at the cave mouth, a northern tower lookout, and no obvious magical detection.',
@@ -118,18 +158,24 @@ export const sessions = [
     id: 'session-16',
     title: 'Session 16',
     subtitle: 'Chains, Spiders, and Gunpowder',
-    location: 'Ducal encampment at the cave mouth · Woods west of camp · Hyrda',
+    location: 'Ducal encampment at the cave mouth · Woods west of camp · Hýrda',
     date: 'March 9, 2026',
     upcoming: false,
     summaryFile: 'session-16.md',
-    description: 'Captured inside the ducal encampment, the party breaks out, rescues Berridin and Witty, reclaims their gear, and escapes with stolen gunpowder while the threat to Hyrda escalates.',
+    description: 'Captured inside the ducal encampment, the party breaks out, rescues Berridin and Witty, reclaims their gear, and escapes with stolen gunpowder while the threat to Hýrda escalates.',
+    homeRecap: 'The party escaped the ducal cages, rescued Berridin and Witty, reclaimed their gear, and got out with at least one barrel of gunpowder, but the captain still has their gold and Hýrda is still on borrowed time.',
+    nextSteps: [
+      'Turn the stolen gunpowder into a workable mine-collapse defense for Hýrda.',
+      'Prepare before ducal reinforcements and retaliation close the window.'
+    ],
+    storyBeat: 'Captivity does not hold for long. Ellara slips free in spider form, Nyx and Ysidor turn panic into momentum, and the party claws Berridin and Witty back out of the ducal camp while reclaiming their gear and stealing gunpowder. Survival becomes counterattack, but the rescue only sharpens the real problem: Hýrda still stands in the path of a larger force that has not yet arrived.',
     highlights: [
       'The party begins Session 16 disarmed and split across three reinforced cages after the failed poison-and-sabotage assault.',
       'Nyx spots a key ring on a guard, while Ellara is marched off to heal poisoned soldiers under close watch.',
       'Ellara escapes by blinding her escort with Light and slipping away in spider form.',
       'Witty and Berridin help create the opening for Ysidor to shatter his chain and break free on a natural 20.',
       'Nyx later teleports out of restraint with the Blessing of the Raven Queen, leaving only Berridin and Witty imprisoned.',
-      'Ysidor, Nyx, and Ellara regroup in Hyrda with Meri and Ardwin, arm themselves, and immediately return for a rescue.',
+      'Ysidor, Nyx, and Ellara regroup in Hýrda with Meri and Ardwin, arm themselves, and immediately return for a rescue.',
       'The trio sneaks back into camp, recovers the party’s gear, and rips Berridin and Witty free from the prisoner pole under fire.',
       'The group escapes alive with their equipment and at least one barrel of gunpowder, but the captain still has their gold and reinforcements are still coming.'
     ],
@@ -138,10 +184,13 @@ export const sessions = [
     id: 'session-15',
     title: 'Session 15',
     subtitle: 'Mushrooms, Moonlight, and Cages',
+    location: 'Hýrda · Hýrda Mines · Hýrda Ducal Encampment',
     date: 'February 9, 2026',
     upcoming: false,
     summaryFile: 'session-15.md',
     description: 'The party attempts a poison-and-sabotage operation against the Hýrda ducal encampment, but the assault fails and ends with everyone imprisoned in cages.',
+    homeRecap: 'The attempt to cripple the ducal encampment with poison and sabotage failed under concentrated resistance; the party surrendered to prevent executions and now sits caged inside enemy lines.',
+    storyBeat: 'Their latest gamble - poison, sabotage, and a collapsing timetable - fails to break the encampment before the counterstrike lands. Rather than watch captors begin executions, the party yields, stripped of gear and locked in cages inside enemy lines, with the next move likely deciding not only their fate but Hýrda\'s.',
     highlights: [
       'The group refines a mine-collapse strategy but pivots to neutralizing the camp force first.',
       'Ellara and Ysidor gather local fungi and plant substitutes to build a nonlethal poison plan.',
@@ -157,10 +206,12 @@ export const sessions = [
     id: 'session-14',
     title: 'Session 14',
     subtitle: 'Stone and Steel',
+    location: 'Hýrda · Ysidor\'s House · Ardwin\'s Forge',
     date: 'February 8, 2026',
     upcoming: false,
     summaryFile: 'session-14.md',
     description: 'The party reaches Hýrda, warns Meri and Ardwin about looming warforged deployments, and helps design a high-risk plan to use the mines against the ducal invasion force.',
+    homeRecap: 'The party reached Hýrda, warned Meri and Ardwin about the warforged threat, and committed to a mine-collapse defense plan before ducal reinforcements could arrive.',
     highlights: [
       'The party arrives at Hýrda and confirms a nearby ducal encampment of roughly twenty soldiers awaiting reinforcements.',
       'Meri briefs the group on the Duke\'s intent to seize local mines and displace the village.',
@@ -177,6 +228,7 @@ export const sessions = [
     id: 'session-13',
     title: 'Session 13',
     subtitle: 'Loans, Lies, and a False Baby',
+    location: 'Bastion City · Road to Hýrda · Hýrda Outskirts',
     date: 'January 11, 2026',
     upcoming: false,
     summaryFile: 'session-13.md',
@@ -197,17 +249,19 @@ export const sessions = [
     id: 'session-12',
     title: 'Session 12',
     subtitle: 'Swans, Stones, and Sky Schemes',
+    location: 'Bastion City · Lord Whitaker\'s Estate · Dunston & Kirk\'s · Eulogian Seminary',
     date: 'January 4, 2026',
     upcoming: false,
     summaryFile: 'session-12.md',
     transcriptFile: 'session_12_corrected.txt',
     description: 'The party learns of a bounty on Meri posted by the mysterious "Black Swan," discovers soldiers encamped near Hýrda under ducal decree, fails to procure a hot air balloon, and departs Bastion by carriage.',
+    storyBeat: 'The road carries them from Bastion to Hýrda, where ducal pressure threatens to become conquest and village defense becomes a race against reinforcements. Strategy shifts from investigation to resistance, and every plan is measured in lives, not glory.',
     highlights: [
       'Nyx reveals the "Black Swan" has posted a 250g bounty to "remove" Meri.',
       'Meri reports ~20 soldiers encamped near her village under a ducal decree.',
       'Nyx suspects the Black Swan is Grand Duke Valerian Oliander.',
       'Witty\'s bath interlude features a rubber ducky and purple shower cap.',
-      'Lady Jacintha provides balloon procurement advice and warns about Berridin.',
+      'Lady Jacinta provides balloon procurement advice and warns about Berridin.',
       'Dunston & Kirk\'s cannot provide a balloon in time—4 weeks minimum, bespoke only.',
       'Ellara receives Proctor Eduard\'s blessing and a theology book before departing.',
       'Berridin haggles a carriage rental from 30g to 26g, pocketing a 4g "finder\'s fee."',
@@ -218,10 +272,11 @@ export const sessions = [
     id: 'session-11',
     title: 'Session 11',
     subtitle: 'The Grand Soiree',
+    location: 'Bastion City · Ducal Palace · Lady Jacinta\'s Estate',
     date: 'December 14, 2025',
     upcoming: false,
     summaryFile: 'session-11.md',
-    description: 'The party infiltrates the Grand Duke\'s ball as the Whitaker brothers. Berridin flirts with Lady Ophelia, Witty charms Lady Jacintha, and Nyx is cornered by Donnathan Reeves. The "Whitaker" cover is blown, but critical intel is gained: the Duke and Reeves are lovers, and they are aware of the resistance.',
+    description: 'The party infiltrates the Grand Duke\'s ball as the Whitaker brothers. Berridin flirts with Lady Ophelia, Witty charms Lady Jacinta, and Nyx is cornered by Donnathan Reeves. The "Whitaker" cover is blown, but critical intel is gained: the Duke and Reeves are lovers, and they are aware of the resistance.',
     highlights: [
       'Berridin (Whitaker 3) dances with Lady Ophelia, who hints at army delays and "resistance".',
       'Witty (Whitaker 6) charms Lady Jacinta, learning about the Duke\'s potential intentions for his niece.',
@@ -237,6 +292,7 @@ export const sessions = [
     id: 'session-10',
     title: 'Session 10',
     subtitle: 'The Brothers Whitaker',
+    location: 'Bastion City · The Golden Goose · Lord Whitaker\'s Estate · Ducal Palace',
     date: 'November 16, 2025',
     upcoming: false,
     summaryFile: 'session-10.md',
@@ -287,6 +343,7 @@ export const sessions = [
     upcoming: false,
     summaryFile: 'session-8.md',
     description: 'Ellara meets Director Reeves and learns of the deep connections between Proctor Eduard, the Lighthouse, and the imperial nobility. Her vision of a screaming lamp leads to a moral reckoning about light crystals. Meanwhile, the party\'s botched reconnaissance at the Lighthouse leaves their rune passes compromised and forces them to scatter across the city.',
+    storyBeat: 'From there the campaign hardens into espionage and open defiance: false names at noble balls, fragile alliances, quiet betrayals, and a bounty order that turns Meri into sanctioned prey. The party keeps winning fragments of truth while losing the safety of anonymity.',
     highlights: [
       'Proctor Eduard revealed as fifth son of Marchioness of Marchenbau with connections to Empress Consort',
       'Director Reeves confirmed as Viscount Sommeil and old college friend of Grand Duke Valerian Oliander',
@@ -307,7 +364,7 @@ export const sessions = [
     date: 'September 21, 2025',
     time: '1:00 PM',
     upcoming: false,
-  description: 'After rescuing Meri, the party shelters in an abandoned barn where she reveals the full truth: Proctor Eduard himself operated the synthesis machine on her as part of a plan to suppress her people and seize their land for light crystal mining. A rift forms as Ysidor feels duty-bound to return to his village, Hýrda, while Ellara and Nyx argue they must stay to fight the conspiracy at its source. Ultimately, Ysidor agrees to stay for one month. The party returns to Bastion to find security heightened with new warforged, and Ellara comes face-to-face with both Eduard and his political liaison, Donnathan Reeves.',
+    description: 'After rescuing Meri, the party shelters in an abandoned barn where she reveals the full truth: Proctor Eduard himself operated the synthesis machine on her as part of a plan to suppress her people and seize their land for light crystal mining. A rift forms as Ysidor feels duty-bound to return to his village, Hýrda, while Ellara and Nyx argue they must stay to fight the conspiracy at its source. Ultimately, Ysidor agrees to stay for one month. The party returns to Bastion to find security heightened with new warforged, and Ellara comes face-to-face with both Eduard and his political liaison, Donnathan Reeves.',
     summaryFile: 'session-7.md',
     highlights: [
       'Meri reveals Proctor Eduard personally operated the synthesis machine on her.',
@@ -323,13 +380,14 @@ export const sessions = [
   {
     id: 'session-6',
     title: 'Session 6',
-    subtitle:'Descent into Darkness',
+    subtitle: 'Descent into Darkness',
     location: 'Duskbreaker Lighthouse',
     date: 'September 7, 2025',
     time: '1:00 PM',
     upcoming: false,
     description: 'A two-pronged infiltration puts Berridin (as “Director Faberge”) in the basement lab where he finds Meri alive, a subject in the Lighthouse\'s synthetic light-crystal program that consumes Shadowed beings. He freezes the run, moves her to Med Bay, and triggers a one-shot Dimension Door rune to extract her to the front steps as alarms erupt, while Nyx maintains cover, Ellara uncovers Faberge\'s notes, and Ysidor carries Meri to safety. The party escapes to an old growth outside the city with Meri stable but unconscious and leads implicating Eulogian liaison Donnathan Reeves.',
     summaryFile: 'session-6.md',
+    storyBeat: 'When they break into the depths and pull Meri out of an active synthesis line, the worst truth is no longer rumor: Shadowed bodies are being consumed to power the very crystal light used to civilize the city. Rescue buys breath, not safety, and the circle of enemies widens.',
     highlights: [
       'Berridin, disguised as Director Faberge, accessed the basement lab and found Meri alive and shackled as a test subject.',
       'Dawn revealed the Lighthouse synthesizes light crystals by consuming Shadowed beings; “alive at initiation” yields the best results; Meri was at 15% with a furnace step planned next.',
@@ -351,8 +409,9 @@ export const sessions = [
     date: 'August 31, 2025',
     time: '1:30 PM',
     upcoming: false,
-    description: 'After surviving the warforged ambush, the party investigates the trap site and discovers the constructs bear Duskbreaker Lighthouse insignia. They return to Bastion City where Ellara consults Proctor Eduard, who reveals the lighthouse\'s involvement and promises an official investigation. Meanwhile, Tsi\'Nyra\'s spider familiar scouts the lighthouse, uncovering extensive underground facilities. Faced with divine guidance, Ellara decides to join the party in infiltrating the lighthouse to find the truth about Meri.',
+    description: 'Scouting Lighthouse shift changes turns lethal when Nyx kills Director of Research Michelle Faberge during a street pursuit while Berridin lifts a guard’s security pass and Ellara meets artificer Darius. Using the stolen passes, Berridin (disguised as Faberge) and Nyx (as guard "Stanley") infiltrate the Duskbreaker Lighthouse, uncovering multi-tier warforged and titan-scale development, phosphorus crystal breakthroughs, and Director of Relations Donnathan Reeves’s ties to Pharus.',
     summaryFile: 'session-5.md',
+    storyBeat: 'Their trail leads to the Duskbreaker Lighthouse, the empire\'s proud monument to light and invention. Behind secured halls and official smiles, the party uncovers a machine economy where warforged ambition, political influence, and sanctioned cruelty feed one another.',
     highlights: [
       'Nyx kills Director of Research Michelle Faberge during a botched pursuit, creating a moral crisis for Ellara.',
       'Berridin successfully infiltrates the lighthouse disguised as the deceased Director using her security pass.',
@@ -374,7 +433,7 @@ export const sessions = [
     date: 'July 20, 2025',
     time: '10:00 AM',
     upcoming: false,
-    description: 'After surviving the warforged ambush, the party investigates the trap site and discovers the constructs bear Duskbreaker Lighthouse insignia. They return to Bastion City where Ellara consults Proctor Eduard, who reveals the lighthouse\'s involvement and promises an official investigation. Meanwhile, Tsi\'Nyra\'s spider familiar scouts the lighthouse, uncovering extensive underground facilities. Faced with divine guidance, Ellara decides to join the party in infiltrating the lighthouse to find the truth about Meri.',
+    description: 'Investigating the Old Trade Road ambush site turns up no sign of Meri, but confirms the warforged bear Duskbreaker Lighthouse insignia and yields three light crystals. Back in Bastion City, Ellara briefs Proctor Eduard, who promises an official inquiry, while Tsi\'Nyra\'s spider familiar uncovers vast underground levels beneath the Lighthouse; after a tense lunch at Nyx\'s townhouse and divine guidance in prayer, Ellara agrees to help infiltrate the Lighthouse.',
     summaryFile: 'session-4.md',
     highlights: [
       'Investigation of the trap site reveals no trace of Meri and confirms the warforged were made by Duskbreaker Lighthouse.',
@@ -392,8 +451,8 @@ export const sessions = [
     title: 'Session 3',
     subtitle: 'Confronting the Proctor',
     date: 'June 22, 2025',
-    time: '1:00 PM', // Added time
-    location: 'Bastion City', // Added location
+    time: '1:00 PM',
+    location: 'Bastion City',
     upcoming: false,
     description: 'The party confronts Proctor Eduard at the seminary and secures Meri’s release, shares camaraderie at The Drunken Goose, sets out by carriage at dawn, survives an ambush by warforged powered by light crystals, and uncovers clues to the mastermind behind the trap.',
     summaryFile: 'session-3.md',
@@ -416,6 +475,7 @@ export const sessions = [
     upcoming: false,
     description: 'The session begins with the PCs experiencing vivid dreams. Morning activities lead to new information for Ellara about Nyx and Meri. The party then ventures into West Bastion, investigating two prisons to find Ysidor\'s mentor, Meri. They discover that Meri was transferred under the personal custody of Proctor Eduard, deepening the mystery.',
     summaryFile: 'session-2.md',
+    storyBeat: 'What begins as a search for one missing mentor becomes a descent through prisons, church offices, and aristocratic courtyards, each door opening onto a larger lie. Every answer points to institutions that call themselves guardians while treating living people as acceptable cost.',
     highlights: [
       'Each character experiences vivid, revealing, or unsettling dreams, including Ysidor\'s memory of Meri and Ellara hearing foreign words of Eulogia.',
       'Tsi\'Nyra joyfully discovers "breakfast!" at Nyx\'s townhouse, experimenting with various food combinations.',
@@ -426,7 +486,7 @@ export const sessions = [
       'After a failed bribery attempt at the first prison, Nyx successfully bribes a guard at Stonewall Tower for information.',
       'Berridin cleverly uses Invisibility to slip past guards and discover a ledger entry: "Custody Transfer—His Holy Eminence Proctor Eduard."',
       'A tense confrontation with a Stonewall Tower guard, who warns Ellara about "people much higher" pulling strings, hints at deeper mysteries.',
-      'The party confirms Meri was transferred under the personal custody of Proctor Eduard, directly implicating him leaving Ellaria stunned.',
+      'The party confirms Meri was transferred under the personal custody of Proctor Eduard, directly implicating him and leaving Ellara stunned.',
     ],
   },
   {
@@ -443,10 +503,10 @@ export const sessions = [
       'Tsi\'Nyra arrived at Nyx\'s at her mother\'s request searching for her missing sisters.',
       'Ellara encountered Berridin and later Ysidor during Alm\'s Giving in the Eastern City.',
       'After a commotion when Tsi\'Nyra and Nyx arrived Ellara took the group aside.',
-      'Ellara felt like this connection was meant to be and she was supposed to help desipte the Shadowed in the group',
+      'Ellara felt like this connection was meant to be and she was supposed to help despite the Shadowed in the group.',
       'Ysidor asked about his mentor, Meri, who was missing. Ellara mentioned she was likely imprisoned after an incident where she took down 20 guards and shouted about the Lighthouse.',
       'Berridin and Ysidor visited the Halfling Quarter, where Berridin showed his connection to the community. The Candy Incident of 650 AE was mentioned.',
-      'Ellara asked her the Denmother about Meri who was likely imprisoned.',
+      'Ellara asked the Denmother about Meri who was likely imprisoned.',
       'Nyx gathered intelligence at a seedy bar from a guard about Meri and learned she was moved from the Eastern prison to one in the West.',
       'The party agreed to meet in 2 days to discuss their next steps.',
     ]
@@ -475,6 +535,7 @@ export const sessions = [
     title: 'Session -1',
     subtitle: 'Initial world building and general framework discussions',
     date: 'April 6, 2025',
+    upcoming: false,
     description: 'Hopes, dreams and expectations setting. Discussed the world\'s themes, character concepts, and narrative boundaries.',
     highlights: [
       'Established our world as a Steampunk/Gaslamp Fantasy setting where magic and emerging technology exist in societal tension.',

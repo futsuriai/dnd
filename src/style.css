@@ -6,19 +6,37 @@
   --font-main: 'Lato', system-ui, Avenir, Helvetica, Arial, sans-serif;
   --font-display: 'Cinzel', serif; /* Elegant fantasy font for headings */
   --font-accent: 'MedievalSharp', cursive; /* More medieval font for accents */
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  --heading-font: var(--font-display);
 
   /* Color Palette (Dark Fantasy Theme) */
   --color-background: #121418; /* Very dark blue-gray */
+  --color-background-soft: #1a1e26;
+  --color-background-mute: #242934;
   --color-surface: #1e222a;  /* Dark slate for cards/containers */
+  --bg-secondary: #1e222a;
+  --bg-hover: #272d38;
+  --background-tertiary: #2c323e;
+  --background-secondary-rgb: 30, 34, 42;
+
   --color-primary: #c9a959; /* Rich gold */
-  --color-highlight: #ffb600; /* Rich gold */
+  --color-primary-dark: #a6883e;
+  --accent-color: var(--color-primary);
+  --color-heading: var(--color-primary);
+  --color-highlight: #ffb600; /* Bright lantern gold */
   --color-secondary: #8a0303; /* Deep blood red */
   --color-accent: #2a6077; /* Deep teal blue */
+
   --color-text: #e8e8e8; /* Off-white */
-  --color-text-muted: #a0a0a0; /* Grey for less important text */
-  --color-link: #d4b784;
-  --color-link-hover: #e8d1a1;
+  --color-text-muted: #a6adb9; /* High-contrast muted gray */
+  --text-muted: var(--color-text-muted);
+
+  /* High-contrast links for dark surfaces (WCAG AA+) */
+  --color-link: #5bb0cf;
+  --color-link-hover: #82cce6;
+
   --border-color: #3b3f47;
+  --border-color-rgb: 59, 63, 71;
   --border-accent: #58473e;
 
   /* Shadows */
@@ -28,7 +46,7 @@
 
   /* Gradients */
   --gradient-primary: linear-gradient(135deg, var(--color-surface) 0%, #262c36 100%);
-  
+
   font-family: var(--font-main);
   line-height: 1.6;
   font-weight: 400;
@@ -48,7 +66,7 @@ body {
   margin: 0;
   min-height: 100vh;
   background-color: var(--color-background);
-  background-image: 
+  background-image:
     url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23232323' fill-opacity='0.3' fill-rule='evenodd'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E");
   position: relative;
 }
@@ -79,9 +97,9 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 700;
 }
 
-h1 { 
-  font-size: 2.8em; 
-  line-height: 1.1; 
+h1 {
+  font-size: 2.8em;
+  line-height: 1.1;
   position: relative;
   display: inline-block;
 }
@@ -96,13 +114,13 @@ h1::after {
   left: 0;
 }
 
-h2 { 
-  font-size: 2em; 
+h2 {
+  font-size: 2em;
   color: var(--color-primary);
 }
 
-h3 { 
-  font-size: 1.5em; 
+h3 {
+  font-size: 1.5em;
 }
 
 p {
@@ -124,6 +142,31 @@ a:hover {
   border-bottom-color: var(--color-link-hover);
 }
 
+/* --- Hash Target Highlight Pulse --- */
+@keyframes hashHighlightPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(201, 169, 89, 0.8), 0 0 22px rgba(255, 182, 0, 0.45);
+    border-color: var(--color-highlight);
+  }
+  45% {
+    box-shadow: 0 0 0 6px rgba(201, 169, 89, 0.28), 0 0 28px rgba(255, 182, 0, 0.35);
+    border-color: var(--color-highlight);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(201, 169, 89, 0);
+    border-color: var(--border-color);
+  }
+}
+
+.hash-highlight {
+  animation: hashHighlightPulse 2s ease-out;
+  scroll-margin-top: 2rem;
+}
+
+[id] {
+  scroll-margin-top: 1.5rem;
+}
+
 /* --- Page Sections --- */
 .content-section {
   background-color: var(--color-surface);
@@ -133,7 +176,7 @@ a:hover {
   box-shadow: var(--shadow-md);
   border: 1px solid var(--border-color);
   position: relative;
-  overflow: hidden;
+  overflow: clip;
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
@@ -153,10 +196,10 @@ a:hover {
 .card-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 2rem !important;           /* Increase gap between cards */
-  grid-auto-rows: min-content;    /* Let rows size to content */
-  align-items: start !important;  /* Align items to top of container */
-  margin-bottom: 2rem;            /* Add space below the grid */
+  gap: 2rem !important;
+  grid-auto-rows: min-content;
+  align-items: start !important;
+  margin-bottom: 2rem;
 }
 
 .card {
@@ -196,7 +239,7 @@ a:hover {
   border: 1px solid var(--color-primary);
   padding: 0.7em 1.4em;
   font-size: 0.95em;
-  font-weight: 500;
+  font-weight: 600;
   font-family: var(--font-main);
   background-color: transparent;
   color: var(--color-primary);
@@ -214,6 +257,17 @@ a:hover {
   text-decoration: none;
   border-bottom-color: var(--color-primary);
   box-shadow: var(--shadow-sm);
+}
+
+.button-link.button-primary {
+  background-color: var(--color-primary);
+  color: var(--color-background);
+}
+
+.button-link.button-primary:hover {
+  background-color: var(--color-highlight);
+  border-color: var(--color-highlight);
+  color: var(--color-background);
 }
 
 button {
@@ -236,7 +290,8 @@ button:hover {
 
 button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  outline: 2px solid var(--color-highlight);
+  outline-offset: 2px;
 }
 
 /* --- Images --- */
@@ -276,11 +331,12 @@ button:focus-visible {
 
 /* --- Navigation --- */
 nav {
-  padding: 1rem 2rem;
+  padding: 0.9rem 1.5rem;
   margin-bottom: 2rem;
   background-color: var(--color-surface);
   border-radius: 8px;
   box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color);
   position: relative;
 }
 
@@ -291,6 +347,7 @@ nav::before {
   left: 0;
   right: 0;
   height: 3px;
+  border-radius: 8px 8px 0 0;
   background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
 }
 
@@ -300,22 +357,26 @@ nav ul {
   margin: 0;
   display: flex;
   justify-content: center;
+  align-items: center;
   flex-wrap: wrap;
-  gap: 1.5rem;
+  gap: 0.9rem 1.25rem;
 }
 
 nav ul li a {
   font-family: var(--font-display);
-  font-size: 1.1em;
-  letter-spacing: 1px;
-  padding: 0.5em 0;
+  font-size: 1.02em;
+  letter-spacing: 0.7px;
+  padding: 0.45em 0;
+  color: #d4b784;
   border-bottom: 2px solid transparent;
   transition: border-color 0.2s ease-in-out, color 0.2s ease-in-out;
+  white-space: nowrap;
 }
 
 nav ul li a:hover,
-nav ul li a.router-link-exact-active {
-  color: var(--color-link-hover);
+nav ul li a.router-link-exact-active,
+nav ul li a.router-link-active:not(.nav-home-link):not(.nav-exact-only) {
+  color: var(--color-highlight);
   border-bottom-color: var(--color-primary);
 }
 
@@ -324,18 +385,17 @@ nav ul li a.router-link-exact-active {
 .npc-tile,
 .character-card,
 .npc-card {
-  height: auto !important;        /* Override any fixed height settings */
-  min-height: 100px;              /* Set minimum height */
-  display: flex !important;       /* Ensure flex display */
-  flex-direction: column !important; /* Stack content vertically */
-  overflow: visible !important;   /* Prevent content cutoff */
-  margin-bottom: 0 !important;    /* Remove bottom margin that might cause issues */
-  position: relative;             /* Enable proper positioning */
+  height: auto !important;
+  min-height: 100px;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: visible !important;
+  margin-bottom: 0 !important;
+  position: relative;
 }
 
-/* If using a grid or flex layout for tiles */
 .tile-container {
-  gap: 1rem;            /* Add space between grid/flex items */
+  gap: 1rem;
 }
 
 /* --- Entity Section Styles --- */
@@ -376,7 +436,7 @@ nav ul li a.router-link-exact-active {
 
 .empty-message {
   font-style: italic;
-  color: var(--color-text-muted, #aaa);
+  color: var(--color-text-muted);
 }
 
 /* --- Responsive Adjustments --- */
@@ -384,7 +444,7 @@ nav ul li a.router-link-exact-active {
   h1 { font-size: 2.4em; }
   h2 { font-size: 1.8em; }
   .content-section { padding: 1.5em; }
-  nav ul { gap: 1rem; }
+  nav ul { gap: 0.75rem 1rem; }
   .entity-grid, .card-grid {
     grid-template-columns: 1fr;
   }
@@ -394,15 +454,11 @@ nav ul li a.router-link-exact-active {
   h1 { font-size: 2.1em; }
   h2 { font-size: 1.6em; }
   .content-section { padding: 1.2em; }
-  nav ul { 
-    flex-direction: column;
-    align-items: center;
-    gap: 0.8rem;
-  }
 }
 
-/* Add these rules to prevent horizontal scrolling on mobile */
+/* Prevent horizontal scrolling while preserving position: sticky */
 html, body {
   max-width: 100%;
   overflow-x: hidden;
+  overflow-x: clip;
 }
