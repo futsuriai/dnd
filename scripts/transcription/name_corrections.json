@@ -22,8 +22,8 @@
     "Nixon": "Nyx",
     "Hyuba": "Hýrda",
     "Hyrda": "Hýrda",
-    "Hjir": "Hyr",
-    "Hypp": "Hyr",
+    "Hjir": "Hýr",
+    "Hypp": "Hýr",
     "Stongalais": "stone goliaths",
     "Stonegull eyes": "stone goliaths",
     "Stonegull": "stone goliath",
@@ -82,7 +82,7 @@
     "the area": "ASR sometimes hears \"the Lara\"; do not turn \"the Ellara\" into the character unless she is being addressed.",
     "Static": "\"The Static\" is campaign lore; lowercase static is just the word.",
     "nites (lowercase)": "Gladia's vocabulary boost sometimes turns the word \"night\" into \"nites\"; only Nites (capitalized, the deity) is the name.",
-    "here": "The GM pronounces Hýr like \"here\"; \"the story of here\" / \"here guides us\" usually means Hyr.",
+    "here": "The GM pronounces Hýr like \"here\"; \"the story of here\" / \"here guides us\" usually means Hýr (note: campaign data stores use unaccented Hyr).",
     "Eduardo": "Players' running joke name for Proctor Eduard; keep it when they are joking, use Eduard in narration.",
     "Jeeves / Jarvis": "Witty's former butler is Jarvis; the GM sometimes says Jeeves."
   },
@@ -90,9 +90,5 @@
     "Din": "Berridin",
     "Little Hill": "Ysidor",
     "Witty": "Whitaker \"Witty\" Whitman VI"
-  },
-  "speaker_label_fixes": {
-    "Witty": "Whitaker",
-    "Beridin": "Berridin"
   }
 }

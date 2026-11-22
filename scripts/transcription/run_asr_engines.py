@@ -9,16 +9,18 @@ Outputs (per engine) in <work-dir>/<engine>/:
 
 Engines:
     gladia             cloud, VAD-compacted upload (needs GLADIA_API_KEY)
-    whisper-large-v3   local faster-whisper large-v3 (GPU)
-    whisper-turbo      local faster-whisper large-v3-turbo (GPU, faster)
+    whisper-large-v3   local Whisper large-v3 (CUDA / Apple MLX / CPU int8)
+    whisper-turbo      local Whisper large-v3-turbo (faster on M1/GPU/CPU)
+    whisper-distil     local distil-large-v3
 
-Cloud and GPU engines run concurrently; GPU tracks run one at a time.
+Cloud and local engines run concurrently; local tracks run one at a time.
 """
 
 from __future__ import annotations
 
 import argparse
 import os
+import platform
 import subprocess
 import sys
 import threading
@@ -26,10 +28,26 @@ import time
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
+try:
+    import pipeline_paths as _pipeline_paths
+except ImportError:
+    _pipeline_paths = None
+
 SCRIPT_DIR = Path(__file__).resolve().parent
-DND_DIR = SCRIPT_DIR.parent.parent
+DND_DIR = _pipeline_paths.DND_DIR if _pipeline_paths is not None else SCRIPT_DIR.parent.parent
 AUDIO_EXTENSIONS = {".flac", ".mp3", ".wav", ".m4a", ".ogg", ".aac"}
-DEFAULT_PYTHON = Path("~/.gemini/tmp/transcribe_env/bin/python3").expanduser()
+
+
+def _default_python() -> Path:
+    if _pipeline_paths is not None:
+        return _pipeline_paths.resolve_python()
+    venv_py = DND_DIR / ".venv-transcription" / "bin" / "python3"
+    if venv_py.exists():
+        return venv_py
+    return Path(sys.executable)
+
+
+DEFAULT_PYTHON = _default_python()
 
 WHISPER_MODELS = {
     "whisper-large-v3": "large-v3",
@@ -49,13 +67,33 @@ def list_audio(audio_dir: Path) -> list[Path]:
     return sorted(p for p in audio_dir.iterdir() if p.is_file() and p.suffix.lower() in AUDIO_EXTENSIONS)
 
 
-def cuda_env(python_bin: Path) -> dict[str, str]:
-    env = dict(os.environ)
-    site = python_bin.parent.parent / "lib" / "python3.12" / "site-packages" / "nvidia"
-    libs = [str(site / lib / "lib") for lib in ("cudnn", "cublas", "cudart") if (site / lib / "lib").exists()]
-    if libs:
-        env["LD_LIBRARY_PATH"] = ":".join(libs + ([env["LD_LIBRARY_PATH"]] if env.get("LD_LIBRARY_PATH") else []))
+def is_apple_silicon() -> bool:
+    return platform.system() == "Darwin" and platform.machine().lower() in {"arm64", "aarch64"}
+
+
+def runtime_env(python_bin: Path) -> dict[str, str]:
+    """Build subprocess env without injecting Linux CUDA paths on macOS."""
+    if _pipeline_paths is not None:
+        env = _pipeline_paths.no_bytecode_env()
+    else:
+        env = dict(os.environ)
+        env["PYTHONDONTWRITEBYTECODE"] = "1"
+
+    # NVIDIA pip wheel libraries live under site-packages/nvidia on Linux only.
+    if platform.system() == "Linux":
+        lib_root = python_bin.parent.parent / "lib"
+        if lib_root.exists():
+            for site in sorted(lib_root.glob("python*/site-packages/nvidia")):
+                libs = [str(site / lib / "lib") for lib in ("cudnn", "cublas", "cudart") if (site / lib / "lib").exists()]
+                if libs:
+                    existing = env.get("LD_LIBRARY_PATH")
+                    env["LD_LIBRARY_PATH"] = ":".join(libs + ([existing] if existing else []))
+                    break
     return env
+
+
+# Preserve legacy helper name if imported externally.
+cuda_env = runtime_env
 
 
 def run_logged(cmd: list[str], log_path: Path, env: dict[str, str]) -> int:
@@ -64,31 +102,44 @@ def run_logged(cmd: list[str], log_path: Path, env: dict[str, str]) -> int:
         return subprocess.run(cmd, cwd=str(DND_DIR), env=env, stdout=lf, stderr=subprocess.STDOUT, check=False).returncode
 
 
-def gladia_track(audio: Path, out_dir: Path, python_bin: Path, env: dict[str, str], force: bool) -> bool:
+def gladia_track(
+    audio: Path,
+    out_dir: Path,
+    python_bin: Path,
+    env: dict[str, str],
+    force: bool,
+    vocab_intensity: float | None = None,
+) -> bool:
     track = audio.name.split(".", 1)[0]
     out_json = out_dir / f"{track}.json"
     if out_json.exists() and not force:
         log(f"gladia {track}: exists, skipping")
         return True
     log(f"gladia {track}: start")
-    code = run_logged(
-        [
-            str(python_bin), "-u", str(SCRIPT_DIR / "transcribe_gladia.py"),
-            str(audio), str(out_dir / f"{track}.txt"),
-            "--dnd-dir", str(DND_DIR),
-            "--artifact-dir", str(out_dir / "work" / track),
-            "--words-json", str(out_json),
-            "--raw-archive", str(out_dir / "raw" / f"{track}.result.json.gz"),
-        ],
-        out_dir / "logs" / f"{track}.log",
-        env,
-    )
+    cmd = [
+        str(python_bin), "-B", "-u", str(SCRIPT_DIR / "transcribe_gladia.py"),
+        str(audio), str(out_dir / f"{track}.txt"),
+        "--dnd-dir", str(DND_DIR),
+        "--artifact-dir", str(out_dir / "work" / track),
+        "--words-json", str(out_json),
+        "--raw-archive", str(out_dir / "raw" / f"{track}.result.json.gz"),
+    ]
+    if vocab_intensity is not None:
+        cmd.extend(["--vocab-intensity", str(vocab_intensity)])
+    code = run_logged(cmd, out_dir / "logs" / f"{track}.log", env)
     log(f"gladia {track}: {'done' if code == 0 else f'FAILED ({code})'}")
     return code == 0
 
 
 def whisper_track(
-    audio: Path, out_dir: Path, model: str, python_bin: Path, env: dict[str, str], session: str, force: bool
+    audio: Path,
+    out_dir: Path,
+    model: str,
+    python_bin: Path,
+    env: dict[str, str],
+    session: str,
+    force: bool,
+    backend: str = "auto",
 ) -> bool:
     track = audio.name.split(".", 1)[0]
     out_json = out_dir / f"{track}.json"
@@ -96,16 +147,14 @@ def whisper_track(
         log(f"{out_dir.name} {track}: exists, skipping")
         return True
     log(f"{out_dir.name} {track}: start")
-    code = run_logged(
-        [
-            str(python_bin), "-u", str(SCRIPT_DIR / "asr_whisper.py"), str(audio),
-            "--out-json", str(out_json),
-            "--model", model,
-            "--session", session,
-        ],
-        out_dir / "logs" / f"{track}.log",
-        env,
-    )
+    cmd = [
+        str(python_bin), "-B", "-u", str(SCRIPT_DIR / "asr_whisper.py"), str(audio),
+        "--out-json", str(out_json),
+        "--model", model,
+        "--session", session,
+        "--backend", backend,
+    ]
+    code = run_logged(cmd, out_dir / "logs" / f"{track}.log", env)
     log(f"{out_dir.name} {track}: {'done' if code == 0 else f'FAILED ({code})'}")
     return code == 0
 
@@ -116,14 +165,20 @@ def main() -> int:
     parser.add_argument("--session", required=True)
     parser.add_argument("--engines", default="gladia,whisper-large-v3", help="Comma-separated engine list")
     parser.add_argument("--work-dir", help="Default: <audio-dir>/asr")
-    parser.add_argument("--python", default=str(DEFAULT_PYTHON), help="Python with faster-whisper installed")
+    parser.add_argument("--python", help=f"Python with faster-whisper/mlx-whisper installed (default: {DEFAULT_PYTHON})")
+    parser.add_argument("--whisper-backend", choices=["auto", "mlx", "faster-whisper"], default="auto")
+    parser.add_argument("--vocab-intensity", type=float, help="Optional Gladia custom vocabulary intensity override")
     parser.add_argument("--gladia-workers", type=int, default=3)
     parser.add_argument("--force", action="store_true")
     args = parser.parse_args()
 
     audio_dir = Path(args.audio_dir).expanduser().resolve()
     work_dir = Path(args.work_dir).expanduser().resolve() if args.work_dir else audio_dir / "asr"
-    python_bin = Path(args.python).expanduser()
+    python_bin = (
+        _pipeline_paths.resolve_python(args.python)
+        if _pipeline_paths is not None
+        else (Path(args.python).expanduser() if args.python else _default_python())
+    )
     audio_files = list_audio(audio_dir)
     if not audio_files:
         raise SystemExit(f"no audio files in {audio_dir}")
@@ -133,16 +188,22 @@ def main() -> int:
     if unknown:
         raise SystemExit(f"unknown engines: {unknown}")
 
-    env = cuda_env(python_bin)
+    env = runtime_env(python_bin)
     env["WHISPER_SESSION_NUMBER"] = str(args.session)
-    log(f"{len(audio_files)} tracks, engines={engines}, work_dir={work_dir}")
+    arch = "Apple Silicon" if is_apple_silicon() else f"{platform.system()} {platform.machine()}"
+    log(f"{len(audio_files)} tracks, engines={engines}, host={arch}, python={python_bin}, work_dir={work_dir}")
 
     results: list[bool] = []
 
     def run_gladia() -> None:
         out_dir = work_dir / "gladia"
         with ThreadPoolExecutor(max_workers=args.gladia_workers) as pool:
-            results.extend(pool.map(lambda a: gladia_track(a, out_dir, python_bin, env, args.force), audio_files))
+            results.extend(
+                pool.map(
+                    lambda a: gladia_track(a, out_dir, python_bin, env, args.force, args.vocab_intensity),
+                    audio_files,
+                )
+            )
 
     def run_local() -> None:
         for engine in engines:
@@ -151,7 +212,16 @@ def main() -> int:
             out_dir = work_dir / engine
             for audio in audio_files:
                 results.append(
-                    whisper_track(audio, out_dir, WHISPER_MODELS[engine], python_bin, env, str(args.session), args.force)
+                    whisper_track(
+                        audio,
+                        out_dir,
+                        WHISPER_MODELS[engine],
+                        python_bin,
+                        env,
+                        str(args.session),
+                        args.force,
+                        backend=args.whisper_backend,
+                    )
                 )
 
     threads = []

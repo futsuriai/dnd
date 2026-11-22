@@ -16,10 +16,7 @@ import math
 import re
 import wave
 from pathlib import Path
-
-import numpy as np
-from faster_whisper.audio import decode_audio
-from faster_whisper.vad import VadOptions, get_speech_timestamps
+from typing import Any
 
 
 SAMPLE_RATE = 16000
@@ -44,7 +41,9 @@ def format_timestamp(seconds: float) -> str:
     return f"{hours:02}:{minutes:02}:{secs:02}"
 
 
-def write_wav(path: Path, audio: np.ndarray) -> None:
+def write_wav(path: Path, audio: Any) -> None:
+    import numpy as np
+
     path.parent.mkdir(parents=True, exist_ok=True)
     pcm = np.clip(audio, -1.0, 1.0)
     pcm = (pcm * 32767).astype(np.int16)
@@ -56,7 +55,9 @@ def write_wav(path: Path, audio: np.ndarray) -> None:
         wav.writeframes(pcm.tobytes())
 
 
-def build_compact_audio(audio: np.ndarray, chunks: list[dict], gap_samples: int) -> np.ndarray:
+def build_compact_audio(audio: Any, chunks: list[dict], gap_samples: int) -> Any:
+    import numpy as np
+
     if not chunks:
         return np.array([], dtype=np.float32)
 
@@ -101,6 +102,9 @@ def json_safe_number(value: float | int) -> float | int | None:
 
 
 def compact(args: argparse.Namespace) -> None:
+    from faster_whisper.audio import decode_audio
+    from faster_whisper.vad import VadOptions, get_speech_timestamps
+
     input_path = Path(args.input_audio)
     output_audio = Path(args.output_audio)
     manifest_path = Path(args.manifest)
@@ -161,21 +165,71 @@ class TimelineMapper:
         self.segments = segments
         self.starts = [segment["compact_start"] for segment in segments]
 
-    def map_time(self, compact_time: float, is_end: bool = False) -> float:
+    def _segment_index(self, compact_time: float) -> int:
         index = bisect.bisect_right(self.starts, compact_time) - 1
-        index = max(0, min(index, len(self.segments) - 1))
+        return max(0, min(index, len(self.segments) - 1))
 
-        segment = self.segments[index]
-        if compact_time > segment["compact_end"] and index + 1 < len(self.segments):
-            segment = self.segments[index + 1]
-
-        offset = compact_time - segment["compact_start"]
-        if is_end:
-            offset = min(max(offset, 0), segment["original_end"] - segment["original_start"])
-        else:
-            offset = max(offset, 0)
-
+    @staticmethod
+    def _clamp_in_segment(segment: dict, compact_time: float) -> float:
+        duration = segment["original_end"] - segment["original_start"]
+        offset = min(max(compact_time - segment["compact_start"], 0.0), duration)
         return segment["original_start"] + offset
+
+    def map_time(self, compact_time: float, is_end: bool = False) -> float:
+        index = self._segment_index(compact_time)
+        segment = self.segments[index]
+
+        if compact_time > segment["compact_end"]:
+            if is_end:
+                # A word/segment ending inside the synthetic gap after island `i`
+                # belongs at the end of island `i`, never across removed silence
+                # at the start of island `i + 1`.
+                return segment["original_end"]
+            if index + 1 < len(self.segments):
+                nxt = self.segments[index + 1]
+                gap_midpoint = 0.5 * (segment["compact_end"] + nxt["compact_start"])
+                if compact_time >= gap_midpoint:
+                    return nxt["original_start"]
+            return segment["original_end"]
+
+        return self._clamp_in_segment(segment, compact_time)
+
+    def map_span(
+        self,
+        compact_start: float,
+        compact_end: float,
+        *,
+        clamp_to_start_segment: bool = True,
+    ) -> tuple[float, float]:
+        """Map a compact `[start, end]` span onto the original timeline without
+        jumping across synthetic `segment_gap_ms` silence between VAD islands.
+        """
+        compact_end = max(compact_start, compact_end)
+        index = self._segment_index(compact_start)
+        segment = self.segments[index]
+
+        if compact_start > segment["compact_end"] and index + 1 < len(self.segments):
+            nxt = self.segments[index + 1]
+            if compact_end > nxt["compact_start"]:
+                index += 1
+                segment = nxt
+                orig_start = segment["original_start"]
+            else:
+                # Entire span sits inside the synthetic gap: snap to closer boundary.
+                dist_prev = compact_start - segment["compact_end"]
+                dist_next = nxt["compact_start"] - compact_end
+                if dist_next < dist_prev:
+                    return nxt["original_start"], nxt["original_start"]
+                return segment["original_end"], segment["original_end"]
+        else:
+            orig_start = self._clamp_in_segment(segment, compact_start)
+
+        if clamp_to_start_segment:
+            orig_end = self._clamp_in_segment(segment, compact_end)
+        else:
+            orig_end = self.map_time(compact_end, is_end=True)
+
+        return orig_start, max(orig_start, orig_end)
 
 
 def remap(args: argparse.Namespace) -> None:
@@ -192,14 +246,17 @@ def remap(args: argparse.Namespace) -> None:
             remapped_lines.append(line)
             continue
 
-        start = mapper.map_time(parse_timestamp(match.group("start")))
+        start_raw = parse_timestamp(match.group("start"))
         end_value = match.group("end")
         if end_value:
-            end = mapper.map_time(parse_timestamp(end_value), is_end=True)
+            start, end = mapper.map_span(
+                start_raw, parse_timestamp(end_value), clamp_to_start_segment=False
+            )
             remapped_lines.append(
                 f"[{format_timestamp(start)} -> {format_timestamp(end)}]{match.group('rest')}"
             )
         else:
+            start = mapper.map_time(start_raw)
             remapped_lines.append(f"[{format_timestamp(start)}]{match.group('rest')}")
 
     output_path.write_text("\n".join(remapped_lines) + "\n", encoding="utf-8")
