@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <clipPath id="badge">
+      <rect width="64" height="64" rx="14" />
+    </clipPath>
+    <radialGradient id="sky" cx="50%" cy="36%" r="68%">
+      <stop offset="0%" stop-color="#1d2433" />
+      <stop offset="100%" stop-color="#0b0d12" />
+    </radialGradient>
+    <linearGradient id="beam-l" x1="100%" y1="50%" x2="0%" y2="50%">
+      <stop offset="0%" stop-color="#ffe79e" stop-opacity="0.72" />
+      <stop offset="55%" stop-color="#f2c45a" stop-opacity="0.22" />
+      <stop offset="100%" stop-color="#c9a959" stop-opacity="0" />
+    </linearGradient>
+    <linearGradient id="beam-r" x1="0%" y1="50%" x2="100%" y2="50%">
+      <stop offset="0%" stop-color="#ffe79e" stop-opacity="0.72" />
+      <stop offset="55%" stop-color="#f2c45a" stop-opacity="0.22" />
+      <stop offset="100%" stop-color="#c9a959" stop-opacity="0" />
+    </linearGradient>
+    <radialGradient id="halo" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#fff8dc" stop-opacity="0.85" />
+      <stop offset="55%" stop-color="#f0be4d" stop-opacity="0.3" />
+      <stop offset="100%" stop-color="#f0be4d" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="tower" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#181e2a" />
+      <stop offset="50%" stop-color="#273042" />
+      <stop offset="100%" stop-color="#141923" />
+    </linearGradient>
+    <linearGradient id="crystal" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="55%" stop-color="#ffe082" />
+      <stop offset="100%" stop-color="#5ec7e6" />
+    </linearGradient>
+  </defs>
+
+  <g clip-path="url(#badge)">
+    <!-- Midnight sky backdrop -->
+    <rect width="64" height="64" fill="url(#sky)" />
+
+    <!-- Dual searchlight beams fanning from Duskbreaker's lantern -->
+    <polygon points="32,23 0,9 0,34" fill="url(#beam-l)" />
+    <polygon points="32,23 64,9 64,34" fill="url(#beam-r)" />
+
+    <!-- Soft lantern halo -->
+    <circle cx="32" cy="23" r="18" fill="url(#halo)" />
+
+    <!-- Eulogian 4-point starburst behind the crown -->
+    <path
+      d="M32 6 L34.8 20.2 L49 23 L34.8 25.8 L32 40 L29.2 25.8 L15 23 L29.2 20.2 Z"
+      fill="#ffe394"
+      opacity="0.7"
+    />
+
+    <!-- Art-Deco stepped Lighthouse tower -->
+    <polygon points="24,31 40,31 44,54 20,54" fill="url(#tower)" stroke="#c9a959" stroke-width="1.6" stroke-linejoin="round" />
+    <!-- Vertical Art-Deco fluting / light slit -->
+    <line x1="32" y1="33" x2="32" y2="50" stroke="#c9a959" stroke-width="1.6" opacity="0.65" />
+    <line x1="27.5" y1="35" x2="25.5" y2="51" stroke="#c9a959" stroke-width="1" opacity="0.35" />
+    <line x1="36.5" y1="35" x2="38.5" y2="51" stroke="#c9a959" stroke-width="1" opacity="0.35" />
+
+    <!-- Stepped Art-Deco base ledges -->
+    <rect x="17" y="51" width="30" height="3.5" rx="1" fill="#1e2533" stroke="#c9a959" stroke-width="1.4" />
+    <rect x="13" y="54.5" width="38" height="4.5" rx="1" fill="#151a24" stroke="#c9a959" stroke-width="1.4" />
+
+    <!-- Lantern gallery & spire cap -->
+    <rect x="22.5" y="28.5" width="19" height="3" rx="1" fill="#c9a959" />
+    <path d="M24 17.5 L32 10 L40 17.5 Z" fill="#1e2533" stroke="#c9a959" stroke-width="1.6" stroke-linejoin="round" />
+    <rect x="24.5" y="17.5" width="15" height="11" fill="#121722" stroke="#c9a959" stroke-width="1.6" />
+
+    <!-- Light Crystal core with subtle teal-blue artificial matrix glint -->
+    <polygon points="32,18.2 37.2,23 32,27.8 26.8,23" fill="url(#crystal)" />
+    <polygon points="32,23 37.2,23 32,27.8" fill="#5ec7e6" opacity="0.55" />
+    <circle cx="32" cy="22.2" r="2" fill="#ffffff" />
+  </g>
+
+  <!-- Subtle gold Art-Deco badge border -->
+  <rect x="1.25" y="1.25" width="61.5" height="61.5" rx="13" fill="none" stroke="#c9a959" stroke-width="1.5" opacity="0.55" />
+</svg>
