@@ -2,15 +2,20 @@
   <div class="character-detail-view">
     <div class="content-section">
       <!-- Character submenu for navigation between characters -->
-      <CharacterSubmenu :currentCharacterId="characterId" />
-      
+      <CharacterSubmenu :currentCharacterId="activeCharacterId" />
+
       <div v-if="character">
         <div class="character-header">
-          <div class="character-avatar">
+          <div
+            class="character-avatar"
+            :class="{ clickable: Boolean(character.portraitUrl) }"
+            @click="showPortrait"
+            :title="character.portraitUrl ? `View ${character.name} full portrait` : undefined"
+          >
             <img v-if="character.avatarUrl" :src="character.avatarUrl" :alt="character.name" />
             <div v-else class="avatar-placeholder">{{ getInitials(character.name) }}</div>
           </div>
-          
+
           <div class="character-info">
             <h1>{{ character.name }}</h1>
             <div class="character-subtitle">
@@ -18,107 +23,116 @@
               <div>{{ character.class }} (Level {{ character.level }})</div>
               <div>{{ character.background }}</div>
             </div>
-            
+
             <div class="character-actions">
-              <a v-if="character.dndBeyondLink" :href="character.dndBeyondLink" target="_blank" rel="noopener noreferrer" class="dndbeyond-link">
-                View on D&D Beyond
+              <a
+                v-if="character.dndBeyondLink"
+                :href="character.dndBeyondLink"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="dndbeyond-link"
+              >
+                View on D&amp;D Beyond
               </a>
-              <button v-if="character.portraitUrl" @click="showPortrait" class="view-portrait-btn">
-                View Full Image
+              <button
+                v-if="character.portraitUrl"
+                type="button"
+                @click="showPortrait"
+                class="view-portrait-btn"
+              >
+                View Full Portrait
               </button>
             </div>
           </div>
         </div>
-        
+
         <div class="character-bio">
           <h2>Biography</h2>
           <p>{{ character.bio }}</p>
         </div>
-        
-        <!-- Slot for character-specific content -->
+
+        <!-- Character-specific correspondence for Ellara -->
+        <EllaraCorrespondence v-if="activeCharacterId === 'ellara'" />
+
+        <!-- Optional slot for extensibility -->
         <slot></slot>
-        
-        <!-- Character Connections -->
+
+        <!-- Character Connections (bidirectional: outgoing + auto-derived backlinks) -->
         <div class="character-connections">
           <h2>Connections</h2>
-          <EntityConnections 
-            entityType="character" 
-            :entityId="characterId"
+          <EntityConnections
+            :key="activeCharacterId"
+            :entity="character"
+            entityType="character"
+            :entityId="activeCharacterId"
+            :defaultExpanded="true"
           />
         </div>
       </div>
-      
+
       <div v-else class="character-not-found">
         <h2>Character not found</h2>
         <p>Sorry, the character you're looking for doesn't exist.</p>
         <router-link to="/characters" class="back-link">Return to Characters</router-link>
       </div>
     </div>
-    
-    <!-- Modal for portrait -->
-    <FullTextModal 
-      :visible="isModalVisible" 
-      :title="modalTitle" 
-      :imageUrl="modalImageUrl"
-      @close="closeModal" 
+
+    <FullTextModal
+      :visible="isOpen"
+      :title="modalTitle"
+      :imageUrl="modalMeta.imageUrl || null"
+      @close="closeModal"
     />
   </div>
 </template>
 
-<script>
-import { characters } from '../store/worldData';
-import CharacterSubmenu from '../components/CharacterSubmenu.vue';
-import EntityConnections from '../components/EntityConnections.vue';
-import FullTextModal from '../components/FullTextModal.vue';
+<script setup>
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
+import { characters } from '@/store/worldData.js';
+import CharacterSubmenu from '@/components/CharacterSubmenu.vue';
+import EntityConnections from '@/components/EntityConnections.vue';
+import FullTextModal from '@/components/FullTextModal.vue';
+import EllaraCorrespondence from '@/components/characters/EllaraCorrespondence.vue';
+import { useModal } from '@/composables/useModal.js';
 
-export default {
-  name: 'CharacterDetailView',
-  components: {
-    CharacterSubmenu,
-    EntityConnections,
-    FullTextModal
+const props = defineProps({
+  characterId: {
+    type: String,
+    default: null,
   },
-  props: {
-    characterId: {
-      type: String,
-      required: true
-    }
-  },
-  data() {
-    return {
-      isModalVisible: false,
-      modalTitle: '',
-      modalImageUrl: null
-    };
-  },
-  computed: {
-    character() {
-      return characters.find(char => char.id === this.characterId);
-    }
-  },
-  methods: {
-    getInitials(name) {
-      return name.split(' ').map(word => word[0]).join('');
-    },
-    showPortrait() {
-      if (this.character && this.character.portraitUrl) {
-        this.modalTitle = this.character.name;
-        this.modalImageUrl = this.character.portraitUrl;
-        this.isModalVisible = true;
-      }
-    },
-    closeModal() {
-      this.isModalVisible = false;
-      this.modalTitle = '';
-      this.modalImageUrl = null;
-    }
+});
+
+const route = useRoute();
+const { isOpen, modalTitle, modalMeta, openModal, closeModal } = useModal();
+
+const activeCharacterId = computed(() => props.characterId || String(route.params.id || ''));
+
+const character = computed(() =>
+  characters.find((char) => char.id === activeCharacterId.value) || null
+);
+
+function getInitials(name) {
+  if (!name) return '?';
+  return name
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((word) => word[0])
+    .join('')
+    .toUpperCase();
+}
+
+function showPortrait() {
+  if (character.value && character.value.portraitUrl) {
+    openModal(character.value.name, '', { imageUrl: character.value.portraitUrl });
   }
-};
+}
 </script>
 
 <style scoped>
 .character-detail-view {
-  padding-bottom: 2rem;
+  padding-bottom: 1rem;
 }
 
 .character-header {
@@ -133,8 +147,18 @@ export default {
   flex-shrink: 0;
   border-radius: 10px;
   overflow: hidden;
-  border: 3px solid var(--border-color, #333);
+  border: 3px solid var(--border-color);
   box-shadow: var(--shadow-lg);
+}
+
+.character-avatar.clickable {
+  cursor: pointer;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.character-avatar.clickable:hover {
+  border-color: var(--color-primary);
+  transform: scale(1.02);
 }
 
 .character-avatar img {
@@ -146,14 +170,14 @@ export default {
 .avatar-placeholder {
   width: 100%;
   height: 100%;
-  background-color: var(--color-primary, #375a7f);
-  color: var(--color-background, #121212);
+  background-color: var(--color-primary);
+  color: var(--color-background);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 3rem;
   font-weight: bold;
-  font-family: var(--heading-font, inherit);
+  font-family: var(--heading-font);
 }
 
 .character-info {
@@ -162,14 +186,14 @@ export default {
 
 .character-info h1 {
   margin-top: 0;
-  margin-bottom: 0.5rem;
-  color: var(--accent-color, #d4af37);
+  margin-bottom: 0.75rem;
+  color: var(--accent-color);
 }
 
 .character-subtitle {
-  color: var(--color-text-muted, #aaa);
-  margin-bottom: 1.5rem;
-  font-size: 1.1rem;
+  color: var(--color-text-muted);
+  margin-bottom: 1.25rem;
+  font-size: 1.05rem;
 }
 
 .character-subtitle > div {
@@ -178,60 +202,59 @@ export default {
 
 .character-actions {
   display: flex;
-  gap: 1rem;
+  flex-wrap: wrap;
+  gap: 0.9rem;
   margin-top: 1rem;
 }
 
-.dndbeyond-link, .view-portrait-btn {
-  padding: 0.7rem 1.4rem;
-  border-radius: 4px;
+.dndbeyond-link,
+.view-portrait-btn {
+  padding: 0.65rem 1.3rem;
+  border-radius: 6px;
   text-decoration: none;
   display: inline-block;
-  font-weight: bold;
+  font-weight: 700;
   cursor: pointer;
   transition: all 0.2s ease;
+  border: none;
 }
 
 .dndbeyond-link {
-  background-color: #e40712; /* D&D Beyond color */
-  color: white;
-  border: none;
+  background-color: #c8101a;
+  color: #fff;
 }
 
 .dndbeyond-link:hover {
-  background-color: #c20510;
+  background-color: #a60d15;
+  color: #fff;
+  border-bottom: none;
 }
 
 .view-portrait-btn {
-  background-color: var(--color-primary, #375a7f);
-  color: white;
-  border: none;
+  background-color: var(--color-primary);
+  color: var(--color-background);
 }
 
 .view-portrait-btn:hover {
-  background-color: var(--color-primary-dark, #2c4a6b);
+  background-color: var(--color-primary-dark);
+  color: var(--color-background);
 }
 
 .character-bio {
   margin-bottom: 2rem;
-  line-height: 1.7;
-  font-size: 1.05rem;
+  line-height: 1.75;
+  font-size: 1.04rem;
 }
 
-.character-bio h2 {
-  border-bottom: 1px solid var(--border-color, #333);
+.character-bio h2,
+.character-connections h2 {
+  border-bottom: 1px solid var(--border-color);
   padding-bottom: 0.5rem;
   margin-bottom: 1rem;
 }
 
 .character-connections {
   margin-top: 2rem;
-}
-
-.character-connections h2 {
-  border-bottom: 1px solid var(--border-color, #333);
-  padding-bottom: 0.5rem;
-  margin-bottom: 1rem;
 }
 
 .character-not-found {
@@ -242,16 +265,10 @@ export default {
 .back-link {
   display: inline-block;
   margin-top: 1rem;
-  color: var(--accent-color, #d4af37);
-  text-decoration: none;
+  color: var(--color-link);
   font-weight: bold;
 }
 
-.back-link:hover {
-  text-decoration: underline;
-}
-
-/* Responsive adjustments */
 @media (max-width: 768px) {
   .character-header {
     flex-direction: column;
@@ -259,12 +276,17 @@ export default {
     text-align: center;
     gap: 1rem;
   }
-  
+
+  .character-info h1::after {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
   .character-avatar {
     width: 150px;
     height: 150px;
   }
-  
+
   .character-actions {
     justify-content: center;
   }
@@ -275,10 +297,12 @@ export default {
     flex-direction: column;
     gap: 0.7rem;
   }
-  
-  .dndbeyond-link, .view-portrait-btn {
+
+  .dndbeyond-link,
+  .view-portrait-btn {
     width: 100%;
     text-align: center;
+    box-sizing: border-box;
   }
 }
 </style>

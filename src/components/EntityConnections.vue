@@ -1,24 +1,46 @@
 <template>
   <div class="entity-connections" v-if="connections.length" :class="{ 'is-expanded': expanded }">
-    <div class="connections-header" @click="toggleConnections">
+    <button
+      type="button"
+      class="connections-header"
+      @click="toggleConnections"
+      :aria-expanded="expanded"
+    >
       <div class="header-content">
-        <h4>Connections</h4>
+        <h4>
+          Connections
+          <span class="connections-count">({{ connections.length }})</span>
+        </h4>
         <div class="connections-preview" v-if="!expanded">
           <span class="preview-text">{{ connectionNamesPreview }}</span>
         </div>
       </div>
-      <span class="toggle-icon">{{ expanded ? '▼' : '▶' }}</span>
-    </div>
-    <div class="connections-list" :class="{ 'expanded': expanded }">
-      <div v-for="(connection, index) in connections" 
-           :key="index" 
-           class="connection-item">
+      <span class="toggle-icon" aria-hidden="true">{{ expanded ? '▼' : '▶' }}</span>
+    </button>
+
+    <div class="connections-list" :class="{ expanded }">
+      <div
+        v-for="connection in connections"
+        :key="`${connection.type || connection.entityType}:${connection.id}`"
+        class="connection-item"
+        :class="{ 'is-incoming': connection.direction === 'incoming' }"
+      >
         <div class="connection-header">
-          <span class="connection-name" @click="navigateToEntity(connection.entityType, connection.id)">
+          <router-link
+            :to="resolveConnectionRoute(connection)"
+            class="connection-name"
+          >
             {{ connection.name }}
+          </router-link>
+          <span class="connection-type" :title="connection.type || connection.entityType">
+            {{ getConnectionTypeIcon(connection.type || connection.entityType) }}
           </span>
-          <span class="connection-type">
-            ({{ getConnectionTypeIcon(connection.entityType) }})
+          <span
+            v-if="connection.direction === 'incoming'"
+            class="direction-badge"
+            title="Referenced by this entity"
+          >
+            ← Backlink
           </span>
         </div>
         <p class="connection-reason" v-if="connection.reason">
@@ -29,354 +51,292 @@
   </div>
 </template>
 
-<script>
-import { getEntityConnections, getLocation } from '../store/worldData'; // Import getLocation
-import { locations } from '../store/locations'; // Import locations data
+<script setup>
+import { ref, computed } from 'vue';
+import { getEntityConnections, getLocation } from '@/store/worldData.js';
+import { locations } from '@/store/locations.js';
+import { getEntityRoute } from '@/utils/entityHelpers.js';
 
-export default {
-  name: 'EntityConnections',
-  props: {
-    entityType: {
-      type: String,
-      required: true,
-      validator: value => ['character', 'npc', 'location', 'item', 'lore'].includes(value)
-    },
-    entityId: {
-      type: String,
-      required: true
-    },
-    filterOutConnectionId: { // Add the new prop
-      type: String,
-      default: null
-    }
+const props = defineProps({
+  entity: {
+    type: Object,
+    default: null,
   },
-  data() {
-    return {
-      expanded: false
-    };
+  entityType: {
+    type: String,
+    default: null,
+    validator: (value) =>
+      value === null || ['character', 'npc', 'location', 'item', 'lore'].includes(value),
   },
-  computed: {
-    parentProvinceId() {
-      if (this.entityType !== 'location') {
-        return null;
-      }
-      const currentLocation = locations.find(loc => loc.id === this.entityId);
-      if (!currentLocation || !currentLocation.connections) {
-        return null;
-      }
-      // Find a connection to a location entity that is a province
-      const provinceConnection = currentLocation.connections.find(conn => {
-        if (conn.type === 'location') {
-          const connectedLoc = getLocation(conn.id); // Use getLocation helper
-          return connectedLoc && connectedLoc.type === 'province';
-        }
-        return false;
-      });
-      return provinceConnection ? provinceConnection.id : null;
-    },
-    connections() {
-      // Fetch connections using the helper function
-      let rawConnections = getEntityConnections(this.entityType, this.entityId);
-      
-      // Filter out the specific connection if filterOutConnectionId is provided
-      if (this.filterOutConnectionId) {
-        rawConnections = rawConnections.filter(conn => 
-          !(conn.entityType === 'location' && conn.id === this.filterOutConnectionId)
-        );
-      }
-      
-      // Existing logic to filter out parent province connection (if applicable)
-      // Note: This might need adjustment if filterOutConnectionId *is* the parent province ID,
-      // but the current logic should handle it okay as it filters based on the ID.
-      if (this.parentProvinceId && this.parentProvinceId !== this.filterOutConnectionId) {
-         rawConnections = rawConnections.filter(conn => 
-           !(conn.entityType === 'location' && conn.id === this.parentProvinceId)
-         );
-      }
-      
-      return rawConnections; 
-    },
-    connectionNamesPreview() {
-      const connectionsToPreview = this.connections; // Use the computed connections
-      if (!connectionsToPreview || connectionsToPreview.length === 0) return '';
-      
-      // Get first 3 names and join with commas
-      const names = connectionsToPreview.slice(0, 3).map(c => c.name);
-      let preview = names.join(', ');
-      
-      // Add ellipsis if there are more connections
-      if (connectionsToPreview.length > 3) { // Use connectionsToPreview here
-        preview += ` +${connectionsToPreview.length - 3} more`;
-      }
-      
-      return preview;
-    }
+  entityId: {
+    type: String,
+    default: null,
   },
-  methods: {
-    getConnectionTypeIcon(type) {
-      const icons = {
-        'location': '📌',
-        'character': '👤',
-        'npc': '👥',
-        'item': '🔮',
-        'lore': '📜' // Add icon for lore
-      };
-      return icons[type] || '🔗'; // Default icon
-    },
-    toggleConnections() {
-      this.expanded = !this.expanded;
-    },
-    navigateToEntity(entityType, entityId) {
-      if (!this.expanded) {
-        // If not expanded, just expand instead of navigating
-        this.expanded = true;
-        return;
-      }
-      
-      let routeName;
-      
-      if (entityType === 'location') {
-        routeName = 'Locations';
-      } else if (entityType === 'character') {
-        routeName = 'Characters';
-      } else if (entityType === 'npc') {
-        routeName = 'NPCs';
-      } else if (entityType === 'item') {
-        routeName = 'Items';
-      } else if (entityType === 'lore') { // Add case for lore
-        routeName = 'Lore';
-      } else {
-        return;
-      }
-      
-      this.$router.push({ name: routeName, hash: `#${entityId}` })
-        .then(() => {
-          this.scrollToElement(entityId);
-        });
-    },
-    scrollToElement(id) {
-      setTimeout(() => {
-        const element = document.getElementById(id);
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      }, 100);
+  filterOutConnectionId: {
+    type: String,
+    default: null,
+  },
+  defaultExpanded: {
+    type: Boolean,
+    default: false,
+  },
+});
+
+const expanded = ref(props.defaultExpanded);
+
+const resolvedType = computed(() => props.entityType || props.entity?.entityType || null);
+const resolvedId = computed(() => props.entityId || props.entity?.id || null);
+
+const parentProvinceId = computed(() => {
+  if (resolvedType.value !== 'location' || !resolvedId.value) return null;
+  const currentLocation = locations.find((loc) => loc.id === resolvedId.value);
+  if (!currentLocation || !Array.isArray(currentLocation.connections)) return null;
+  const provinceConn = currentLocation.connections.find((conn) => {
+    if (conn.type === 'location') {
+      const target = getLocation(conn.id);
+      return target && target.type === 'province';
     }
+    return false;
+  });
+  return provinceConn ? provinceConn.id : null;
+});
+
+const connections = computed(() => {
+  let raw = props.entity
+    ? getEntityConnections(props.entity)
+    : resolvedType.value && resolvedId.value
+      ? getEntityConnections(resolvedType.value, resolvedId.value)
+      : [];
+
+  if (props.filterOutConnectionId) {
+    raw = raw.filter(
+      (conn) =>
+        !(
+          (conn.type || conn.entityType) === 'location' &&
+          conn.id === props.filterOutConnectionId
+        )
+    );
   }
+
+  // Only suppress parent province when the caller explicitly requested filtering
+  // OR for non-province child cards that only want peer connections.
+  if (
+    props.filterOutConnectionId &&
+    parentProvinceId.value &&
+    parentProvinceId.value !== props.filterOutConnectionId
+  ) {
+    raw = raw.filter(
+      (conn) =>
+        !(
+          (conn.type || conn.entityType) === 'location' &&
+          conn.id === parentProvinceId.value
+        )
+    );
+  }
+
+  return raw;
+});
+
+const connectionNamesPreview = computed(() => {
+  if (!connections.value.length) return '';
+  const names = connections.value.slice(0, 3).map((c) => c.name);
+  let preview = names.join(', ');
+  if (connections.value.length > 3) {
+    preview += ` +${connections.value.length - 3} more`;
+  }
+  return preview;
+});
+
+function getConnectionTypeIcon(type) {
+  const icons = {
+    location: '📌',
+    character: '👤',
+    npc: '👥',
+    item: '🔮',
+    lore: '📜',
+    session: '🗓️',
+  };
+  return icons[type] || '🔗';
+}
+
+function resolveConnectionRoute(connection) {
+  return getEntityRoute(connection.type || connection.entityType, connection.id);
+}
+
+function toggleConnections() {
+  expanded.value = !expanded.value;
 }
 </script>
 
 <style scoped>
 .entity-connections {
-  margin-top: auto; /* Push to the bottom of flex container */
-  margin-bottom: 0.5rem;
+  margin-top: auto;
   padding-top: 0.75rem;
-  border-top: 1px solid rgba(var(--border-color-rgb, 59, 63, 71), 0.5);
-  transition: margin 0.3s ease, padding 0.3s ease;
-  width: 100%; /* Ensure full width */
+  border-top: 1px solid rgba(var(--border-color-rgb), 0.6);
+  transition: margin 0.25s ease, padding 0.25s ease;
+  width: 100%;
   position: relative;
   z-index: 1;
-  overflow: hidden;
-  box-sizing: border-box; /* Ensure padding is included in width calculation */
-}
-
-/* Add specific rule for location cards */
-:deep(.location-card) .entity-connections {
-  max-height: calc(100% - 1rem);
-  margin-bottom: 0;
-  padding-bottom: 0.5rem;
-}
-
-:deep(.location-section) {
-  position: relative;
-  overflow: hidden; /* Prevent content from peeking through */
-}
-
-/* Ensure location cards stay within their containers */
-:deep(.location-section) :deep(.location-card) {
-  max-height: 100%;
-  overflow: hidden;
-  position: relative;
+  box-sizing: border-box;
 }
 
 .entity-connections.is-expanded {
-  margin-top: 1.5rem;
-  margin-bottom: 1rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--border-color);
-  z-index: 2; /* Higher z-index when expanded */
-}
-
-/* Adjust connections in location context */
-:deep(.location-card) .entity-connections.is-expanded {
-  margin-bottom: 0.5rem;
+  margin-top: 1rem;
+  padding-top: 0.9rem;
+  border-top-color: var(--border-color);
+  z-index: 2;
 }
 
 .connections-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: inherit;
   cursor: pointer;
   user-select: none;
-  padding: 0 0 0.2rem 0;
+  padding: 0.15rem 0;
   font-size: 0.85rem;
+  text-align: left;
+  gap: 0.5rem;
+}
+
+.connections-header:hover {
+  background: transparent;
+  color: inherit;
 }
 
 .header-content {
   display: flex;
   align-items: baseline;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.45rem;
+  min-width: 0;
 }
 
 .entity-connections h4 {
   font-family: var(--font-display);
   color: var(--color-primary);
   margin: 0;
-  font-size: 0.9rem;
-  opacity: 0.8;
-  font-weight: normal;
-  display: inline;
+  font-size: 0.92rem;
+  opacity: 0.9;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.25rem;
+}
+
+.connections-count {
+  font-family: var(--font-main);
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+  font-weight: 400;
 }
 
 .is-expanded h4 {
-  font-size: 1.1rem;
+  font-size: 1rem;
   opacity: 1;
-  font-weight: bold;
 }
 
 .connections-preview {
   display: inline;
+  min-width: 0;
 }
 
 .preview-text {
   font-size: 0.8rem;
   color: var(--color-text-muted);
   font-style: italic;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 180px;
 }
 
 .connections-header:hover h4 {
   opacity: 1;
+  color: var(--color-highlight);
 }
 
 .connections-header:hover .preview-text {
   color: var(--color-text);
 }
 
+.toggle-icon {
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+}
+
 .connections-list {
-  max-height: 0;
-  overflow: hidden;
-  opacity: 0;
-  transition: max-height 0.5s cubic-bezier(0, 1, 0, 1), 
-              opacity 0.3s ease,
-              margin 0.3s ease;
-  pointer-events: none;
+  display: none;
 }
 
 .connections-list.expanded {
-  max-height: 1000px; /* Large enough to contain all content */
-  opacity: 1;
-  margin-top: 0.8rem;
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
-  transition: max-height 0.5s cubic-bezier(0.5, 0, 1, 0), 
-              opacity 0.3s ease,
-              margin 0.3s ease;
-  pointer-events: auto;
-}
-
-.toggle-icon {
-  font-size: 0.7rem;
-  color: var(--color-text-muted);
-  transition: transform 0.3s ease;
-  opacity: 0.6;
-}
-
-.is-expanded .toggle-icon {
-  font-size: 0.8rem;
-  opacity: 1;
-}
-
-.connections-header:hover .toggle-icon {
-  transform: translateY(2px);
-  opacity: 1;
+  gap: 0.55rem;
+  margin-top: 0.75rem;
 }
 
 .connection-item {
   font-size: 0.85rem;
-  padding: 0.5rem 0.7rem;
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 4px;
-  transition: all 0.3s ease;
+  padding: 0.5rem 0.75rem;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(var(--border-color-rgb), 0.55);
+  border-radius: 5px;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
   max-width: 100%;
-  transform-origin: top center;
+  box-sizing: border-box;
 }
 
-.connections-list.expanded .connection-item {
-  animation: fadeIn 0.3s ease forwards;
+.connection-item.is-incoming {
+  border-style: dashed;
+  background: rgba(91, 176, 207, 0.06);
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-5px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.connections-list.expanded .connection-item:hover {
-  background: rgba(0, 0, 0, 0.3);
+.connection-item:hover {
+  background: rgba(0, 0, 0, 0.38);
+  border-color: rgba(201, 169, 89, 0.5);
 }
 
 .connection-header {
   display: flex;
   align-items: center;
-  white-space: nowrap;
+  flex-wrap: wrap;
+  gap: 0.35rem;
 }
 
 .connection-name {
-  color: var(--color-primary);
-  font-weight: normal;
-  cursor: pointer;
-  z-index: 2;
+  color: var(--color-link);
+  font-weight: 600;
+  border-bottom: none;
 }
 
-.connections-list.expanded .connection-name:hover {
+.connection-name:hover {
+  color: var(--color-link-hover);
   text-decoration: underline;
 }
 
 .connection-type {
-  color: var(--color-text-muted);
-  margin-left: 0.25rem;
-  font-size: 0.8rem;
+  font-size: 0.82rem;
+}
+
+.direction-badge {
+  font-size: 0.68rem;
+  padding: 0.08rem 0.38rem;
+  border-radius: 999px;
+  background: rgba(91, 176, 207, 0.16);
+  color: var(--color-link-hover);
+  letter-spacing: 0.02em;
 }
 
 .connection-reason {
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   font-style: italic;
-  margin: 0.4rem 0 0;
+  margin: 0.35rem 0 0;
   color: var(--color-text-muted);
-  padding-top: 0.4rem;
-  border-top: 1px dotted rgba(255, 255, 255, 0.1);
+  padding-top: 0.35rem;
+  border-top: 1px dotted rgba(255, 255, 255, 0.12);
   white-space: normal;
-}
-
-@media (max-width: 768px) {
-  .preview-text {
-    max-width: 120px;
-  }
-}
-
-@media (max-width: 480px) {
-  .preview-text {
-    max-width: 100px;
-  }
+  line-height: 1.4;
 }
 </style>

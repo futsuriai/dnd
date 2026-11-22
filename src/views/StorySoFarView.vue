@@ -1,173 +1,117 @@
 <template>
   <div class="content-section story-page">
-    <h1>The Story So Far</h1>
-    <p v-if="isLoading" class="loading-message">Gathering the chronicle...</p>
-    <p v-else-if="coverageText" class="coverage-text">{{ coverageText }}</p>
+    <div class="story-header">
+      <h1>The Story So Far</h1>
+      <p class="coverage-text">
+        An unlikely party, a darkness in the heart of the duchy, a light in the hearts of our heroes.
+      </p>
+      <p v-if="latestCompletedSession" class="coverage-meta">
+        Chronicle through {{ latestCompletedSession.title }} ({{ latestCompletedSession.date }})
+      </p>
+    </div>
 
-    <article v-if="!isLoading && storyParagraphs.length" class="story-manuscript">
-      <p v-for="(paragraph, index) in storyParagraphs" :key="index">{{ paragraph }}</p>
+    <article v-if="preambleParagraphs.length || chronicleBeats.length" class="story-manuscript">
+      <div v-if="preambleParagraphs.length" class="story-preamble">
+        <p v-for="(paragraph, index) in preambleParagraphs" :key="`preamble-${index}`">
+          {{ paragraph }}
+        </p>
+      </div>
+
+      <section
+        v-for="beat in chronicleBeats"
+        :key="beat.sessionId"
+        class="story-beat"
+      >
+        <div class="beat-meta">
+          <router-link :to="`/sessions/${beat.sessionId}`" class="beat-session-link">
+            {{ beat.title }}<span v-if="beat.subtitle"> · {{ beat.subtitle }}</span>
+          </router-link>
+        </div>
+        <p class="beat-text">{{ beat.text }}</p>
+      </section>
     </article>
 
-    <p v-else-if="!isLoading" class="empty-message">
+    <p v-else class="empty-message">
       No session records were found to build the chronicle.
     </p>
+
+    <div class="story-footer-actions">
+      <router-link to="/sessions" class="button-link">
+        Browse All Sessions
+      </router-link>
+      <router-link
+        v-if="latestCompletedSession"
+        :to="`/sessions/${latestCompletedSession.id}`"
+        class="button-link button-primary"
+      >
+        Read {{ latestCompletedSession.title }} →
+      </router-link>
+    </div>
   </div>
 </template>
 
-<script>
-const sessionMarkdownModules = import.meta.glob('@/assets/sessions/session-*.md', {
-  query: '?raw',
-  import: 'default'
+<script setup>
+import { computed } from 'vue';
+import { sessions, storyPreamble } from '@/store/sessions.js';
+import { parseSessionNumber } from '@/store/config.js';
+
+const preambleParagraphs = computed(() =>
+  typeof storyPreamble === 'string'
+    ? storyPreamble
+        .split(/\n\s*\n/)
+        .map((part) => part.trim())
+        .filter(Boolean)
+    : []
+);
+
+const completedNumberedSessions = computed(() =>
+  sessions
+    .filter((session) => session && session.upcoming === false)
+    .map((session) => ({
+      ...session,
+      sessionNumber: parseSessionNumber(session.id),
+    }))
+    .filter((session) => Number.isFinite(session.sessionNumber) && session.sessionNumber >= 1)
+    .sort((a, b) => a.sessionNumber - b.sessionNumber)
+);
+
+const latestCompletedSession = computed(() => {
+  const list = completedNumberedSessions.value;
+  return list.length ? list[list.length - 1] : null;
 });
 
-const BACK_OF_BOOK_STAGES = [
-  {
-    minSession: 1,
-    text: 'In Bastion City, crystal lamps burn so bright they throw crueler shadows. Progress is preached as holy, order is sold as mercy, and the people least protected by either are the first to disappear.'
-  },
-  {
-    minSession: 1,
-    text: 'Into that fracture step five unlikely allies: Ellara, a faithful acolyte-druid torn between doctrine and conscience; Nyx, a shadowed hunter who trusts little and misses less; Berridin, a silver-tongued halfling survivor; Ysidor, a mountain paladin searching for his mentor Meri; and Witty, a volatile noble artificer whose absurdity often hides real nerve.'
-  },
-  {
-    minSession: 2,
-    text: 'What begins as a search for one missing mentor becomes a descent through prisons, church offices, and aristocratic courtyards, each door opening onto a larger lie. Every answer points to institutions that call themselves guardians while treating living people as acceptable cost.'
-  },
-  {
-    minSession: 5,
-    text: 'Their trail leads to the Duskbreaker Lighthouse, the empire\'s proud monument to light and invention. Behind secured halls and official smiles, the party uncovers a machine economy where warforged ambition, political influence, and sanctioned cruelty feed one another.'
-  },
-  {
-    minSession: 6,
-    text: 'When they break into the depths and pull Meri out of an active synthesis line, the worst truth is no longer rumor: Shadowed bodies are being consumed to power the very crystal light used to civilize the city. Rescue buys breath, not safety, and the circle of enemies widens.'
-  },
-  {
-    minSession: 8,
-    text: 'From there the campaign hardens into espionage and open defiance: false names at noble balls, fragile alliances, quiet betrayals, and a bounty order that turns Meri into sanctioned prey. The party keeps winning fragments of truth while losing the safety of anonymity.'
-  },
-  {
-    minSession: 12,
-    text: 'The road carries them from Bastion to Hýrda, where ducal pressure threatens to become conquest and village defense becomes a race against reinforcements. Strategy shifts from investigation to resistance, and every plan is measured in lives, not glory.'
-  },
-  {
-    minSession: 15,
-    text: 'Their latest gamble - poison, sabotage, and a collapsing timetable - fails to break the encampment before the counterstrike lands. Rather than watch captors begin executions, the party yields, stripped of gear and locked in cages inside enemy lines, with the next move likely deciding not only their fate but Hýrda\'s.'
-  },
-  {
-    minSession: 16,
-    text: 'Captivity does not hold for long. Ellara slips free in spider form, Nyx and Ysidor turn panic into momentum, and the party claws Berridin and Witty back out of the ducal camp while reclaiming their gear and stealing gunpowder. Survival becomes counterattack, but the rescue only sharpens the real problem: Hýrda still stands in the path of a larger force that has not yet arrived.'
-  },
-  {
-    minSession: 17,
-    text: 'With the powder finally in hand, the party moves from rescue to preparation. Under cover of night they slip miners into the Hýrda Mines, silence the cave-mouth guards without killing them, and begin turning the mountain itself into a trap. Then Hyr wakes: not merely a village story, but the spirit of the range, old enough to remember Nites, the Great Cataclysm, and a name that the world itself refuses to let anyone hear.'
-  },
-  {
-    minSession: 18,
-    text: 'The mine trap is no longer theory. The charges are set, the backup plunger is hidden, and the party has slipped back to Hýrda for a long rest while the army is still about a week away. What remains is stranger than tactics: Meri is ready to tell the stories Hýrda keeps, Ellara must carry her questions about Nites and Hyr back toward Proctor Eduard, and the party now has to defend a village whose god has spoken.'
-  },
-  {
-    minSession: 19,
-    text: 'When the ducal army finally arrives, the trap holds. Berridin and Ysidor draw roughly eighty soldiers beneath the mountain before collapsing the passage, while Ellara, Nyx, Witty, Meri, and Hýrda’s defenders break the force left outside. Nyx’s final bolt topples the warforged titan, most surviving soldiers surrender, and the party reaches level 5—victorious, but now responsible for prisoners, casualties, and whatever answer the Empire sends next.'
-  },
-  {
-    minSession: 20,
-    text: 'Victory leaves the party holding both leverage and danger: Witty extracts a head-sized light crystal from the titan, Nyx reveals that Michelle Faberge died during their confrontation, and Hýrda mourns its dead before Meri sends the party back toward Bastion. A desperate ride gets Berridin to the city in time to save Lord Whitaker’s Estate from repossession, and the party regroups there with the Lighthouse’s work, Proctor Eduard’s loyalties, and the Duke’s response still unresolved.'
-  },
-  {
-    minSession: 21,
-    text: 'At Lord Whitaker’s Estate, Witty finds an artificial matrix inside the titan’s crystal and estimates its power at a hundred ordinary lamps. The lives behind that power give the party a shared purpose: stop more people becoming fuel. Ellara tells Proctor Eduard what they witnessed; he expresses shock and offers passage to Pharus, but she returns to her companions. With the Duke funding an independent Lighthouse and his knowledge of the experiments still uncertain, they choose a new way inside: Witty will seek Faberge’s vacant position through his credentials and family ties to Reeves.'
-  }
-];
+const chronicleBeats = computed(() => {
+  const list = completedNumberedSessions.value;
+  if (!list.length) return [];
 
-function extractSessionNumber(filePath) {
-  const match = filePath.match(/session-(\d+)\.md$/i);
-  return match ? Number.parseInt(match[1], 10) : null;
-}
+  const authoredBeats = list.filter(
+    (session) => typeof session.storyBeat === 'string' && session.storyBeat.trim().length > 0
+  );
+  const lastAuthoredNumber = authoredBeats.length
+    ? authoredBeats[authoredBeats.length - 1].sessionNumber
+    : 0;
 
-function stripMarkdown(text) {
-  return text
-    .replace(/```[\s\S]*?```/g, ' ')
-    .replace(/`([^`]+)`/g, '$1')
-    .replace(/!\[[^\]]*\]\([^)]+\)/g, ' ')
-    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
-    .replace(/[*_~>#|]/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
-}
-
-function extractFirstNarrativeSentence(markdown) {
-  const proseBlock = markdown
-    .split(/\n\s*\n/)
-    .map(block => block.trim())
-    .find(block => {
-      if (!block) return false;
-      if (/^(#|\||>|---|\*\*|\d+\s*[.\-]|[-*]\s+)/.test(block)) return false;
-      return stripMarkdown(block).length > 100;
-    });
-
-  if (!proseBlock) return '';
-
-  const sentenceMatch = stripMarkdown(proseBlock).match(/[^.!?]+[.!?]/);
-  return sentenceMatch ? sentenceMatch[0].trim() : stripMarkdown(proseBlock);
-}
-
-function buildStoryParagraphs(latestSessionNumber, latestSessionContent) {
-  const staged = BACK_OF_BOOK_STAGES
-    .filter(stage => latestSessionNumber >= stage.minSession)
-    .map(stage => stage.text);
-
-  if (latestSessionNumber > 21) {
-    const continuation = extractFirstNarrativeSentence(latestSessionContent);
-    if (continuation) {
-      staged.push(`Beyond that turning point, the tale keeps moving: ${continuation}`);
+  const beats = [];
+  for (const session of list) {
+    const hasBeat = typeof session.storyBeat === 'string' && session.storyBeat.trim().length > 0;
+    if (hasBeat) {
+      beats.push({
+        sessionId: session.id,
+        title: session.title,
+        subtitle: session.subtitle,
+        text: session.storyBeat.trim(),
+      });
+    } else if (session.sessionNumber > lastAuthoredNumber && session.description) {
+      beats.push({
+        sessionId: session.id,
+        title: session.title,
+        subtitle: session.subtitle,
+        text: session.description.trim(),
+      });
     }
   }
-
-  return staged;
-}
-
-export default {
-  name: 'StorySoFarView',
-  data() {
-    return {
-      storyParagraphs: [],
-      coverageText: '',
-      isLoading: true
-    };
-  },
-  async created() {
-    await this.buildStory();
-  },
-  methods: {
-    async buildStory() {
-      const sessions = (
-        await Promise.all(
-          Object.entries(sessionMarkdownModules).map(async ([filePath, loadContent]) => {
-            const number = extractSessionNumber(filePath);
-            if (number === null) return null;
-
-            const content = await loadContent();
-            return { number, content };
-          })
-        )
-      )
-        .filter(Boolean)
-        .sort((a, b) => a.number - b.number);
-
-      if (!sessions.length) {
-        this.storyParagraphs = [];
-        this.coverageText = '';
-        this.isLoading = false;
-        return;
-      }
-
-      const latest = sessions[sessions.length - 1];
-      this.storyParagraphs = buildStoryParagraphs(latest.number, latest.content);
-      this.coverageText = 'An unlikely party, a darkness in the heart of the duchy, a light in the hearts of our heroes.';
-      this.isLoading = false;
-    }
-  }
-};
+  return beats;
+});
 </script>
 
 <style scoped>
@@ -176,46 +120,108 @@ export default {
   margin: 0 auto;
 }
 
-.section-intro {
+.story-header {
   text-align: center;
-  max-width: 820px;
-  margin: 0 auto 1rem;
+  margin-bottom: 1.5rem;
 }
 
-.loading-message {
-  text-align: center;
-  margin: 0 auto 1.25rem;
-  color: var(--text-muted);
-  font-style: italic;
+.story-header h1::after {
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .coverage-text {
   text-align: center;
-  margin: 0 auto 1.5rem;
-  color: var(--text-muted);
+  margin: 1rem auto 0.35rem;
+  color: var(--color-text);
   font-style: italic;
+  max-width: 700px;
+}
+
+.coverage-meta {
+  text-align: center;
+  margin: 0 auto;
+  font-size: 0.88rem;
+  color: var(--text-muted);
 }
 
 .story-manuscript {
   background: var(--gradient-primary);
   border: 1px solid var(--border-color);
   border-radius: 10px;
-  padding: 1.25rem 1.5rem;
+  padding: 1.5rem 1.75rem;
 }
 
-.story-manuscript p {
+.story-preamble {
+  padding-bottom: 1.25rem;
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid rgba(var(--border-color-rgb), 0.7);
+}
+
+.story-preamble p {
   margin: 0 0 1rem;
-  line-height: 1.72;
+  line-height: 1.75;
+  text-wrap: pretty;
+  font-size: 1.03rem;
+}
+
+.story-preamble p:last-child {
+  margin-bottom: 0;
+}
+
+.story-beat {
+  margin-bottom: 1.25rem;
+  padding-left: 1rem;
+  border-left: 2px solid rgba(201, 169, 89, 0.38);
+}
+
+.story-beat:last-child {
+  margin-bottom: 0;
+}
+
+.beat-meta {
+  margin-bottom: 0.3rem;
+}
+
+.beat-session-link {
+  font-family: var(--font-display);
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--color-link);
+  letter-spacing: 0.03em;
+}
+
+.beat-session-link:hover {
+  color: var(--color-link-hover);
+}
+
+.beat-text {
+  margin: 0;
+  line-height: 1.74;
   text-wrap: pretty;
 }
 
-.story-manuscript p:last-child {
-  margin-bottom: 0;
+.story-footer-actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1.75rem;
+}
+
+.story-footer-actions .button-link {
+  margin-top: 0;
 }
 
 .empty-message {
   text-align: center;
   color: var(--text-muted);
   font-style: italic;
+}
+
+@media (max-width: 600px) {
+  .story-manuscript {
+    padding: 1.15rem 1.1rem;
+  }
 }
 </style>

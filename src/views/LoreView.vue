@@ -1,93 +1,100 @@
 <template>
-    <div class="content-section">
-      <h1>World Lore</h1>
-      <div class="lore-list">
-        <!-- Use EntityCard to display each lore item -->
-        <EntityCard 
-          v-for="(item, index) in loreEntries" 
-          :key="index" 
-          :entity="item" 
-          entityType="lore"
-          @show-full-text="showFullTextModal" 
-        />
-      </div>
-      <!-- Add the FullTextModal component -->
-      <FullTextModal 
-        :visible="isModalVisible" 
-        :title="modalTitle" 
-        :text="modalText" 
-        @close="closeModal" 
+  <div class="content-section">
+    <h1>World Lore</h1>
+
+    <FilterBar
+      v-model="searchQuery"
+      v-model:activeFilter="activeFilter"
+      :filters="filterPills"
+      :totalCount="lore.length"
+      :filteredCount="filteredLoreEntries.length"
+      itemLabel="lore entries"
+      placeholder="Search lore by term, description, or full entry..."
+    />
+
+    <div v-if="filteredLoreEntries.length" class="lore-list">
+      <EntityCard
+        v-for="item in filteredLoreEntries"
+        :key="item.id"
+        :entity="item"
+        entityType="lore"
+        @show-full-text="handleShowFullText"
       />
     </div>
-  </template>
-  
-  <script>
-import { marked } from 'marked'; // Import marked library
+
+    <p v-else class="empty-message">No lore entries match your current filter.</p>
+
+    <FullTextModal
+      :visible="isOpen"
+      :title="modalTitle"
+      :text="modalContent"
+      @close="closeModal"
+    />
+  </div>
+</template>
+
+<script setup>
+import { ref, computed } from 'vue';
 import EntityCard from '@/components/EntityCard.vue';
-import FullTextModal from '@/components/FullTextModal.vue'; // Import the modal
-import EntityConnections from '@/components/EntityConnections.vue'; // Import EntityConnections
+import FullTextModal from '@/components/FullTextModal.vue';
+import FilterBar from '@/components/FilterBar.vue';
 import { lore } from '@/store/lore.js';
-import { sortEntitiesByLastSession } from '@/utils/entitySorting.js'; // Import sorting utility
-  
-export default {
-  name: 'LoreView',
-  components: {
-    EntityCard,
-    FullTextModal, // Register the modal
-    EntityConnections // Register EntityConnections
+import { currentSession, isEntityNew } from '@/store/config.js';
+import { sortEntitiesByLastSession } from '@/utils/entitySorting.js';
+import { useModal } from '@/composables/useModal.js';
+
+const { isOpen, modalTitle, modalContent, openModal, closeModal } = useModal();
+
+const searchQuery = ref('');
+const activeFilter = ref('all');
+
+const sortedLore = computed(() => sortEntitiesByLastSession(lore));
+
+const filterPills = computed(() => [
+  { value: 'all', label: 'All', count: lore.length },
+  {
+    value: 'updated',
+    label: `Updated in Session ${currentSession}`,
+    count: lore.filter((entry) => isEntityNew(entry, currentSession)).length,
   },
-  data() {
-    return {
-      isModalVisible: false, // State for modal visibility
-      modalText: '', // State for modal content
-      modalTitle: '' // Add state for modal title
-    };
+  {
+    value: 'detailed',
+    label: 'Full Entries',
+    count: lore.filter((entry) => Boolean(entry.fullText)).length,
   },
-  computed: {
-    loreEntries() {
-      return sortEntitiesByLastSession(lore);
-    }
-  },
-  methods: {
-      formatDescription(description) {
-        // This method might no longer be needed directly in the template 
-        // if EntityCard handles description display, but keep it for now 
-        // in case EntityCard relies on formatted HTML or if used elsewhere.
-        return marked.parse(description || '');
-      },
-      showFullTextModal(payload) { // Accept payload object
-      this.modalTitle = payload.title; // Set title
-      this.modalText = payload.text; // Set text
-      this.isModalVisible = true;
-    },
-    closeModal() { 
-      this.isModalVisible = false;
-      this.modalText = '';
-      this.modalTitle = ''; // Clear title on close
-    }
-    }
-  };
-  </script>
-  
-  <style scoped>
-  .section-intro {
-    text-align: center;
-    max-width: 800px;
-    margin: 0 auto 2em;
-  }
-  
-  .lore-list {
-    display: grid; /* Change to grid for better card layout */
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive grid */
-    gap: 1.5rem;
-  }
-  
-  /* Remove styles specific to the old .lore-item structure */
-  /* .lore-item { ... } */
-  /* .lore-term { ... } */
-  /* .lore-description { ... } */
-  
-  /* Styles for blockquotes/italics might need adjustment if EntityCard handles description differently */
-  /* .lore-description :deep(blockquote) { ... } */
-  /* .lore-description :deep(em) { ... } */
-  </style>
+]);
+
+const filteredLoreEntries = computed(() => {
+  const q = searchQuery.value.trim().toLowerCase();
+  return sortedLore.value.filter((entry) => {
+    if (activeFilter.value === 'updated' && !isEntityNew(entry, currentSession)) return false;
+    if (activeFilter.value === 'detailed' && !entry.fullText) return false;
+
+    if (!q) return true;
+    const haystack = [entry.term, entry.description, entry.fullText]
+      .filter(Boolean)
+      .join(' ')
+      .toLowerCase();
+    return haystack.includes(q);
+  });
+});
+
+function handleShowFullText(payload) {
+  openModal(payload.title, payload.text);
+}
+</script>
+
+<style scoped>
+.lore-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  align-items: stretch;
+}
+
+.empty-message {
+  text-align: center;
+  margin-top: 2rem;
+  color: var(--text-muted);
+}
+</style>

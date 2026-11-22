@@ -2,7 +2,17 @@
   <div class="content-section">
     <h1>Notable NPCs</h1>
 
-    <!-- Major NPCs -->
+    <FilterBar
+      v-model="searchQuery"
+      v-model:activeFilter="activeFilter"
+      :filters="filterPills"
+      :totalCount="npcs.length"
+      :filteredCount="filteredNpcs.length"
+      itemLabel="NPCs"
+      placeholder="Search NPCs by name, role, location, or description..."
+    />
+
+    <!-- Major NPCs (Key Figures) -->
     <div v-if="majorNpcs.length" class="location-section">
       <h2>Key Figures</h2>
       <div class="entity-grid">
@@ -11,16 +21,14 @@
           :key="npc.id"
           :entity="npc"
           entityType="npc"
-          :showAvatar="!!npc.avatarUrl"
-          :avatarUrl="npc.avatarUrl"
-          :portraitUrl="npc.portraitUrl"
-          @show-full-text="showFullTextModal"
-          @show-portrait="showPortraitModal"
+          :showAvatar="Boolean(npc.avatarUrl)"
+          @show-full-text="handleShowFullText"
+          @show-portrait="handleShowPortrait"
         />
       </div>
     </div>
 
-    <!-- Minor NPCs -->
+    <!-- Minor NPCs (Others) — now also supports Read More & Connections when present -->
     <div v-if="minorNpcs.length" class="location-section">
       <h2>Others</h2>
       <div class="npc-list">
@@ -28,247 +36,270 @@
           <div class="npc-list-header">
             <strong class="npc-name">{{ npc.name }}</strong>
             <span class="npc-role">{{ npc.role }}</span>
-            <button v-if="hasHistory(npc)" class="history-btn" @click="showMinorHistory(npc)" aria-label="View change history" title="View change history">History</button>
+            <button
+              v-if="hasHistory(npc)"
+              type="button"
+              class="history-btn"
+              @click="showMinorHistory(npc)"
+              aria-label="View change history"
+              title="View change history"
+            >
+              History
+            </button>
           </div>
           <div class="npc-list-body">
-            <span class="npc-meta">{{ npc.location }}</span>
-            <span v-if="badgeLabel(npc)" :class="badgeLabel(npc) === 'Updated' ? 'badge-updated' : 'badge-new'">{{ badgeLabel(npc) }}</span>
-            <span v-else-if="fallbackBadgeLabel(npc)" class="badge-stale">{{ fallbackBadgeLabel(npc) }}</span>
+            <div class="npc-meta-row">
+              <span v-if="npc.location" class="npc-meta">📍 {{ npc.location }}</span>
+              <span
+                v-if="badgeLabel(npc)"
+                :class="badgeLabel(npc) === 'Updated' ? 'badge-updated' : 'badge-new'"
+              >
+                {{ badgeLabel(npc) }}
+              </span>
+              <span v-else-if="fallbackBadgeLabel(npc)" class="badge-stale">
+                {{ fallbackBadgeLabel(npc) }}
+              </span>
+            </div>
             <p class="npc-desc">{{ npc.description }}</p>
+            <button
+              v-if="npc.fullText"
+              type="button"
+              class="read-more-link"
+              @click="handleShowFullText({ title: npc.name, text: npc.fullText })"
+            >
+              Read More →
+            </button>
           </div>
+          <EntityConnections
+            :entity="npc"
+            entityType="npc"
+            :entityId="npc.id"
+          />
         </div>
       </div>
     </div>
 
-    <p v-if="!npcs.length" class="empty-message">No NPCs recorded yet.</p>
+    <p v-if="!filteredNpcs.length" class="empty-message">
+      {{ npcs.length ? 'No NPCs match your current filter.' : 'No NPCs recorded yet.' }}
+    </p>
 
-    <FullTextModal 
-      :visible="isModalVisible" 
-      :title="modalTitle" 
-      :text="modalText" 
-      :imageUrl="modalImageUrl"
-      @close="closeModal" 
+    <FullTextModal
+      :visible="isOpen"
+      :title="modalTitle"
+      :text="modalContent"
+      :imageUrl="modalMeta.imageUrl || null"
+      @close="closeModal"
     />
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref, computed } from 'vue';
 import EntityCard from '@/components/EntityCard.vue';
+import EntityConnections from '@/components/EntityConnections.vue';
 import FullTextModal from '@/components/FullTextModal.vue';
+import FilterBar from '@/components/FilterBar.vue';
 import { npcs } from '@/store/npcs.js';
-import { getEntityUpdateHistory, currentSession } from '@/store/config.js';
-import { sortEntitiesByLastSession } from '@/utils/entitySorting.js'; // Import sorting utility
+import { currentSession, isEntityNew } from '@/store/config.js';
+import { sortEntitiesByLastSession } from '@/utils/entitySorting.js';
+import {
+  badgeLabel,
+  fallbackBadgeLabel,
+  hasHistory,
+  formatHistoryMarkdown,
+} from '@/utils/entityHelpers.js';
+import { useModal } from '@/composables/useModal.js';
 
-export default {
-  name: 'NpcsView',
-  components: {
-    EntityCard,
-    FullTextModal
+const { isOpen, modalTitle, modalContent, modalMeta, openModal, closeModal } = useModal();
+
+const searchQuery = ref('');
+const activeFilter = ref('all');
+
+function isMajorNpc(npc) {
+  if (!npc) return false;
+  if (npc.prominence === 'major') return true;
+  if (npc.prominence === 'minor') return false;
+  return Boolean(npc.fullText) || ['ally', 'enemy'].includes((npc.status || '').toLowerCase());
+}
+
+const filterPills = computed(() => [
+  { value: 'all', label: 'All', count: npcs.length },
+  {
+    value: 'updated',
+    label: `Updated in Session ${currentSession}`,
+    count: npcs.filter((n) => isEntityNew(n, currentSession)).length,
   },
-  data() {
-    return {
-      npcs,
-      isModalVisible: false,
-      modalText: '',
-      modalTitle: '',
-      modalImageUrl: null
-    };
+  {
+    value: 'major',
+    label: 'Key Figures',
+    count: npcs.filter((n) => isMajorNpc(n)).length,
   },
-  computed: {
-    majorNpcs() {
-      // Treat as major if not explicitly marked minor and meets heuristic (fullText or ally/enemy)
-      const majorList = this.npcs.filter(n => (n.prominence !== 'minor') && (n.fullText || ['ally', 'enemy'].includes((n.status || '').toLowerCase())));
-      return sortEntitiesByLastSession(majorList);
-    },
-    minorNpcs() {
-      // Explicitly include those marked minor, plus anything not in majors
-      const majors = new Set(this.majorNpcs.map(m => m.id));
-      const minorList = this.npcs.filter(n => n.prominence === 'minor' || !majors.has(n.id));
-      return sortEntitiesByLastSession(minorList);
-    }
+  {
+    value: 'minor',
+    label: 'Others',
+    count: npcs.filter((n) => !isMajorNpc(n)).length,
   },
-  methods: {
-    badgeLabel(entity) {
-      const sessions = getEntityUpdateHistory(entity);
-      if (sessions.includes(currentSession)) {
-        return sessions.length === 1 ? 'New' : 'Updated';
-      }
-      return null;
-    },
-    fallbackBadgeLabel(entity) {
-      const sessions = getEntityUpdateHistory(entity);
-      if (!sessions || !sessions.length) return null;
-      if (sessions.includes(currentSession)) return null;
-      const last = Math.max(...sessions);
-      return `Session ${last}`;
-    },
-    hasHistory(entity) {
-      const sessions = getEntityUpdateHistory(entity);
-      const notes = Array.isArray(entity.history) ? entity.history : [];
-      return sessions.length > 0 || notes.length > 0;
-    },
-    showMinorHistory(entity) {
-      const sessions = getEntityUpdateHistory(entity);
-      const notes = Array.isArray(entity.history) ? entity.history : [];
-      if (!sessions.length && !notes.length) return;
-      const title = `History: ${entity.name}`;
-      const notesBySession = {};
-      notes.forEach(n => {
-        if (n && typeof n.session === 'number') {
-          if (!notesBySession[n.session]) notesBySession[n.session] = [];
-          if (n.note) notesBySession[n.session].push(n.note);
-        }
-      });
-      const allSessions = Array.from(new Set([
-        ...sessions,
-        ...notes.map(n => (typeof n.session === 'number' ? n.session : null)).filter(s => typeof s === 'number')
-      ])).sort((a, b) => a - b);
-      const lines = allSessions.map(s => {
-        const n = notesBySession[s] && notesBySession[s].length ? ` — ${notesBySession[s].join(' • ')}` : (sessions.includes(s) ? ' — Updated' : '');
-        return `- Session ${s}${n}`;
-      });
-      const text = lines.join('\n');
-      this.showFullTextModal({ title, text });
-    },
-    showMinorHistory(entity) {
-      const sessions = getEntityUpdateHistory(entity);
-      const notes = Array.isArray(entity.history) ? entity.history : [];
-      if (!sessions.length && !notes.length) return;
-      const title = `History: ${entity.name}`;
-      const notesBySession = {};
-      notes.forEach(n => {
-        if (n && typeof n.session === 'number') {
-          if (!notesBySession[n.session]) notesBySession[n.session] = [];
-          if (n.note) notesBySession[n.session].push(n.note);
-        }
-      });
-      const allSessions = Array.from(new Set([
-        ...sessions,
-        ...notes.map(n => (typeof n.session === 'number' ? n.session : null)).filter(s => typeof s === 'number')
-      ])).sort((a, b) => a - b);
-      const lines = allSessions.map(s => {
-        const n = notesBySession[s] && notesBySession[s].length ? ` — ${notesBySession[s].join(' • ')}` : (sessions.includes(s) ? ' — Updated' : '');
-        return `- Session ${s}${n}`;
-      });
-      const text = lines.join('\n');
-      this.showFullTextModal({ title, text });
-    },
-    showFullTextModal(payload) {
-      this.modalTitle = payload.title;
-      this.modalText = payload.text;
-      this.modalImageUrl = null;
-      this.isModalVisible = true;
-    },
-    showPortraitModal(payload) {
-      this.modalTitle = payload.title;
-      this.modalImageUrl = payload.imageUrl;
-      this.modalText = '';
-      this.isModalVisible = true;
-    },
-    closeModal() {
-      this.isModalVisible = false;
-      this.modalText = '';
-      this.modalTitle = '';
-      this.modalImageUrl = null;
-    }
-  }
+]);
+
+const filteredNpcs = computed(() => {
+  const q = searchQuery.value.trim().toLowerCase();
+  return npcs.filter((npc) => {
+    if (activeFilter.value === 'updated' && !isEntityNew(npc, currentSession)) return false;
+    if (activeFilter.value === 'major' && !isMajorNpc(npc)) return false;
+    if (activeFilter.value === 'minor' && isMajorNpc(npc)) return false;
+
+    if (!q) return true;
+    const haystack = [npc.name, npc.role, npc.location, npc.description, npc.fullText]
+      .filter(Boolean)
+      .join(' ')
+      .toLowerCase();
+    return haystack.includes(q);
+  });
+});
+
+const majorNpcs = computed(() =>
+  sortEntitiesByLastSession(filteredNpcs.value.filter((n) => isMajorNpc(n)))
+);
+
+const minorNpcs = computed(() =>
+  sortEntitiesByLastSession(filteredNpcs.value.filter((n) => !isMajorNpc(n)))
+);
+
+function showMinorHistory(entity) {
+  const text = formatHistoryMarkdown(entity);
+  if (!text) return;
+  openModal(`History: ${entity.name}`, text, { imageUrl: null });
+}
+
+function handleShowFullText(payload) {
+  openModal(payload.title, payload.text, { imageUrl: null });
+}
+
+function handleShowPortrait(payload) {
+  openModal(payload.title, '', { imageUrl: payload.imageUrl });
 }
 </script>
 
 <style scoped>
 .npc-list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.15rem;
+  align-items: start;
 }
 
 .npc-list-item {
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.22);
   border: 1px solid var(--border-color);
-  border-radius: 6px;
-  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  padding: 1rem 1.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
 }
 
 .npc-list-header {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   gap: 0.5rem;
   flex-wrap: wrap;
 }
 
-.npc-name { color: var(--color-primary); }
+.npc-name {
+  color: var(--color-primary);
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+}
 
-.npc-role { color: var(--color-text-muted); font-style: italic; }
+.npc-role {
+  color: var(--color-text-muted);
+  font-style: italic;
+  font-size: 0.9rem;
+}
 
-.npc-status { font-weight: bold; margin-left: auto; }
+.npc-meta-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-bottom: 0.35rem;
+}
+
+.npc-meta {
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+}
+
+.badge-new,
+.badge-updated,
+.badge-stale {
+  padding: 0.08rem 0.42rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #111;
+  border-radius: 3px;
+}
 
 .badge-new {
-  padding: 0.05rem 0.4rem;
-  font-size: 0.7rem;
-  font-weight: bold;
-  color: #111;
   background: #ffd54f;
-  border-radius: 3px;
 }
+
 .badge-updated {
-  padding: 0.05rem 0.4rem;
-  font-size: 0.7rem;
-  font-weight: bold;
-  color: #111;
-  background: #90caf9; /* light blue */
-  border-radius: 3px;
+  background: #90caf9;
 }
+
 .badge-stale {
-  padding: 0.05rem 0.4rem;
-  font-size: 0.7rem;
-  font-weight: bold;
-  color: #111;
-  background: #e0e0e0; /* grey */
-  border-radius: 3px;
+  background: #cfd6e0;
 }
 
 .history-btn {
-  margin-left: auto; /* right align for minor NPCs */
-  font-size: 0.85rem;
+  margin-left: auto;
+  font-size: 0.84rem;
   line-height: 1.1;
-  color: var(--color-accent);
+  color: var(--color-link);
   background: transparent;
   border: none;
   cursor: pointer;
   font-weight: 600;
   padding: 0;
 }
-.history-btn:hover { text-decoration: underline; }
 
-.npc-meta {
-  display: inline-block;
-  margin-right: 0.5rem;
-  color: var(--color-text-muted);
+.history-btn:hover {
+  background: transparent;
+  color: var(--color-link-hover);
+  text-decoration: underline;
 }
-.npc-list-body .badge-new,
-.npc-list-body .badge-updated { margin-left: 0.25rem; vertical-align: text-top; }
 
-.npc-desc { margin: 0.25rem 0 0; }
+.read-more-link {
+  display: inline-block;
+  margin-top: 0.45rem;
+  color: var(--color-link);
+  background: transparent;
+  border: none;
+  padding: 0;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+}
 
-.location-section { margin: 1.5rem 0; }
+.read-more-link:hover {
+  background: transparent;
+  color: var(--color-link-hover);
+  text-decoration: underline;
+}
+
+.npc-desc {
+  margin: 0;
+  line-height: 1.58;
+}
+
+.location-section {
+  margin: 1.5rem 0;
+}
 
 .empty-message {
   text-align: center;
   margin-top: 2rem;
   color: var(--text-muted);
 }
-
-/* Right align the History button in minor NPC header */
-.npc-list-header .history-btn {
-  margin-left: auto;
-  font-size: 0.85rem;
-  line-height: 1.1;
-  color: var(--color-accent);
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  font-weight: 600;
-  padding: 0;
-}
-.npc-list-header .history-btn:hover { text-decoration: underline; }
 </style>

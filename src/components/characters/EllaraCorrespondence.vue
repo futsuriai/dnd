@@ -2,13 +2,21 @@
   <div class="ellara-correspondence">
     <h2>Correspondence with Lyra</h2>
     <div class="correspondence-container">
-      <div v-for="(letter, index) in letters" :key="index" class="letter-card">
-        <div class="letter-header" @click="toggleLetter(letter.id)">
+      <div v-for="letter in letters" :key="letter.id" class="letter-card">
+        <div
+          class="letter-header"
+          role="button"
+          tabindex="0"
+          :aria-expanded="isExpanded(letter.id)"
+          @click="toggleLetter(letter.id)"
+          @keydown.enter.prevent="toggleLetter(letter.id)"
+          @keydown.space.prevent="toggleLetter(letter.id)"
+        >
           <div class="letter-meta">
             <div class="letter-title-row">
               <h3 class="letter-title">{{ letter.title }}</h3>
-              <div class="expand-icon" :class="{ 'expanded': expandedLetters.includes(letter.id) }">
-                <span v-if="expandedLetters.includes(letter.id)">▼</span>
+              <div class="expand-icon" :class="{ expanded: isExpanded(letter.id) }" aria-hidden="true">
+                <span v-if="isExpanded(letter.id)">▼</span>
                 <span v-else>▶</span>
               </div>
             </div>
@@ -20,15 +28,31 @@
             From: {{ letter.from }} • To: {{ letter.to }}
           </div>
         </div>
-        
+
         <transition name="fade">
-          <div v-if="expandedLetters.includes(letter.id)" class="letter-content-wrapper">
-            <div class="letter-content" :class="{'ellara-handwriting': letter.from === 'Ellara', 'lyra-handwriting': letter.from === 'Lyra'}">
-              <p v-for="(paragraph, pIndex) in letter.content" :key="'p'+pIndex">{{ paragraph }}</p>
+          <div v-if="isExpanded(letter.id)" class="letter-content-wrapper">
+            <div
+              class="letter-content"
+              :class="{
+                'ellara-handwriting': letter.from === 'Ellara',
+                'lyra-handwriting': letter.from === 'Lyra',
+              }"
+            >
+              <p v-for="(paragraph, pIndex) in letter.content" :key="`${letter.id}-p-${pIndex}`">
+                {{ paragraph }}
+              </p>
             </div>
-            
+
             <div class="letter-footer">
-              <div class="letter-signature" :class="{'ellara-signature': letter.from === 'Ellara', 'lyra-signature': letter.from === 'Lyra'}">{{ letter.signature }}</div>
+              <div
+                class="letter-signature"
+                :class="{
+                  'ellara-signature': letter.from === 'Ellara',
+                  'lyra-signature': letter.from === 'Lyra',
+                }"
+              >
+                {{ letter.signature }}
+              </div>
             </div>
           </div>
         </transition>
@@ -37,29 +61,25 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref } from 'vue';
 import { correspondence } from '@/store/correspondence';
-import '@/assets/fonts/fonts.css';
 
-export default {
-  name: 'EllaraCorrespondence',
-  data() {
-    return {
-      letters: correspondence,
-      expandedLetters: []
-    };
-  },
-  methods: {
-    toggleLetter(id) {
-      const index = this.expandedLetters.indexOf(id);
-      if (index === -1) {
-        this.expandedLetters.push(id);
-      } else {
-        this.expandedLetters.splice(index, 1);
-      }
-    }
+const letters = correspondence;
+const expandedLetters = ref([]);
+
+function isExpanded(id) {
+  return expandedLetters.value.includes(id);
+}
+
+function toggleLetter(id) {
+  const idx = expandedLetters.value.indexOf(id);
+  if (idx === -1) {
+    expandedLetters.value.push(id);
+  } else {
+    expandedLetters.value.splice(idx, 1);
   }
-};
+}
 </script>
 
 <style scoped>
@@ -68,41 +88,41 @@ export default {
 }
 
 h2 {
-  border-bottom: 1px solid var(--border-color, #333);
+  border-bottom: 1px solid var(--border-color);
   padding-bottom: 0.5rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 .correspondence-container {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.5rem;
 }
 
 .letter-card {
   background: rgba(255, 255, 255, 0.03);
   border-radius: 8px;
-  border: 1px solid var(--border-color, #333);
+  border: 1px solid var(--border-color);
   overflow: hidden;
 }
 
 .letter-header {
-  background-color: rgba(0, 0, 0, 0.2);
-  padding: 1.2rem;
-  border-bottom: 1px solid var(--border-color, #333);
+  background-color: rgba(0, 0, 0, 0.22);
+  padding: 1.15rem;
+  border-bottom: 1px solid var(--border-color);
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
 
 .letter-header:hover {
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(0, 0, 0, 0.34);
 }
 
 .letter-meta {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.45rem;
 }
 
 .letter-title-row {
@@ -113,43 +133,35 @@ h2 {
 
 .expand-icon {
   font-size: 0.8rem;
-  transition: transform 0.3s ease;
-}
-
-.expand-icon.expanded {
-  transform: rotate(0deg);
-}
-
-.letter-date {
-  font-style: italic;
-  color: var(--color-text-muted, #aaa);
+  color: var(--color-text-muted);
 }
 
 .letter-direction {
-  font-size: 0.85rem;
-  padding: 0.2rem 0.6rem;
-  border-radius: 10px;
-  font-weight: bold;
+  font-size: 0.82rem;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  font-weight: 700;
 }
 
 .letter-direction.sent {
   background-color: rgba(75, 175, 80, 0.2);
-  color: #4baf50;
+  color: #6fdc74;
 }
 
 .letter-direction.received {
-  background-color: rgba(33, 150, 243, 0.2);
-  color: #2196f3;
+  background-color: rgba(91, 176, 207, 0.2);
+  color: var(--color-link-hover);
 }
 
 .letter-title {
-  margin: 0.5rem 0;
-  color: var(--accent-color, #d4af37);
+  margin: 0.25rem 0;
+  color: var(--accent-color);
+  font-size: 1.2rem;
 }
 
 .letter-from-to {
   font-size: 0.9rem;
-  color: var(--color-text-muted, #aaa);
+  color: var(--color-text-muted);
 }
 
 .letter-content-wrapper {
@@ -159,11 +171,13 @@ h2 {
 .letter-content {
   padding: 1.5rem;
   line-height: 1.7;
-  background: linear-gradient(to bottom, 
-    rgba(255, 255, 255, 0.01), 
-    rgba(255, 255, 255, 0.05) 15%, 
-    rgba(255, 255, 255, 0.05) 85%,
-    rgba(255, 255, 255, 0.01));
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.01),
+    rgba(255, 255, 255, 0.04) 15%,
+    rgba(255, 255, 255, 0.04) 85%,
+    rgba(255, 255, 255, 0.01)
+  );
 }
 
 .letter-content p {
@@ -175,14 +189,14 @@ h2 {
 }
 
 .letter-footer {
-  padding: 1.2rem;
-  border-top: 1px solid var(--border-color, #333);
+  padding: 1.1rem 1.5rem;
+  border-top: 1px solid var(--border-color);
   text-align: right;
 }
 
 .letter-signature {
   font-style: italic;
-  color: var(--accent-color, #d4af37);
+  color: var(--accent-color);
 }
 
 .fade-enter-active,
@@ -198,30 +212,32 @@ h2 {
   opacity: 0;
 }
 
-/* Custom handwriting fonts */
+/* Loaded handwriting fonts from fonts.css */
 .ellara-handwriting {
-  font-family: 'Lugrasimo', cursive;
-  font-size: 1.1rem;
-  line-height: 1.6;
-  letter-spacing: 0.3px;
+  font-family: 'Lugrasimo', Georgia, serif;
+  font-size: 1.08rem;
+  line-height: 1.65;
+  letter-spacing: 0.25px;
   font-weight: 500;
 }
 
 .lyra-handwriting {
-  font-family: 'Kalam', cursive;
-  font-size: 1.1rem;
-  letter-spacing: 0.3px;
+  font-family: 'Kalam', Georgia, serif;
+  font-size: 1.08rem;
+  letter-spacing: 0.25px;
 }
 
 .ellara-signature {
-  font-family: 'Dancing Script', cursive;
-  font-size: 1.6rem;
+  font-family: 'Lugrasimo', Georgia, 'Times New Roman', serif;
+  font-style: italic;
+  font-size: 1.35rem;
   font-weight: 600;
+  letter-spacing: 0.4px;
 }
 
 .lyra-signature {
-  font-family: 'Kalam', cursive;
-  font-size: 1.3rem;
+  font-family: 'Kalam', Georgia, serif;
+  font-size: 1.25rem;
   font-weight: 400;
 }
 
@@ -231,11 +247,11 @@ h2 {
     align-items: flex-start;
     gap: 0.5rem;
   }
-  
+
   .letter-header {
     padding: 1rem;
   }
-  
+
   .letter-content {
     padding: 1.2rem;
   }
