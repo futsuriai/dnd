@@ -6,9 +6,6 @@
       <div class="hero-overlay">
         <p class="hero-eyebrow">{{ worldName }} · 651 AE</p>
         <h1 class="hero-title">{{ campaignName }}</h1>
-        <p class="hero-tagline">
-          Crystal lamps burn bright in Bastion City, casting deep shadows over the truth beneath.
-        </p>
         <div class="hero-actions">
           <router-link
             v-if="latestCompletedSession"
@@ -317,14 +314,6 @@ const updatedFeedGroups = computed(() => {
   left: 50%;
   transform: translateX(-50%);
   width: 45%;
-}
-
-.hero-tagline {
-  max-width: 620px;
-  margin: 1rem auto 1.25rem;
-  color: var(--color-text);
-  font-size: 1.05rem;
-  opacity: 0.92;
 }
 
 .hero-actions {

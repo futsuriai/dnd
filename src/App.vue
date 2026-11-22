@@ -25,15 +25,7 @@
                 <router-link to="/" class="nav-home-link">Home</router-link>
               </li>
               <li>
-                <router-link
-                  to="/sessions"
-                  :class="{ 'nav-exact-only': isStorySoFarRoute }"
-                >
-                  Sessions
-                </router-link>
-              </li>
-              <li>
-                <router-link to="/sessions/story-so-far">Story So Far</router-link>
+                <router-link to="/sessions">Sessions</router-link>
               </li>
               <li>
                 <router-link to="/characters">Characters</router-link>
@@ -101,8 +93,6 @@ const shortcutHint = computed(() => {
   }
   return 'Ctrl K';
 });
-
-const isStorySoFarRoute = computed(() => route.path === '/sessions/story-so-far');
 
 const currentRouteName = computed(() => {
   if (route.path === '/') return 'Home';
@@ -401,7 +391,7 @@ footer::before {
   }
 
   .nav-drawer li a.router-link-exact-active,
-  .nav-drawer li a.router-link-active:not(.nav-home-link):not(.nav-exact-only) {
+  .nav-drawer li a.router-link-active:not(.nav-home-link) {
     background-color: rgba(201, 169, 89, 0.12);
     border-bottom: none;
   }

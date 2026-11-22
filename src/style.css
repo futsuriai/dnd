@@ -375,7 +375,7 @@ nav ul li a {
 
 nav ul li a:hover,
 nav ul li a.router-link-exact-active,
-nav ul li a.router-link-active:not(.nav-home-link):not(.nav-exact-only) {
+nav ul li a.router-link-active:not(.nav-home-link) {
   color: var(--color-highlight);
   border-bottom-color: var(--color-primary);
 }

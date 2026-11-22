@@ -1,7 +1,6 @@
 <template>
   <div class="content-section">
     <h1>Campaign Sessions</h1>
-    <p class="section-intro">Chronicles of our adventures and key events from each session.</p>
     <p class="story-link-row">
       <router-link to="/sessions/story-so-far" class="story-link">
         Read The Story So Far →
@@ -232,12 +231,6 @@ async function showTranscript(session) {
 </script>
 
 <style scoped>
-.section-intro {
-  text-align: center;
-  max-width: 800px;
-  margin: 0 auto 0.75em;
-}
-
 .story-link-row {
   text-align: center;
   margin: 0 auto 1.5rem;

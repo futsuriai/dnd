@@ -2,9 +2,6 @@
   <div class="content-section story-page">
     <div class="story-header">
       <h1>The Story So Far</h1>
-      <p class="coverage-text">
-        An unlikely party, a darkness in the heart of the duchy, a light in the hearts of our heroes.
-      </p>
       <p v-if="latestCompletedSession" class="coverage-meta">
         Chronicle through {{ latestCompletedSession.title }} ({{ latestCompletedSession.date }})
       </p>
@@ -128,14 +125,6 @@ const chronicleBeats = computed(() => {
 .story-header h1::after {
   left: 50%;
   transform: translateX(-50%);
-}
-
-.coverage-text {
-  text-align: center;
-  margin: 1rem auto 0.35rem;
-  color: var(--color-text);
-  font-style: italic;
-  max-width: 700px;
 }
 
 .coverage-meta {

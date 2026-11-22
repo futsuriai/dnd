@@ -2,9 +2,6 @@
   <div class="content-section">
     <div class="bastion-header">
       <h1>Bastion City</h1>
-      <p class="section-intro">
-        The canal-divided capital of Hieroterra Province, where crystal lamps illuminate the affluent West Side and cast long shadows across the East.
-      </p>
     </div>
 
     <FilterBar
@@ -36,9 +33,6 @@
       <!-- Duskbreaker Lighthouse Facilities (surfaces all 4 facilities + Medical Bay) -->
       <div v-if="lighthouseFacilities.length" class="location-section lighthouse-section">
         <h2>Duskbreaker Lighthouse Facilities</h2>
-        <p class="facility-intro">
-          Restricted floors, research departments, and hidden subterranean complexes within the Duskbreaker Lighthouse.
-        </p>
         <div class="entity-grid">
           <EntityCard
             v-for="facility in lighthouseFacilities"
@@ -168,12 +162,6 @@ function handleShowFullText(payload) {
 <style scoped>
 .bastion-header {
   margin-bottom: 1rem;
-}
-
-.facility-intro {
-  margin: 0 0 1.15rem;
-  color: var(--text-muted);
-  font-style: italic;
 }
 
 .lighthouse-section {

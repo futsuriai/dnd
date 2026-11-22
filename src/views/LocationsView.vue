@@ -2,10 +2,8 @@
   <div class="content-section">
     <div class="locations-header">
       <h1>World Locations</h1>
-      <p class="section-intro">
-        Provinces, capitals, towns, and notable places across The Hariolar Empire.
-        Looking for city districts, prisons, or Duskbreaker Lighthouse interiors?
-        <router-link to="/bastion-city" class="inline-bastion-link">Explore Bastion City →</router-link>
+      <p class="bastion-link-row">
+        <router-link to="/bastion-city" class="inline-bastion-link">View Bastion City locations →</router-link>
       </p>
     </div>
 
@@ -338,6 +336,11 @@ function handleShowFullText(payload) {
 <style scoped>
 .locations-header {
   margin-bottom: 1rem;
+}
+
+.bastion-link-row {
+  text-align: center;
+  margin: 0.5rem auto 0.25rem;
 }
 
 .inline-bastion-link {
