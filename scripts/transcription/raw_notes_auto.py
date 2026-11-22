@@ -2,20 +2,22 @@
 """Generate Raw Session N notes from a transcript, scene by scene, unattended.
 
 Replaces fixed 100-line chunks + a reconcile pass with:
-1. one planning call that splits the whole transcript into scenes
-   (play / recap / ooc) with a one-line summary each
-2. one extraction call per play scene (run in parallel) that sees the whole
-   session outline, the scene's transcript, D&D Beyond dice lines, and real
-   examples of the player's hand-written notes
-3. deterministic assembly with `---` between scenes
+1. one structured planning call (`--json-schema`, defaulting to
+   `gemini-4-neon-high` on `agy`) that splits the transcript into scenes
+   (`play` / `recap` / `ooc`) with a one-line summary each
+2. one extraction call per play/recap scene (run in parallel) that sees the
+   whole session outline, the scene's transcript, D&D Beyond dice lines, and
+   real examples of the player's hand-written notes; uncertain proper nouns
+   emitted as `review-name:` are routed into `<work-dir>/review_queue.json`
+3. deterministic `NameNormalizer` cleanup and assembly with `---` between scenes
 
-Work files (plan + per-scene notes) are kept in --work-dir so reruns only redo
-missing scenes (use --force to redo everything).
+Work files (plan + per-scene notes + review_queue.json) are kept in --work-dir
+so reruns only redo missing scenes (use --force to redo everything).
 
 Example:
-    python raw_notes_auto.py --session 21 \
-        --transcript "/home/babu/source/ellara/Session Notes/Transcripts/Transcript Session 21.txt" \
-        --out "/home/babu/source/ellara/Session Notes/Raw Session 21.md" --provider codex
+    python3 -B scripts/transcription/raw_notes_auto.py --session 21 \
+        --transcript "<ellara>/Session Notes/Transcripts/Transcript Session 21.txt" \
+        --out "<ellara>/Session Notes/Raw Session 21.md" --provider agy
 """
 
 from __future__ import annotations
@@ -34,15 +36,43 @@ import agent_cli  # noqa: E402
 from name_normalizer import NameNormalizer  # noqa: E402
 from note_generation_guidance import CANONICAL_CAST_REFERENCE, CANONICAL_EVIDENCE_POLICY  # noqa: E402
 
-LINE_RE = re.compile(r"^\[(\d{2}:\d{2}:\d{2})\] ([^:]+): (.*)$")
-EXAMPLES = (SCRIPT_DIR / "examples" / "raw_notes_examples.md").read_text(encoding="utf-8")
-WORKSPACE = SCRIPT_DIR.parent.parent
+try:
+    import pipeline_paths as _pipeline_paths
+except ImportError:
+    _pipeline_paths = None
+
+LINE_RE = re.compile(r"^\[(\d{2}:\d{2}:\d{2}(?:\.\d+)?)\] ([^:]+): (.*)$")
+REVIEW_LINE_RE = re.compile(r"^\s*review(?:-name)?\s*:(.*)$", re.IGNORECASE)
+EXAMPLES_PATH = SCRIPT_DIR / "examples" / "raw_notes_examples.md"
+EXAMPLES = EXAMPLES_PATH.read_text(encoding="utf-8") if EXAMPLES_PATH.exists() else ""
+WORKSPACE = _pipeline_paths.DND_DIR if _pipeline_paths is not None else SCRIPT_DIR.parent.parent
+
+SCENE_PLAN_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "scenes": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "start": {"type": "integer"},
+                    "end": {"type": "integer"},
+                    "kind": {"type": "string", "enum": ["play", "recap", "ooc"]},
+                    "title": {"type": "string"},
+                    "summary": {"type": "string"},
+                },
+                "required": ["start", "end", "kind", "title", "summary"],
+            },
+        }
+    },
+    "required": ["scenes"],
+}
 
 PLAN_PROMPT = """You are planning notes for a Dungeons & Dragons session. Below is the full machine transcript,
 one numbered line per speaker turn: `<n> [time] Speaker: text`. `GM` is the game master, who also voices every NPC.
 `DICE` lines are rolls from the D&D Beyond game log.
 
-Split the transcript into consecutive scenes and return JSON only, no prose:
+Split the transcript into consecutive scenes and return JSON matching the schema, no prose:
 {{"scenes": [{{"start": <first line number>, "end": <last line number>, "kind": "play" | "recap" | "ooc",
   "title": "<short scene title>", "summary": "<1-2 sentences: who does what, what is learned or decided>"}}]}}
 
@@ -79,7 +109,11 @@ How the hand-written notes look (follow this closely):
 - compress repeated planning to the options considered and the choice made
 - canonical spellings for names; the transcript's speaker labels are reliable, but ASR mishears names in the text
 - never invent facts, quotes, or outcomes; if something is unclear, leave it out rather than guess; never write
-  review lines, notes to the reader, or commentary about the transcript
+  notes to the reader or meta-commentary about the transcript
+- uncertain proper nouns: if a heard/transcribed proper noun is genuinely ambiguous, keep the safest descriptive form
+  in the note prose and add a separate trailing `review-name: <heard> | <candidates or context>` line at the very end;
+  the pipeline automatically extracts `review-name:` lines into a sidecar `review_queue.json` so they never appear in
+  the final raw notes file
 - density: dialogue-heavy scenes keep most exchanges; logistics and long rules discussions become one line
 
 {examples}
@@ -98,7 +132,7 @@ Whole-session outline (for context; write notes only for the CURRENT scene):
 Transcript of the current scene (lines before `=== SCENE START ===` are earlier context only):
 {scene}
 
-Write only the raw notes for the current scene."""
+Write only the raw notes for the current scene (plus any trailing `review-name:` lines if a proper noun is ambiguous)."""
 
 KIND_INSTRUCTIONS = {
     "play": "The current scene is gameplay: write full raw notes for it.",
@@ -124,14 +158,33 @@ def render(lines: list[dict]) -> str:
 
 
 def parse_json(text: str) -> dict:
-    text = agent_cli.strip_code_fences(text)
-    start, end = text.find("{"), text.rfind("}")
-    return json.loads(text[start:end + 1])
+    parsed = agent_cli.extract_json(text)
+    if not isinstance(parsed, dict):
+        raise ValueError(f"expected JSON object, got {type(parsed).__name__}")
+    return parsed
 
 
-def to_seconds(stamp: str) -> int:
-    h, m, s = (int(x) for x in stamp.split(":"))
-    return h * 3600 + m * 60 + s
+def split_review_lines(text: str) -> tuple[str, list[str]]:
+    """Separate clean scene notes from `review:` / `review-name:` sidecar entries."""
+    note_lines: list[str] = []
+    review_items: list[str] = []
+    for raw in text.splitlines():
+        stripped = raw.lstrip()
+        if stripped.startswith("#"):
+            continue
+        review_match = REVIEW_LINE_RE.match(raw)
+        if review_match:
+            item = review_match.group(1).strip()
+            if item:
+                review_items.append(item)
+            continue
+        note_lines.append(raw)
+    return "\n".join(note_lines).strip(), review_items
+
+
+def to_seconds(stamp: str) -> float:
+    h, m, s = stamp.split(":")
+    return int(h) * 3600 + int(m) * 60 + float(s)
 
 
 def repair_plan(scenes: list[dict], total: int, lines: list[dict], max_lines: int) -> list[dict]:
@@ -142,8 +195,13 @@ def repair_plan(scenes: list[dict], total: int, lines: list[dict], max_lines: in
         if end < start or start < 1:
             continue
         kind = scene.get("kind") if scene.get("kind") in {"play", "recap", "ooc"} else "play"
-        cleaned.append({"start": start, "end": min(end, total), "kind": kind,
-                        "title": str(scene.get("title", "")).strip(), "summary": str(scene.get("summary", "")).strip()})
+        cleaned.append({
+            "start": start,
+            "end": min(end, total),
+            "kind": kind,
+            "title": str(scene.get("title", "")).strip(),
+            "summary": str(scene.get("summary", "")).strip(),
+        })
     if not cleaned:
         cleaned = [{"start": 1, "end": total, "kind": "play", "title": "Session", "summary": ""}]
     cleaned[0]["start"] = 1
@@ -164,7 +222,10 @@ def repair_plan(scenes: list[dict], total: int, lines: list[dict], max_lines: in
                 bounded.append(current)
                 continue
             lo, hi = current["start"] + size // 3, current["end"] - size // 3
-            cut = max(range(lo, hi), key=lambda n: to_seconds(lines[n]["time"]) - to_seconds(lines[n - 1]["time"]))
+            cut = max(
+                range(lo, max(lo + 1, hi)),
+                key=lambda n: to_seconds(lines[min(n, total - 1)]["time"]) - to_seconds(lines[max(0, n - 1)]["time"]),
+            )
             pending[:0] = [
                 {**current, "end": cut},
                 {**current, "start": cut + 1, "title": current["title"] + " (cont.)"},
@@ -189,7 +250,7 @@ def main() -> int:
     parser.add_argument("--provider", choices=agent_cli.PROVIDERS, default="codex")
     parser.add_argument("--model")
     parser.add_argument("--plan-provider", choices=agent_cli.PROVIDERS, help="Default: --provider")
-    parser.add_argument("--plan-model")
+    parser.add_argument("--plan-model", help="Default: --model (or gemini-4-neon-high when planning with agy)")
     parser.add_argument("--workers", type=int, default=3)
     parser.add_argument("--context-lines", type=int, default=10)
     parser.add_argument("--max-scene-lines", type=int, default=400)
@@ -204,35 +265,92 @@ def main() -> int:
     if not lines:
         raise SystemExit(f"no transcript lines in {transcript}")
 
+    plan_provider = args.plan_provider or args.provider
+    plan_model = args.plan_model or args.model
+    if plan_provider == "agy" and not plan_model:
+        plan_model = agent_cli.AGY_TIERS["strong"]
+
     plan_path = work / "scene_plan.json"
     if plan_path.exists() and not args.force:
         scenes = json.loads(plan_path.read_text(encoding="utf-8"))["scenes"]
     else:
-        print(f"Planning scenes over {len(lines)} lines with {args.plan_provider or args.provider}...", flush=True)
-        reply = agent_cli.run_agent(
-            args.plan_provider or args.provider,
-            PLAN_PROMPT.format(last=len(lines), transcript=render(lines)),
-            WORKSPACE,
-            args.plan_model or args.model,
+        print(
+            f"Planning scenes over {len(lines)} lines with {plan_provider} "
+            f"({agent_cli.resolve_model(plan_provider, plan_model)})...",
+            flush=True,
         )
-        try:
-            planned = parse_json(reply).get("scenes", [])
-        except (ValueError, json.JSONDecodeError):
-            print("planner returned invalid JSON; falling back to gap-based scenes", flush=True)
-            planned = []
+        plan_prompt = PLAN_PROMPT.format(last=len(lines), transcript=render(lines))
+        planned: list[dict] = []
+        fallback_reason: str | None = None
+        last_reply = ""
+
+        for attempt in range(2):
+            try:
+                last_reply = agent_cli.run_agent(
+                    plan_prompt,
+                    provider=plan_provider,
+                    model=plan_model,
+                    workspace=WORKSPACE,
+                    write=False,
+                    json_schema=SCENE_PLAN_SCHEMA,
+                    timeout=360,
+                    retries=1,
+                )
+                parsed = parse_json(last_reply)
+                candidate = parsed.get("scenes", [])
+                if isinstance(candidate, list) and candidate:
+                    planned = candidate
+                    fallback_reason = None
+                    break
+                fallback_reason = "planner returned empty scenes list"
+            except Exception as exc:  # noqa: BLE001
+                fallback_reason = f"{type(exc).__name__}: {exc}"
+            if attempt == 0:
+                print(
+                    f"WARNING: scene planner attempt 1 failed ({fallback_reason}); retrying once...",
+                    file=sys.stderr,
+                    flush=True,
+                )
+
+        if not planned:
+            raw_dump = work / "scene_plan_raw.txt"
+            raw_dump.write_text(last_reply + "\n", encoding="utf-8")
+            print(
+                f"WARNING: scene planner fell back to timestamp-gap scenes ({fallback_reason}). "
+                f"Raw output saved to {raw_dump}",
+                file=sys.stderr,
+                flush=True,
+            )
+
         scenes = repair_plan(planned, len(lines), lines, args.max_scene_lines)
-        plan_path.write_text(json.dumps({"scenes": scenes}, indent=2) + "\n", encoding="utf-8")
+        plan_payload: dict = {"scenes": scenes, "fallback": bool(fallback_reason)}
+        if fallback_reason:
+            plan_payload["fallback_reason"] = fallback_reason
+        plan_path.write_text(json.dumps(plan_payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+
     print(f"{len(scenes)} scenes: " + ", ".join(f"{s['kind']}:{s['end'] - s['start'] + 1}" for s in scenes), flush=True)
 
-    hints = NameNormalizer().llm_hint_block()
+    normalizer = NameNormalizer()
+    hints = normalizer.llm_hint_block()
+    review_queue_path = work / "review_queue.json"
+    existing_queue: dict[int, list[dict]] = {}
+    if review_queue_path.exists() and not args.force:
+        try:
+            prev_q = json.loads(review_queue_path.read_text(encoding="utf-8"))
+            for item in prev_q.get("items", []):
+                existing_queue.setdefault(int(item.get("scene", 0)), []).append(item)
+        except (OSError, json.JSONDecodeError, ValueError):
+            pass
+
+    scene_reviews: dict[int, list[dict]] = dict(existing_queue)
 
     def run_scene(index: int) -> None:
         scene = scenes[index]
         target = work / f"scene_{index + 1:02d}.md"
         if scene["kind"] == "ooc" or (target.exists() and not args.force):
             return
-        before = lines[max(0, scene["start"] - 1 - args.context_lines): scene["start"] - 1]
-        body = lines[scene["start"] - 1: scene["end"]]
+        before = lines[max(0, scene["start"] - 1 - args.context_lines) : scene["start"] - 1]
+        body = lines[scene["start"] - 1 : scene["end"]]
         scene_text = (render(before) + "\n" if before else "") + "=== SCENE START ===\n" + render(body)
         prompt = SCENE_PROMPT.format(
             examples=EXAMPLES,
@@ -243,13 +361,52 @@ def main() -> int:
             kind_instruction=KIND_INSTRUCTIONS[scene["kind"]],
             scene=scene_text,
         )
-        reply = agent_cli.strip_code_fences(agent_cli.run_agent(args.provider, prompt, WORKSPACE, args.model))
-        reply = "\n".join(l for l in reply.splitlines() if not l.lstrip().startswith(("#", "review:", "review-name:")))
-        target.write_text(reply.strip() + "\n", encoding="utf-8")
-        print(f"  scene {index + 1}/{len(scenes)} ({scene['title']}): {len(reply.splitlines())} lines", flush=True)
+        raw_reply = agent_cli.strip_code_fences(
+            agent_cli.run_agent(
+                prompt,
+                provider=args.provider,
+                model=args.model,
+                workspace=WORKSPACE,
+                write=False,
+                timeout=300,
+                retries=2,
+            )
+        )
+        clean_reply, review_items = split_review_lines(raw_reply)
+        normalized_reply = normalizer.normalize(clean_reply, preserve_lowercase=True)
+        target.write_text((normalized_reply.strip() + "\n") if normalized_reply.strip() else "", encoding="utf-8")
+
+        if review_items:
+            scene_reviews[index + 1] = [
+                {
+                    "scene": index + 1,
+                    "title": scene["title"],
+                    "start_line": scene["start"],
+                    "end_line": scene["end"],
+                    "start_time": lines[scene["start"] - 1]["time"],
+                    "end_time": lines[scene["end"] - 1]["time"],
+                    "note": item,
+                }
+                for item in review_items
+            ]
+        else:
+            scene_reviews.pop(index + 1, None)
+
+        print(
+            f"  scene {index + 1}/{len(scenes)} ({scene['title']}): "
+            f"{len(normalized_reply.splitlines())} lines"
+            + (f" (+{len(review_items)} review-name queued)" if review_items else ""),
+            flush=True,
+        )
 
     with ThreadPoolExecutor(max_workers=args.workers) as pool:
         list(pool.map(run_scene, range(len(scenes))))
+
+    flat_reviews = [item for idx in sorted(scene_reviews) for item in scene_reviews[idx]]
+    review_queue_path.write_text(
+        json.dumps({"session": args.session, "items": flat_reviews}, indent=2, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
 
     parts = []
     for index, scene in enumerate(scenes):
@@ -258,8 +415,12 @@ def main() -> int:
             text = path.read_text(encoding="utf-8").strip()
             if text:
                 parts.append(text)
+    out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text("\n\n---\n\n".join(parts) + "\n", encoding="utf-8")
-    print(f"Wrote {out} ({sum(len(p.splitlines()) for p in parts)} lines from {len(parts)} scenes)")
+    print(
+        f"Wrote {out} ({sum(len(p.splitlines()) for p in parts)} lines from {len(parts)} scenes; "
+        f"{len(flat_reviews)} review-name item(s) -> {review_queue_path})"
+    )
     return 0
 
 

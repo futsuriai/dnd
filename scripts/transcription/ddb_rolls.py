@@ -14,12 +14,9 @@ The CobaltSession cookie is a login credential: keep it only in .env.local.
 
 Subcommands:
     fetch   download the campaign log, keep the most recent play session's rolls
-    align   estimate the recording-start offset by matching roll totals to
-            numbers spoken in the transcript, then write audio-timed events
-
-Craig recordings carry no wall-clock start time, so `align` votes over every
-(roll, spoken number) pair and picks the offset most rolls agree on. Pass
---recording-start to skip estimation when the start time is known.
+    align   estimate the recording-start offset by keyword-weighted matching of
+            roll totals to spoken numbers in the transcript, then write
+            audio-timed events
 """
 
 from __future__ import annotations
@@ -37,13 +34,41 @@ from datetime import datetime, timezone
 from pathlib import Path
 from urllib import error, parse, request
 
+try:
+    import pipeline_paths as _pipeline_paths
+except ImportError:
+    _pipeline_paths = None
+
 SCRIPT_DIR = Path(__file__).resolve().parent
-DND_DIR = SCRIPT_DIR.parent.parent
+DND_DIR = _pipeline_paths.DND_DIR if _pipeline_paths is not None else SCRIPT_DIR.parent.parent
 AUTH_URL = "https://auth-service.dndbeyond.com/v1/cobalt-token"
 USER_DATA_URL = "https://www.dndbeyond.com/mobile/api/v6/user-data"
 GAME_LOG_BASE = "https://game-log-rest-live.dndbeyond.com/v1"
-USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) dnd-session-pipeline"
-PARTY = ["Berridin", "Ellara", "Nyx", "Ysidor", "Witty"]
+USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X) dnd-session-pipeline"
+DEFAULT_PARTY = ["Berridin", "Ellara", "Nyx", "Ysidor", "Witty"]
+
+
+def _load_party() -> list[str]:
+    meta = DND_DIR / "scripts" / "transcription" / "entity_metadata.json"
+    if not meta.exists():
+        return list(DEFAULT_PARTY)
+    try:
+        entities = json.loads(meta.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return list(DEFAULT_PARTY)
+    names: list[str] = []
+    for entity in entities:
+        if entity.get("type") != "Characters":
+            continue
+        raw = str(entity.get("name", "")).strip()
+        quoted = re.findall(r'"([^"]+)"', raw)
+        short = quoted[0] if quoted else raw.split()[0]
+        if short and short not in names:
+            names.append(short)
+    return names or list(DEFAULT_PARTY)
+
+
+PARTY = _load_party()
 
 
 # ---------------------------------------------------------------- utilities
@@ -89,6 +114,16 @@ def jwt_claims(token: str) -> dict:
         return json.loads(base64.urlsafe_b64decode(payload))
     except (IndexError, ValueError):
         return {}
+
+
+def format_total(total) -> str:
+    """Format single or multi-roll D&D Beyond totals cleanly (never raw list `[12, 8]`)."""
+    if isinstance(total, (list, tuple)):
+        parts = [str(x) for x in total if x is not None]
+        return ", ".join(parts) if parts else "?"
+    if total is None:
+        return "?"
+    return str(total)
 
 
 # ---------------------------------------------------------------- fetch
@@ -194,6 +229,7 @@ def normalize_record(record: dict) -> dict | None:
             kinds.append(roll["rollKind"])
     if not totals:
         return None
+    total_val = totals[0] if len(totals) == 1 else totals
     return {
         "id": record.get("id") or record.get("rollId") or data.get("rollId"),
         "wall_time": when.isoformat(),
@@ -202,7 +238,8 @@ def normalize_record(record: dict) -> dict | None:
         "action": data.get("action") or context.get("action") or "",
         "roll_type": " ".join(dict.fromkeys(roll_types)),
         "roll_kind": " ".join(dict.fromkeys(kinds)),
-        "total": totals[0] if len(totals) == 1 else totals,
+        "total": total_val,
+        "total_display": format_total(total_val),
         "naturals": naturals,
         "detail": "; ".join(details),
     }
@@ -278,6 +315,15 @@ NUMBER_WORDS = {
     "nineteen": 19, "twenty": 20, "thirty": 30, "forty": 40, "fifty": 50,
 }
 
+ROLL_KEYWORDS = {
+    "roll", "rolled", "rolling", "check", "save", "saving", "nat", "natural",
+    "crit", "critical", "hit", "hits", "damage", "initiative", "stealth",
+    "perception", "insight", "persuasion", "deception", "intimidation",
+    "investigation", "arcana", "athletics", "acrobatics", "survival",
+    "religion", "history", "nature", "medicine", "performance", "sleight",
+    "attack", "total", "plus", "dc", "to", "got", "d20", "d12", "d10", "d8", "d6", "d4",
+}
+
 
 def spoken_numbers(text: str) -> set[int]:
     lowered = text.lower().replace("-", " ")
@@ -294,6 +340,10 @@ def spoken_numbers(text: str) -> set[int]:
     return numbers
 
 
+def _word_set(text: str) -> set[str]:
+    return set(re.findall(r"[a-z0-9]+", text.lower()))
+
+
 def load_lines(path: Path) -> list[dict]:
     lines = []
     for raw in path.read_text(encoding="utf-8").splitlines():
@@ -301,43 +351,127 @@ def load_lines(path: Path) -> list[dict]:
             line = json.loads(raw)
             if line.get("speaker") != "DICE":
                 line["numbers"] = spoken_numbers(line["text"])
+                line["_words"] = _word_set(line["text"])
                 lines.append(line)
     return lines
 
 
+def _nearby_words(lines: list[dict], idx: int, window_s: float = 8.0) -> set[str]:
+    center = float(lines[idx]["start"])
+    words = set(lines[idx].get("_words") or _word_set(lines[idx]["text"]))
+    for j in range(max(0, idx - 3), min(len(lines), idx + 4)):
+        if j != idx and abs(float(lines[j]["start"]) - center) <= window_s:
+            words |= lines[j].get("_words") or _word_set(lines[j]["text"])
+    return words
+
+
+def _match_weight(roll: dict, line: dict, matched_nums: set[int], context_words: set[str]) -> float:
+    """Weight a (roll, spoken-number) vote higher when roll/skill keywords appear nearby."""
+    action_words = {w for w in _word_set(f"{roll.get('action', '')} {roll.get('roll_type', '')}") if len(w) >= 3}
+    has_action = bool(action_words & context_words)
+    has_roll_kw = bool(ROLL_KEYWORDS & context_words)
+
+    weight = 1.0
+    if has_action:
+        weight += 2.5
+    elif has_roll_kw:
+        weight += 1.5
+    elif max(matched_nums) <= 3:
+        # Uncontextualized tiny numbers ("1", "2", "3") occur constantly in table chatter.
+        weight = 0.25
+
+    if line.get("speaker") == roll.get("character"):
+        weight += 0.5
+    return weight
+
+
 def estimate_offset(rolls: list[dict], lines: list[dict], bin_seconds: float) -> tuple[float | None, dict]:
-    votes: dict[int, set[int]] = defaultdict(set)
-    candidates: list[tuple[float, int]] = []
+    # Per bin: map roll_index -> max match weight observed for that roll in that bin.
+    bin_roll_weights: dict[int, dict[int, float]] = defaultdict(dict)
+    candidates: list[tuple[float, int, float]] = []
+
+    for line_idx, line in enumerate(lines):
+        if "_words" not in line:
+            line["_words"] = _word_set(line["text"])
+        if "numbers" not in line:
+            line["numbers"] = spoken_numbers(line["text"])
+
+    nearby_cache = [_nearby_words(lines, i) for i in range(len(lines))]
+
     for index, roll in enumerate(rolls):
         wall = parse_time(roll["wall_time"]).timestamp()
         totals = roll["total"] if isinstance(roll["total"], list) else [roll["total"]]
         targets = {int(t) for t in totals if isinstance(t, (int, float))} | {int(n) for n in roll.get("naturals", [])}
         targets.discard(0)
+        if not targets:
+            continue
         speakers = {roll.get("character"), "GM"}
-        for line in lines:
-            if line["speaker"] in speakers and targets & line["numbers"]:
-                offset = wall - line["start"]
-                candidates.append((offset, index))
-                votes[int(offset // bin_seconds)].add(index)
-    if not votes:
+        for line_idx, line in enumerate(lines):
+            if line["speaker"] not in speakers:
+                continue
+            matched = targets & line["numbers"]
+            if not matched:
+                continue
+            weight = _match_weight(roll, line, matched, nearby_cache[line_idx])
+            offset = wall - float(line["start"])
+            candidates.append((offset, index, weight))
+            b = int(offset // bin_seconds)
+            prev = bin_roll_weights[b].get(index, 0.0)
+            if weight > prev:
+                bin_roll_weights[b][index] = weight
+
+    if not bin_roll_weights:
         return None, {"reason": "no spoken numbers matched any roll"}
 
-    def support(bin_id: int) -> int:
-        return len(votes.get(bin_id - 1, set()) | votes.get(bin_id, set()) | votes.get(bin_id + 1, set()))
+    def neighborhood_weights(bin_id: int) -> dict[int, float]:
+        merged: dict[int, float] = {}
+        for b in (bin_id - 1, bin_id, bin_id + 1):
+            for r_idx, w in bin_roll_weights.get(b, {}).items():
+                if w > merged.get(r_idx, 0.0):
+                    merged[r_idx] = w
+        return merged
 
-    ranked = sorted(votes, key=support, reverse=True)
+    def weighted_score(bin_id: int) -> tuple[float, int]:
+        mw = neighborhood_weights(bin_id)
+        return (sum(mw.values()), len(mw))
+
+    ranked = sorted(bin_roll_weights, key=weighted_score, reverse=True)
     best = ranked[0]
+    best_weight, best_support = weighted_score(best)
     runner_up = next((b for b in ranked[1:] if abs(b - best) > 5), None)
-    near = [off for off, _ in candidates if abs(off - (best + 0.5) * bin_seconds) <= 1.5 * bin_seconds]
-    offset = statistics.median(near)
+    ru_weight, ru_support = weighted_score(runner_up) if runner_up is not None else (0.0, 0)
+
+    near = [
+        (off, r_idx, w)
+        for off, r_idx, w in candidates
+        if abs(off - (best + 0.5) * bin_seconds) <= 1.5 * bin_seconds
+    ]
+    offset = statistics.median([off for off, _, _ in near])
+
+    # Basic clock-drift check comparing first half vs second half of matched rolls.
+    drift_seconds = None
+    if len(near) >= 6:
+        ordered_near = sorted(near, key=lambda x: x[1])
+        half = len(ordered_near) // 2
+        early = statistics.median(x[0] for x in ordered_near[:half])
+        late = statistics.median(x[0] for x in ordered_near[half:])
+        drift_seconds = round(late - early, 2)
+
     stats = {
         "rolls": len(rolls),
-        "supporting_rolls": support(best),
-        "runner_up_support": support(runner_up) if runner_up is not None else 0,
+        "supporting_rolls": best_support,
+        "weighted_support": round(best_weight, 2),
+        "runner_up_support": ru_support,
+        "runner_up_weighted": round(ru_weight, 2),
         "offset_epoch": offset,
+        "drift_seconds": drift_seconds,
         "recording_start_utc": datetime.fromtimestamp(offset, tz=timezone.utc).isoformat(),
     }
-    confident = stats["supporting_rolls"] >= max(4, 0.15 * len(rolls)) and stats["supporting_rolls"] >= 2 * stats["runner_up_support"]
+    confident = (
+        best_support >= max(4, 0.15 * len(rolls))
+        and best_weight >= max(1.8 * ru_weight, ru_weight + 3.0)
+        and best_support >= ru_support
+    )
     stats["confident"] = confident
     return (offset if confident else None), stats
 
@@ -356,13 +490,14 @@ def cmd_align(args: argparse.Namespace) -> int:
         stats = {"method": "given", "recording_start_utc": args.recording_start, "confident": True}
     else:
         offset, stats = estimate_offset(rolls, lines, args.bin_seconds)
-        stats["method"] = "spoken-number voting"
+        stats["method"] = "keyword-weighted spoken-number voting"
     duration = max((l["end"] for l in lines), default=0)
 
     aligned = 0
     with out.open("w", encoding="utf-8") as f:
         for roll in rolls:
             event = dict(roll)
+            event.setdefault("total_display", format_total(event.get("total")))
             if offset is not None:
                 audio_time = parse_time(roll["wall_time"]).timestamp() - offset
                 event["audio_time"] = round(audio_time, 2) if -60 <= audio_time <= duration + 600 else None
@@ -371,7 +506,8 @@ def cmd_align(args: argparse.Namespace) -> int:
                 event["audio_time"] = None
             f.write(json.dumps(event, ensure_ascii=False) + "\n")
     stats["aligned_rolls"] = aligned
-    Path(args.report).write_text(json.dumps(stats, indent=2) + "\n", encoding="utf-8") if args.report else None
+    if args.report:
+        Path(args.report).write_text(json.dumps(stats, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(stats, indent=2))
     return 0 if offset is not None else 3
 

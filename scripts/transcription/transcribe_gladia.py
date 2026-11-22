@@ -5,9 +5,9 @@ Transcribe one speaker-isolated audio file with Gladia after local VAD compactio
 The output transcript uses the same timestamp format as transcribe.py:
     [HH:MM:SS -> HH:MM:SS] text
 
-Gladia receives only the compact speech-only WAV. Timestamps from Gladia's
-compact-audio result are mapped back to the original audio timeline before
-writing the final transcript.
+Gladia receives only the compact speech-only WAV (or Opus/FLAC upload copy).
+Timestamps from Gladia's compact-audio result are mapped back to the original
+audio timeline before writing the final transcript.
 """
 
 from __future__ import annotations
@@ -16,11 +16,13 @@ import argparse
 import importlib.util
 import json
 import mimetypes
-import re
 import os
+import re
 import subprocess
 import sys
 import time
+import types
+import unicodedata
 import uuid
 from pathlib import Path
 from urllib import error, request
@@ -28,11 +30,19 @@ from urllib import error, request
 import asr_common
 import vad_compact
 
+try:
+    import pipeline_paths as _pipeline_paths
+except ImportError:
+    _pipeline_paths = None
+
+SCRIPT_DIR = Path(__file__).resolve().parent
+DND_DIR = _pipeline_paths.DND_DIR if _pipeline_paths is not None else SCRIPT_DIR.parent.parent
 
 UPLOAD_URL = "https://api.gladia.io/v2/upload"
 PRE_RECORDED_URL = "https://api.gladia.io/v2/pre-recorded"
 DEFAULT_POLL_INTERVAL = 5
 DEFAULT_TIMEOUT = 1800
+DEFAULT_VOCAB_INTENSITY = 0.35
 
 
 def load_env_file(path: Path) -> None:
@@ -51,13 +61,72 @@ def load_env_file(path: Path) -> None:
             os.environ[key] = value
 
 
+def _fallback_transcribe_helpers():
+    """Lightweight pure-Python fallback when torch/faster_whisper aren't installed."""
+    ns = types.SimpleNamespace()
+    ns.SECTION_PRIORITY = {"Characters": 0, "Locations": 1, "NPCs": 2, "Lore": 3}
+    ns.PRIORITY_TRANSCRIPTION_TERMS = ["Nites", "Hyr", "Hýr", "Hýrda"]
+
+    def clean_term(value: str) -> str:
+        return re.sub(r"\s+", " ", value.strip().rstrip("\\").strip())
+
+    def dedupe_terms(terms: list[str]) -> list[str]:
+        seen: set[str] = set()
+        result: list[str] = []
+        for term in terms:
+            term = clean_term(term)
+            if not term:
+                continue
+            key = term.casefold()
+            if key in seen:
+                continue
+            seen.add(key)
+            result.append(term)
+        return result
+
+    def ascii_fallback_fn(term: str) -> str | None:
+        normalized = unicodedata.normalize("NFKD", term)
+        fallback = "".join(ch for ch in normalized if not unicodedata.combining(ch))
+        return fallback if fallback != term else None
+
+    def get_session_weight(updated_sessions: list, current_session: str | None) -> float:
+        if not updated_sessions:
+            return 1.0
+        try:
+            cur = int(current_session) if current_session is not None else None
+        except ValueError:
+            cur = None
+        max_weight = 5.0
+        for s in updated_sessions:
+            try:
+                num = int(s)
+                if cur is not None:
+                    distance = abs(cur - num)
+                    weight = 10.0 + max(0.0, 10.0 - distance)
+                else:
+                    weight = 5.0 + float(num) * 0.1
+                max_weight = max(max_weight, weight)
+            except (TypeError, ValueError):
+                continue
+        return max_weight
+
+    ns.clean_term = clean_term
+    ns.dedupe_terms = dedupe_terms
+    ns.ascii_fallback = ascii_fallback_fn
+    ns.get_session_weight = get_session_weight
+    return ns
+
+
 def load_transcribe_module(script_dir: Path):
     path = script_dir / "transcribe.py"
-    spec = importlib.util.spec_from_file_location("dnd_transcribe", path)
-    module = importlib.util.module_from_spec(spec)
-    assert spec.loader is not None
-    spec.loader.exec_module(module)
-    return module
+    try:
+        spec = importlib.util.spec_from_file_location("dnd_transcribe", path)
+        module = importlib.util.module_from_spec(spec)
+        assert spec.loader is not None
+        spec.loader.exec_module(module)
+        return module
+    except ImportError:
+        return _fallback_transcribe_helpers()
 
 
 def http_json(method: str, url: str, api_key: str, payload: dict | None = None) -> dict:
@@ -76,11 +145,80 @@ def http_json(method: str, url: str, api_key: str, payload: dict | None = None) 
         raise RuntimeError(f"Gladia {method} {url} failed: HTTP {exc.code}: {body}") from exc
 
 
-def upload_audio(path: Path, api_key: str, attempts: int = 6) -> dict:
-    """Upload with retries; any network/HTTP failure except auth errors backs off."""
+def probe_audio_timing(path: Path) -> dict[str, float | None]:
+    """Read container start_time and duration via ffprobe (returns None values on failure)."""
+    try:
+        proc = subprocess.run(
+            [
+                "ffprobe",
+                "-v",
+                "error",
+                "-show_entries",
+                "format=start_time,duration:stream=start_time,duration",
+                "-of",
+                "json",
+                str(path),
+            ],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        data = json.loads(proc.stdout)
+    except Exception:  # noqa: BLE001
+        return {"start_time": None, "duration": None}
+
+    fmt = data.get("format") or {}
+    streams = data.get("streams") or []
+    stream0 = streams[0] if streams else {}
+
+    def _to_float(val) -> float | None:
+        if val in (None, "", "N/A"):
+            return None
+        try:
+            return float(val)
+        except ValueError:
+            return None
+
+    start_time = _to_float(stream0.get("start_time"))
+    if start_time is None:
+        start_time = _to_float(fmt.get("start_time"))
+    duration = _to_float(fmt.get("duration"))
+    if duration is None:
+        duration = _to_float(stream0.get("duration"))
+    return {"start_time": start_time, "duration": duration}
+
+
+def measure_compression_drift(wav_path: Path, compressed_path: Path) -> dict[str, float | None]:
+    """Compare compact WAV timing against compressed upload file (e.g., Opus pre-skip)."""
+    wav_info = probe_audio_timing(wav_path)
+    comp_info = probe_audio_timing(compressed_path)
+    start_offset = comp_info["start_time"] if comp_info["start_time"] is not None else 0.0
+    duration_delta = None
+    if wav_info["duration"] is not None and comp_info["duration"] is not None:
+        duration_delta = round(comp_info["duration"] - wav_info["duration"], 4)
+    return {
+        "upload_start_time_s": round(start_offset, 4),
+        "duration_delta_s": duration_delta,
+    }
+
+
+def upload_audio(path: Path, api_key: str, attempts: int = 6) -> tuple[dict, dict]:
+    """Upload with retries; returns (upload_response, upload_timing_info)."""
+    upload_path = path
+    timing_info: dict = {"format": path.suffix.lstrip(".").lower(), "upload_start_time_s": 0.0, "duration_delta_s": 0.0}
+    if path.suffix.lower() == ".wav" and path.stat().st_size >= 8 * 1024 * 1024:
+        upload_path = compressed_upload_path(path)
+        drift = measure_compression_drift(path, upload_path)
+        timing_info = {"format": upload_path.suffix.lstrip(".").lower(), **drift}
+        print(
+            f"Compressed upload audio: {upload_path} ({upload_path.stat().st_size} bytes, "
+            f"start_time={drift['upload_start_time_s']}s, duration_delta={drift['duration_delta_s']}s)",
+            flush=True,
+        )
+
     for attempt in range(1, attempts + 1):
         try:
-            return _upload_audio_once(path, api_key)
+            return _upload_audio_once(upload_path, api_key), timing_info
         except Exception as exc:  # noqa: BLE001 - http.client raises a zoo of exception types
             # Gladia reports upstream upload timeouts as 400 "Failed to download or
             # upload the input file"; those are transient, other 4xx are not.
@@ -108,17 +246,19 @@ def compressed_upload_path(path: Path) -> Path:
     fmt = os.environ.get("GLADIA_UPLOAD_FORMAT", "opus").lower()
     target = path.with_suffix(".ogg" if fmt == "opus" else ".flac")
     if not target.exists() or target.stat().st_mtime < path.stat().st_mtime:
-        codec = ["-c:a", "libopus", "-b:a", os.environ.get("GLADIA_OPUS_BITRATE", "48k"), "-application", "voip"] if fmt == "opus" else ["-compression_level", "8"]
-        subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", str(path), "-ac", "1", *codec, str(target)], check=True)
+        codec = (
+            ["-c:a", "libopus", "-b:a", os.environ.get("GLADIA_OPUS_BITRATE", "48k"), "-application", "voip"]
+            if fmt == "opus"
+            else ["-compression_level", "8"]
+        )
+        subprocess.run(
+            ["ffmpeg", "-y", "-loglevel", "error", "-i", str(path), "-ac", "1", *codec, str(target)],
+            check=True,
+        )
     return target
 
 
-def _upload_audio_once(path: Path, api_key: str) -> dict:
-    upload_path = path
-    if path.suffix.lower() == ".wav" and path.stat().st_size >= 8 * 1024 * 1024:
-        upload_path = compressed_upload_path(path)
-        print(f"Compressed upload audio: {upload_path} ({upload_path.stat().st_size} bytes)")
-
+def _upload_audio_once(upload_path: Path, api_key: str) -> dict:
     boundary = f"----dnd-gladia-{uuid.uuid4().hex}"
     content_type = mimetypes.guess_type(upload_path.name)[0] or "application/octet-stream"
     file_bytes = upload_path.read_bytes()
@@ -144,8 +284,8 @@ def _upload_audio_once(path: Path, api_key: str) -> dict:
         with request.urlopen(req, timeout=upload_timeout) as response:
             return json.loads(response.read().decode("utf-8"))
     except error.HTTPError as exc:
-        body = exc.read().decode("utf-8", errors="replace")
-        raise RuntimeError(f"Gladia upload failed: HTTP {exc.code}: {body}") from exc
+        body_text = exc.read().decode("utf-8", errors="replace")
+        raise RuntimeError(f"Gladia upload failed: HTTP {exc.code}: {body_text}") from exc
 
 
 def load_name_correction_pronunciations(path: Path) -> dict[str, list[str]]:
@@ -442,6 +582,7 @@ def utterance_to_original_entries(
     utterance: dict,
     mapper: vad_compact.TimelineMapper,
     max_original_word_gap: float,
+    time_offset: float = 0.0,
 ) -> list[dict]:
     words = [word for word in utterance.get("words", []) if clean_text(word.get("word", ""))]
     if not words:
@@ -449,12 +590,12 @@ def utterance_to_original_entries(
         if not text:
             return []
 
+        raw_start = max(0.0, float(utterance.get("start", 0)) - time_offset)
+        raw_end = max(raw_start, float(utterance.get("end", utterance.get("start", 0))) - time_offset)
+        orig_start, orig_end = mapper.map_span(raw_start, raw_end, clamp_to_start_segment=False)
         return [{
-            "start": mapper.map_time(float(utterance.get("start", 0))),
-            "end": mapper.map_time(
-                float(utterance.get("end", utterance.get("start", 0))),
-                is_end=True,
-            ),
+            "start": orig_start,
+            "end": orig_end,
             "text": text,
         }]
 
@@ -464,11 +605,9 @@ def utterance_to_original_entries(
     current_end = None
 
     for word in words:
-        original_start = mapper.map_time(float(word.get("start", 0)))
-        original_end = mapper.map_time(
-            float(word.get("end", word.get("start", 0))),
-            is_end=True,
-        )
+        raw_start = max(0.0, float(word.get("start", 0)) - time_offset)
+        raw_end = max(raw_start, float(word.get("end", word.get("start", 0))) - time_offset)
+        original_start, original_end = mapper.map_span(raw_start, raw_end, clamp_to_start_segment=True)
 
         if (
             current_words
@@ -488,7 +627,7 @@ def utterance_to_original_entries(
             current_start = original_start
 
         current_words.append(word)
-        current_end = original_end
+        current_end = max(current_end or original_end, original_end)
 
     if current_words:
         entries.append({
@@ -500,16 +639,23 @@ def utterance_to_original_entries(
     return [entry for entry in entries if entry["text"]]
 
 
-def remapped_words(result: dict, mapper: vad_compact.TimelineMapper) -> list[dict]:
+def remapped_words(
+    result: dict,
+    mapper: vad_compact.TimelineMapper,
+    time_offset: float = 0.0,
+) -> list[dict]:
     words = []
     for utterance in extract_utterances(result):
         for word in utterance.get("words", []) or []:
             text = clean_text(word.get("word", ""))
             if not text:
                 continue
+            raw_start = max(0.0, float(word.get("start", 0)) - time_offset)
+            raw_end = max(raw_start, float(word.get("end", word.get("start", 0))) - time_offset)
+            orig_start, orig_end = mapper.map_span(raw_start, raw_end, clamp_to_start_segment=True)
             words.append({
-                "s": mapper.map_time(float(word.get("start", 0))),
-                "e": mapper.map_time(float(word.get("end", word.get("start", 0))), is_end=True),
+                "s": orig_start,
+                "e": orig_end,
                 "w": text,
                 "p": word.get("confidence"),
             })
@@ -524,6 +670,7 @@ def write_remapped_transcript(
     words_json_path: Path | None = None,
     audio_file: Path | None = None,
     params: dict | None = None,
+    time_offset: float = 0.0,
 ) -> None:
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     mapper = vad_compact.TimelineMapper(manifest["segments"])
@@ -533,7 +680,7 @@ def write_remapped_transcript(
     max_original_word_gap = float(os.getenv("GLADIA_WORD_SPLIT_GAP", "2.5"))
     for utterance in utterances:
         original_entries.extend(
-            utterance_to_original_entries(utterance, mapper, max_original_word_gap)
+            utterance_to_original_entries(utterance, mapper, max_original_word_gap, time_offset=time_offset)
         )
 
     merged_entries = coalesce_entries(
@@ -552,7 +699,7 @@ def write_remapped_transcript(
             engine="gladia",
             model=str(result.get("request_params", {}).get("model") or "gladia-default"),
             audio_file=audio_file or Path(manifest.get("source_audio", "")),
-            words=remapped_words(result, mapper),
+            words=remapped_words(result, mapper, time_offset=time_offset),
             segments=segments,
             duration=manifest.get("original_duration"),
             speech_seconds=sum(
@@ -594,12 +741,12 @@ def run_gladia_job(
     custom_vocabulary_config: dict,
     custom_spelling_config: dict,
     args,
-) -> dict:
+) -> tuple[dict, dict]:
     upload_response_path = artifact_dir / "upload_response.json"
     init_response_path = artifact_dir / "init_response.json"
     result_path = artifact_dir / "result.json"
 
-    upload_response = upload_audio(compact_audio_path, api_key)
+    upload_response, upload_timing = upload_audio(compact_audio_path, api_key)
     upload_response_path.write_text(json.dumps(upload_response, indent=2) + "\n", encoding="utf-8")
     audio_url = upload_response["audio_url"]
 
@@ -615,7 +762,7 @@ def run_gladia_job(
     result_url = init_response.get("result_url") or f"{PRE_RECORDED_URL}/{init_response['id']}"
     result = poll_result(result_url, api_key, timeout=args.timeout, poll_interval=args.poll_interval)
     result_path.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
-    return result
+    return result, upload_timing
 
 
 def retry_compaction_args(args: argparse.Namespace, input_audio: Path, output_audio: Path, manifest: Path) -> argparse.Namespace:
@@ -636,12 +783,19 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("audio_file")
     parser.add_argument("output_file")
-    parser.add_argument("--dnd-dir", default="/home/babu/source/dnd")
+    parser.add_argument("--dnd-dir", default=str(DND_DIR))
     parser.add_argument("--artifact-dir", help="Directory for compact audio, manifests, and Gladia JSON")
     parser.add_argument("--env-file", help="Local env file with GLADIA_API_KEY; defaults to <dnd-dir>/.env.local")
     parser.add_argument("--api-key-env", default="GLADIA_API_KEY")
     parser.add_argument("--custom-vocabulary-limit", type=int, default=400)
-    parser.add_argument("--custom-vocabulary-intensity", type=float, default=0.45)
+    parser.add_argument(
+        "--vocab-intensity",
+        "--custom-vocabulary-intensity",
+        dest="custom_vocabulary_intensity",
+        type=float,
+        default=DEFAULT_VOCAB_INTENSITY,
+        help=f"Gladia custom vocabulary boost intensity (default {DEFAULT_VOCAB_INTENSITY})",
+    )
     parser.add_argument("--disable-custom-vocabulary", action="store_true")
     parser.add_argument("--disable-custom-spelling", action="store_true")
     parser.add_argument("--poll-interval", type=int, default=DEFAULT_POLL_INTERVAL)
@@ -674,7 +828,11 @@ def main() -> int:
 
     audio_file = Path(args.audio_file).expanduser().resolve()
     output_file = Path(args.output_file).expanduser().resolve()
-    dnd_dir = Path(args.dnd_dir).expanduser().resolve()
+    dnd_dir = (
+        _pipeline_paths.resolve_dnd_dir(args.dnd_dir)
+        if _pipeline_paths is not None
+        else Path(args.dnd_dir).expanduser().resolve()
+    )
     env_file = Path(args.env_file).expanduser().resolve() if args.env_file else dnd_dir / ".env.local"
     load_env_file(env_file)
 
@@ -682,7 +840,6 @@ def main() -> int:
     if not api_key:
         raise RuntimeError(f"{args.api_key_env} is required for Gladia transcription; checked {env_file}")
 
-    script_dir = Path(__file__).resolve().parent
     artifact_dir = (
         Path(args.artifact_dir).expanduser().resolve()
         if args.artifact_dir
@@ -692,7 +849,7 @@ def main() -> int:
 
     compact_audio_path = artifact_dir / f"{audio_file.stem}.vad.wav"
     manifest_path = artifact_dir / f"{audio_file.stem}.vad.json"
-    transcribe_module = load_transcribe_module(script_dir)
+    transcribe_module = load_transcribe_module(SCRIPT_DIR)
     compact_audio(audio_file, compact_audio_path, manifest_path, args)
 
     custom_vocabulary_config = (
@@ -712,10 +869,13 @@ def main() -> int:
             dnd_dir / "scripts" / "transcription" / "name_corrections.json"
         )
     )
-    print(f"Using {len(custom_vocabulary_config['vocabulary'])} Gladia custom vocabulary entries.")
+    print(
+        f"Using {len(custom_vocabulary_config['vocabulary'])} Gladia custom vocabulary entries "
+        f"(intensity={custom_vocabulary_config['default_intensity']})."
+    )
     print(f"Using {len(custom_spelling_config['spelling_dictionary'])} Gladia custom spelling entries.")
 
-    result = run_gladia_job(
+    result, upload_timing = run_gladia_job(
         audio_file,
         compact_audio_path,
         manifest_path,
@@ -742,7 +902,7 @@ def main() -> int:
         vad_compact.compact(
             retry_compaction_args(args, audio_file, retry_compact_audio_path, retry_manifest_path)
         )
-        retry_result = run_gladia_job(
+        retry_result, retry_upload_timing = run_gladia_job(
             audio_file,
             retry_compact_audio_path,
             retry_manifest_path,
@@ -755,14 +915,25 @@ def main() -> int:
         if count_result_utterances(retry_result) > 0:
             result = retry_result
             final_manifest_path = retry_manifest_path
+            upload_timing = retry_upload_timing
         else:
             print("Relaxed VAD retry also returned no utterances; keeping the original empty result.")
+
+    # Apply conservative pre-skip compensation when Opus container reports a positive start offset.
+    preskip_offset = float(upload_timing.get("upload_start_time_s") or 0.0)
+    if not (0.0 < preskip_offset < 0.5):
+        preskip_offset = 0.0
+    elif preskip_offset > 0.0:
+        print(f"Applying Opus pre-skip time compensation: -{preskip_offset:.4f}s", flush=True)
 
     params = {
         "custom_vocabulary_entries": len(custom_vocabulary_config["vocabulary"]),
         "custom_vocabulary_intensity": custom_vocabulary_config.get("default_intensity"),
         "custom_spelling_entries": len(custom_spelling_config["spelling_dictionary"]),
         "vad_manifest": str(final_manifest_path),
+        "upload_format": upload_timing.get("format"),
+        "opus_preskip_drift_s": upload_timing.get("upload_start_time_s"),
+        "upload_duration_delta_s": upload_timing.get("duration_delta_s"),
     }
     write_remapped_transcript(
         result,
@@ -771,12 +942,16 @@ def main() -> int:
         words_json_path=Path(args.words_json).expanduser().resolve() if args.words_json else None,
         audio_file=audio_file,
         params=params,
+        time_offset=preskip_offset,
     )
     if args.raw_archive:
         raw_result = final_manifest_path.parent / "result.json"
         archive = Path(args.raw_archive).expanduser().resolve()
         asr_common.archive_json(raw_result, archive)
-        asr_common.archive_json(final_manifest_path, archive.with_name(archive.name.replace(".result.json.gz", "") + ".vad.json.gz"))
+        asr_common.archive_json(
+            final_manifest_path,
+            archive.with_name(archive.name.replace(".result.json.gz", "") + ".vad.json.gz"),
+        )
         print(f"Archived raw Gladia result: {archive}")
     print(f"Transcript saved to {output_file}")
     return 0
