@@ -4,9 +4,16 @@
 from __future__ import annotations
 
 import argparse
+import json
 import re
 import sys
 from pathlib import Path
+
+SCRIPT_DIR = Path(__file__).resolve().parent
+if str(SCRIPT_DIR) not in sys.path:
+    sys.path.insert(0, str(SCRIPT_DIR))
+
+import pipeline_paths  # noqa: E402
 
 
 TIMESTAMP_RE = re.compile(r"^\[\d{2}:\d{2}:\d{2}\]\s+", re.MULTILINE)
@@ -28,8 +35,9 @@ PROCESS_LANGUAGE_RE = re.compile(
     r")\b",
     re.IGNORECASE,
 )
-BAD_NAME_RE = re.compile(
-    r"\b(Nytes|Nýtes|Netus|Nitesh|Marie|Mara|Illaoi|Bigilar|Stongalais|Stonegull(?:\s+eyes?)?)\b",
+RAW_EXTRA_BAD_NAME_RE = re.compile(r"\b(Netus|Nitesh)\b", re.IGNORECASE)
+FALLBACK_BAD_NAME_RE = re.compile(
+    r"\b(Nytes|Nýtes|Netus|Nitesh|Marie|Mara|Illaoi|Bigilar|Stongalais|Stonegull(?:\s+eyes?)?|Hirotera)\b",
     re.IGNORECASE,
 )
 RISKY_NITES_RE = re.compile(r"\b(?:Nites.*censored|censored.*Nites)\b", re.IGNORECASE)
@@ -37,7 +45,7 @@ OOC_DENSITY_RE = re.compile(
     r"\b(GM|rules:|player|we as players|mechanically|classic movie scene|recording|discord|microphone)\b",
     re.IGNORECASE,
 )
-SESSION_17_BAD_STATIC_ATTRIBUTION_RE = re.compile(
+FALLBACK_SESSION_17_RE = re.compile(
     r"\bBerridin\s+Arcana\s*=\s*nat(?:ural)?\s*20\b|"
     r"\bBerridin\b[^\n]{0,80}\bArcana\s+natural\s+20\b|"
     r"\bBerridin\b[^\n]{0,80}\bnatural\s+20\s+Arcana\b|"
@@ -45,6 +53,48 @@ SESSION_17_BAD_STATIC_ATTRIBUTION_RE = re.compile(
     r"\bvoice\s+was\s+not\s+new\s+to\s+Berridin\b",
     re.IGNORECASE,
 )
+
+
+def _compile_rule(rule: dict) -> tuple[re.Pattern[str], str]:
+    flags = 0
+    raw_flags = str(rule.get("flags", ""))
+    if "i" in raw_flags:
+        flags |= re.IGNORECASE
+    if "m" in raw_flags:
+        flags |= re.MULTILINE
+    return re.compile(rule["pattern"], flags), rule["message"]
+
+
+def load_shared_rules(
+    rules_path: Path | None = None,
+) -> tuple[list[tuple[re.Pattern[str], str]], dict[str, list[tuple[re.Pattern[str], str]]]]:
+    path = rules_path or (pipeline_paths.DND_DIR / "scripts" / "shared_sync_rules.json")
+    if not path.is_file():
+        return (
+            [(FALLBACK_BAD_NAME_RE, "raw notes contain a known bad canonical spelling")],
+            {
+                "17": [
+                    (
+                        FALLBACK_SESSION_17_RE,
+                        "Session 17 Hýr/static-name Arcana natural 20 and familiar-voice realization belong to Nyx, not Berridin.",
+                    )
+                ]
+            },
+        )
+    data = json.loads(path.read_text(encoding="utf-8"))
+    canonical_patterns = [
+        _compile_rule(r)
+        for r in data.get("badPublicPatterns", [])
+        if r.get("canonical", False)
+    ]
+    canonical_patterns.append(
+        (RAW_EXTRA_BAD_NAME_RE, "Use canonical spelling `Nites`, not `Netus` or `Nitesh`.")
+    )
+    session_rules = {
+        str(k): [_compile_rule(r) for r in v]
+        for k, v in data.get("sessionSpecificRules", {}).items()
+    }
+    return canonical_patterns, session_rules
 
 
 class Reporter:
@@ -80,16 +130,16 @@ def check_matches(pattern: re.Pattern[str], text: str, reporter: Reporter, messa
     return count
 
 
-def check_session_specific_facts(session: int | None, text: str, reporter: Reporter) -> None:
-    if session != 17:
+def check_session_specific_facts(
+    session: int | None,
+    text: str,
+    reporter: Reporter,
+    session_rules: dict[str, list[tuple[re.Pattern[str], str]]],
+) -> None:
+    if session is None:
         return
-
-    check_matches(
-        SESSION_17_BAD_STATIC_ATTRIBUTION_RE,
-        text,
-        reporter,
-        "Session 17 Hýr/static-name Arcana natural 20 and familiar-voice realization belong to Nyx, not Berridin",
-    )
+    for pattern, message in session_rules.get(str(session), []):
+        check_matches(pattern, text, reporter, message)
 
 
 def count_opening_continuity(lines: list[str]) -> int:
@@ -112,17 +162,20 @@ def non_review_text(text: str) -> str:
     )
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("raw_notes_file", help="Raw Session N.md path")
-    parser.add_argument("--session", type=int, help="Session number, used only in messages")
+    parser.add_argument("--session", type=int, help="Session number, used in messages and session-specific rules")
+    parser.add_argument("--rules-file", help="Optional path to shared_sync_rules.json")
     parser.add_argument("--allow-review-lines", action="store_true", help="Allow review/review-name lines")
     parser.add_argument("--warn-only", action="store_true", help="Report issues but exit 0")
     parser.add_argument("--min-dialogue-lines", type=int, default=8, help="Warn below this preserved dialogue count")
     parser.add_argument("--min-dialogue-ratio", type=float, default=0.15, help="Warn below this dialogue-line ratio")
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
     path = Path(args.raw_notes_file).expanduser().resolve()
+    rules_path = Path(args.rules_file).expanduser().resolve() if args.rules_file else None
+    canonical_patterns, session_rules = load_shared_rules(rules_path)
     reporter = Reporter()
     if not path.exists():
         reporter.error(f"Missing raw notes: {path}")
@@ -141,9 +194,10 @@ def main() -> int:
     check_matches(TIMESTAMP_RE, text, reporter, "raw notes still contain timestamped transcript lines")
     check_matches(re.compile(r"^#|\bchunk_\d+\b|```", re.MULTILINE), text, reporter, "raw notes contain headings, chunk IDs, or code fences")
     check_matches(PROCESS_LANGUAGE_RE, text, reporter, "raw notes contain table/process phrasing that should be converted or removed")
-    check_matches(BAD_NAME_RE, text, reporter, "raw notes contain a known bad canonical spelling")
+    for pattern, message in canonical_patterns:
+        check_matches(pattern, text, reporter, message)
     check_matches(RISKY_NITES_RE, text, reporter, "raw notes risk equating Nites with the censored unknown birth name", error=False)
-    check_session_specific_facts(args.session, text, reporter)
+    check_session_specific_facts(args.session, text, reporter, session_rules)
 
     review_count = check_matches(
         REVIEW_RE,

@@ -5,7 +5,14 @@ from __future__ import annotations
 
 import argparse
 import shutil
+import sys
 from pathlib import Path
+
+SCRIPT_DIR = Path(__file__).resolve().parent
+if str(SCRIPT_DIR) not in sys.path:
+    sys.path.insert(0, str(SCRIPT_DIR))
+
+import pipeline_paths  # noqa: E402
 
 
 AUDIO_EXTENSIONS = {".flac", ".mp3", ".wav", ".m4a", ".ogg", ".aac"}
@@ -24,12 +31,16 @@ def collect_paths(
     paths: list[Path] = [
         notes_dir / f"Raw Session {session} Candidate.md",
         notes_dir / f"Raw Session {session} Reconciled Candidate.md",
+        notes_dir / f"Raw Session {session} - Audit.md",
         notes_dir / f"Raw Session {session} Chunks",
         transcript_dir / f"Session {session} OOC Annotation Chunks",
         transcript_dir / f"Session {session} OOC Review Chunks",
         transcript_dir / f"Session {session} OOC Review Chunks From Provider Merge",
     ]
-    paths.extend(sorted(transcript_dir.glob(f"Transcript Session {session} - *")))
+    if transcript_dir.is_dir():
+        # Debug/operational reports (ASR Diagnostics, Fusion Report, Unfused backups, OOC reports)
+        # belong in <audio-dir>/pipeline/, not inside ellara/Session Notes/Transcripts/.
+        paths.extend(sorted(transcript_dir.glob(f"Transcript Session {session} - *")))
 
     if include_dnd_transcript_assets:
         paths.extend(
@@ -48,8 +59,9 @@ def collect_paths(
             ]
         )
         # Compact VAD audio is large and reproducible; the raw provider JSON,
-        # per-word engine JSON, dice data and diagnostics under asr/ are kept.
-        paths.extend(sorted((audio_dir / "asr").glob("*/work")))
+        # per-word engine JSON, dice data, and <audio-dir>/pipeline/ reports are kept.
+        if (audio_dir / "asr").is_dir():
+            paths.extend(sorted((audio_dir / "asr").glob("*/work")))
         for audio in sorted(audio_dir.iterdir()) if audio_dir.exists() else []:
             if not audio.is_file() or audio.suffix.lower() not in AUDIO_EXTENSIONS:
                 continue
@@ -71,15 +83,17 @@ def collect_paths(
                 dnd_dir / "transcription_job.log",
             ]
         )
+        if ellara_root.is_dir():
+            for cache_dir in sorted(ellara_root.rglob("__pycache__")):
+                if ".git" not in cache_dir.relative_to(ellara_root).parts:
+                    paths.append(cache_dir)
 
     durable = {
         notes_dir / f"Raw Session {session}.md",
         notes_dir / f"Session {session}.md",
         transcript_dir / f"Transcript Session {session}.txt",
-        transcript_dir / f"Transcript Session {session} - Pipeline Manifest.json",
-        transcript_dir / f"Transcript Session {session} - ASR Diagnostics.md",
-        transcript_dir / f"Transcript Session {session} - ASR Diagnostics.json",
         transcript_dir / f"Transcript Session {session}.lines.jsonl",
+        transcript_dir / f"Transcript Session {session} - Pipeline Manifest.json",
         dnd_dir / "src" / "assets" / "sessions" / f"session-{session}.md",
     }
     return [path for path in dict.fromkeys(paths) if path not in durable]
@@ -99,11 +113,11 @@ def remove_path(path: Path, dry_run: bool) -> bool:
     return True
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--session", required=True, type=int, help="Session number to clean")
-    parser.add_argument("--dnd-dir", default="/home/babu/source/dnd", help="DnD repo root")
-    parser.add_argument("--ellara-root", default="/home/babu/source/ellara", help="Ellara repo root")
+    parser.add_argument("--dnd-dir", default=str(pipeline_paths.resolve_dnd_dir()), help="DnD repo root")
+    parser.add_argument("--ellara-root", default=str(pipeline_paths.resolve_ellara_dir()), help="Ellara repo root")
     parser.add_argument("--audio-dir", help="Optional original audio directory to clean sidecars from")
     parser.add_argument(
         "--include-dnd-transcript-assets",
@@ -116,10 +130,10 @@ def main() -> int:
         help="Also remove repo scratch outputs such as dist, logs, and pycache",
     )
     parser.add_argument("--apply", action="store_true", help="Actually remove files. Default is dry-run.")
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
-    dnd_dir = Path(args.dnd_dir).expanduser().resolve()
-    ellara_root = Path(args.ellara_root).expanduser().resolve()
+    dnd_dir = pipeline_paths.resolve_dnd_dir(args.dnd_dir)
+    ellara_root = pipeline_paths.resolve_ellara_dir(args.ellara_root)
     audio_dir = Path(args.audio_dir).expanduser().resolve() if args.audio_dir else None
     dry_run = not args.apply
 

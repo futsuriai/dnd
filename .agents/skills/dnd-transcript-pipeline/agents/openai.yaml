@@ -1,0 +1,4 @@
+interface:
+  display_name: "DnD Transcript Pipeline"
+  short_description: "Run end-to-end DnD audio, notes, website sync, and Ellara state pipeline"
+  default_prompt: "Run the unified session pipeline using .agents/skills/dnd-transcript-pipeline/scripts/run_pipeline.sh <SESSION> <AUDIO_DIR> (wrapping scripts/transcription/run_session_auto.py) through website sync, ellara-state analysis, and cross-repo verification."
