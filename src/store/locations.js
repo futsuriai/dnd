@@ -41,7 +41,7 @@ export const locations = [
     ],
     connections: [
       { type: 'location', id: 'bastion-city', reason: 'Located in West Bastion' },
-      { type: 'npc', id: 'lord-whitaker-6th', reason: 'Owner' }
+      { type: 'character', id: 'witty', reason: 'Owner' }
     ]
   },
   {
@@ -61,7 +61,7 @@ export const locations = [
     description: 'The capital of Hieroterra, where the campaign begins.',
     tags: ['major city', 'hieroterra'],
     connections: [
-      { type: 'location', id: 'hieroterra', relationship: 'Located In' }
+      { type: 'location', id: 'hieroterra', reason: 'Located In' }
     ]
   },
   {
@@ -85,7 +85,7 @@ export const locations = [
     description: 'The imperial throne’s seat and the heart of the Eulogia of the Eternal Light. Said to be where Nites sacrificed herself to defeat the Shadowed Monarch, the city was founded by The First Emperor.',
     connections: [
       { type: 'location', id: 'ordonne', reason: 'Located within Ordonne' },
-      { type: 'lore', id: 'nites', reason: 'Site of Nites\'s sacrifice' }, 
+      { type: 'lore', id: 'nites', reason: 'Site of Nites\'s sacrifice' },
       { type: 'lore', id: 'first-emperor', reason: 'Founded by the First Emperor' }
     ]
   },
@@ -109,7 +109,7 @@ export const locations = [
       { session: 8, note: 'Reeves planned to visit while coordinating with Grand Duke Valerian Oliander.' }
     ],
     connections: [
-      { type: 'location', id: 'ordonne', relationship: 'Located In' },
+      { type: 'location', id: 'ordonne', reason: 'Located In' },
       { type: 'npc', id: 'donnathan-reeves', reason: 'Alumnus' },
       { type: 'npc', id: 'duke-valerian-oliander', reason: 'Alumnus' },
       { type: 'lore', id: 'torchlight-college', reason: 'Central institution' }
@@ -133,7 +133,7 @@ export const locations = [
       { session: 21, note: 'The party clarified the Lighthouse’s independence from the Duke and chose Witty’s application for Faberge’s vacant position as their way inside to stop the living-subject experiments.' }
     ],
     connections: [
-      { type: 'location', id: 'bastion-city', relationship: 'Located In' }
+      { type: 'location', id: 'bastion-city', reason: 'Located In' }
     ]
   },
   {
@@ -144,13 +144,13 @@ export const locations = [
     tags: ['seminary', 'west bastion'],
     history: [
       { session: 2, note: 'Ellara learns of Meri\'s transfer to Proctor Eduard\'s custody.' },
-      { session: 3, note: 'Ellara confronts Proctor Eduard, who says he gave orders to releas Meri.' },
+      { session: 3, note: 'Ellara confronts Proctor Eduard, who says he gave orders to release Meri.' },
       { session: 4, note: 'Ellara reports the warforged attack; Eduard pledges to escalate the matter.' },
       { session: 7, note: 'Eduard introduces Reeves to Ellara in mess hall' },
       { session: 12, note: 'Ellara received Eduard\'s blessing and a theology book before departing for Hýrda' }
     ],
     connections: [
-      { type: 'location', id: 'bastion-city', relationship: 'Located In' }
+      { type: 'location', id: 'bastion-city', reason: 'Located In' }
     ]
   },
   {
@@ -163,7 +163,7 @@ export const locations = [
       { session: 3, note: 'Party waits while Ellara meets with Eduard; Tsi\'Nyra tries alcohol for the first time.' }
     ],
     connections: [
-      { type: 'location', id: 'bastion-city', relationship: 'Located In' }
+      { type: 'location', id: 'bastion-city', reason: 'Located In' }
     ]
   },
   {
@@ -175,7 +175,7 @@ export const locations = [
       { session: 2, note: 'Party crosses into West Bastion for the first time to investigate the prisons.' }
     ],
     connections: [
-      { type: 'location', id: 'bastion-city', relationship: 'Within city' }
+      { type: 'location', id: 'bastion-city', reason: 'Within city' }
     ]
   },
   {
@@ -190,7 +190,7 @@ export const locations = [
       { session: 4, note: 'Party determines the trap was not for Meri and returns to the city.' }
     ],
     connections: [
-      { type: 'location', id: 'bastion-city', relationship: 'Begins at East Gate' },
+      { type: 'location', id: 'bastion-city', reason: 'Begins at East Gate' },
       { type: 'lore', id: 'warforged', reason: 'Field test encounter' },
       { type: 'lore', id: 'light-crystals', reason: 'Recovered crystal cores' }
     ]
@@ -206,7 +206,7 @@ export const locations = [
       { session: 6, note: 'Darius returns, realizes Faberge is actually missing, and goes to report it.' }
     ],
     connections: [
-      { type: 'location', id: 'bastion-city', relationship: 'Located In' },
+      { type: 'location', id: 'bastion-city', reason: 'Located In' },
       { type: 'lore', id: 'light-crystals', reason: 'Energy concurrency research' }
     ]
   },
@@ -220,8 +220,8 @@ export const locations = [
       { session: 5, note: 'Berridin overhears guard chatter about poker and routines, exposing lax security.' }
     ],
     connections: [
-      { type: 'location', id: 'bastion-city', relationship: 'Located In' },
-      { type: 'location', id: 'duskbreaker-lighthouse', relationship: 'Guards off-duty hangout' }
+      { type: 'location', id: 'bastion-city', reason: 'Located In' },
+      { type: 'location', id: 'duskbreaker-lighthouse', reason: 'Guards off-duty hangout' }
     ]
   },
   {
@@ -234,7 +234,7 @@ export const locations = [
       { session: 2, note: 'Bribed inquiry reveals Meri was held then transferred; Berridin finds the transfer ledger naming Proctor Eduard.' }
     ],
     connections: [
-      { type: 'location', id: 'bastion-city', relationship: 'Located In' },
+      { type: 'location', id: 'bastion-city', reason: 'Located In' },
       { type: 'npc', id: 'proctor-eduard', reason: 'Named on custody transfer ledger' }
     ]
   },
@@ -248,7 +248,7 @@ export const locations = [
       { session: 1, note: 'Berridin led Ysidor here after the Alms Giving, where Ysidor met the local children.' }
     ],
     connections: [
-      { type: 'location', id: 'bastion-city', relationship: 'Located In' }
+      { type: 'location', id: 'bastion-city', reason: 'Located In' }
     ]
   },
   {
@@ -256,7 +256,7 @@ export const locations = [
     name: 'Lighthouse Medical Bay',
     type: 'poi',
     description: 'Medical facility within the Duskbreaker Lighthouse where subjects from the basement program are monitored.',
-    tags: ['medical', 'lighthouse'],
+    tags: ['medical', 'lighthouse', 'bastion city'],
     history: [
       { session: 6, note: 'Meri was moved here from the lab before being extracted via Dimension Door.' }
     ],
@@ -283,6 +283,7 @@ export const locations = [
     name: 'Basement Synthesis Laboratory',
     type: 'facility',
     description: 'Hidden laboratory beneath the Duskbreaker Lighthouse where light crystals are synthesized from living Shadowed subjects.',
+    tags: ['facility', 'lighthouse', 'bastion city'],
     history: [
       { session: 4, note: 'Existence hinted at by spider reconnaissance revealing a deep underground complex.' },
       { session: 6, note: 'Infiltrated by Berridin; Meri found as a test subject for crystal synthesis.' }
@@ -296,6 +297,7 @@ export const locations = [
     name: 'Deep Underground Complex',
     type: 'facility',
     description: 'Deep, cold underground levels beneath the Lighthouse discovered by spider reconnaissance. Contains extensive insect populations and mysterious depths.',
+    tags: ['facility', 'lighthouse', 'bastion city'],
     history: [
       { session: 4, note: 'Spider reconnaissance reveals deep underground complex with strange noises.' },
       { session: 5, note: 'Mentioned as unexplored depths below the main facilities.' }
@@ -309,6 +311,7 @@ export const locations = [
     name: 'Engineering Floor (Floor 10)',
     type: 'facility',
     description: 'Engineering department of the Lighthouse where Beth works on Titan application files and prototype development.',
+    tags: ['facility', 'lighthouse', 'bastion city'],
     history: [
       { session: 5, note: 'Berridin visits but finds Beth absent; acquires a prototype device.' }
     ],
@@ -319,8 +322,9 @@ export const locations = [
   {
     id: 'lighthouse-arcana-floor',
     name: 'High Arcana Floor (Wizard Scriptorium)',
-    type: 'facility', 
+    type: 'facility',
     description: 'Upper floor of the Lighthouse housing wizard consultants, arcane libraries, and advanced magical research. Where Lex works.',
+    tags: ['facility', 'lighthouse', 'bastion city'],
     history: [
       { session: 5, note: 'Berridin explores, finding an extensive magical library and that Lex is absent.' }
     ],
@@ -489,7 +493,7 @@ export const locations = [
       { session: 9, note: 'Nyx accessed records to find Reeves\' estate address.' }
     ],
     connections: [
-      { type: 'location', id: 'bastion-city', relationship: 'Located In' }
+      { type: 'location', id: 'bastion-city', reason: 'Located In' }
     ]
   },
   {
@@ -504,7 +508,7 @@ export const locations = [
       { session: 12, note: 'Witty and Berridin visited to inquire about balloon procurement and horses' }
     ],
     connections: [
-      { type: 'location', id: 'bastion-city', relationship: 'Located In' },
+      { type: 'location', id: 'bastion-city', reason: 'Located In' },
       { type: 'npc', id: 'lady-jacinta', reason: 'Owner' }
     ]
   },
@@ -518,11 +522,10 @@ export const locations = [
       { session: 9, note: 'Scouted by Ellara and Berridin; Nyx claims to be staying here.' }
     ],
     connections: [
-      { type: 'location', id: 'bastion-city', relationship: 'Located In' },
-      { type: 'location', id: 'ducal-palace', relationship: 'Nearby' }
+      { type: 'location', id: 'bastion-city', reason: 'Located In' },
+      { type: 'location', id: 'ducal-palace', reason: 'Nearby' }
     ]
   },
-
   {
     id: 'badwater-well',
     name: 'Badwater Well',
@@ -547,7 +550,7 @@ export const locations = [
       { session: 8, note: 'Identified as the Marchenbau family\'s provincial seat during the Meri investigation.' }
     ],
     connections: [
-      { type: 'location', id: 'boixden', relationship: 'Province Capital' },
+      { type: 'location', id: 'boixden', reason: 'Province Capital' },
       { type: 'lore', id: 'marchenbau', reason: 'Family seat' }
     ]
   },
@@ -586,7 +589,7 @@ export const locations = [
       { session: 8, note: 'Reeves confirmed his title as Viscount Sommeil before departing for the ducal palace.' }
     ],
     connections: [
-      { type: 'location', id: 'vaselia', relationship: 'Viscounty within the province' },
+      { type: 'location', id: 'vaselia', reason: 'Viscounty within the province' },
       { type: 'npc', id: 'donnathan-reeves', reason: 'Title holder' }
     ]
   },

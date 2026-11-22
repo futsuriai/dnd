@@ -1,100 +1,32 @@
 import fs from 'fs';
 import path from 'path';
-import vm from 'vm';
+import { createRequire } from 'module';
 import { fileURLToPath } from 'url';
+
+const require = createRequire(import.meta.url);
+const { REPO_ROOT, buildGeneratedEntityArtifacts } = require('./store_loader.cjs');
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Paths to data stores
-const storePath = path.join(__dirname, '../src/store');
-const outputFile = path.join(__dirname, '../ENTITY_LIST.md');
+const outputFile = path.join(REPO_ROOT, 'ENTITY_LIST.md');
+const metadataFile = path.join(__dirname, 'transcription/entity_metadata.json');
 
-// Files to process
-const files = [
-  { name: 'lore.js', type: 'Lore', exportName: 'lore' },
-  { name: 'locations.js', type: 'Locations', exportName: 'locations' },
-  { name: 'npcs.js', type: 'NPCs', exportName: 'npcs' },
-  { name: 'characters.js', type: 'Characters', exportName: 'characters' }
-];
-
-function loadEntitiesFromStore(content, exportName) {
-  const transformed = content
-    .replace(/import\.meta\.glob\([^)]*\)/g, '({})')
-    .replace(new RegExp(`export\\s+const\\s+${exportName}\\s*=`), `const ${exportName} =`)
-    .replace(new RegExp(`export\\s+default\\s+${exportName}\\s*;?`, 'g'), '');
-
-  const context = {
-    __entities: [],
-    console: {
-      log: () => {},
-      warn: () => {},
-      error: (...args) => console.error(...args),
-    },
-  };
-
-  vm.createContext(context);
-  const script = new vm.Script(`
-${transformed}
-__entities = ${exportName}
-  .map((entity) => {
-    const sessions = new Set(entity.updatedInSessions || []);
-    if (Array.isArray(entity.history)) {
-      entity.history.forEach(h => {
-        if (h && typeof h.session === 'number') {
-          sessions.add(h.session);
-        }
-      });
+function writeIfChanged(filePath, content) {
+  if (fs.existsSync(filePath)) {
+    const existing = fs.readFileSync(filePath, 'utf8');
+    if (existing === content) {
+      return false;
     }
-    return {
-      id: entity.id,
-      name: entity.name || entity.term,
-      updatedInSessions: Array.from(sessions).sort((a, b) => a - b)
-    };
-  })
-  .filter((entity) => entity.id && entity.name);
-`);
-  script.runInContext(context);
-  return context.__entities;
+  }
+  fs.writeFileSync(filePath, content);
+  return true;
 }
 
-let output = '# World Entity List\n\nThis file is auto-generated. Do not edit manually.\n\n';
-const metadata = [];
+const { entityList, metadata } = buildGeneratedEntityArtifacts(REPO_ROOT);
 
-files.forEach(file => {
-  const filePath = path.join(storePath, file.name);
-  if (fs.existsSync(filePath)) {
-    try {
-      const content = fs.readFileSync(filePath, 'utf8');
-      
-      const entities = loadEntitiesFromStore(content, file.exportName);
-      
-      output += '## ' + file.type + '\n\n';
-      entities.sort((a, b) => a.id.localeCompare(b.id));
-      
-      entities.forEach(entity => {
-        output += '- `' + entity.id + '`: ' + entity.name + '\n';
-        metadata.push({
-          id: entity.id,
-          name: entity.name,
-          type: file.type,
-          updatedInSessions: entity.updatedInSessions
-        });
-      });
-      output += '\n';
-      
-    } catch (err) {
-      console.error('Error reading ' + file.name + ':', err);
-    }
-  } else {
-    console.warn('File not found: ' + filePath);
-  }
-});
-
-fs.writeFileSync(outputFile, output);
+writeIfChanged(outputFile, entityList);
 console.log('Entity list generated at ' + outputFile);
 
-// Also write structured JSON metadata for weighting prompts in ASR
-const metadataFile = path.join(__dirname, 'transcription/entity_metadata.json');
-fs.writeFileSync(metadataFile, JSON.stringify(metadata, null, 2) + '\n');
+writeIfChanged(metadataFile, metadata);
 console.log('Entity metadata JSON generated at ' + metadataFile);
