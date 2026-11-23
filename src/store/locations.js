@@ -37,7 +37,8 @@ export const locations = [
       { session: 10, note: 'Party prepared for the ball here; Berridin cooked spicy curry' },
       { session: 12, note: 'Party regrouped here morning after the ball; discussed Black Swan bounty via sending stones' },
       { session: 20, note: 'Saved from imminent repossession when Berridin paid the 1,000-gold loan in full; the party regrouped here afterward.' },
-      { session: 21, note: 'The party examined the titan’s crystal here, and Ysidor performed Ceremony for the lives lost while Ellara secretly continued her own blessing.' }
+      { session: 21, note: 'The party examined the titan’s crystal here, and Ysidor performed Ceremony for the lives lost while Ellara secretly continued her own blessing.' },
+      { session: 22, note: 'Hosted an enchanted-forest dinner for Donnathan Reeves and Proctor Eduard, where Reeves offered Witty a Lighthouse envoy post in Pharus.' }
     ],
     connections: [
       { type: 'location', id: 'bastion-city', reason: 'Located in West Bastion' },
@@ -83,6 +84,9 @@ export const locations = [
     type: 'capital',
     tags: ['major city', 'ordonne'],
     description: 'The imperial throne’s seat and the heart of the Eulogia of the Eternal Light. Said to be where Nites sacrificed herself to defeat the Shadowed Monarch, the city was founded by The First Emperor.',
+    history: [
+      { session: 22, note: 'Donnathan Reeves offered Witty a funded Lighthouse envoy post here to represent Lighthouse interests and scout nearby Torchlight College.' }
+    ],
     connections: [
       { type: 'location', id: 'ordonne', reason: 'Located within Ordonne' },
       { type: 'lore', id: 'nites', reason: 'Site of Nites\'s sacrifice' },
@@ -130,7 +134,8 @@ export const locations = [
       { session: 6, note: 'Basement lab confirmed to be synthesizing crystals from living subjects.' },
       { session: 7, note: 'Security increased with modern warforged deployment' },
       { session: 8, note: 'Security breach; party\'s rune passes compromised; forecourt battle with warforged' },
-      { session: 21, note: 'The party clarified the Lighthouse’s independence from the Duke and chose Witty’s application for Faberge’s vacant position as their way inside to stop the living-subject experiments.' }
+      { session: 21, note: 'The party clarified the Lighthouse’s independence from the Duke and chose Witty’s application for Faberge’s vacant position as their way inside to stop the living-subject experiments.' },
+      { session: 22, note: 'Nyx observed modern warforged guarding the exterior during a late-night delivery; Reeves later confirmed Faberge’s research post remains unfilled under ducal and Eulogian scrutiny.' }
     ],
     connections: [
       { type: 'location', id: 'bastion-city', reason: 'Located In' }

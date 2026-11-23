@@ -142,7 +142,8 @@ export const npcs = [
         fullText: 'Michelle Faberge was a brilliant artificer-scientist who served as Director of Research at the Duskbreaker Lighthouse. Her workshop revealed extensive notes on power concurrency problems affecting both warforged long-term energy systems and east-side water purification infrastructure. Among her personal effects was a disturbing notation questioning "How much more blood will this cost." She possessed experimental runestones capable of casting spells like Dimension Door, suggesting she was preparing contingency plans. Her death during a street pursuit has created gaps in the Lighthouse\'s research hierarchy and security protocols.',
         history: [
             { session: 5, note: 'Killed during pursuit; her pass and notes enabled infiltration.' },
-            { session: 6, note: 'Reported missing; workshop examined; Darius alarmed.' }
+            { session: 6, note: 'Reported missing; workshop examined; Darius alarmed.' },
+            { session: 22, note: 'Reeves confirmed her Director of Research post remains unfilled under ducal and Eulogian scrutiny, while Eduard noted whispers that she had been "not so proper."' }
         ],
         connections: [
             { type: 'location', id: 'duskbreaker-lighthouse', reason: 'Director of Research' },
@@ -167,7 +168,8 @@ export const npcs = [
             { session: 10, note: 'Invited Ellara to the Grand Duke\'s ball; escorted her as his guest' },
             { session: 11, note: 'Privately claimed to control Ellara, stating she will "do as expected."' },
             { session: 12, note: 'Gave Ellara his blessing to travel and gifted her "Josephine\'s Insights on the Nature of Eulogia"' },
-            { session: 21, note: 'Ellara disclosed the living-subject experiments; Eduard expressed shock, said he had understood crystals to be mined from ruins, and issued her an undated, church-funded rail writ to Pharus.' }
+            { session: 21, note: 'Ellara disclosed the living-subject experiments; Eduard expressed shock, said he had understood crystals to be mined from ruins, and issued her an undated, church-funded rail writ to Pharus.' },
+            { session: 22, note: 'Attended dinner at Lord Whitaker’s Estate, pressed for a "proper Eulogian" to replace Faberge, and arranged a private meeting with Reeves later in the week.' }
         ],
         connections: [
             { type: 'character', id: 'ellara', reason: 'Mentor at the Seminary' },
@@ -195,7 +197,8 @@ export const npcs = [
             { session: 9, note: 'Revealed to be the lover of Grand Duke Oliander; stays at the Palace.' },
             { session: 10, note: 'Greeted party at the ball; recognized "Orange" Whitaker with dangerous familiarity' },
             { session: 11, note: 'Confronted Nyx about Whitaker identity; revealed romantic relationship with Grand Duke Oliander.' },
-            { session: 21, note: 'Eduard reported that Reeves had repeatedly delayed his Lighthouse inquiries, while Witty identified Reeves’s ties to his family as a possible route inside.' }
+            { session: 21, note: 'Eduard reported that Reeves had repeatedly delayed his Lighthouse inquiries, while Witty identified Reeves’s ties to his family as a possible route inside.' },
+            { session: 22, note: 'Attended Witty’s dinner, ruled him out for Faberge’s post, and offered him a funded Lighthouse envoy role in Pharus; Ellara’s Insight 20 read him as controlling and dismissive of Witty, though he sharply objected to coercing servants.' }
         ],
         connections: [
             { type: 'location', id: 'duskbreaker-lighthouse', reason: 'Executive at the Lighthouse' },

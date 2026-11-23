@@ -76,6 +76,7 @@
                     :href="`#${heading.id}`"
                     class="toc-link"
                     :class="{ active: activeHeadingId === heading.id }"
+                    :aria-current="activeHeadingId === heading.id ? 'location' : undefined"
                     @click.prevent="scrollToHeading(heading.id)"
                   >
                     {{ heading.text }}
@@ -85,6 +86,8 @@
                   <a
                     href="#session-entities-updated"
                     class="toc-link toc-link-accent"
+                    :class="{ active: activeHeadingId === 'session-entities-updated' }"
+                    :aria-current="activeHeadingId === 'session-entities-updated' ? 'location' : undefined"
                     @click.prevent="scrollToHeading('session-entities-updated')"
                   >
                     Entities Updated ({{ totalUpdatedEntities }})
@@ -197,7 +200,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch, nextTick, onMounted, onBeforeUnmount } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { marked } from 'marked';
 import {
@@ -448,6 +451,7 @@ async function switchToTranscript() {
 
 function scrollToHeading(id) {
   activeHeadingId.value = id;
+  scrollLockUntil = performance.now() + 700;
   const target = document.getElementById(id);
   if (target) {
     target.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -509,6 +513,76 @@ const updatedEntityGroups = computed(() => {
 const totalUpdatedEntities = computed(() =>
   updatedEntityGroups.value.reduce((sum, group) => sum + group.items.length, 0)
 );
+
+const trackedSectionIds = computed(() => [
+  ...tocHeadings.value.map((heading) => heading.id),
+  ...(updatedEntityGroups.value.length ? ['session-entities-updated'] : []),
+]);
+
+let scrollSpyRaf = 0;
+let scrollLockUntil = 0;
+
+function updateActiveHeading() {
+  if (activeTab.value !== 'summary' || !trackedSectionIds.value.length) return;
+  const tracked = trackedSectionIds.value
+    .map((id) => ({ id, el: document.getElementById(id) }))
+    .filter((item) => item.el);
+  if (!tracked.length) return;
+
+  if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 24) {
+    activeHeadingId.value = tracked[tracked.length - 1].id;
+    return;
+  }
+
+  const offset = Math.min(140, Math.max(96, window.innerHeight * 0.18));
+  let currentId = tracked[0].id;
+  for (const item of tracked) {
+    if (item.el.getBoundingClientRect().top <= offset) {
+      currentId = item.id;
+    } else {
+      break;
+    }
+  }
+  activeHeadingId.value = currentId;
+}
+
+function scheduleScrollSpy() {
+  if (performance.now() < scrollLockUntil || scrollSpyRaf) return;
+  scrollSpyRaf = window.requestAnimationFrame(() => {
+    scrollSpyRaf = 0;
+    updateActiveHeading();
+  });
+}
+
+function clearScrollLock() {
+  scrollLockUntil = 0;
+}
+
+watch([renderedSummaryHtml, isLoadingMarkdown, activeTab], async () => {
+  if (activeTab.value === 'summary' && !isLoadingMarkdown.value) {
+    await nextTick();
+    updateActiveHeading();
+  }
+});
+
+onMounted(() => {
+  window.addEventListener('scroll', scheduleScrollSpy, { passive: true });
+  window.addEventListener('resize', scheduleScrollSpy, { passive: true });
+  window.addEventListener('wheel', clearScrollLock, { passive: true });
+  window.addEventListener('touchstart', clearScrollLock, { passive: true });
+  updateActiveHeading();
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', scheduleScrollSpy);
+  window.removeEventListener('resize', scheduleScrollSpy);
+  window.removeEventListener('wheel', clearScrollLock);
+  window.removeEventListener('touchstart', clearScrollLock);
+  if (scrollSpyRaf) {
+    window.cancelAnimationFrame(scrollSpyRaf);
+    scrollSpyRaf = 0;
+  }
+});
 
 watch(
   () => activeSessionId.value,
@@ -667,6 +741,8 @@ watch(
   border: 1px solid var(--border-color);
   border-radius: 8px;
   padding: 1rem;
+  max-height: calc(100vh - 2.5rem);
+  overflow-y: auto;
 }
 
 .toc-title {
@@ -901,6 +977,7 @@ watch(
   margin-top: 2.5rem;
   padding-top: 1.75rem;
   border-top: 1px solid var(--border-color);
+  scroll-margin-top: 1.5rem;
 }
 
 .updated-entities-section h2 {

@@ -4,14 +4,41 @@ Into that fracture step five unlikely allies: Ellara, a faithful acolyte-druid t
 
 export const sessions = [
   {
+    id: 'session-23',
+    title: 'Session 23',
+    subtitle: 'The Envoy’s Contract',
+    location: 'Bastion City · Duskbreaker Lighthouse · Lord Whitaker\'s Estate',
+    date: 'TBD',
+    upcoming: true,
+    description: 'Witty heads to the Duskbreaker Lighthouse to review and sign his Pharus envoy contract, while the party debriefs with Ellara and prepares to relocate to the capital as his retinue.',
+    highlights: [],
+  },
+  {
     id: 'session-22',
     title: 'Session 22',
-    subtitle: 'Change It from Within',
-    location: 'Bastion City · Lord Whitaker\'s Estate',
-    date: 'November 1, 2026',
-    upcoming: true,
-    description: 'Witty prepares to apply for Michelle Faberge’s vacant position at the Duskbreaker Lighthouse, while the party seeks funds from his allowance account and evidence of who directs the crystal experiments.',
-    highlights: [],
+    subtitle: 'An Enchanted Evening',
+    location: 'Bastion City · Lord Whitaker\'s Estate · Duskbreaker Lighthouse · Eulogian Seminary',
+    date: 'November 22, 2026',
+    upcoming: false,
+    summaryFile: 'session-22.md',
+    description: 'The party hosts an enchanted-forest dinner at Lord Whitaker’s Estate for Donnathan Reeves and Proctor Eduard. Though Reeves rules Witty out for Michelle Faberge’s old post, he offers Witty a funded Lighthouse envoy role in Pharus—setting up the party’s move to the capital.',
+    homeRecap: 'At Lord Whitaker’s Estate, Ellara reconciled with Ysidor and invited Proctor Eduard to join the party’s enchanted-forest dinner for Donnathan Reeves. Reeves rejected Witty for Michelle Faberge’s vacant post, but offered him a temporary, fully funded Lighthouse envoy role in Pharus to scout Torchlight College. Witty is set to sign the contract tomorrow while the party prepares to travel to the capital as his retinue.',
+    nextSteps: [
+      'Review and sign Witty’s Pharus envoy contract at the Duskbreaker Lighthouse tomorrow.',
+      'Debrief with Ellara once she is back at the cloister and align her rail writ with the party’s cover as Witty’s retinue.',
+      'Keep watch on Proctor Eduard’s upcoming private meeting with Donnathan Reeves later this week.'
+    ],
+    storyBeat: 'Back in Bastion City, the party trades infiltration for dinner-table politics. Ellara reconciles with Ysidor over Meri and the ritual blessing, then brings Proctor Eduard to Lord Whitaker’s Estate alongside Donnathan Reeves while Nyx, Berridin, and Ysidor work the evening in disguise. Reeves turns Witty down for Michelle Faberge’s old post—which remains under scrutiny between the Grand Duke and the Eulogia—but offers him a funded Lighthouse envoy assignment in Pharus to scout Torchlight College. With Witty set to sign the contract and Eduard arranging a private talk with Reeves, the road ahead turns toward the imperial capital.',
+    highlights: [
+      'Disguised as a courier (Deception 22), Nyx delivers Witty’s dinner invitation to the Duskbreaker Lighthouse and observes modern warforged guarding the exterior.',
+      'Ellara apologizes to Ysidor for dismissing Meri and confesses she secretly finished her ritual blessing; Ysidor forgives her and suggests inviting Proctor Eduard to dinner.',
+      'Witty pivots the meal to an enchanted-forest theme; Berridin and Ysidor decorate and serve in leaf disguises while Nyx cooks in secret as the chef.',
+      'Donnathan Reeves confirms Michelle Faberge’s Director of Research post remains unfilled amid scrutiny between the Grand Duke and the Eulogia, and rules Witty out.',
+      'Reeves offers Witty a temporary Lighthouse envoy post in Pharus with a stipend, first-class rail passage, housing, and an event budget to scout Torchlight College.',
+      'Nyx passes inspection in disguise as the chef (Deception 21), while Ellara’s Insight 20 reads Reeves as cocky, controlling, and openly dismissive of Witty.',
+      'Reeves promises to meet privately with Proctor Eduard later in the week, and later snaps at Witty for suggesting a servant escort him, insisting on free will.',
+      'Eduard escorts Ellara back by carriage after she clarifies her relationship with Witty; the rest of the party prepares to relocate to Pharus as Witty’s retinue.'
+    ],
   },
   {
     id: 'session-21',

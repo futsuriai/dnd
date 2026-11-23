@@ -177,7 +177,8 @@ Session 6 revealed that the Lighthouse conducts a secret basement program to syn
       { session: 4, note: 'Tensions with the Duskbreaker Lighthouse over ambition and control are discussed by Eduard.' },
       { session: 6, note: 'Implicated in the secret synthesis program through liaison Donnathan Reeves, who delivers subjects.' },
       { session: 9, note: 'Schism regarding warforged mentioned; Eduard argues they are gifts of light.' },
-      { session: 18, note: 'Ellara\'s Religion 13 found Hyr\'s revelation mostly compatible with scripture except for the conflict over whether Nites or Hyr moved the mountains.' }
+      { session: 18, note: 'Ellara\'s Religion 13 found Hyr\'s revelation mostly compatible with scripture except for the conflict over whether Nites or Hyr moved the mountains.' },
+      { session: 22, note: 'Eduard confirmed the church’s political seat lies in Pharus and stated the Eulogia is scrutinizing Michelle Faberge’s replacement to ensure a proper Eulogian takes the role.' }
     ],
     connections: [
       { type: 'npc', id: 'proctor-eduard', reason: 'Clergy member (Proctor)' },
