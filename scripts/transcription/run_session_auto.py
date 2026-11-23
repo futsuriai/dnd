@@ -7,15 +7,17 @@ No human checkpoints. Each stage records its status and outputs in
 
 Stages (in order):
     entities      regenerate ENTITY_LIST.md + entity_metadata.json (ASR vocabulary)
-    asr           run ASR engines per speaker track (raw provider JSON is kept)
-    gemini        Gemini 4 Neon (agy) listens to disputed / one-sided lines (audio arbitration)
+    asr           run ASR engines per speaker track (default: gladia only; opt-in Whisper)
+    gemini        when multi-engine / --gemini disputed|all: Gemini 4 Neon arbitrates clips;
+                  in default zero-Whisper mode (--gemini mixed), handled in single-pass fuse
     transcript    assemble the chronological transcript from the primary engine
     dice          optional: fetch D&D Beyond rolls, align to audio, re-assemble with DICE lines
-    fuse          LLM judge picks/combines the engines' readings per line, in context
+    fuse          default: single-pass mixed-audio review + isolated-track delete guard;
+                  multi-engine: LLM judge reconciles engine readings per line
     diagnostics   compare engines (coverage, agreement, names, loops; optional audio judge)
     raw-notes     scene-based Raw Session N.md
-    audit         LLM audit of each scene's notes vs transcript (OOC leaks, missing beats,
-                  misattributions, game content in skipped scenes); patches scene files in place
+    audit         LLM audit of each scene's notes vs transcript + audio spot-check on
+                  review_queue items; patches scene files in place
     notes         polished Session N.md (with post-generation structure/canon validation)
     website       copy into the site, update stores (including sessions.js homeRecap/nextSteps/storyBeat)
     ellara-state  update ~/source/ellara/Ellara/Campaign State/ + IC/OOC audit + Prep Brief
@@ -23,11 +25,15 @@ Stages (in order):
     publish       only with --publish: preflight + explicit staging + commit both repos (no push unless --push)
 
 Typical runs:
-    # full run using Gemini 4 Neon via agy (default)
+    # full zero-Whisper run using Gladia + single-pass Gemini mixed-audio review (default)
     python3 -B scripts/transcription/run_session_auto.py --session 22 --audio-dir ~/source/session-22
 
     # dry-run stage plan and resolved paths
     python3 -B scripts/transcription/run_session_auto.py --session 22 --audio-dir ~/source/session-22 --dry-run
+
+    # opt-in multi-engine Gladia + Whisper (MYNE CUDA offload) fallback
+    python3 -B scripts/transcription/run_session_auto.py --session 22 --audio-dir ~/source/session-22 \
+        --engines gladia,whisper-large-v3
 
     # cheap/free ASR: local Whisper only
     python3 -B scripts/transcription/run_session_auto.py --session 22 --audio-dir ~/source/session-22 \
@@ -88,6 +94,24 @@ def resolve_stage_provider_and_model(
     if stage_provider is None or stage_provider == default_provider:
         return provider, default_model
     return provider, None
+
+
+def resolve_gemini_mode(requested_mode: str, engines: list[str], primary: str) -> str:
+    """Resolve effective Gemini audio-review mode from `--gemini`, configured engines, and primary."""
+    if requested_mode != "auto":
+        return requested_mode
+    if any(engine != primary for engine in engines):
+        return "disputed"
+    return "mixed"
+
+
+def audio_dir_has_tracks(audio_dir: Path) -> bool:
+    """Return True when top-level speaker audio tracks exist in `audio_dir`."""
+    exts = {".flac", ".wav", ".ogg", ".mp3", ".m4a", ".aac"}
+    return audio_dir.exists() and any(
+        p.is_file() and p.suffix.lower() in exts and not p.stem.startswith("mixed_")
+        for p in audio_dir.iterdir()
+    )
 
 
 def ddb_configured(dnd_dir: Path) -> bool:
@@ -210,7 +234,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--dnd-dir", default=str(pipeline_paths.resolve_dnd_dir()), help="DnD repo root")
     parser.add_argument("--ellara-root", default=str(pipeline_paths.resolve_ellara_dir()), help="Ellara repo root")
     parser.add_argument("--python", help="Override Python interpreter for transcription/pipeline child scripts")
-    parser.add_argument("--engines", default="gladia,whisper-large-v3", help="ASR engines to run")
+    parser.add_argument("--engines", default="gladia", help="ASR engines to run (default: gladia; pass gladia,whisper-large-v3 to include Whisper)")
     parser.add_argument(
         "--whisper-offload",
         choices=["auto", "local", "myne"],
@@ -220,11 +244,13 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--primary", default="gladia", help="Engine whose output becomes the transcript (gladia, whisper-*, gemini)")
     parser.add_argument(
         "--gemini",
-        choices=["off", "disputed", "all"],
-        default="disputed",
-        help="Gemini 4 Neon (agy) audio arbitration: disputed/one-sided lines (default), every line, or off",
+        choices=["auto", "mixed", "disputed", "all", "off"],
+        default="auto",
+        help="Gemini 4 Neon audio review: auto (mixed for single-engine, disputed for multi-engine), mixed, disputed, all, or off",
     )
     parser.add_argument("--gemini-model", default="gemini-4-neon-medium", help="Model for Gemini audio arbitration")
+    parser.add_argument("--no-skip-ooc", action="store_true", help="Do not pre-detect OOC stretches before Gemini audio arbitration")
+    parser.add_argument("--no-audio-verify", action="store_true", help="Skip Gemini audio spot-check on flagged review items during audit")
     parser.add_argument("--judge", action="store_true", help="Diagnostics: let Gemini listen to disagreement clips")
     parser.add_argument("--no-fuse", action="store_true", help="Skip the LLM transcript proofreading stage")
     parser.add_argument("--no-audit", action="store_true", help="Skip the raw-notes audit/repair stage")
@@ -305,6 +331,7 @@ def main(argv: list[str] | None = None) -> int:
         engines.insert(0, args.primary)
     reference_engine = args.primary
     second_engine = next((e for e in engines if e != args.primary), None)
+    effective_gemini = resolve_gemini_mode(args.gemini, engines, args.primary)
 
     selected = list(STAGES)
     if args.from_stage:
@@ -327,7 +354,7 @@ def main(argv: list[str] | None = None) -> int:
             "engines": engines,
             "whisper_offload": args.whisper_offload,
             "primary": args.primary,
-            "gemini": {"mode": args.gemini, "model": args.gemini_model},
+            "gemini": {"mode": args.gemini, "effective_mode": effective_gemini, "model": args.gemini_model},
             "providers": {
                 "fuse": {"provider": fuse_provider, "model": fuse_model},
                 "notes": {"provider": notes_provider, "model": notes_model},
@@ -375,11 +402,30 @@ def main(argv: list[str] | None = None) -> int:
 
     def assemble(dice: Path | None = None) -> None:
         engine_dir = asr_dir / args.primary
-        cmd: list[object] = [SCRIPT_DIR / "assemble_transcript.py", engine_dir, transcript, "--lines-jsonl", lines_jsonl]
+        assemble_script = SCRIPT_DIR / "assemble_transcript.py"
+        cmd: list[object] = [assemble_script, engine_dir, transcript, "--lines-jsonl", lines_jsonl]
+        if effective_gemini in {"mixed", "off"} and script_accepts_flag(assemble_script, "--no-gemini"):
+            cmd.append("--no-gemini")
         if dice and dice.exists() and dice.stat().st_size:
             cmd += ["--dice", dice]
         run(cmd, python=True)
         snapshot_pre_fuse(transcript, lines_jsonl, pre_fuse_txt, pre_fuse_jsonl)
+
+    def maybe_detect_ooc() -> Path | None:
+        ooc_path = work / "ooc_spans.json"
+        if args.no_skip_ooc or not (asr_dir / reference_engine).exists():
+            return ooc_path if (not args.no_skip_ooc and ooc_path.is_file()) else None
+        if ooc_path.is_file() and not args.force:
+            return ooc_path
+        ooc_cmd = [
+            SCRIPT_DIR / "detect_ooc_spans.py",
+            "--reference-dir", asr_dir / reference_engine,
+            "--out", ooc_path,
+            "--provider", "agy",
+        ]
+        if run(ooc_cmd, python=True, check=False) == 0 and ooc_path.is_file():
+            return ooc_path
+        return None
 
     notes_ran_this_invocation = False
     log(f"session {session}: stages {selected}")
@@ -412,14 +458,19 @@ def main(argv: list[str] | None = None) -> int:
                 mark(stage, engines=engines, whisper_offload=args.whisper_offload, dir=str(asr_dir))
 
             elif stage == "gemini":
-                if args.gemini == "off":
+                if effective_gemini == "off":
                     log("gemini: disabled (--gemini off)")
                     mark(stage, status="skipped", reason="--gemini off")
+                    continue
+                if effective_gemini == "mixed":
+                    log("gemini: single-pass mixed-audio review runs in fuse stage (--gemini mixed)")
+                    mark(stage, status="skipped", reason="handled by mixed-audio review in fuse stage")
                     continue
                 if not shutil.which("agy"):
                     log("gemini: agy CLI not found; skipping")
                     mark(stage, status="skipped", reason="agy CLI not found")
                     continue
+                ooc_spans_path = maybe_detect_ooc()
                 cmd = [
                     SCRIPT_DIR / "asr_gemini_windows.py",
                     "--reference-dir", asr_dir / reference_engine,
@@ -427,7 +478,9 @@ def main(argv: list[str] | None = None) -> int:
                     "--session", session,
                     "--model", args.gemini_model,
                 ]
-                if args.gemini == "disputed" and second_engine:
+                if ooc_spans_path and script_accepts_flag(SCRIPT_DIR / "asr_gemini_windows.py", "--ooc-spans"):
+                    cmd += ["--ooc-spans", ooc_spans_path]
+                if effective_gemini == "disputed" and second_engine:
                     cmd += ["--select", "disputed", "--alt-dir", asr_dir / second_engine]
                 else:
                     cmd += ["--select", "all"]
@@ -435,7 +488,12 @@ def main(argv: list[str] | None = None) -> int:
                     log("gemini: failed; fusion will use the other engines only")
                     mark(stage, status="failed", reason="asr_gemini_windows.py exited non-zero")
                     continue
-                mark(stage, select=args.gemini, model=args.gemini_model)
+                mark(
+                    stage,
+                    select=effective_gemini,
+                    model=args.gemini_model,
+                    ooc_spans=str(ooc_spans_path) if ooc_spans_path else None,
+                )
 
             elif stage == "transcript":
                 assemble()
@@ -475,23 +533,51 @@ def main(argv: list[str] | None = None) -> int:
                     mark(stage, status="skipped", reason="--no-fuse")
                     continue
                 prepare_fuse_input(transcript, lines_jsonl, pre_fuse_txt, pre_fuse_jsonl)
-                alts = [e for e in engines if e != args.primary and (asr_dir / e).exists()]
-                if args.gemini != "off" and (asr_dir / "gemini").exists():
-                    alts.append("gemini")
-                cmd = [
-                    SCRIPT_DIR / "fuse_transcript.py",
-                    lines_jsonl,
-                    "--session", session,
-                    "--provider", fuse_provider,
-                    "--primary-label", "Gladia" if args.primary == "gladia" else args.primary,
-                    "--report", fusion_report,
-                ]
-                for alt in alts:
-                    cmd += ["--alt-dir", asr_dir / alt]
-                if fuse_model:
-                    cmd += ["--model", fuse_model]
-                run(cmd, python=True)
-                mark(stage, alt_engines=alts, provider=fuse_provider, model=fuse_model, report=str(fusion_report))
+                if effective_gemini == "mixed" and shutil.which("agy") and audio_dir_has_tracks(audio_dir):
+                    ooc_spans_path = maybe_detect_ooc()
+                    stats_out = work / "audio_review_stats.json"
+                    review_cmd = [
+                        SCRIPT_DIR / "review_transcript_audio.py",
+                        lines_jsonl,
+                        "--audio-dir", audio_dir,
+                        "--session", session,
+                        "--out-txt", transcript,
+                        "--work-dir", work / "audio_review",
+                        "--report", fusion_report,
+                        "--stats-out", stats_out,
+                        "--model", args.gemini_model,
+                    ]
+                    if ooc_spans_path:
+                        review_cmd += ["--ooc-spans", ooc_spans_path]
+                    if args.force:
+                        review_cmd.append("--force")
+                    run(review_cmd, python=True)
+                    mark(
+                        stage,
+                        mode="mixed-audio-review",
+                        model=args.gemini_model,
+                        ooc_spans=str(ooc_spans_path) if ooc_spans_path else None,
+                        report=str(fusion_report),
+                        stats=str(stats_out),
+                    )
+                else:
+                    alts = [e for e in engines if e != args.primary and (asr_dir / e).exists()]
+                    if effective_gemini in {"disputed", "all"} and (asr_dir / "gemini").exists():
+                        alts.append("gemini")
+                    cmd = [
+                        SCRIPT_DIR / "fuse_transcript.py",
+                        lines_jsonl,
+                        "--session", session,
+                        "--provider", fuse_provider,
+                        "--primary-label", "Gladia" if args.primary == "gladia" else args.primary,
+                        "--report", fusion_report,
+                    ]
+                    for alt in alts:
+                        cmd += ["--alt-dir", asr_dir / alt]
+                    if fuse_model:
+                        cmd += ["--model", fuse_model]
+                    run(cmd, python=True)
+                    mark(stage, alt_engines=alts, provider=fuse_provider, model=fuse_model, report=str(fusion_report))
 
             elif stage == "diagnostics":
                 available = (
@@ -549,6 +635,14 @@ def main(argv: list[str] | None = None) -> int:
                 ]
                 if script_accepts_flag(audit_script, "--report"):
                     cmd += ["--report", audit_report]
+                if (
+                    not args.no_audio_verify
+                    and shutil.which("agy")
+                    and audio_dir_has_tracks(audio_dir)
+                    and lines_jsonl.is_file()
+                    and script_accepts_flag(audit_script, "--audio-verify")
+                ):
+                    cmd += ["--audio-verify", "--lines-jsonl", lines_jsonl, "--audio-dir", audio_dir]
                 if notes_model:
                     cmd += ["--model", notes_model]
                 run(cmd, python=True)

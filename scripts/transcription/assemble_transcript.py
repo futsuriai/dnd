@@ -407,6 +407,7 @@ def main() -> int:
     parser.add_argument("--lines-jsonl", help="Default: <output_txt minus .txt>.lines.jsonl")
     parser.add_argument("--dice", help="Aligned dice events JSONL from ddb_rolls.py")
     parser.add_argument("--gemini-dir", help="Optional Gemini arbitration dir (merges verified one-sided speech & bleed verdicts)")
+    parser.add_argument("--no-gemini", action="store_true", help="Do not auto-load sibling asr/gemini/verdicts.json")
     parser.add_argument("--split-gap", type=float, default=0.9, help="Seconds of silence that end an utterance")
     parser.add_argument("--merge-gap", type=float, default=2.0, help="Merge a speaker's consecutive utterances within this gap")
     parser.add_argument("--max-turn-chars", type=int, default=600)
@@ -420,8 +421,8 @@ def main() -> int:
     if not tracks:
         raise SystemExit(f"no dnd-asr-v1 track files in {args.engine_dir}")
 
-    gemini_dir = Path(args.gemini_dir) if args.gemini_dir else None
-    if gemini_dir is None:
+    gemini_dir = None if args.no_gemini else (Path(args.gemini_dir) if args.gemini_dir else None)
+    if not args.no_gemini and gemini_dir is None:
         sibling_gemini = Path(args.engine_dir).resolve().parent / "gemini"
         if (sibling_gemini / "verdicts.json").exists():
             gemini_dir = sibling_gemini

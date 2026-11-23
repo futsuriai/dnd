@@ -337,6 +337,15 @@ class TestRunSessionAuto(unittest.TestCase):
         )
         self.assertEqual((prov, mod), ("agy", "gemini-4-neon-high"))
 
+    def test_resolve_gemini_mode_defaults_and_overrides(self):
+        self.assertEqual(run_session_auto.resolve_gemini_mode("auto", ["gladia"], "gladia"), "mixed")
+        self.assertEqual(
+            run_session_auto.resolve_gemini_mode("auto", ["gladia", "whisper-large-v3"], "gladia"),
+            "disputed",
+        )
+        self.assertEqual(run_session_auto.resolve_gemini_mode("off", ["gladia"], "gladia"), "off")
+        self.assertEqual(run_session_auto.resolve_gemini_mode("mixed", ["gladia", "whisper-large-v3"], "gladia"), "mixed")
+
     def test_dry_run_outputs_json_plan_without_mutating(self):
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
@@ -365,11 +374,36 @@ class TestRunSessionAuto(unittest.TestCase):
                 )
             self.assertEqual(rc, 0)
             plan = json.loads(buf.getvalue())
+            self.assertEqual(plan["engines"], ["gladia"])
+            self.assertEqual(plan["gemini"]["effective_mode"], "mixed")
             self.assertIn("ellara-state", plan["stages"])
             self.assertEqual(plan["providers"]["notes"]["model"], "gemini-4-neon-high")
             self.assertEqual(plan["providers"]["website"]["provider"], "claude")
             self.assertIsNone(plan["providers"]["website"]["model"])
             self.assertFalse((audio / "pipeline" / "manifest.json").exists())
+
+            # Multi-engine opt-in resolves effective_mode to disputed
+            buf_multi = io.StringIO()
+            with redirect_stdout(buf_multi):
+                rc_multi = run_session_auto.main(
+                    [
+                        "--session",
+                        "22",
+                        "--audio-dir",
+                        str(audio),
+                        "--dnd-dir",
+                        str(root / "dnd"),
+                        "--ellara-root",
+                        str(root / "ellara"),
+                        "--engines",
+                        "gladia,whisper-large-v3",
+                        "--dry-run",
+                    ]
+                )
+            self.assertEqual(rc_multi, 0)
+            plan_multi = json.loads(buf_multi.getvalue())
+            self.assertEqual(plan_multi["engines"], ["gladia", "whisper-large-v3"])
+            self.assertEqual(plan_multi["gemini"]["effective_mode"], "disputed")
 
     def test_pre_fuse_snapshot_and_restore_idempotency(self):
         with tempfile.TemporaryDirectory() as td:
@@ -632,6 +666,94 @@ class TestRunEllaraAnalysisAgent(unittest.TestCase):
             self.assertFalse(brief_out.exists())
             self.assertIn("aborting before audit", err_buf.getvalue())
 
+    def test_audit_only_skips_pass1_and_runs_audit(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            dnd, ellara = _create_fixture_repos(root, session=21)
+            with mock.patch.object(
+                run_ellara_analysis_agent.pipeline_paths,
+                "call_agent",
+                return_value="No IC/OOC or quote defects found.",
+            ) as mocked_agent:
+                rc = run_ellara_analysis_agent.main(
+                    [
+                        "--session",
+                        "21",
+                        "--dnd-dir",
+                        str(dnd),
+                        "--ellara-root",
+                        str(ellara),
+                        "--provider",
+                        "agy",
+                        "--audit-only",
+                    ]
+                )
+            self.assertEqual(rc, 0)
+            self.assertEqual(mocked_agent.call_count, 1)
+            self.assertIn("Perform a clean-context", mocked_agent.call_args_list[0].kwargs["prompt"])
+
+    def test_audit_pass_quota_fallback_and_resume_hint(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            dnd, ellara = _create_fixture_repos(root, session=21)
+            err_buf = io.StringIO()
+            with mock.patch.object(
+                run_ellara_analysis_agent.pipeline_paths,
+                "call_agent",
+                side_effect=[
+                    "## Prep Brief\nStay sharp.",
+                    RuntimeError("RESOURCE_EXHAUSTED (code 429): Individual quota reached."),
+                    "No IC/OOC or quote defects found.",
+                ],
+            ) as mocked_agent:
+                with redirect_stderr(err_buf):
+                    rc = run_ellara_analysis_agent.main(
+                        [
+                            "--session",
+                            "21",
+                            "--dnd-dir",
+                            str(dnd),
+                            "--ellara-root",
+                            str(ellara),
+                            "--provider",
+                            "agy",
+                            "--force",
+                        ]
+                    )
+            self.assertEqual(rc, 0)
+            self.assertEqual(mocked_agent.call_count, 3)
+            self.assertEqual(mocked_agent.call_args_list[1].kwargs["model"], "gemini-4-neon-high")
+            self.assertEqual(mocked_agent.call_args_list[2].kwargs["model"], "gemini-4-neon-medium")
+            self.assertIn("retrying once with gemini-4-neon-medium", err_buf.getvalue())
+
+            # If fallback also hits quota, exits 1 with an actionable --audit-only resume hint
+            err_buf_fail = io.StringIO()
+            with mock.patch.object(
+                run_ellara_analysis_agent.pipeline_paths,
+                "call_agent",
+                side_effect=[
+                    "## Prep Brief\nStay sharp.",
+                    RuntimeError("RESOURCE_EXHAUSTED (429)"),
+                    RuntimeError("RESOURCE_EXHAUSTED (429)"),
+                ],
+            ):
+                with redirect_stderr(err_buf_fail):
+                    rc_fail = run_ellara_analysis_agent.main(
+                        [
+                            "--session",
+                            "21",
+                            "--dnd-dir",
+                            str(dnd),
+                            "--ellara-root",
+                            str(ellara),
+                            "--provider",
+                            "agy",
+                            "--force",
+                        ]
+                    )
+            self.assertEqual(rc_fail, 1)
+            self.assertIn("--audit-only", err_buf_fail.getvalue())
+
 
 class TestSessionNotesAndWebsiteAgents(unittest.TestCase):
     def test_session_notes_post_generation_validation(self):
@@ -729,8 +851,12 @@ class TestValidatorsAndCleanup(unittest.TestCase):
             )
             self.assertEqual(rc_dirty, 1)
 
-            collected = cleanup_session_artifacts.collect_paths(21, dnd, ellara, None, False, False)
+            audio = root / "session-21"
+            audio.mkdir()
+            collected = cleanup_session_artifacts.collect_paths(21, dnd, ellara, audio, False, False)
             self.assertIn(audit_leak, collected)
+            self.assertIn(audio / "pipeline" / "audio_review", collected)
+            self.assertNotIn(audio / "pipeline" / "audio_review_stats.json", collected)
             self.assertNotIn(ellara / "Session Notes" / "Session 21.md", collected)
 
     def test_validate_raw_notes_uses_shared_rules(self):

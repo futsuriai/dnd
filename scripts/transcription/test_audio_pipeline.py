@@ -24,8 +24,10 @@ import asr_whisper
 import assemble_transcript
 import audit_raw_notes
 import ddb_rolls
+import detect_ooc_spans
 import fuse_transcript
 import raw_notes_auto
+import review_transcript_audio
 import run_asr_engines
 import session_facts
 import transcribe_gladia
@@ -200,6 +202,52 @@ class TestAssembleTranscript(unittest.TestCase):
         self.assertNotIn("[", line["text"])
         self.assertNotIn("]", line["text"])
         self.assertIn("19, 11", line["text"])
+
+    def test_no_gemini_flag_ignores_sibling_verdicts(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            gladia_dir = root / "asr" / "gladia"
+            gemini_dir = root / "asr" / "gemini"
+            gladia_dir.mkdir(parents=True)
+            gemini_dir.mkdir(parents=True)
+            (gladia_dir / "1-ellanelle.json").write_text(
+                json.dumps(
+                    {
+                        "format": "dnd-asr-v1",
+                        "engine": "gladia",
+                        "track": "1-ellanelle",
+                        "audio_file": "1-ellanelle.flac",
+                        "words": [{"s": 10.0, "e": 11.0, "w": "Hello.", "p": 0.99}],
+                        "segments": [{"s": 10.0, "e": 11.0, "text": "Hello."}],
+                    }
+                ),
+                encoding="utf-8",
+            )
+            (gemini_dir / "verdicts.json").write_text(
+                json.dumps(
+                    {
+                        "verdicts": [
+                            {
+                                "track": "2-aurusoriale",
+                                "speaker": "GM",
+                                "s": 15.0,
+                                "e": 16.0,
+                                "status": "speech",
+                                "text": "Stale recovered line.",
+                                "origin": "alt_only",
+                            }
+                        ]
+                    }
+                ),
+                encoding="utf-8",
+            )
+            out_txt = root / "Transcript Session 22.txt"
+            with mock.patch.object(sys, "argv", ["assemble_transcript.py", str(gladia_dir), str(out_txt), "--no-gemini"]):
+                rc = assemble_transcript.main()
+            self.assertEqual(rc, 0)
+            content = out_txt.read_text(encoding="utf-8")
+            self.assertIn("Ellara: Hello.", content)
+            self.assertNotIn("Stale recovered line.", content)
 
 
 class TestFuseTranscript(unittest.TestCase):
@@ -519,7 +567,7 @@ class TestAsrGeminiWindows(unittest.TestCase):
 
         selected = asr_gemini_windows.select_segments(pool, alt_tracks, threshold=0.25, low_conf_threshold=0.50)
         self.assertEqual(len(selected), 2)
-        self.assertIn("low_conf", selected[0]["reasons"])
+        self.assertIn("low_mean_conf", selected[0]["reasons"])
         self.assertIn("dice_number", selected[0]["reasons"])
         self.assertIn("one_sided_alt", selected[1]["reasons"])
 
@@ -541,6 +589,125 @@ class TestAsrGeminiWindows(unittest.TestCase):
         self.assertEqual(verdicts[selected[0]["idx"]]["status"], "mic_bleed")
         self.assertEqual(verdicts[selected[1]["idx"]]["status"], "speech")
         self.assertEqual(verdicts[selected[1]["idx"]]["text"], "Nat 20!")
+
+    def test_targeted_selection_mean_conf_unknown_proper_noun_and_ooc_skip(self) -> None:
+        # 1) Single low-conf word in high-mean-conf sentence should NOT trigger
+        # 2) mean_conf < 0.65 triggers low_mean_conf
+        # 3) >= 2 non-filler low-conf words (<0.45) triggers low_conf_cluster
+        # 4) "though I believe one belongs to the Roja." triggers unknown_proper_noun
+        # 5) Segment inside OOC span is skipped
+        long_words = [
+            {"s": 130.0 + i * 0.4, "e": 130.3 + i * 0.4, "w": w, "p": p}
+            for i, (w, p) in enumerate(
+                [
+                    ("Yes,", 0.95), ("we", 0.96), ("will", 0.95), ("meet", 0.94),
+                    ("outside", 0.95), ("the", 0.35), ("old", 0.95), ("northern", 0.94),
+                    ("courtyard", 0.96), ("tonight.", 0.95),
+                ]
+            )
+        ]
+        ref_tracks = {
+            "2-aurusoriale": {
+                "audio_file": "/tmp/2-aurusoriale.flac",
+                "words": [
+                    # Inside OOC span (0..112s) -> should be skipped!
+                    {"s": 20.0, "e": 20.5, "w": "Testing", "p": 0.2},
+                    {"s": 20.5, "e": 21.0, "w": "mic", "p": 0.2},
+                    # High mean_conf (0.894) with single dip ("the" 0.35) -> should NOT trigger
+                    *long_words,
+                    # Cluster of 2 low-conf content words while mean_conf >= 0.65
+                    {"s": 140.0, "e": 140.4, "w": "We", "p": 0.95},
+                    {"s": 140.4, "e": 140.8, "w": "checked", "p": 0.95},
+                    {"s": 140.8, "e": 141.2, "w": "both", "p": 0.95},
+                    {"s": 141.2, "e": 141.6, "w": "weird", "p": 0.30},
+                    {"s": 141.6, "e": 142.0, "w": "seals", "p": 0.30},
+                    {"s": 142.0, "e": 142.4, "w": "yesterday.", "p": 0.95},
+                    # High-conf unknown proper noun "Roja"
+                    {"s": 150.0, "e": 150.3, "w": "though", "p": 0.95},
+                    {"s": 150.3, "e": 150.5, "w": "I", "p": 0.95},
+                    {"s": 150.5, "e": 150.9, "w": "believe", "p": 0.95},
+                    {"s": 150.9, "e": 151.1, "w": "one", "p": 0.95},
+                    {"s": 151.1, "e": 151.5, "w": "belongs", "p": 0.95},
+                    {"s": 151.5, "e": 151.7, "w": "to", "p": 0.95},
+                    {"s": 151.7, "e": 151.9, "w": "the", "p": 0.95},
+                    {"s": 151.9, "e": 152.5, "w": "Roja.", "p": 0.95},
+                ],
+                "segments": [
+                    {"s": 20.0, "e": 21.0, "text": "Testing mic"},
+                    {"s": 130.0, "e": 134.0, "text": "Yes, we will meet outside the old northern courtyard tonight."},
+                    {"s": 140.0, "e": 142.4, "text": "We checked both weird seals yesterday."},
+                    {"s": 150.0, "e": 152.5, "text": "though I believe one belongs to the Roja."},
+                ],
+            }
+        }
+        pool = asr_gemini_windows.collect_union_segments(ref_tracks, {}, lambda _t: "GM", word_conf_threshold=0.45)
+        common = {"yes", "we", "will", "meet", "outside", "the", "old", "northern", "courtyard", "tonight", "checked", "both", "weird", "seals", "yesterday", "though", "i", "believe", "one", "belongs", "to"}
+        selected = asr_gemini_windows.select_segments(
+            pool,
+            {},
+            ooc_spans=[(0.0, 112.0)],
+            entity_names=["Eulogia", "Whitman"],
+            common_words=common,
+        )
+        texts = [s["text"] for s in selected]
+        self.assertNotIn("Testing mic", texts)
+        self.assertNotIn("Yes, we will meet outside the old northern courtyard tonight.", texts)
+        self.assertIn("We checked both weird seals yesterday.", texts)
+        self.assertIn("though I believe one belongs to the Roja.", texts)
+        roja_seg = next(s for s in selected if "Roja" in s["text"])
+        cluster_seg = next(s for s in selected if "weird seals" in s["text"])
+        self.assertIn("unknown_proper_noun", roja_seg["reasons"])
+        self.assertIn("low_conf_cluster", cluster_seg["reasons"])
+
+        # Legacy segment dict without mean_conf / low_conf_word_count falls back cleanly to "low_conf"
+        legacy = [{"idx": 99, "s": 200.0, "e": 201.0, "track": "2-aurusoriale", "speaker": "GM", "audio": "/tmp/2.flac", "text": "hello there", "min_conf": 0.2}]
+        legacy_sel = asr_gemini_windows.select_segments(legacy, {})
+        self.assertEqual(legacy_sel[0]["reasons"], ["low_conf"])
+
+    def test_detect_ooc_spans_and_audio_verification_patching(self) -> None:
+        normalized = detect_ooc_spans.normalize_ooc_spans(
+            [
+                {"start": 0.0, "end": 120.0, "reason": "pre-game chatter"},
+                {"start": 100.0, "end": 140.0, "reason": "too short"},
+                {"start": 500.0, "end": 580.0, "reason": "break part 1"},
+                {"start": 570.0, "end": 660.0, "reason": "break part 2"},
+            ],
+            min_duration=60.0,
+            safety_margin=8.0,
+        )
+        self.assertEqual(len(normalized), 2)
+        self.assertEqual((normalized[0]["start"], normalized[0]["end"]), (0.0, 112.0))
+        self.assertEqual((normalized[1]["start"], normalized[1]["end"]), (508.0, 652.0))
+
+        with tempfile.TemporaryDirectory() as tmp:
+            work = Path(tmp)
+            scene_file = work / "scene_11.md"
+            scene_file.write_text(
+                "eduard: many children, i believe one belongs to the roja.\n"
+                "din: very unique family.\n",
+                encoding="utf-8",
+            )
+            patches = audit_raw_notes.apply_audio_verification_patches(
+                [
+                    {
+                        "scene": 11,
+                        "should_patch": False,
+                        "original_term": "unique",
+                        "corrected_term": "different",
+                    },
+                    {
+                        "scene": 11,
+                        "should_patch": True,
+                        "original_term": "the roja",
+                        "corrected_term": "the Eulogia",
+                    },
+                ],
+                work,
+            )
+            self.assertEqual(len(patches), 1)
+            updated = scene_file.read_text(encoding="utf-8")
+            self.assertIn("belongs to the eulogia.", updated)
+            self.assertIn("very unique family.", updated)
 
 
 class TestDdbRollsAndNotesAndFacts(unittest.TestCase):
@@ -680,6 +847,218 @@ class TestDdbRollsAndNotesAndFacts(unittest.TestCase):
             rewritten = json.loads(dest_json.read_text(encoding="utf-8"))
             self.assertEqual(rewritten["audio_file"], str(local_audio.resolve()))
             self.assertEqual(rewritten["params"]["offload_host"], "myne")
+
+
+class TestReviewTranscriptAudio(unittest.TestCase):
+    def test_pure_helpers(self) -> None:
+        self.assertEqual(
+            review_transcript_audio.subtract_ooc(1000.0, [(0.0, 90.0), (500.0, 620.0), (998.0, 1000.0)]),
+            [(90.0, 500.0), (620.0, 998.0)],
+        )
+        chunks = review_transcript_audio.chunk_intervals([(0.0, 1800.0)], target_sec=600.0)
+        self.assertEqual(chunks, [(0.0, 600.0), (600.0, 1200.0), (1200.0, 1800.0)])
+
+        self.assertTrue(review_transcript_audio.is_heavy_truncation("A ten. It's a three plus ten.", "A ten."))
+        self.assertFalse(review_transcript_audio.is_heavy_truncation("It was a monthly allowance. Damn,", "It was a monthly allowance."))
+
+        lines = [
+            {"id": "L00001", "start": 10.0, "end": 10.5, "speaker": "Ellara", "text": "Thank", "possible_bleed": False},
+            {"id": "L00002", "start": 10.6, "end": 12.0, "speaker": "Ellara", "text": "You. She bows.", "possible_bleed": False},
+            {"id": "L00003", "start": 20.0, "end": 22.0, "speaker": "GM", "text": "They found her body.", "possible_bleed": False},
+            {"id": "L00004", "start": 20.1, "end": 21.5, "speaker": "Berridin", "text": "They found body", "possible_bleed": True},
+        ]
+        edits = {"L00002": {"action": "replace", "text": "Thank you. She bows."}}
+        self.assertTrue(review_transcript_audio.is_merged_adjacent_split(0, lines, edits))
+        self.assertTrue(review_transcript_audio.is_confirmed_short_bleed(3, lines))
+        self.assertFalse(review_transcript_audio.is_confirmed_short_bleed(2, lines))
+
+        self.assertEqual(
+            review_transcript_audio.canonicalize_speaker("Din", {"GM", "Nyx", "Ellara", "Berridin", "Witty", "Ysidor"}),
+            "Berridin",
+        )
+        self.assertEqual(
+            review_transcript_audio.canonicalize_speaker("ysidor", {"GM", "Nyx", "Ellara", "Berridin", "Witty", "Ysidor"}),
+            "Ysidor",
+        )
+        self.assertTrue(review_transcript_audio.is_duplicate_missed_line(20.5, "GM", "They found her body.", lines))
+        self.assertFalse(review_transcript_audio.is_duplicate_missed_line(30.0, "Witty", "Three.", lines))
+
+    def test_end_to_end_isolated_guard_and_no_isolated_verify(self) -> None:
+        base_lines = [
+            {
+                "id": "L00001",
+                "start": 10.0,
+                "end": 14.0,
+                "speaker": "GM",
+                "track": "2-aurusoriale",
+                "text": "I believe one belongs to the Roja.",
+                "raw_asr_text": "I believe one belongs to the Roja.",
+                "possible_bleed": False,
+                "overlap_speakers": [],
+            },
+            {
+                "id": "L00002",
+                "start": 18.0,
+                "end": 22.0,
+                "speaker": "Ellara",
+                "track": "1-ellanelle",
+                "text": "I assume they're still in the room.",
+                "raw_asr_text": "I assume they're still in the room.",
+                "possible_bleed": False,
+                "overlap_speakers": ["GM"],
+            },
+            {
+                "id": "L00003",
+                "start": 25.0,
+                "end": 26.0,
+                "speaker": "Nyx",
+                "track": "4-icegecko",
+                "text": "Oh my god.",
+                "raw_asr_text": "Oh my god.",
+                "possible_bleed": False,
+                "overlap_speakers": [],
+            },
+            {
+                "id": "L00004",
+                "start": 30.0,
+                "end": 34.0,
+                "speaker": "Witty",
+                "track": "5-sultanofsalty",
+                "text": "A ten. It's a three plus ten. That's",
+                "raw_asr_text": "A ten. It's a three plus ten. That's",
+                "possible_bleed": False,
+                "overlap_speakers": ["Ellara"],
+            },
+            {
+                "id": "L00005",
+                "start": 40.0,
+                "end": 40.0,
+                "speaker": "DICE",
+                "track": "ddb",
+                "text": "Witty rolled Insight check: 3",
+                "raw_asr_text": "Witty rolled Insight check: 3",
+                "possible_bleed": False,
+                "overlap_speakers": [],
+            },
+        ]
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            audio_dir = root / "session-22"
+            audio_dir.mkdir()
+            for fname in ("1-ellanelle.flac", "2-aurusoriale.flac", "4-icegecko.flac", "5-sultanofsalty.flac"):
+                (audio_dir / fname).write_bytes(b"fLaC")
+            mixed = root / "mixed.ogg"
+            mixed.write_bytes(b"OggS")
+
+            lines_path = root / "Transcript Session 22.lines.jsonl"
+            out_txt = root / "Transcript Session 22.txt"
+            work_dir = root / "work"
+            report_path = root / "report.md"
+            stats_path = root / "stats.json"
+
+            lines_path.write_text("\n".join(json.dumps(l) for l in base_lines) + "\n", encoding="utf-8")
+
+            pass1_payload = json.dumps(
+                {
+                    "edits": [
+                        {"id": "L00001", "action": "replace", "text": "I believe one belongs to the Eulogia.", "reason": "canonical order"},
+                        {"id": "L00002", "action": "delete", "text": "", "reason": "not heard on mix"},
+                        {"id": "L00003", "action": "delete", "text": "", "reason": "silence/noise"},
+                        {"id": "L00004", "action": "replace", "text": "A ten.", "reason": "trimmed overlap"},
+                        {"id": "L00005", "action": "delete", "text": "", "reason": "should be ignored on DICE"},
+                    ],
+                    "missed_lines": [
+                        {"time_offset_sec": 38.0, "speaker": "Witty", "text": "Three.", "reason": "roll answer"},
+                        {"time_offset_sec": 10.5, "speaker": "GM", "text": "I believe one belongs to the Eulogia.", "reason": "duplicate"},
+                    ],
+                }
+            )
+            pass2_payload = json.dumps(
+                {
+                    "verdicts": [
+                        {"id": "L00002", "action": "keep_original", "text": "", "reason": "clear isolated speech"},
+                        {"id": "L00004", "action": "replace", "text": "A ten. It's a three plus seven.", "reason": "heard three plus seven on Witty mic"},
+                    ]
+                }
+            )
+
+            def fake_subproc(cmd, *args, **kwargs):
+                Path(cmd[-1]).write_bytes(b"OggS")
+                return mock.Mock(returncode=0)
+
+            def fake_peak(track: Path, start_s: float, end_s: float) -> float:
+                if "4-icegecko" in track.name:
+                    return -60.0
+                return -8.0
+
+            def fake_write_block(segs, dest_stem: Path, prefer_opus: bool = True) -> Path:
+                clip = dest_stem.with_suffix(".ogg")
+                clip.write_bytes(b"OggS")
+                return clip
+
+            with mock.patch("review_transcript_audio.probe_duration", return_value=120.0), \
+                 mock.patch("review_transcript_audio.subprocess.run", side_effect=fake_subproc), \
+                 mock.patch("review_transcript_audio.measure_peak_db", side_effect=fake_peak), \
+                 mock.patch("review_transcript_audio.asr_gemini_windows.write_block_audio", side_effect=fake_write_block), \
+                 mock.patch("review_transcript_audio.agent_cli.run_agent", side_effect=[pass1_payload, pass2_payload]) as mocked_agent:
+                rc = review_transcript_audio.main(
+                    [
+                        str(lines_path),
+                        "--audio-dir", str(audio_dir),
+                        "--session", "22",
+                        "--out-txt", str(out_txt),
+                        "--work-dir", str(work_dir),
+                        "--mixed-audio", str(mixed),
+                        "--report", str(report_path),
+                        "--stats-out", str(stats_path),
+                        "--force",
+                    ]
+                )
+
+            self.assertEqual(rc, 0)
+            self.assertEqual(mocked_agent.call_count, 2)
+            txt = out_txt.read_text(encoding="utf-8")
+            self.assertIn("to the Eulogia.", txt)
+            self.assertIn("Ellara: I assume they're still in the room.", txt)
+            self.assertNotIn("Nyx: Oh my god.", txt)
+            self.assertIn("Witty: A ten. It's a three plus seven.", txt)
+            self.assertIn("DICE: Witty rolled Insight check: 3", txt)
+            self.assertEqual(txt.count("Witty: Three."), 1)
+
+            stats = json.loads(stats_path.read_text(encoding="utf-8"))
+            self.assertEqual(stats["guard_silent_delete"], 1)
+            self.assertEqual(stats["guard_kept"], 1)
+            self.assertEqual(stats["guard_replaced"], 1)
+            self.assertEqual(stats["guard_confirmed_delete"], 1)
+            self.assertEqual(stats["missed_added"], 1)
+
+            # Now verify --no-isolated-verify conservatively keeps >= 3-word deleted lines without a Pass 2 LLM call
+            lines_path.write_text("\n".join(json.dumps(l) for l in base_lines) + "\n", encoding="utf-8")
+            with mock.patch("review_transcript_audio.probe_duration", return_value=120.0), \
+                 mock.patch("review_transcript_audio.subprocess.run", side_effect=fake_subproc), \
+                 mock.patch("review_transcript_audio.measure_peak_db", side_effect=fake_peak), \
+                 mock.patch("review_transcript_audio.agent_cli.run_agent", side_effect=[pass1_payload]) as mocked_no_guard:
+                rc2 = review_transcript_audio.main(
+                    [
+                        str(lines_path),
+                        "--audio-dir", str(audio_dir),
+                        "--session", "22",
+                        "--out-txt", str(out_txt),
+                        "--work-dir", str(work_dir),
+                        "--mixed-audio", str(mixed),
+                        "--report", str(report_path),
+                        "--stats-out", str(stats_path),
+                        "--no-isolated-verify",
+                        "--force",
+                    ]
+                )
+            self.assertEqual(rc2, 0)
+            self.assertEqual(mocked_no_guard.call_count, 1)
+            txt2 = out_txt.read_text(encoding="utf-8")
+            self.assertIn("Ellara: I assume they're still in the room.", txt2)
+            self.assertIn("Witty: A ten. It's a three plus ten. That's", txt2)
+            self.assertNotIn("Nyx: Oh my god.", txt2)
 
 
 if __name__ == "__main__":

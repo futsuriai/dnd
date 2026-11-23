@@ -155,6 +155,27 @@ def has_dice_or_number_risk(primary_text: str, alt_text: str) -> bool:
     return False
 
 
+TITLE_ARTICLE_CUES = {
+    "the", "master", "lord", "lady", "proctor", "director", "duke", "viscount",
+    "countess", "brother", "abbot", "house", "order", "church", "temple", "priory",
+}
+
+COMMON_PROPER_NOUNS = {
+    "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday",
+    "january", "february", "march", "april", "may", "june", "july", "august",
+    "september", "october", "november", "december",
+    "discord", "tinder", "grindr", "gucci", "procter", "gamble", "bachelor",
+    "nazi", "nazis", "youtube", "dnd", "beyond", "god", "jesus", "christ",
+    "christmas", "english", "latin", "french", "spanish",
+}
+
+CONTRACTION_ROOTS = {
+    "i", "we", "you", "they", "he", "she", "it", "there", "that", "what", "who",
+    "don", "doesn", "didn", "can", "won", "wouldn", "shouldn", "couldn", "isn",
+    "aren", "wasn", "weren", "hasn", "haven", "hadn", "let",
+}
+
+
 def has_entity_near_miss(text: str, entity_folded: set[str], common_words: set[str]) -> bool:
     if not entity_folded:
         return False
@@ -167,6 +188,65 @@ def has_entity_near_miss(text: str, entity_folded: set[str], common_words: set[s
         if difflib.get_close_matches(key, entity_list, n=1, cutoff=0.76):
             return True
     return False
+
+
+def has_unknown_proper_noun(text: str, entity_folded: set[str], common_words: set[str]) -> bool:
+    """Return True when text has an unexpected capitalized mid-sentence or titled proper noun."""
+    matches = list(re.finditer(r"[A-Za-zÀ-ÖØ-öø-ÿ']+", text))
+    for i, match in enumerate(matches):
+        raw = match.group(0)
+        gap = text[matches[i - 1].end() : match.start()] if i > 0 else ""
+        is_sent_start = (i == 0) or any(ch in gap for ch in ".!?—")
+        prev_raw = matches[i - 1].group(0) if i > 0 else ""
+        prev_word = (
+            unicodedata.normalize("NFKD", prev_raw).encode("ascii", "ignore").decode("ascii").lower().strip("'")
+        )
+        if is_sent_start and prev_word not in TITLE_ARTICLE_CUES:
+            continue
+
+        base = raw[:-2] if raw.lower().endswith("'s") else raw.rstrip("'")
+        if not base or not base[0].isupper():
+            continue
+        if len(base) >= 2 and base.isupper():
+            continue
+        if "'" in base and base.split("'", 1)[0].lower() in CONTRACTION_ROOTS:
+            continue
+
+        key = unicodedata.normalize("NFKD", base).encode("ascii", "ignore").decode("ascii").lower()
+        if len(key) < 4:
+            continue
+        if key in entity_folded or key in common_words or key in COMMON_PROPER_NOUNS:
+            continue
+        if key.endswith("s") and len(key) > 4 and (key[:-1] in common_words or key[:-1] in entity_folded):
+            continue
+        return True
+    return False
+
+
+def load_ooc_spans(path: Path) -> list[tuple[float, float]]:
+    """Load OOC [start, end] intervals from a JSON file emitted by detect_ooc_spans.py."""
+    raw = json.loads(path.read_text(encoding="utf-8"))
+    items = raw.get("spans", []) if isinstance(raw, dict) else raw
+    spans: list[tuple[float, float]] = []
+    if not isinstance(items, list):
+        return spans
+    for entry in items:
+        if not isinstance(entry, dict):
+            continue
+        try:
+            s, e = float(entry["start"]), float(entry["end"])
+        except (KeyError, TypeError, ValueError):
+            continue
+        if e > s:
+            spans.append((s, e))
+    return spans
+
+
+def in_ooc_spans(start: float, end: float, ooc_spans: list[tuple[float, float]]) -> bool:
+    if not ooc_spans:
+        return False
+    mid = 0.5 * (float(start) + float(end))
+    return any(s <= mid <= e for s, e in ooc_spans)
 
 
 def beep(seconds: float = 0.1, freq: float = 880.0, gap: float = 0.3) -> bytes:
@@ -267,6 +347,7 @@ def collect_union_segments(
     alt_tracks: dict[str, dict] | None,
     speaker_of,
     min_alt_tokens: int = 2,
+    word_conf_threshold: float = 0.45,
 ) -> list[dict]:
     """Pool primary-engine segments PLUS Whisper/alt one-sided segments missed by primary."""
     pool: list[dict] = []
@@ -277,6 +358,14 @@ def collect_union_segments(
                 continue
             words = _words_in_span(data, seg["s"], seg["e"], pad=0.1)
             confs = [w["p"] for w in words if w.get("p") is not None]
+            low_conf_word_count = 0
+            for w in words:
+                prob = w.get("p")
+                if prob is None or float(prob) >= word_conf_threshold:
+                    continue
+                word_norm = norm(w.get("w", ""))
+                if word_norm and word_norm not in FILLERS:
+                    low_conf_word_count += 1
             pool.append({
                 "s": float(seg["s"]),
                 "e": float(seg["e"]),
@@ -287,6 +376,7 @@ def collect_union_segments(
                 "origin": "reference",
                 "mean_conf": (sum(confs) / len(confs)) if confs else None,
                 "min_conf": min(confs) if confs else None,
+                "low_conf_word_count": low_conf_word_count,
             })
 
     if alt_tracks:
@@ -324,6 +414,7 @@ def collect_union_segments(
                     "origin": "alt_only",
                     "mean_conf": None,
                     "min_conf": None,
+                    "low_conf_word_count": 0,
                 })
 
     pool.sort(key=lambda s: (s["s"], s["e"], s["track"]))
@@ -337,7 +428,10 @@ def select_segments(
     alt_tracks: dict[str, dict] | None,
     *,
     threshold: float = 0.25,
-    low_conf_threshold: float = 0.50,
+    low_conf_threshold: float = 0.45,
+    mean_conf_threshold: float = 0.65,
+    min_low_conf_words: int = 2,
+    ooc_spans: list[tuple[float, float]] | None = None,
     entity_names: list[str] | None = None,
     common_words: set[str] | None = None,
     external_hotspots: list[dict] | None = None,
@@ -360,6 +454,9 @@ def select_segments(
 
     chosen: list[dict] = []
     for seg in segments:
+        if not select_all and ooc_spans and in_ooc_spans(seg["s"], seg["e"], ooc_spans):
+            continue
+
         if seg.get("origin") == "alt_only":
             seg["reasons"] = ["one_sided_alt"]
             chosen.append(seg)
@@ -386,9 +483,12 @@ def select_segments(
 
             min_conf = seg.get("min_conf")
             mean_conf = seg.get("mean_conf")
-            if (min_conf is not None and min_conf < low_conf_threshold) or (
-                mean_conf is not None and mean_conf < low_conf_threshold
-            ):
+            low_word_cnt = seg.get("low_conf_word_count")
+            if mean_conf is not None and mean_conf < mean_conf_threshold:
+                reasons.append("low_mean_conf")
+            elif isinstance(low_word_cnt, int) and low_word_cnt >= min_low_conf_words:
+                reasons.append("low_conf_cluster")
+            elif low_word_cnt is None and mean_conf is None and min_conf is not None and min_conf < low_conf_threshold:
                 reasons.append("low_conf")
 
             if has_dice_or_number_risk(seg["text"], alt_text):
@@ -401,6 +501,11 @@ def select_segments(
                 alt_text and has_entity_near_miss(alt_text, entity_folded, common)
             ):
                 reasons.append("entity_near_miss")
+
+            if has_unknown_proper_noun(seg["text"], entity_folded, common) or (
+                alt_text and has_unknown_proper_noun(alt_text, entity_folded, common)
+            ):
+                reasons.append("unknown_proper_noun")
 
             for hs_s, hs_e in hotspots_by_track.get(seg["track"], []):
                 if seg["s"] <= hs_e + 0.5 and seg["e"] >= hs_s - 0.5:
@@ -817,9 +922,12 @@ def main() -> int:
     parser.add_argument("--out-dir", required=True, help="Output engine dir, e.g. <session>/asr/gemini")
     parser.add_argument("--alt-dir", help="Second engine dir; unioned for one-sided speech and disagreement triggers")
     parser.add_argument("--hotspots-json", help="Optional hotspot_segments.json from asr_diagnostics.py")
+    parser.add_argument("--ooc-spans", help="Optional JSON from detect_ooc_spans.py to skip pure OOC windows")
     parser.add_argument("--select", choices=["all", "disputed"], default="disputed")
     parser.add_argument("--dispute-threshold", type=float, default=0.25, help="Normalized token mismatch threshold")
-    parser.add_argument("--low-conf-threshold", type=float, default=0.50, help="Trigger arbitration when word p < threshold")
+    parser.add_argument("--low-conf-threshold", type=float, default=0.45, help="Word probability cutoff for cluster counting and legacy fallback")
+    parser.add_argument("--mean-conf-threshold", type=float, default=0.65, help="Trigger arbitration when mean segment confidence < threshold")
+    parser.add_argument("--min-low-conf-words", type=int, default=2, help="Trigger arbitration when at least this many non-filler words < low-conf-threshold")
     parser.add_argument("--session")
     parser.add_argument("--model", help="agy model (default: gemini-4-neon-medium / AGY_MODEL)")
     parser.add_argument("--escalation-model", help="Fallback stronger agy model (default: gemini-4-neon-high)")
@@ -846,7 +954,9 @@ def main() -> int:
     speaker_map = assemble_transcript.load_speaker_map()
     speaker_of = lambda t: assemble_transcript.identify_speaker(t, speaker_map)  # noqa: E731
 
-    pool = collect_union_segments(ref_tracks, alt_tracks, speaker_of)
+    pool = collect_union_segments(
+        ref_tracks, alt_tracks, speaker_of, word_conf_threshold=args.low_conf_threshold
+    )
     candidates = [s for s in pool if s["s"] >= args.start_at]
 
     module = transcribe_gladia.load_transcribe_module(SCRIPT_DIR)
@@ -861,14 +971,27 @@ def main() -> int:
         raw_hs = json.loads(Path(args.hotspots_json).read_text(encoding="utf-8"))
         external_hotspots = raw_hs.get("segments", raw_hs) if isinstance(raw_hs, dict) else raw_hs
 
+    ooc_spans: list[tuple[float, float]] = []
+    if args.ooc_spans and Path(args.ooc_spans).exists():
+        ooc_spans = load_ooc_spans(Path(args.ooc_spans))
+
     if args.select == "disputed" and not args.alt_dir and not external_hotspots:
         print("Note: --select disputed without --alt-dir; selecting via confidence, dice, loop, and entity triggers only.", flush=True)
+
+    ooc_skipped = 0
+    if ooc_spans and args.select != "all":
+        ooc_skipped = sum(1 for seg in candidates if in_ooc_spans(seg["s"], seg["e"], ooc_spans))
+        if ooc_skipped:
+            print(f"Skipping {ooc_skipped} segment(s) inside {len(ooc_spans)} OOC window(s)", flush=True)
 
     selected = select_segments(
         candidates,
         alt_tracks,
         threshold=args.dispute_threshold,
         low_conf_threshold=args.low_conf_threshold,
+        mean_conf_threshold=args.mean_conf_threshold,
+        min_low_conf_words=args.min_low_conf_words,
+        ooc_spans=ooc_spans,
         entity_names=names,
         common_words=common,
         external_hotspots=external_hotspots,

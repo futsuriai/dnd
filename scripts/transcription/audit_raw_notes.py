@@ -108,8 +108,18 @@ AUDIO_VERIFY_SCHEMA = {
         "verified_text": {"type": "string"},
         "confirmed_speaker": {"type": "string"},
         "assessment": {"type": "string"},
+        "original_term": {"type": "string"},
+        "corrected_term": {"type": "string"},
+        "should_patch": {"type": "boolean"},
     },
-    "required": ["verified_text", "confirmed_speaker", "assessment"],
+    "required": [
+        "verified_text",
+        "confirmed_speaker",
+        "assessment",
+        "original_term",
+        "corrected_term",
+        "should_patch",
+    ],
 }
 
 OOC_CHECK_PROMPT = """This stretch of a Dungeons & Dragons session transcript was classified as out-of-character
@@ -293,12 +303,42 @@ def check_dice_coverage(lines: list[dict], scenes: list[dict], work: Path) -> di
     }
 
 
+def apply_audio_verification_patches(audio_verifications: list[dict], work: Path) -> list[str]:
+    """Patch scene note files in place for unambiguous audio-verified fixes."""
+    patches: list[str] = []
+    for av in audio_verifications:
+        if not av.get("should_patch"):
+            continue
+        orig = str(av.get("original_term") or "").strip()
+        corr = str(av.get("corrected_term") or "").strip()
+        if not orig or not corr or orig.lower() == corr.lower():
+            continue
+        try:
+            scene_num = int(av.get("scene", 0))
+        except (TypeError, ValueError):
+            continue
+        if scene_num < 1:
+            continue
+        scene_path = work / f"scene_{scene_num:02d}.md"
+        if not scene_path.is_file():
+            continue
+        text = scene_path.read_text(encoding="utf-8")
+        pattern = re.compile(r"(?<!\w)" + re.escape(orig) + r"(?!\w)", re.IGNORECASE)
+        replacement = corr.lower()
+        updated, count = pattern.subn(replacement, text)
+        if count > 0 and updated != text:
+            scene_path.write_text(updated, encoding="utf-8")
+            patches.append(f"scene {scene_num}: '{orig}' -> '{replacement}' ({count}x)")
+    return patches
+
+
 def _run_audio_verification(
     audits: dict[int, dict],
     scenes: list[dict],
     lines: list[dict],
     work: Path,
     *,
+    session: str | None = None,
     lines_jsonl: Path | None,
     audio_dir: Path | None,
     audio_model: str,
@@ -307,6 +347,20 @@ def _run_audio_verification(
     """Optional Gemini 4 Neon high audio check on flagged misattributions & review_queue items."""
     if not shutil.which("agy") or not audio_dir or not audio_dir.exists():
         return []
+
+    canonical_names: list[str] = []
+    try:
+        import transcribe_gladia
+
+        module = transcribe_gladia.load_transcribe_module(SCRIPT_DIR)
+        canonical_names = transcribe_gladia.vocabulary_terms_from_metadata(WORKSPACE, session, module)[:100]
+    except Exception:  # noqa: BLE001
+        canonical_names = []
+    canonical_block = (
+        "Campaign canonical terms: " + ", ".join(canonical_names) + "\n"
+        if canonical_names
+        else ""
+    )
 
     jsonl_records: list[dict] = []
     if lines_jsonl and lines_jsonl.exists():
@@ -379,8 +433,12 @@ def _run_audio_verification(
                 f"Track speaker: {best_rec['speaker']} at [{asr_common.format_ts(best_rec['start'])}].\n"
                 f"Transcript line: {best_rec['text']}\n"
                 f"Question: {target['query']}\n"
+                f"{canonical_block}"
                 f"{names_hint}\n"
-                "Listen to the attached audio clip and return JSON matching the schema."
+                "Listen carefully to the attached audio clip and return JSON matching the schema.\n"
+                "Set `should_patch: true` ONLY when the audio unambiguously contradicts `original_term` in the raw note "
+                "(e.g. 'the roja' clearly heard as 'the Eulogia'), putting the exact erroneous phrase in `original_term` "
+                "and the canonical spelling in `corrected_term`. Otherwise set `should_patch: false` with empty terms."
             )
             try:
                 raw = agent_cli.run_agent(
@@ -511,6 +569,19 @@ def main() -> int:
         audits = dict(zip(noted, pool.map(audit_scene, noted)))
 
     # 3. Patch existing scenes, generate notes for reclassified ooc->play scenes, and re-audit them!
+    def _reassemble() -> None:
+        cmd = [
+            sys.executable, "-B", str(SCRIPT_DIR / "raw_notes_auto.py"),
+            "--session", str(args.session),
+            "--transcript", args.transcript,
+            "--out", args.notes,
+            "--work-dir", str(work),
+            "--provider", args.provider,
+        ]
+        if args.model:
+            cmd += ["--model", args.model]
+        subprocess.run(cmd, check=True)
+
     applied: dict[int, list[str]] = {}
     if args.fix:
         for i, result in audits.items():
@@ -527,19 +598,6 @@ def main() -> int:
                 if "(reclassified from ooc)" not in scenes[i]["title"]:
                     scenes[i]["title"] += " (reclassified from ooc)"
             plan_path.write_text(json.dumps({"scenes": scenes}, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-
-        def _reassemble() -> None:
-            cmd = [
-                sys.executable, "-B", str(SCRIPT_DIR / "raw_notes_auto.py"),
-                "--session", str(args.session),
-                "--transcript", args.transcript,
-                "--out", args.notes,
-                "--work-dir", str(work),
-                "--provider", args.provider,
-            ]
-            if args.model:
-                cmd += ["--model", args.model]
-            subprocess.run(cmd, check=True)
 
         _reassemble()
 
@@ -566,6 +624,7 @@ def main() -> int:
 
     # 5. Optional audio verification on flagged misattributions / review-name items.
     audio_verifications: list[dict] = []
+    audio_patches: list[str] = []
     if args.audio_verify:
         lines_jsonl = Path(args.lines_jsonl) if args.lines_jsonl else Path(args.transcript).with_suffix(".lines.jsonl")
         audio_dir = Path(args.audio_dir).expanduser().resolve() if args.audio_dir else None
@@ -574,11 +633,16 @@ def main() -> int:
             scenes,
             lines,
             work,
+            session=str(args.session),
             lines_jsonl=lines_jsonl,
             audio_dir=audio_dir,
             audio_model=args.audio_model,
             names_hint=hints,
         )
+        if args.fix and audio_verifications:
+            audio_patches = apply_audio_verification_patches(audio_verifications, work)
+            if audio_patches:
+                _reassemble()
 
     errors = [
         *(f"ooc_check scene {i + 1}: {v['error']}" for i, v in ooc_checks.items() if v.get("error")),
@@ -593,6 +657,7 @@ def main() -> int:
         "applied": {str(k): v for k, v in applied.items()},
         "dice_coverage": dice_coverage,
         "audio_verifications": audio_verifications,
+        "audio_patches": audio_patches,
         "errors": errors,
     }
     (work / "audit.json").write_text(json.dumps(result, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
@@ -639,8 +704,12 @@ def main() -> int:
             else:
                 out.append(
                     f"- Scene {av['scene']} {av['line_id']} [{av['time']}] ({av['kind']}): "
-                    f"speaker={av.get('confirmed_speaker')} | heard=`{av.get('verified_text')}` — {av.get('assessment')}"
+                    f"speaker={av.get('confirmed_speaker')} | heard=`{av.get('verified_text')}` "
+                    f"(patch={bool(av.get('should_patch'))}) — {av.get('assessment')}"
                 )
+        if audio_patches:
+            out.append("- Applied audio patches:")
+            out.extend(f"  - {p}" for p in audio_patches)
         out.append("")
 
     for i, check in ooc_checks.items():

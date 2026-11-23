@@ -53,7 +53,7 @@ Entities follow a **history-first** schema (do NOT add `updatedInSessions` — `
 
 ### Session Workflow
 The canonical end-to-end pipeline from per-speaker audio to website + Ellara Campaign State is `scripts/transcription/run_session_auto.py` (documented in `AGENT_SESSION_PIPELINE.md`):
-1.  **Audio -> Notes:** Transcribe (`gladia` + local Whisper), arbitrate with Gemini 4 Neon (`agy`), fuse, generate & audit `Raw Session N.md`, and produce polished `Session N.md`.
+1.  **Audio -> Notes:** Transcribe (`gladia` by default; opt-in `--engines gladia,whisper-large-v3` for MYNE/local Whisper fallback), run conservative OOC detection + single-pass Gemini 4 Neon (`agy`) mixed-audio review with isolated-track delete verification (`review_transcript_audio.py`), generate & audit `Raw Session N.md` (with ±4s `review_queue` audio verification), and produce polished `Session N.md`.
 2.  **Website Sync:** Copy `Session N.md` into `src/assets/sessions/session-N.md`, update `src/store/sessions.js` (including `homeRecap`, `nextSteps`, `storyBeat`, and the `session-(N+1)` upcoming stub) and impacted world stores per `.copilot/prompts/process-latest-session.md`.
 3.  **Ellara Campaign State (`ellara-state`):** Run `scripts/transcription/run_ellara_analysis_agent.py` against sibling `../ellara` (`Ellara/Campaign State/`) and verify with `check_session_delta.py --validate`.
 4.  **Verification:** Run `npm run sync-check` (`generate-list` + `verify-session-sync` + `build`) and `scripts/transcription/validate_session_pipeline.py --session N`.

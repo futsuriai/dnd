@@ -45,17 +45,17 @@ DDB_CAMPAIGN_ID=...
 | stage | what it does | durable / operational output |
 |---|---|---|
 | `entities` | `npm run generate-list` (ASR vocabulary comes from `entity_metadata.json`) | `ENTITY_LIST.md`, `entity_metadata.json` |
-| `asr` | each engine transcribes each track; silence is cut via VAD before upload | `<audio>/asr/<engine>/<track>.json` (+ raw Gladia JSON) |
-| `gemini` | Gemini 4 Neon (`agy`, default `gemini-4-neon-medium`) arbitrates disputed & one-sided audio clips with candidate context & concurrent-speaker bleed checks | `<audio>/asr/gemini/` |
+| `asr` | transcribes each isolated track (default: `gladia` only with VAD compaction; pass `--engines gladia,whisper-large-v3` for opt-in Whisper on MYNE/local) | `<audio>/asr/<engine>/<track>.json` (+ raw Gladia JSON) |
+| `gemini` | in opt-in multi-engine / `--gemini disputed\|all` runs, Gemini 4 Neon (`agy`) arbitrates disputed clips; in default zero-Whisper mode (`--gemini mixed`), skipped here and handled in `fuse` | `<audio>/asr/gemini/` (multi-engine only) |
 | `transcript` | assemble one chronological transcript from the primary engine and snapshot unfused pre-fuse baseline | `ellara/Session Notes/Transcripts/Transcript Session N.txt` + `.lines.jsonl` (+ `<audio>/pipeline/*.pre_fuse.*`) |
 | `dice` | fetch D&D Beyond rolls, align to recording timeline, re-assemble with `DICE:` lines, refresh pre-fuse baseline | `<audio>/ddb/` |
-| `fuse` | restores pre-fuse snapshot for idempotency; LLM judge picks/combines engine readings per line (with optional audio escalation) | `<audio>/pipeline/session_N_fusion_report.md` |
-| `diagnostics` | compares engines (coverage, agreement, dice/entity metrics, loops; optional `--judge` audio check) | `<audio>/pipeline/session_N_asr_diagnostics.md` |
+| `fuse` | restores pre-fuse snapshot for idempotency; default `--gemini mixed` runs `detect_ooc_spans.py` + `review_transcript_audio.py` (10-min mixed-audio pass + isolated-track delete/truncation guard); multi-engine runs `fuse_transcript.py` | `<audio>/pipeline/session_N_fusion_report.md`, `<audio>/pipeline/audio_review_stats.json` |
+| `diagnostics` | when `>= 2` engines exist, compares coverage, agreement, dice/entity metrics, loops (optional `--judge` audio check) | `<audio>/pipeline/session_N_asr_diagnostics.md` |
 | `raw-notes` | scene plan + per-scene extraction in hand-written evidence style | `ellara/Session Notes/Raw Session N.md` |
-| `audit` | per-scene LLM audit vs transcript (OOC leaks, missing beats, misattributions, game content in `ooc` scenes); patches scene files surgically in place and generates + re-audits any `ooc -> play` reclassified scenes | `<audio>/pipeline/session_N_raw_notes_audit.md` |
+| `audit` | per-scene LLM audit vs transcript + ±4s audio spot-check on `review_queue` items (`--no-audio-verify` to skip); patches scene files surgically in place and generates + re-audits any `ooc -> play` reclassified scenes | `<audio>/pipeline/session_N_raw_notes_audit.md` |
 | `notes` | validates raw notes first, generates polished `Session N.md`, and runs post-generation structure/canon validation | `ellara/Session Notes/Session N.md` |
 | `website` | derives played/next dates (`session_facts.py`), safely syncs `Session N.md` -> `src/assets/sessions/session-N.md` with parity protection, updates `src/store/sessions.js` (including `homeRecap`, `nextSteps`, `storyBeat`) and impacted world stores, runs `npm run sync-check` | `src/assets/sessions/session-N.md`, `src/store/*.js`, `<audio>/pipeline/session_facts.json` |
-| `ellara-state` | runs `run_ellara_analysis_agent.py` against `ellara/.agents/skills/ellara-session-analysis`: updates `Ellara/Campaign State/`, runs clean-context IC/OOC & quote audit pass, validates with `check_session_delta.py --validate`, saves Prep Brief | `ellara/Ellara/Campaign State/*`, `<audio>/pipeline/ellara_prep_brief_session_N.md` |
+| `ellara-state` | runs `run_ellara_analysis_agent.py` against `ellara/.agents/skills/ellara-session-analysis`: updates `Ellara/Campaign State/`, runs clean-context IC/OOC & quote audit pass (with `--audit-only` resume + Pass-2 quota fallback), validates with `check_session_delta.py --validate`, saves Prep Brief | `ellara/Ellara/Campaign State/*`, `<audio>/pipeline/ellara_prep_brief_session_N.md` |
 | `verify` | hard gate running ALL validators: `validate_raw_notes.py`, `npm run sync-check`, `validate_session_pipeline.py`, and `check_session_delta.py --validate --session N` | manifest `verify` status (aborts on any failure) |
 | `publish` | only with `--publish`: verifies `verify` passed, checks git repos, explicitly stages ONLY session outputs in `ellara` (notes + `Ellara/Campaign State/` + transcript) and `dnd`, commits cleanly (and pushes only with `--push`) | git commits |
 
@@ -64,12 +64,12 @@ DDB_CAMPAIGN_ID=...
 - Stage selection: `--only STAGE`, `--from-stage STAGE`, `--stop-after STAGE`, `--force`, `--dry-run`, `--sandbox DIR`
 - Provider & model routing (per-stage model overrides never leak across different providers):
   - `--provider agy|claude|codex|gemini`, `--model MODEL`
-  - `--gemini off|disputed|all`, `--gemini-model MODEL` (default `gemini-4-neon-medium`)
+  - `--gemini auto|mixed|disputed|all|off`, `--gemini-model MODEL` (default `auto` resolves to `mixed` for single-engine and `disputed` for multi-engine; default model `gemini-4-neon-medium`)
   - `--fuse-provider`, `--fuse-model`, `--no-fuse`
-  - `--notes-provider`, `--notes-model`, `--no-audit`
+  - `--notes-provider`, `--notes-model`, `--no-audit`, `--no-audio-verify`
   - `--website-provider`, `--website-model`
   - `--ellara-provider`, `--ellara-model`, `--no-ellara`, `--no-ellara-audit`
-- ASR & dates: `--engines`, `--primary`, `--whisper-offload auto|local|myne`, `--judge`, `--session-date YYYY-MM-DD`, `--ellara-root PATH`, `--dnd-dir PATH` (with `auto`, macOS offloads Whisper CUDA inference to MYNE desktop via `myne` when reachable, running concurrently with Gladia)
+- ASR & dates: `--engines gladia` (default; pass `gladia,whisper-large-v3` for Whisper fallback), `--primary gladia`, `--whisper-offload auto|local|myne`, `--no-skip-ooc`, `--judge`, `--session-date YYYY-MM-DD`, `--ellara-root PATH`, `--dnd-dir PATH`
 
 ## Standalone Stage Runners
 
@@ -112,7 +112,7 @@ python3 -B scripts/transcription/cleanup_session_artifacts.py --session N --audi
   --include-dnd-transcript-assets --include-repo-scratch   # dry run; add --apply
 ```
 
-Cleanup deletes reproducible compact VAD audio and any leftover intermediate files while preserving `asr/` raw engine JSON, `ddb/`, `<audio-dir>/pipeline/`, durable notes, and `.lines.jsonl`.
+Cleanup deletes reproducible compact VAD audio, `<audio-dir>/pipeline/audio_review/` mixed/chunk clips, and any leftover intermediate files while preserving `asr/` raw engine JSON, `ddb/`, `<audio-dir>/pipeline/` durable reports (`audio_review_stats.json`, `manifest.json`, `*.pre_fuse.*`), durable notes, and `.lines.jsonl`.
 
 ## Legacy Checkpointed Flow
 

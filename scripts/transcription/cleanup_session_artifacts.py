@@ -62,6 +62,7 @@ def collect_paths(
         # per-word engine JSON, dice data, and <audio-dir>/pipeline/ reports are kept.
         if (audio_dir / "asr").is_dir():
             paths.extend(sorted((audio_dir / "asr").glob("*/work")))
+        paths.append(audio_dir / "pipeline" / "audio_review")
         for audio in sorted(audio_dir.iterdir()) if audio_dir.exists() else []:
             if not audio.is_file() or audio.suffix.lower() not in AUDIO_EXTENSIONS:
                 continue

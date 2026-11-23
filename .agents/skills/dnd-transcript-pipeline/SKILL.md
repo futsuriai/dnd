@@ -39,17 +39,17 @@ Add `--dry-run` to inspect resolved paths, providers, models, and stages before 
 ## Pipeline Stages
 
 1. `entities`: `npm run generate-list` -> refreshes `ENTITY_LIST.md` & `entity_metadata.json`.
-2. `asr`: per-speaker VAD compaction + ASR (`gladia,whisper-large-v3` by default).
-3. `gemini`: Gemini 4 Neon (`agy`, default `gemini-4-neon-medium`) audio arbitration on disputed & one-sided clips.
+2. `asr`: per-speaker VAD compaction + ASR (`gladia` by default; pass `--engines gladia,whisper-large-v3` for opt-in Whisper on MYNE/local).
+3. `gemini`: in multi-engine / `--gemini disputed|all` runs, Gemini 4 Neon (`agy`) arbitrates disputed clips; skipped in default `--gemini mixed` mode (handled in `fuse`).
 4. `transcript`: chronological assembly + unfused pre-fuse baseline snapshot in `<audio-dir>/pipeline/`.
 5. `dice`: optional D&D Beyond roll fetch/alignment (`DDB_COBALT_SESSION` + `DDB_CAMPAIGN_ID` in `.env.local`).
-6. `fuse`: restores pre-fuse baseline for idempotency; LLM judge reconciles engine readings and writes report to `<audio-dir>/pipeline/`.
-7. `diagnostics`: multi-engine diagnostics report in `<audio-dir>/pipeline/` (optional `--judge`).
+6. `fuse`: restores pre-fuse baseline for idempotency; default `--gemini mixed` runs `detect_ooc_spans.py` + `review_transcript_audio.py` (10-min mixed-audio pass + isolated-track delete/truncation guard); multi-engine runs `fuse_transcript.py`.
+7. `diagnostics`: multi-engine diagnostics report in `<audio-dir>/pipeline/` when `>= 2` engines exist (optional `--judge`).
 8. `raw-notes`: scene-based extraction into `../ellara/Session Notes/Raw Session <N>.md`.
-9. `audit`: per-scene IC/OOC & attribution audit patching scene files in place (report in `<audio-dir>/pipeline/`).
+9. `audit`: per-scene IC/OOC & attribution audit + ±4s audio spot-check on `review_queue` items (`--no-audio-verify` to opt out), patching scene files in place (report in `<audio-dir>/pipeline/`).
 10. `notes`: validates raw notes, generates polished `../ellara/Session Notes/Session <N>.md`, and enforces post-generation structural/canon validation (`# Session <N>`, `**Locales:**`, `**Time:**`, `## 1)`, shared spelling/fact rules).
 11. `website`: runs `session_facts.py` + `run_website_sync_agent.py` (parity guard, `MODE: autofix`, updates `src/store/sessions.js` including `homeRecap`/`nextSteps`/`storyBeat`, updates impacted stores using `history` + `reason:`, runs `npm run sync-check`).
-12. `ellara-state`: runs `run_ellara_analysis_agent.py` against `../ellara/.agents/skills/ellara-session-analysis/` (updates `Ellara/Campaign State/`, runs clean-context IC/OOC & quote audit pass, validates with `check_session_delta.py --validate`, saves Prep Brief to `<audio-dir>/pipeline/`).
+12. `ellara-state`: runs `run_ellara_analysis_agent.py` against `../ellara/.agents/skills/ellara-session-analysis/` (updates `Ellara/Campaign State/`, runs clean-context IC/OOC & quote audit pass with `--audit-only` resume and Pass-2 quota fallback, validates with `check_session_delta.py --validate`, saves Prep Brief to `<audio-dir>/pipeline/`).
 13. `verify`: hard gate requiring ALL validators to exit 0 (`validate_raw_notes.py`, `npm run sync-check`, `validate_session_pipeline.py`, and `check_session_delta.py --validate --session <N>`).
 14. `publish`: only with `--publish`; requires `verify` `done`, stages explicit session file allowlists in both repos, and commits cleanly.
 
@@ -58,12 +58,12 @@ Add `--dry-run` to inspect resolved paths, providers, models, and stages before 
 - Stage control: `--only STAGE`, `--from-stage STAGE`, `--stop-after STAGE`, `--force`, `--dry-run`, `--sandbox DIR`
 - Providers & models (per-stage overrides never leak across providers):
   - `--provider agy|claude|codex|gemini`, `--model MODEL`
-  - `--gemini off|disputed|all`, `--gemini-model gemini-4-neon-medium`
+  - `--gemini auto|mixed|disputed|all|off`, `--gemini-model gemini-4-neon-medium`
   - `--fuse-provider`, `--fuse-model`, `--no-fuse`
-  - `--notes-provider`, `--notes-model`, `--no-audit`
+  - `--notes-provider`, `--notes-model`, `--no-audit`, `--no-audio-verify`
   - `--website-provider`, `--website-model`
   - `--ellara-provider`, `--ellara-model`, `--no-ellara`, `--no-ellara-audit`
-- ASR & paths: `--engines`, `--primary`, `--whisper-offload auto|local|myne` (auto offloads Whisper to MYNE CUDA GPU from macOS when reachable), `--judge`, `--session-date YYYY-MM-DD`, `--ellara-root`, `--dnd-dir`
+- ASR & paths: `--engines gladia` (or `gladia,whisper-large-v3`), `--primary gladia`, `--whisper-offload auto|local|myne`, `--no-skip-ooc`, `--judge`, `--session-date YYYY-MM-DD`, `--ellara-root`, `--dnd-dir`
 
 ## Canonical Character Pronouns & Spelling
 

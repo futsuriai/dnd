@@ -342,6 +342,11 @@ def resolve_audit_model(provider: str, model: str | None, audit_model: str | Non
     return None
 
 
+def _is_quota_error(exc: Exception) -> bool:
+    msg = str(exc).lower()
+    return any(tok in msg for tok in ("quota", "429", "resource_exhausted", "rate limit"))
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--session", required=True, type=int, help="Session number to analyze")
@@ -351,6 +356,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--model", help="Optional model override for the analysis pass")
     parser.add_argument("--audit-model", help="Optional model override for the IC/OOC audit pass")
     parser.add_argument("--no-audit", action="store_true", help="Skip the clean-context IC/OOC & quote audit pass")
+    parser.add_argument("--audit-only", action="store_true", help="Skip Pass 1 analysis and run only Pass 2 IC/OOC audit + validation")
     parser.add_argument("--sync-from-dnd", action="store_true", help="Copy dnd session-N.md into Ellara if missing (or with --prefer dnd)")
     parser.add_argument("--prefer", choices=("ellara", "dnd"), help="Resolve parity mismatch if Session N.md and session-N.md differ")
     parser.add_argument("--allow-provisional", action="store_true", help="Allow provisional mode when only raw notes exist")
@@ -374,7 +380,7 @@ def main(argv: list[str] | None = None) -> int:
 
     delta_report = run_delta_check(ellara_dir, dnd_dir)
     last_analyzed = delta_report.get("last_analyzed_session")
-    if isinstance(last_analyzed, int) and last_analyzed >= args.session and not args.force:
+    if not args.audit_only and isinstance(last_analyzed, int) and last_analyzed >= args.session and not args.force:
         print(
             f"Ellara Campaign State already analyzed through Session {last_analyzed} (>= {args.session}); skipping agent run."
         )
@@ -388,61 +394,10 @@ def main(argv: list[str] | None = None) -> int:
         )
 
     allow_shell = args.provider != "agy"
-    dnd_store_diff = collect_dnd_store_diff(dnd_dir)
     vault_stems = collect_vault_stems(ellara_dir)
 
-    prompt = build_analysis_prompt(
-        args.session,
-        delta_report,
-        dnd_dir,
-        allow_provisional=args.allow_provisional,
-        allow_shell=allow_shell,
-        dnd_store_diff=dnd_store_diff,
-        vault_stems=vault_stems,
-    )
-
-    if args.dry_run:
-        print(f"[dry-run] Would run {args.provider} (model={args.model or 'default'}, allow_shell={allow_shell}) in {ellara_dir} with extra_dirs=[{dnd_dir}]")
-        if not args.no_audit:
-            audit_model = resolve_audit_model(args.provider, args.model, args.audit_model)
-            print(f"[dry-run] Would run clean-context IC/OOC audit pass with {args.provider} (model={audit_model or 'default'})")
-        if args.brief_out:
-            print(f"[dry-run] Would write Prep Brief to {args.brief_out}")
-        print()
-        print(prompt)
-        return 0
-
-    print(f"Running Ellara campaign-state analysis for Session {args.session} via {args.provider}...")
-    brief = pipeline_paths.call_agent(
-        agent_cli,
-        prompt=prompt,
-        provider=args.provider,
-        model=args.model,
-        workspace=ellara_dir,
-        write=True,
-        extra_dirs=[dnd_dir],
-        extra_allowed_tools=["Bash(python3 -B:*)"],
-        timeout=600,
-    ).strip()
-
-    state_diff = collect_campaign_state_diff(ellara_dir, args.session)
-    if not brief and not state_diff:
-        print(
-            "ERROR: Ellara analysis pass returned no Prep Brief and made no changes in Ellara/Campaign State/; aborting before audit.",
-            file=sys.stderr,
-        )
-        return 1
-
-    if args.brief_out:
-        brief_path = Path(args.brief_out).expanduser().resolve()
-        brief_path.parent.mkdir(parents=True, exist_ok=True)
-        brief_path.write_text((brief + "\n") if brief else "", encoding="utf-8")
-        print(f"Saved Ellara Prep Brief -> {brief_path}")
-    if brief:
-        print()
-        print(brief)
-
-    if not args.no_audit:
+    if args.audit_only:
+        state_diff = collect_campaign_state_diff(ellara_dir, args.session)
         audit_model = resolve_audit_model(args.provider, args.model, args.audit_model)
         audit_prompt = build_audit_prompt(
             args.session,
@@ -452,18 +407,121 @@ def main(argv: list[str] | None = None) -> int:
             allow_shell=allow_shell,
             vault_stems=vault_stems,
         )
-        print(f"Running clean-context IC/OOC & quote audit via {args.provider} (model={audit_model or 'default'})...")
-        audit_reply = pipeline_paths.call_agent(
+        if args.dry_run:
+            print(f"[dry-run] --audit-only: would run Pass 2 IC/OOC audit with {args.provider} (model={audit_model or 'default'}, allow_shell={allow_shell})")
+            print()
+            print(audit_prompt)
+            return 0
+    else:
+        dnd_store_diff = collect_dnd_store_diff(dnd_dir)
+        prompt = build_analysis_prompt(
+            args.session,
+            delta_report,
+            dnd_dir,
+            allow_provisional=args.allow_provisional,
+            allow_shell=allow_shell,
+            dnd_store_diff=dnd_store_diff,
+            vault_stems=vault_stems,
+        )
+
+        if args.dry_run:
+            print(f"[dry-run] Would run {args.provider} (model={args.model or 'default'}, allow_shell={allow_shell}) in {ellara_dir} with extra_dirs=[{dnd_dir}]")
+            if not args.no_audit:
+                audit_model = resolve_audit_model(args.provider, args.model, args.audit_model)
+                print(f"[dry-run] Would run clean-context IC/OOC audit pass with {args.provider} (model={audit_model or 'default'})")
+            if args.brief_out:
+                print(f"[dry-run] Would write Prep Brief to {args.brief_out}")
+            print()
+            print(prompt)
+            return 0
+
+        print(f"Running Ellara campaign-state analysis for Session {args.session} via {args.provider}...")
+        brief = pipeline_paths.call_agent(
             agent_cli,
-            prompt=audit_prompt,
+            prompt=prompt,
             provider=args.provider,
-            model=audit_model,
+            model=args.model,
             workspace=ellara_dir,
             write=True,
             extra_dirs=[dnd_dir],
             extra_allowed_tools=["Bash(python3 -B:*)"],
             timeout=600,
         ).strip()
+
+        state_diff = collect_campaign_state_diff(ellara_dir, args.session)
+        if not brief and not state_diff:
+            print(
+                "ERROR: Ellara analysis pass returned no Prep Brief and made no changes in Ellara/Campaign State/; aborting before audit.",
+                file=sys.stderr,
+            )
+            return 1
+
+        if args.brief_out:
+            brief_path = Path(args.brief_out).expanduser().resolve()
+            brief_path.parent.mkdir(parents=True, exist_ok=True)
+            brief_path.write_text((brief + "\n") if brief else "", encoding="utf-8")
+            print(f"Saved Ellara Prep Brief -> {brief_path}")
+        if brief:
+            print()
+            print(brief)
+
+    if args.audit_only or not args.no_audit:
+        audit_model = resolve_audit_model(args.provider, args.model, args.audit_model)
+        audit_prompt = build_audit_prompt(
+            args.session,
+            primary_summary,
+            dnd_dir,
+            state_diff,
+            allow_shell=allow_shell,
+            vault_stems=vault_stems,
+        )
+        default_tier = agent_cli.AGY_TIERS["default"]
+        fallback_model = (
+            default_tier
+            if args.provider == "agy" and not args.audit_model and audit_model != default_tier
+            else None
+        )
+
+        def _invoke_audit(target_model: str | None) -> str:
+            return pipeline_paths.call_agent(
+                agent_cli,
+                prompt=audit_prompt,
+                provider=args.provider,
+                model=target_model,
+                workspace=ellara_dir,
+                write=True,
+                extra_dirs=[dnd_dir],
+                extra_allowed_tools=["Bash(python3 -B:*)"],
+                timeout=600,
+            ).strip()
+
+        print(f"Running clean-context IC/OOC & quote audit via {args.provider} (model={audit_model or 'default'})...")
+        try:
+            audit_reply = _invoke_audit(audit_model)
+        except Exception as exc:  # noqa: BLE001
+            if fallback_model and _is_quota_error(exc):
+                print(
+                    f"WARNING: Audit pass hit quota/429 on {audit_model}; retrying once with {fallback_model}...",
+                    file=sys.stderr,
+                )
+                try:
+                    audit_reply = _invoke_audit(fallback_model)
+                except Exception as exc2:  # noqa: BLE001
+                    print(
+                        f"ERROR: Ellara audit pass failed on fallback model {fallback_model}: {exc2}\n"
+                        f"HINT: Pass 1 changes in Ellara/Campaign State/ are preserved. Resume audit only with:\n"
+                        f"  python3 -B {Path(__file__).name} --session {args.session} --dnd-dir {dnd_dir} --ellara-root {ellara_dir} --provider {args.provider} --audit-only",
+                        file=sys.stderr,
+                    )
+                    return 1
+            else:
+                print(
+                    f"ERROR: Ellara audit pass failed: {exc}\n"
+                    f"HINT: Pass 1 changes in Ellara/Campaign State/ are preserved. Resume audit only with:\n"
+                    f"  python3 -B {Path(__file__).name} --session {args.session} --dnd-dir {dnd_dir} --ellara-root {ellara_dir} --provider {args.provider} --audit-only",
+                    file=sys.stderr,
+                )
+                return 1
         if audit_reply:
             print(audit_reply)
 
