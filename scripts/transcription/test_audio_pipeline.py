@@ -631,6 +631,56 @@ class TestDdbRollsAndNotesAndFacts(unittest.TestCase):
             device, compute = asr_whisper.resolve_device_and_compute("auto", "auto")
             self.assertEqual((device, compute), ("cpu", "int8"))
 
+    def test_myne_offload_resolution_bundle_and_path_rewrite(self) -> None:
+        self.assertEqual(run_asr_engines.resolve_whisper_offload("local"), "local")
+        with mock.patch("run_asr_engines.platform.system", return_value="Darwin"), mock.patch(
+            "run_asr_engines.myne_available", return_value=True
+        ):
+            self.assertEqual(run_asr_engines.resolve_whisper_offload("auto"), "myne")
+            self.assertEqual(run_asr_engines.resolve_whisper_offload("myne"), "myne")
+        with mock.patch("run_asr_engines.platform.system", return_value="Darwin"), mock.patch(
+            "run_asr_engines.myne_available", return_value=False
+        ), mock.patch("run_asr_engines.log"):
+            self.assertEqual(run_asr_engines.resolve_whisper_offload("auto"), "local")
+            self.assertEqual(run_asr_engines.resolve_whisper_offload("myne"), "local")
+
+        with tempfile.TemporaryDirectory() as tmp:
+            td = Path(tmp)
+            stage_dir = td / "stage"
+            dnd_root = SCRIPT_DIR.parent.parent
+            runner = run_asr_engines.stage_myne_bundle(
+                stage_dir, dnd_root, ["1-ellanelle.flac", "2-aurusoriale.flac"], "large-v3", "22"
+            )
+            self.assertTrue(runner.is_file())
+            runner_text = runner.read_text(encoding="utf-8")
+            self.assertIn("--device cuda", runner_text)
+            self.assertIn("--compute-type float16", runner_text)
+            self.assertIn('"1-ellanelle.flac" "2-aurusoriale.flac"', runner_text)
+            self.assertTrue((stage_dir / "dnd" / "scripts" / "transcription" / "vad_compact.py").is_file())
+            self.assertFalse((stage_dir / "dnd" / ".env.local").exists())
+
+            remote_json = td / "remote.json"
+            remote_json.write_text(
+                json.dumps(
+                    {
+                        "format": "dnd-asr-v1",
+                        "engine": "whisper",
+                        "audio_file": "/home/babu/offload/job1/1-ellanelle.flac",
+                        "params": {"backend": "faster-whisper"},
+                        "words": [],
+                        "segments": [],
+                    }
+                ),
+                encoding="utf-8",
+            )
+            local_audio = td / "1-ellanelle.flac"
+            local_audio.write_bytes(b"fLaC")
+            dest_json = td / "out" / "1-ellanelle.json"
+            run_asr_engines.rewrite_offloaded_json(remote_json, dest_json, local_audio)
+            rewritten = json.loads(dest_json.read_text(encoding="utf-8"))
+            self.assertEqual(rewritten["audio_file"], str(local_audio.resolve()))
+            self.assertEqual(rewritten["params"]["offload_host"], "myne")
+
 
 if __name__ == "__main__":
     unittest.main()

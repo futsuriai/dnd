@@ -144,21 +144,92 @@ def run_validation(
     return res.returncode
 
 
+def collect_dnd_store_diff(dnd_dir: Path, max_chars: int = 12000) -> str:
+    """Collect the uncommitted git diff of `src/store/` in `dnd_dir`."""
+    res = subprocess.run(
+        ["git", "-C", str(dnd_dir), "diff", "--", "src/store/"],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    if res.returncode != 0 or not res.stdout.strip():
+        return ""
+    diff = res.stdout.strip()
+    if len(diff) > max_chars:
+        return diff[:max_chars].rstrip() + "\n... (truncated)"
+    return diff
+
+
+def collect_vault_stems(ellara_dir: Path) -> list[str]:
+    """Return sorted unique markdown filename stems across the Ellara vault."""
+    excluded = {".git", ".agents", ".github", "node_modules"}
+    stems: set[str] = set()
+    for path in ellara_dir.rglob("*.md"):
+        try:
+            rel_parts = path.relative_to(ellara_dir).parts
+        except ValueError:
+            continue
+        if set(rel_parts[:-1]) & excluded:
+            continue
+        stems.add(path.stem)
+    return sorted(stems)
+
+
 def build_analysis_prompt(
     session: int,
     delta_report: dict,
     dnd_dir: Path,
     *,
     allow_provisional: bool = False,
+    allow_shell: bool = True,
+    dnd_store_diff: str = "",
+    vault_stems: list[str] | None = None,
 ) -> str:
     provisional_note = (
         "Provisional mode is enabled: if only raw notes/transcripts exist, mark the brief `[PROVISIONAL]`."
         if allow_provisional
         else "Polished session notes exist: do NOT leave a `[PROVISIONAL]` marker in the final brief."
     )
+    tool_rule = (
+        ""
+        if allow_shell
+        else (
+            "Tool constraint (IMPORTANT):\n"
+            "- Use file reading and editing tools ONLY (`read_file`, `edit_file`, `write_file`).\n"
+            "- NEVER invoke shell or terminal commands (`run_command`, bash, python, git, find). "
+            "`check_session_delta.py --json`, the `dnd/src/store/` diff, and valid vault page stems are precomputed below, "
+            "and `check_session_delta.py --validate` runs automatically right after your edits.\n\n"
+        )
+    )
+    store_diff_section = (
+        f"\nPrecomputed `git diff` of `dnd/src/store/`:\n```diff\n{dnd_store_diff}\n```\n"
+        if dnd_store_diff
+        else ""
+    )
+    stems_section = (
+        f"\nPrecomputed valid vault WikiLink target stems ({len(vault_stems)} total): "
+        + ", ".join(vault_stems)
+        + "\n"
+        if vault_stems
+        else ""
+    )
+    validation_step = (
+        f"After updating the four files, run:\n"
+        f"`python3 -B .agents/skills/ellara-session-analysis/scripts/check_session_delta.py --ellara-root . --dnd-root \"{dnd_dir}\" --validate --session {session}`"
+        if allow_shell
+        else (
+            "After updating the four files, do NOT run any shell validation command — "
+            "the Python harness automatically runs `check_session_delta.py --validate` right after your turn completes."
+        )
+    )
+    python_rule = (
+        "7. Always invoke Python with `python3 -B` (zero `__pycache__/` or `*.pyc` files)."
+        if allow_shell
+        else "7. Never create `__pycache__/` or `*.pyc` files (and do not invoke Python/shell commands)."
+    )
     return f"""You are running the `ellara-session-analysis` workflow for Session {session} in the `ellara` repository.
 
-Governing instructions (read these files in the workspace first; do not ignore any rule):
+{tool_rule}Governing instructions (read these files in the workspace first; do not ignore any rule):
 - `AGENTS.md`
 - `.agents/skills/ellara-session-analysis/SKILL.md`
 - `.agents/skills/ellara-session-analysis/references/repo-map-and-methodology.md`
@@ -170,7 +241,7 @@ Precomputed `check_session_delta.py --json` report:
 ```json
 {json.dumps(delta_report, indent=2)}
 ```
-
+{store_diff_section}{stems_section}
 Mandatory scope & boundaries:
 1. Edit ONLY files inside `Ellara/Campaign State/`:
    - `Ellara/Campaign State/Ellara Current State.md`
@@ -182,10 +253,9 @@ Mandatory scope & boundaries:
 4. Primary-text discipline: verify every verbatim quote and exact skill-check scope (especially Insight / Perception) against the primary session summary; never put quotation marks around narrator paraphrase.
 5. Wiki compatibility: keep every `.md` filename stem globally unique, ensure every `[[WikiLink]]` resolves to a real vault page, and never place `[[WikiLinks]]` inside fenced code blocks.
 6. Keep frontmatter synchronized (`last_analyzed_session: {session}`, `next_session: {session + 1}`, and `next_session_title` matching `dnd/src/store/sessions.js` upcoming subtitle when present). {provisional_note}
-7. Always invoke Python with `python3 -B` (zero `__pycache__/` or `*.pyc` files).
+{python_rule}
 
-After updating the four files, run:
-`python3 -B .agents/skills/ellara-session-analysis/scripts/check_session_delta.py --ellara-root . --dnd-root "{dnd_dir}" --validate --session {session}`
+{validation_step}
 
 In your final response, deliver ONLY the concise, table-ready **Prep Brief** for Session {session + 1}:
 - What Ellara is thinking right now (strictly IC)
@@ -216,17 +286,35 @@ def build_audit_prompt(
     primary_summary: Path | None,
     dnd_dir: Path,
     state_diff: str,
+    *,
+    allow_shell: bool = True,
+    vault_stems: list[str] | None = None,
 ) -> str:
     summary_hint = str(primary_summary) if primary_summary else f"{dnd_dir}/src/assets/sessions/session-{session}.md"
+    tool_rule = (
+        ""
+        if allow_shell
+        else (
+            "Tool constraint (IMPORTANT): Use file reading and editing tools ONLY (`read_file`, `edit_file`, `write_file`). "
+            "NEVER invoke shell or terminal commands (`run_command`, bash, python, git, find); validation runs automatically afterward.\n\n"
+        )
+    )
+    stems_section = (
+        f"\nValid vault WikiLink target stems ({len(vault_stems)} total): "
+        + ", ".join(vault_stems)
+        + "\n"
+        if vault_stems
+        else ""
+    )
     return f"""Perform a clean-context primary-text & IC/OOC audit of the Session {session} updates in `Ellara/Campaign State/`.
 
-Read:
+{tool_rule}Read:
 - Primary session summary: `{summary_hint}`
 - `Ellara/Campaign State/Knowledge Boundary and Dramatic Irony.md`
 - `Ellara/Campaign State/Ellara Current State.md`
 - `Ellara/Campaign State/Ellara Threads and Callbacks.md`
 - `Ellara/Campaign State/Session Briefs/Session {session} Analysis.md`
-
+{stems_section}
 Check strictly for these four defect classes:
 1. **OOC / Dramatic Irony Leakage:** Any item from Section 2 of `Knowledge Boundary and Dramatic Irony.md` (or offscreen scene Ellara did not witness) appearing inside Ellara's IC thoughts, headspace, motives, or planned moves.
 2. **Paraphrase-as-Quote:** Any narrator summary or paraphrase wrapped in quotation marks as if it were verbatim dialogue from `{summary_hint}`.
@@ -299,15 +387,22 @@ def main(argv: list[str] | None = None) -> int:
             allow_provisional=args.allow_provisional,
         )
 
+    allow_shell = args.provider != "agy"
+    dnd_store_diff = collect_dnd_store_diff(dnd_dir)
+    vault_stems = collect_vault_stems(ellara_dir)
+
     prompt = build_analysis_prompt(
         args.session,
         delta_report,
         dnd_dir,
         allow_provisional=args.allow_provisional,
+        allow_shell=allow_shell,
+        dnd_store_diff=dnd_store_diff,
+        vault_stems=vault_stems,
     )
 
     if args.dry_run:
-        print(f"[dry-run] Would run {args.provider} (model={args.model or 'default'}) in {ellara_dir} with extra_dirs=[{dnd_dir}]")
+        print(f"[dry-run] Would run {args.provider} (model={args.model or 'default'}, allow_shell={allow_shell}) in {ellara_dir} with extra_dirs=[{dnd_dir}]")
         if not args.no_audit:
             audit_model = resolve_audit_model(args.provider, args.model, args.audit_model)
             print(f"[dry-run] Would run clean-context IC/OOC audit pass with {args.provider} (model={audit_model or 'default'})")
@@ -330,6 +425,14 @@ def main(argv: list[str] | None = None) -> int:
         timeout=600,
     ).strip()
 
+    state_diff = collect_campaign_state_diff(ellara_dir, args.session)
+    if not brief and not state_diff:
+        print(
+            "ERROR: Ellara analysis pass returned no Prep Brief and made no changes in Ellara/Campaign State/; aborting before audit.",
+            file=sys.stderr,
+        )
+        return 1
+
     if args.brief_out:
         brief_path = Path(args.brief_out).expanduser().resolve()
         brief_path.parent.mkdir(parents=True, exist_ok=True)
@@ -341,8 +444,14 @@ def main(argv: list[str] | None = None) -> int:
 
     if not args.no_audit:
         audit_model = resolve_audit_model(args.provider, args.model, args.audit_model)
-        state_diff = collect_campaign_state_diff(ellara_dir, args.session)
-        audit_prompt = build_audit_prompt(args.session, primary_summary, dnd_dir, state_diff)
+        audit_prompt = build_audit_prompt(
+            args.session,
+            primary_summary,
+            dnd_dir,
+            state_diff,
+            allow_shell=allow_shell,
+            vault_stems=vault_stems,
+        )
         print(f"Running clean-context IC/OOC & quote audit via {args.provider} (model={audit_model or 'default'})...")
         audit_reply = pipeline_paths.call_agent(
             agent_cli,

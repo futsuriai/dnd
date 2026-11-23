@@ -67,7 +67,13 @@ def sync_session_markdown(
     return "copied"
 
 
-def build_prompt(session: int, session_date: str | None = None, next_session_date: str | None = None) -> str:
+def build_prompt(
+    session: int,
+    session_date: str | None = None,
+    next_session_date: str | None = None,
+    *,
+    allow_shell: bool = True,
+) -> str:
     played = (
         f"Session {session} was played on {session_date}: set its `date` to exactly '{session_date}'."
         if session_date
@@ -78,9 +84,29 @@ def build_prompt(session: int, session_date: str | None = None, next_session_dat
         if next_session_date
         else f"No next-session date was scheduled: give session {session + 1} the `date` 'TBD'."
     )
+    tool_rule = (
+        ""
+        if allow_shell
+        else (
+            "Tool constraint (IMPORTANT):\n"
+            "- Use file reading and editing tools ONLY (`read_file`, `edit_file`, `write_file`).\n"
+            "- NEVER invoke shell or terminal commands (`run_command`, npm, node, git); "
+            "the harness runs `npm run sync-check` automatically after your edits.\n\n"
+        )
+    )
+    sync_requirement = (
+        "- Run `npm run sync-check` (which runs `npm run generate-list`, `npm run verify-session-sync -- --session latest`, and `npm run build`)."
+        if allow_shell
+        else "- Do NOT run `npm run sync-check` yourself — the harness runs it automatically after your edits."
+    )
+    closing_instruction = (
+        "After editing, run `npm run sync-check`."
+        if allow_shell
+        else "Do NOT run shell commands; the harness runs `npm run sync-check` automatically after your edits."
+    )
     return f"""MODE: autofix (edit the repository files directly in place; do NOT output a unified diff instead of editing).
 
-Task:
+{tool_rule}Task:
 Update the DnD website repo for completed Session {session}.
 
 Use `.copilot/prompts/process-latest-session.md` as the governing instructions.
@@ -96,7 +122,7 @@ Required work:
   - Add only significant `history` entries (`{{ session: {session}, note: '...' }}`), connections (ALWAYS use `reason:`, NEVER `relationship:`), description refinements, or genuinely new entities grounded in the polished summary.
   - Do NOT add `updatedInSessions`; `history` is the single source of truth.
   - Do NOT treat party members (`Nyx`, `Ellara`, `Ysidor`, `Berridin`, `Witty` / `Whitaker "Witty" Whitman VI`, or former PC `Tsi'nyra`) as NPCs.
-- Run `npm run sync-check` (which runs `npm run generate-list`, `npm run verify-session-sync -- --session latest`, and `npm run build`).
+{sync_requirement}
 - Preserve canonical spellings from `ENTITY_LIST.md`, `src/store/lore.js`, and `scripts/transcription/name_corrections.json`.
 - Use `Nites` exactly, pronounced knee-tes. Do not write `Nytes` or `Nýtes`.
 - Preserve capitalization for Ellara, Nyx, Ysidor, Berridin, and Witty in public copy.
@@ -119,7 +145,7 @@ Keep the update proportionate and in the existing voice:
 - Do not rewrite existing descriptions or connection reasons. If the session adds or contradicts a detail, add
   it (e.g. a new history note) rather than replacing earlier canon.
 
-After editing, run `npm run sync-check`.
+{closing_instruction}
 Report the files changed and validation commands you ran."""
 
 
@@ -152,7 +178,12 @@ def main(argv: list[str] | None = None) -> int:
         dry_run=args.dry_run,
     )
 
-    prompt = build_prompt(session, args.session_date, args.next_session_date)
+    prompt = build_prompt(
+        session,
+        args.session_date,
+        args.next_session_date,
+        allow_shell=(args.provider != "agy"),
+    )
     if not args.provider or args.dry_run:
         print()
         print("Website-sync agent prompt:")

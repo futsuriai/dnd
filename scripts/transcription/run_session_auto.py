@@ -211,6 +211,12 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--ellara-root", default=str(pipeline_paths.resolve_ellara_dir()), help="Ellara repo root")
     parser.add_argument("--python", help="Override Python interpreter for transcription/pipeline child scripts")
     parser.add_argument("--engines", default="gladia,whisper-large-v3", help="ASR engines to run")
+    parser.add_argument(
+        "--whisper-offload",
+        choices=["auto", "local", "myne"],
+        default="auto",
+        help="Where to run local Whisper engines: auto (MYNE CUDA if reachable from macOS), local, or myne",
+    )
     parser.add_argument("--primary", default="gladia", help="Engine whose output becomes the transcript (gladia, whisper-*, gemini)")
     parser.add_argument(
         "--gemini",
@@ -319,6 +325,7 @@ def main(argv: list[str] | None = None) -> int:
             "work_dir": str(work),
             "python": str(python_bin),
             "engines": engines,
+            "whisper_offload": args.whisper_offload,
             "primary": args.primary,
             "gemini": {"mode": args.gemini, "model": args.gemini_model},
             "providers": {
@@ -388,11 +395,21 @@ def main(argv: list[str] | None = None) -> int:
                 mark(stage)
 
             elif stage == "asr":
-                cmd = [SCRIPT_DIR / "run_asr_engines.py", "--audio-dir", audio_dir, "--session", session, "--engines", ",".join(engines)]
+                cmd = [
+                    SCRIPT_DIR / "run_asr_engines.py",
+                    "--audio-dir",
+                    audio_dir,
+                    "--session",
+                    session,
+                    "--engines",
+                    ",".join(engines),
+                    "--whisper-offload",
+                    args.whisper_offload,
+                ]
                 if args.force:
                     cmd.append("--force")
                 run(cmd, python=True)
-                mark(stage, engines=engines, dir=str(asr_dir))
+                mark(stage, engines=engines, whisper_offload=args.whisper_offload, dir=str(asr_dir))
 
             elif stage == "gemini":
                 if args.gemini == "off":

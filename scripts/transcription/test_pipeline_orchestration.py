@@ -12,7 +12,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
-from contextlib import redirect_stdout
+from contextlib import redirect_stderr, redirect_stdout
 from pathlib import Path
 from unittest import mock
 
@@ -571,6 +571,67 @@ class TestRunEllaraAnalysisAgent(unittest.TestCase):
             self.assertEqual(first_kwargs["extra_dirs"], [dnd.resolve()])
             self.assertIn("Stay sharp.", brief_out.read_text(encoding="utf-8"))
 
+    def test_no_shell_prompts_include_precomputed_context(self):
+        analysis_prompt = run_ellara_analysis_agent.build_analysis_prompt(
+            22,
+            {"last_analyzed_session": 21, "new_sessions": [22]},
+            Path("/tmp/dnd"),
+            allow_shell=False,
+            dnd_store_diff="diff --git a/src/store/npcs.js b/src/store/npcs.js",
+            vault_stems=["Ellara", "Spirit"],
+        )
+        self.assertIn("Use file reading and editing tools ONLY", analysis_prompt)
+        self.assertIn("NEVER invoke shell", analysis_prompt)
+        self.assertIn("diff --git a/src/store/npcs.js", analysis_prompt)
+        self.assertIn("Ellara, Spirit", analysis_prompt)
+        self.assertNotIn("python3 -B .agents/skills/ellara-session-analysis/scripts/check_session_delta.py --validate", analysis_prompt)
+
+        audit_prompt = run_ellara_analysis_agent.build_audit_prompt(
+            22,
+            Path("/tmp/ellara/Session Notes/Session 22.md"),
+            Path("/tmp/dnd"),
+            "### diff\n+change",
+            allow_shell=False,
+            vault_stems=["Ellara", "Spirit"],
+        )
+        self.assertIn("Use file reading and editing tools ONLY", audit_prompt)
+        self.assertIn("NEVER invoke shell", audit_prompt)
+        self.assertIn("Ellara, Spirit", audit_prompt)
+
+    def test_empty_analysis_aborts_before_audit(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            dnd, ellara = _create_fixture_repos(root, session=21)
+            summary_22 = "# Session 22 — *Test*\n\n**Locales:** Bastion\n**Time:** Evening\n"
+            (ellara / "Session Notes" / "Session 22.md").write_text(summary_22, encoding="utf-8")
+            (dnd / "src" / "assets" / "sessions" / "session-22.md").write_text(summary_22, encoding="utf-8")
+            brief_out = root / "prep_brief.md"
+            err_buf = io.StringIO()
+            with mock.patch.object(
+                run_ellara_analysis_agent.pipeline_paths,
+                "call_agent",
+                return_value="",
+            ) as mocked_agent:
+                with redirect_stderr(err_buf):
+                    rc = run_ellara_analysis_agent.main(
+                        [
+                            "--session",
+                            "22",
+                            "--dnd-dir",
+                            str(dnd),
+                            "--ellara-root",
+                            str(ellara),
+                            "--provider",
+                            "agy",
+                            "--brief-out",
+                            str(brief_out),
+                        ]
+                    )
+            self.assertEqual(rc, 1)
+            self.assertEqual(mocked_agent.call_count, 1)
+            self.assertFalse(brief_out.exists())
+            self.assertIn("aborting before audit", err_buf.getvalue())
+
 
 class TestSessionNotesAndWebsiteAgents(unittest.TestCase):
     def test_session_notes_post_generation_validation(self):
@@ -624,6 +685,14 @@ class TestSessionNotesAndWebsiteAgents(unittest.TestCase):
         self.assertIn("storyBeat", prompt)
         self.assertIn("Witty", prompt)
         self.assertIn("Do NOT manually edit `src/views/HomeView.vue`", prompt)
+
+        no_shell_prompt = run_website_sync_agent.build_prompt(
+            22, "November 1, 2026", "November 15, 2026", allow_shell=False
+        )
+        self.assertIn("Use file reading and editing tools ONLY", no_shell_prompt)
+        self.assertIn("NEVER invoke shell", no_shell_prompt)
+        self.assertIn("Do NOT run shell commands", no_shell_prompt)
+        self.assertNotIn("After editing, run `npm run sync-check`.", no_shell_prompt)
 
 
 class TestValidatorsAndCleanup(unittest.TestCase):

@@ -63,7 +63,7 @@ Add `--dry-run` to inspect resolved paths, providers, models, and stages before 
   - `--notes-provider`, `--notes-model`, `--no-audit`
   - `--website-provider`, `--website-model`
   - `--ellara-provider`, `--ellara-model`, `--no-ellara`, `--no-ellara-audit`
-- ASR & paths: `--engines`, `--primary`, `--judge`, `--session-date YYYY-MM-DD`, `--ellara-root`, `--dnd-dir`
+- ASR & paths: `--engines`, `--primary`, `--whisper-offload auto|local|myne` (auto offloads Whisper to MYNE CUDA GPU from macOS when reachable), `--judge`, `--session-date YYYY-MM-DD`, `--ellara-root`, `--dnd-dir`
 
 ## Canonical Character Pronouns & Spelling
 

@@ -69,7 +69,7 @@ DDB_CAMPAIGN_ID=...
   - `--notes-provider`, `--notes-model`, `--no-audit`
   - `--website-provider`, `--website-model`
   - `--ellara-provider`, `--ellara-model`, `--no-ellara`, `--no-ellara-audit`
-- ASR & dates: `--engines`, `--primary`, `--judge`, `--session-date YYYY-MM-DD`, `--ellara-root PATH`, `--dnd-dir PATH`
+- ASR & dates: `--engines`, `--primary`, `--whisper-offload auto|local|myne`, `--judge`, `--session-date YYYY-MM-DD`, `--ellara-root PATH`, `--dnd-dir PATH` (with `auto`, macOS offloads Whisper CUDA inference to MYNE desktop via `myne` when reachable, running concurrently with Gladia)
 
 ## Standalone Stage Runners
 
